@@ -1,13 +1,45 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import mascotUrl from '../../assets/mascot.png'
 
 import type { PresentationDeck, SiteContent, TitleSlide } from '../../types/content'
 
-defineProps<{
+const props = defineProps<{
   deck: PresentationDeck
   site: SiteContent
   slide: TitleSlide
 }>()
+
+const footerLinks = computed(() => {
+  const toDisplayLabel = (url: string): string => {
+    const parsed = new URL(url)
+    const path = parsed.pathname.replace(/\/$/, '')
+
+    return `${parsed.host}${path}`
+  }
+
+  return [
+    {
+      key: 'repository',
+      iconClass: 'fab fa-github',
+      text: toDisplayLabel(props.site.links.repository.url),
+      url: props.site.links.repository.url,
+    },
+    {
+      key: 'docs',
+      iconClass: 'fas fa-book',
+      text: toDisplayLabel(props.site.links.docs.url),
+      url: props.site.links.docs.url,
+    },
+    {
+      key: 'owasp',
+      iconClass: 'fas fa-globe',
+      text: toDisplayLabel(props.site.links.owasp.url),
+      url: props.site.links.owasp.url,
+    },
+  ]
+})
 </script>
 
 <template>
@@ -45,20 +77,22 @@ defineProps<{
 
     <div class="footer-wrap">
       <div class="footer-links">
-        <div class="footer-link">
-          <i class="fab fa-github footer-icon"></i>
-          <p>github.com/OWASP/threat-dragon</p>
-        </div>
-        <div class="footer-separator" aria-hidden="true"></div>
-        <div class="footer-link">
-          <i class="fas fa-book footer-icon"></i>
-          <p>threatdragon.com/docs</p>
-        </div>
-        <div class="footer-separator" aria-hidden="true"></div>
-        <div class="footer-link">
-          <i class="fas fa-globe footer-icon"></i>
-          <p>owasp.org</p>
-        </div>
+        <template v-for="(link, index) in footerLinks" :key="link.key">
+          <a
+            class="footer-link"
+            :href="link.url"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <i :class="[link.iconClass, 'footer-icon']"></i>
+            <p>{{ link.text }}</p>
+          </a>
+          <div
+            v-if="index < footerLinks.length - 1"
+            class="footer-separator"
+            aria-hidden="true"
+          ></div>
+        </template>
       </div>
     </div>
 
@@ -241,6 +275,14 @@ defineProps<{
 .footer-link {
   display: flex;
   align-items: center;
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.footer-link:hover {
+  color: #d1d5db;
+  transform: translateY(-1px);
 }
 
 .footer-icon {

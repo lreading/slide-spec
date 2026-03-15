@@ -52,6 +52,7 @@ defineProps<{
   <RoadmapSlideView
     v-else-if="slide.kind === 'roadmap'"
     :deck="record.deck"
+    :site="site"
     :slide="slide"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

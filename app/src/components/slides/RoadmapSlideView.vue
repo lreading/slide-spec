@@ -8,10 +8,12 @@ import type {
   RoadmapSlide,
   RoadmapStageContent,
   RoadmapStageStatus,
+  SiteContent,
 } from '../../types/content'
 
 const props = defineProps<{
   deck: PresentationDeck
+  site: SiteContent
   slide: RoadmapSlide
   slideNumber: number
   slideTotal: number
@@ -113,7 +115,7 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
 
       <a
         class="footer-link"
-        href="https://github.com/OWASP/threat-dragon"
+        :href="site.links.repository.url"
         target="_blank"
         rel="noreferrer"
       >
