@@ -7,7 +7,10 @@ const files = {
 site:
   title: Test Site
   tagline: Test Tagline
-  eyebrow: Demo
+  project_badge:
+    label: Demo
+    fa_icon: fa-flask
+    icon_position: before
   home_intro: Intro
   home_cta_label: Open
   archive_cta_label: Archive

@@ -49,7 +49,10 @@ const mentionCards = computed(() =>
     <div class="content-grid">
       <div class="left-column">
         <div class="section-header">
-          <h2 class="section-title"><FontAwesomeIcon icon="bullhorn" /> Talks &amp; Mentions</h2>
+          <h2 class="section-title">
+            <FontAwesomeIcon icon="bullhorn" />
+            {{ slide.section_heading ?? 'Community Activity' }}
+          </h2>
         </div>
         <div class="mentions-list">
           <component
@@ -117,9 +120,10 @@ const mentionCards = computed(() =>
   align-items: center;
 }
 
-.section-title i {
+.section-title :deep(svg) {
   color: #e8341c;
   margin-right: 12px;
+  flex-shrink: 0;
 }
 
 .mentions-list {

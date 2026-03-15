@@ -1,6 +1,3 @@
-- Welcome slide: "OWASP Project" - include optional maturity level (fixed selection)
-- Community highlights: subtitle, feels very marketing-ish
-- Community highlights: Talks / mentions - rename, include things like interop tools as well
 - Presentation: Replace red weird logo with configurable logo (global config?)
 - How to Contribute: Make sure links are configurable
 - Add a real root level README

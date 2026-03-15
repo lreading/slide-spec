@@ -132,7 +132,8 @@ presentation:
           summary: Rewrote the entire Getting Started guide series and added comprehensive examples for cloud-native threat modeling scenarios.
     - kind: community-highlights
       enabled: true
-      subtitle: Engagement and growth metrics for Q1 2026
+      subtitle: Notable community activity and ecosystem updates from Q1 2026
+      section_heading: Community Activity
       stat_keys:
         - stars
         - issues_closed
@@ -143,13 +144,13 @@ presentation:
           title: '"Scaling Threat Modeling with OWASP Threat Dragon" at AppSec Global 2025'
           url_label: Watch recording on YouTube
           url: https://www.youtube.com/
+        - type: Interop tool
+          title: 'Community-maintained export bridge for pulling Threat Dragon models into architecture review workflows'
+          url_label: Explore the prototype on GitHub
+          url: https://github.com/OWASP/threat-dragon
         - type: Blog post
-          title: 'Top 5 Open Source Tools for Security Architects: Why We Choose Threat Dragon'
-          url_label: Read article on SecurityWeekly.com
-          url: https://owasp.org/
-        - type: Podcast
-          title: 'Developer Security Radio: Interview with Mike Goodwin on the future of Threat Modeling'
-          url_label: Listen on Spotify
+          title: 'Open source threat modeling round-up featuring Threat Dragon in a broader secure design toolkit'
+          url_label: Read the write-up
           url: https://owasp.org/
     - kind: how-to-contribute
       enabled: true

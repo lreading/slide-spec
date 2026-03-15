@@ -25,12 +25,13 @@ describe('CommunityHighlightsSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Talks & Mentions')
+    expect(wrapper.text()).toContain('Community Activity')
     expect(wrapper.findAll('.mention-card')).toHaveLength(slide.mentions.length)
     expect(wrapper.findAll('.stat-card')).toHaveLength(slide.stat_keys.length)
     expect(wrapper.text()).toContain('+12% vs last Q')
     expect(wrapper.text()).toContain('GitHub Stars')
     expect(wrapper.findAll('a.mention-card')).toHaveLength(slide.mentions.length)
+    expect(wrapper.text()).toContain('Interop tool')
   })
 
   it('maps icon/trend slots deterministically for reordered stat keys', () => {
@@ -95,5 +96,22 @@ describe('CommunityHighlightsSlideView', () => {
     expect(mentionCards[0].element.tagName).toBe('A')
     expect(mentionCards[1].element.tagName).toBe('DIV')
     expect(mentionCards[1].find('.mention-link').exists()).toBe(false)
+  })
+
+  it('falls back to the default section heading when none is configured', () => {
+    const wrapper = mount(CommunityHighlightsSlideView, {
+      props: {
+        deck: record.deck,
+        generated: record.generated,
+        slide: {
+          ...slide,
+          section_heading: undefined,
+        },
+        slideNumber: 7,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.text()).toContain('Community Activity')
   })
 })

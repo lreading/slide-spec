@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import mascotUrl from '../../assets/mascot.png'
+import { getProjectBadgeDisplay } from '../../content/projectBadge'
 
 import type { PresentationDeck, SiteContent, TitleSlide } from '../../types/content'
 
@@ -40,6 +41,7 @@ const footerLinks = computed(() => {
     },
   ]
 })
+const badge = computed(() => getProjectBadgeDisplay(props.site))
 </script>
 
 <template>
@@ -54,8 +56,20 @@ const footerLinks = computed(() => {
     </svg>
 
     <div class="content-wrap">
-      <div class="glass-badge">
-        <p class="badge-text"><i class="fas fa-shield-alt badge-icon"></i>{{ site.eyebrow }}</p>
+      <div v-if="badge" class="glass-badge">
+        <p class="badge-text">
+          <span class="badge-text__section">
+            <i
+              v-if="badge.iconClass && badge.iconPosition === 'before'"
+              :class="[badge.iconClass, 'badge-icon']"
+            ></i>
+            <span v-if="badge.label">{{ badge.label }}</span>
+            <i
+              v-if="badge.iconClass && badge.iconPosition === 'after'"
+              :class="[badge.iconClass, 'badge-icon badge-icon--after']"
+            ></i>
+          </span>
+        </p>
       </div>
 
       <div class="relative group">
@@ -181,11 +195,24 @@ const footerLinks = computed(() => {
   color: #d1d5db;
   text-transform: uppercase;
   letter-spacing: 0.1em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.badge-text__section {
+  display: inline-flex;
+  align-items: center;
 }
 
 .badge-icon {
   margin-right: 0.5rem;
   color: #e8341c;
+}
+
+.badge-icon--after {
+  margin-right: 0;
+  margin-left: 0.5rem;
 }
 
 .mascot-glow {

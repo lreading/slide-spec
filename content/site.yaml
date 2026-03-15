@@ -1,7 +1,10 @@
 site:
   title: Threat Dragon Quarterly Updates
   tagline: making threat modeling less threatening
-  eyebrow: OWASP Project
+  project_badge:
+    label: OWASP Lab Project
+    fa_icon: fa-flask
+    icon_position: before
   home_intro: Quarterly community updates, published as a static presentation app.
   home_cta_label: View latest presentation
   archive_cta_label: Browse previous presentations

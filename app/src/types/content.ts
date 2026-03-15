@@ -3,10 +3,16 @@ export interface SiteLink {
   url: string
 }
 
+export interface ProjectBadge {
+  label?: string
+  fa_icon?: string
+  icon_position?: 'before' | 'after'
+}
+
 export interface SiteContent {
   title: string
   tagline: string
-  eyebrow: string
+  project_badge?: ProjectBadge
   home_intro: string
   home_cta_label: string
   archive_cta_label: string
@@ -72,6 +78,7 @@ export interface ContributorSpotlightSlide extends BaseSlide {
 
 export interface CommunityHighlightsSlide extends BaseSlide {
   kind: 'community-highlights'
+  section_heading?: string
   stat_keys: string[]
   mentions: CommunityMention[]
 }
