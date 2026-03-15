@@ -20,7 +20,12 @@ const agendaItems = computed(() =>
 </script>
 
 <template>
-  <StandardSlideLayout title="Agenda" :subtitle="slide.subtitle" :slide-number="slideNumber">
+  <StandardSlideLayout
+    title="Agenda"
+    :subtitle="slide.subtitle"
+    :slide-number="slideNumber"
+    :deck-subtitle="deck.subtitle"
+  >
     <div class="agenda-grid">
       <div v-for="(item, index) in agendaItems" :key="item" class="agenda-card">
         <div class="number-badge">{{ String(index + 1).padStart(2, '0') }}</div>

@@ -69,6 +69,11 @@ defineProps<{
       <p class="footer-quote">"making threat modeling less threatening"</p>
     </div>
 
+    <div class="deck-mark">
+      <span class="deck-mark__name">Threat Dragon</span>
+      <span class="deck-mark__subtitle">{{ deck.subtitle }}</span>
+    </div>
+
     <div class="bottom-strip"></div>
   </div>
 </template>
@@ -280,6 +285,30 @@ defineProps<{
   letter-spacing: 0.05em;
 }
 
+.deck-mark {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  z-index: 10;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  color: #d0d0e8;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.deck-mark__name {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.deck-mark__subtitle {
+  color: #e8341c;
+  font-weight: 700;
+}
+
 .bottom-strip {
   position: absolute;
   bottom: 0;
@@ -338,6 +367,13 @@ defineProps<{
     position: relative;
     bottom: auto;
     margin-top: 2rem;
+  }
+
+  .deck-mark {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    margin-top: 1rem;
   }
 }
 </style>

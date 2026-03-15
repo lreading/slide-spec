@@ -19,7 +19,12 @@ const releases = computed(() =>
 </script>
 
 <template>
-  <StandardSlideLayout title="Releases" :subtitle="slide.subtitle" :slide-number="slideNumber">
+  <StandardSlideLayout
+    title="Releases"
+    :subtitle="slide.subtitle"
+    :slide-number="slideNumber"
+    :deck-subtitle="deck.subtitle"
+  >
     <div class="timeline-container">
       <div class="timeline-line"></div>
       <div v-for="(release, index) in releases" :key="release.id" class="release-card" :class="{ latest: index === 0 }">

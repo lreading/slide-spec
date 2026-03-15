@@ -18,6 +18,7 @@ const trailingIcons = ['arrow-right', 'arrow-right', 'arrow-right', 'star']
     title="How to Contribute"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :deck-subtitle="deck.subtitle"
     content-padding="50px 80px"
     :show-dots="false"
   >

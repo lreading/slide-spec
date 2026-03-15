@@ -4,6 +4,7 @@ withDefaults(
     title: string
     subtitle?: string
     slideNumber: number
+    deckSubtitle?: string
     contentPadding?: string
     showDots?: boolean
   }>(),
@@ -35,8 +36,13 @@ withDefaults(
           </div>
         </div>
 
-        <div class="z-10">
+        <div class="content-body z-10">
           <slot />
+        </div>
+
+        <div v-if="deckSubtitle" class="deck-mark z-10">
+          <span class="deck-mark__name">Threat Dragon</span>
+          <span class="deck-mark__subtitle">{{ deckSubtitle }}</span>
         </div>
       </div>
     </div>
@@ -111,6 +117,14 @@ withDefaults(
   min-width: 0;
 }
 
+.content-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  padding-bottom: 2.25rem;
+}
+
 .header-section {
   margin-bottom: 40px;
   border-bottom: 1px solid #333344;
@@ -157,6 +171,29 @@ withDefaults(
   z-index: 0;
 }
 
+.deck-mark {
+  position: absolute;
+  right: 2rem;
+  bottom: 2rem;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  color: #d0d0e8;
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.deck-mark__name {
+  color: #9ca3af;
+  font-weight: 500;
+}
+
+.deck-mark__subtitle {
+  color: #e8341c;
+  font-weight: 700;
+}
+
 @media (max-width: 959px) {
   .layout-grid {
     grid-template-columns: 1fr;
@@ -173,6 +210,11 @@ withDefaults(
   .main-content {
     padding: 32px 24px !important;
   }
+
+  .deck-mark {
+    right: 1.5rem;
+    bottom: 0.9rem;
+  }
 }
 
 @media (max-width: 767px) {
@@ -180,6 +222,14 @@ withDefaults(
     gap: 12px;
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .deck-mark {
+    position: relative;
+    right: auto;
+    bottom: auto;
+    flex-wrap: wrap;
+    margin-top: 1rem;
   }
 }
 </style>

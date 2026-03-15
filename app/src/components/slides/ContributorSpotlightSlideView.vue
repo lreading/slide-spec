@@ -36,6 +36,7 @@ const contributors = computed(() =>
     title="Contributor Spotlight"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :deck-subtitle="deck.subtitle"
   >
     <div class="profiles-grid">
       <div v-for="profile in contributors" :key="profile.login" class="profile-card">

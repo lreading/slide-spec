@@ -15,6 +15,7 @@ defineProps<{
     title="Roadmap"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :deck-subtitle="deck.subtitle"
     content-padding="50px 80px"
   >
     <div class="content-wrapper">

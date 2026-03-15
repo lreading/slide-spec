@@ -34,6 +34,7 @@ const stats = computed(() =>
     title="Community Highlights"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :deck-subtitle="deck.subtitle"
   >
     <div class="content-grid">
       <div class="left-column">

@@ -17,6 +17,7 @@ const icons = ['wrench', 'star', 'users']
     title="What Happened Since Last Update"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
+    :deck-subtitle="deck.subtitle"
   >
     <div class="feature-grid">
       <div v-for="(section, index) in slide.sections" :key="section.title" class="feature-card">
