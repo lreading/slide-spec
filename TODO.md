@@ -1,4 +1,3 @@
-- Rename "Current Deck" to "Latest Presentation" or similar
 - Ensure consistency in naming across the app: all copy, yaml, file names, classes, routing, etc. ("Archive" is really "All Presentations" for example)
 - Look for repeated code and styles, make into reusable components.  Make a plan first: identify all of the things that are repeated more than once, create a list.  Work through that list by creating reusable components for them, and implementing the new components. Good example is buttons, we have a primary and secondary button in use.  Standardize these, only buttons should be our custom component buttons.
 

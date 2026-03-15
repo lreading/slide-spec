@@ -59,7 +59,7 @@ describe('AppNav', () => {
       name: 'presentation',
       params: { presentationId: '2026-q1' },
     })
-    expect(wrapper.findAll('.app-nav__link--active')[0]?.text()).toBe('Current Deck')
+    expect(wrapper.findAll('.app-nav__link--active')[0]?.text()).toBe('Latest Presentation')
   })
 
   it('falls back to the first presentation when there is no featured deck', async () => {

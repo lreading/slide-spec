@@ -61,7 +61,7 @@ watch(
           class="app-nav__link"
           :class="{ 'app-nav__link--active': isPresentationActive }"
         >
-          Current Deck
+          Latest Presentation
         </RouterLink>
       </nav>
     </div>

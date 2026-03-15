@@ -26,7 +26,7 @@ describe('App', () => {
     expect(wrapper.text()).toContain('OWASP Threat Dragon')
     expect(wrapper.text()).toContain('Home')
     expect(wrapper.text()).toContain('Presentations')
-    expect(wrapper.text()).toContain('Current Deck')
+    expect(wrapper.text()).toContain('Latest Presentation')
     expect(wrapper.text()).toContain('td-project-updates')
   })
 
