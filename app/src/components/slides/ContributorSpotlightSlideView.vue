@@ -79,13 +79,16 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
 
 <style scoped>
 .profiles-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 30px;
   flex: 1;
 }
 
 .profile-card {
+  flex: 0 1 calc((100% - 60px) / 3);
+  max-width: calc((100% - 60px) / 3);
   background-color: #252535;
   border-radius: 12px;
   padding: 30px 24px;
@@ -209,8 +212,9 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
 }
 
 @media (max-width: 959px) {
-  .profiles-grid {
-    grid-template-columns: 1fr;
+  .profile-card {
+    flex-basis: min(100%, 36rem);
+    max-width: min(100%, 36rem);
   }
 }
 </style>
