@@ -38,6 +38,7 @@ describe('DeckView', () => {
 
     expect(router.currentRoute.value.query.slide).toBe('2')
     expect(wrapper.text()).toContain('Agenda')
+    wrapper.unmount()
   })
 
   it('normalizes invalid slide queries and exits presentation mode on escape', async () => {
@@ -64,6 +65,7 @@ describe('DeckView', () => {
     await flushPromises()
 
     expect(router.currentRoute.value.query.mode).toBeUndefined()
+    wrapper.unmount()
   })
 
   it('supports first, last, and fullscreen shortcuts', async () => {
@@ -88,7 +90,7 @@ describe('DeckView', () => {
     await router.push('/presentations/2026-q1?slide=3')
     await router.isReady()
 
-    mount(DeckView, {
+    const wrapper = mount(DeckView, {
       global: {
         plugins: [router],
         stubs: {
@@ -117,5 +119,64 @@ describe('DeckView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
     await flushPromises()
     expect(exitFullscreen).toHaveBeenCalled()
+    wrapper.unmount()
+  })
+
+  it('ignores modified shortcuts and toggles presentation mode with p', async () => {
+    const router = createAppRouter(true)
+
+    await router.push('/presentations/2026-q1?slide=2')
+    await router.isReady()
+
+    const wrapper = mount(DeckView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight', ctrlKey: true }))
+    await flushPromises()
+    expect(router.currentRoute.value.query.slide).toBe('2')
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'p' }))
+    await flushPromises()
+    expect(router.currentRoute.value.query.mode).toBe('presentation')
+
+    wrapper.unmount()
+  })
+
+  it('does nothing for fullscreen requests when fullscreen is unavailable', async () => {
+    const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
+
+    Object.defineProperty(document, 'fullscreenEnabled', {
+      configurable: true,
+      value: false,
+    })
+    Object.defineProperty(document.documentElement, 'requestFullscreen', {
+      configurable: true,
+      value: requestFullscreen,
+    })
+
+    const router = createAppRouter(true)
+
+    await router.push('/presentations/2026-q1?slide=3')
+    await router.isReady()
+
+    const wrapper = mount(DeckView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
+    await flushPromises()
+    expect(requestFullscreen).not.toHaveBeenCalled()
+    wrapper.unmount()
   })
 })

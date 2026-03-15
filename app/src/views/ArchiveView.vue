@@ -12,7 +12,6 @@ const presentations = contentRepository.listPresentations()
         <p class="page-eyebrow">{{ site.title }}</p>
         <h1 class="page-title">Presentation archive</h1>
       </div>
-      <RouterLink :to="{ name: 'home' }" class="button button--secondary">Home</RouterLink>
     </div>
 
     <section class="archive-grid">

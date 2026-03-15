@@ -20,6 +20,7 @@
   --primary-text: #f5f7ff;
   --secondary-text: #d0d7e8;
   --muted-text: #93a0bd;
+  --page-gutter: clamp(1rem, 2vw, 1.75rem);
   --font-sans: "Poppins", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "Roboto Mono", "SFMono-Regular", ui-monospace, monospace;
   color: var(--primary-text);
@@ -89,7 +90,7 @@ a {
 .page {
   display: grid;
   gap: 1.5rem;
-  padding: 1.5rem;
+  padding: 1.5rem var(--page-gutter);
 }
 
 .page--centered {
@@ -141,6 +142,6 @@ a {
 
 @media (min-width: 960px) {
   .page {
-    padding: 2rem;
+    padding: 2rem var(--page-gutter);
   }
 }

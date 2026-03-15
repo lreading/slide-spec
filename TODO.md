@@ -20,6 +20,7 @@
 - Thank you slide: ui bug, buttons cover subtitle
 - Thank you: make links and titles configurable
 - Add real favicon from docs/site
+- Add a real root level README
 
 # Future
 - Add presenter notes? Might be a lot of work cuz of fullscreen constraints

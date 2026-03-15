@@ -19,7 +19,7 @@ const navigator = computed(() => new DeckNavigation(slides.value.length))
 const slideNumber = computed(() => navigator.value.resolve(route.query.slide))
 const currentSlide = computed(() => slides.value[slideNumber.value - 1])
 const isPresentationMode = computed(() => route.query.mode === 'presentation')
-const isFullscreenAvailable = typeof document !== 'undefined' && document.fullscreenEnabled
+const isFullscreenAvailable = typeof document !== 'undefined' && Boolean(document.fullscreenEnabled)
 const onKeydown = (event: KeyboardEvent): void => {
   void handleKeydown(event)
 }
@@ -135,10 +135,6 @@ onUnmounted(() => {
         <p class="page-eyebrow">{{ record.index.subtitle }}</p>
         <h1 class="page-title">{{ record.index.title }}</h1>
       </div>
-      <div class="deck-links">
-        <RouterLink :to="{ name: 'home' }" class="button button--secondary">Home</RouterLink>
-        <RouterLink :to="{ name: 'archive' }" class="button button--secondary">Archive</RouterLink>
-      </div>
     </div>
 
     <PresentationToolbar
@@ -167,12 +163,6 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.deck-links {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-}
-
 .page--presentation {
   gap: 1rem;
   padding: 1rem;
