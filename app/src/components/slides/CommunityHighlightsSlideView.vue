@@ -28,6 +28,14 @@ const stats = computed(() =>
     trend: trendLabels[index],
   })),
 )
+
+const mentionCards = computed(() =>
+  props.slide.mentions.map((mention, index) => ({
+    ...mention,
+    icon: mentionIcons[index] ?? 'rss',
+    isLinked: Boolean(mention.url),
+  })),
+)
 </script>
 
 <template>
@@ -44,13 +52,22 @@ const stats = computed(() =>
           <h2 class="section-title"><FontAwesomeIcon icon="bullhorn" /> Talks &amp; Mentions</h2>
         </div>
         <div class="mentions-list">
-          <div v-for="(mention, index) in slide.mentions" :key="mention.title" class="mention-card">
-            <div class="mention-type"><FontAwesomeIcon :icon="mentionIcons[index]" /> {{ mention.type }}</div>
+          <component
+            :is="mention.isLinked ? 'a' : 'div'"
+            v-for="mention in mentionCards"
+            :key="mention.title"
+            class="mention-card"
+            :class="{ 'mention-card--linked': mention.isLinked }"
+            :href="mention.url"
+            :target="mention.isLinked ? '_blank' : undefined"
+            :rel="mention.isLinked ? 'noreferrer' : undefined"
+          >
+            <div class="mention-type"><FontAwesomeIcon :icon="mention.icon" /> {{ mention.type }}</div>
             <h3 class="mention-title">{{ mention.title }}</h3>
-            <div class="mention-link">
+            <div v-if="mention.url && mention.url_label" class="mention-link">
               <FontAwesomeIcon icon="external-link-alt" /> {{ mention.url_label }}
             </div>
-          </div>
+          </component>
         </div>
       </div>
 
@@ -121,7 +138,11 @@ const stats = computed(() =>
   flex-direction: column;
 }
 
-.mention-card:hover {
+.mention-card--linked {
+  cursor: pointer;
+}
+
+.mention-card--linked:hover {
   border-left-color: #e8341c;
   background-color: #2a2a3e;
   transform: translateX(5px);

@@ -140,8 +140,8 @@ export interface SpotlightEntry {
 export interface CommunityMention {
   type: string
   title: string
-  url_label: string
-  url: string
+  url_label?: string
+  url?: string
 }
 
 export interface ContributionCard {

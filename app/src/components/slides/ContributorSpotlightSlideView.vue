@@ -7,11 +7,13 @@ import type {
   ContributorSpotlightSlide,
   GeneratedPresentationData,
   PresentationDeck,
+  SiteContent,
 } from '../../types/content'
 
 const props = defineProps<{
   deck: PresentationDeck
   generated: GeneratedPresentationData
+  site: SiteContent
   slide: ContributorSpotlightSlide
   slideNumber: number
   slideTotal: number
@@ -26,10 +28,12 @@ const contributors = computed(() =>
       ...entry,
       name: contributor?.name ?? entry.login,
       handle: `@${entry.login}`,
+      profileUrl: `https://github.com/${entry.login}`,
       icon: avatarIcons[index] ?? 'fa-user-secret',
     }
   }),
 )
+const contributorsUrl = computed(() => `${props.site.links.repository.url}/graphs/contributors`)
 </script>
 
 <template>
@@ -46,8 +50,15 @@ const contributors = computed(() =>
           <FontAwesomeIcon :icon="profile.icon" class="avatar-icon" />
         </div>
         <h2 class="contributor-name">{{ profile.name }}</h2>
-        <p class="github-handle"><FontAwesomeIcon :icon="['fab', 'github']" /> {{ profile.handle }}</p>
-        <div class="focus-chip">{{ profile.focus_area }}</div>
+        <a
+          class="github-handle"
+          :href="profile.profileUrl"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <FontAwesomeIcon :icon="['fab', 'github']" />
+          <span>{{ profile.handle }}</span>
+        </a>
         <FontAwesomeIcon icon="quote-left" class="quote-icon" />
         <p class="contribution-desc">{{ profile.summary }}</p>
       </div>
@@ -56,7 +67,10 @@ const contributors = computed(() =>
     <div class="thank-you-banner">
       <p class="thank-you-text">
         <FontAwesomeIcon icon="heart" class="text-[#e8341c] mr-2" /> Special thanks to
-        <strong>all {{ generated.contributors.total }} contributors</strong> who submitted PRs,
+        <a class="contributors-link" :href="contributorsUrl" target="_blank" rel="noreferrer">
+          <strong>all {{ generated.contributors.total }} contributors</strong>
+        </a>
+        who submitted PRs,
         reported bugs, and improved docs this quarter!
       </p>
     </div>
@@ -134,23 +148,13 @@ const contributors = computed(() =>
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
 }
 
-.github-handle i {
-  margin-right: 6px;
-}
-
-.focus-chip {
-  background-color: rgba(232, 52, 28, 0.1);
-  color: #e8341c;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-  margin-bottom: 20px;
-  border: 1px solid rgba(232, 52, 28, 0.2);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+.github-handle:hover {
+  color: #ff8d78;
 }
 
 .contribution-desc {
@@ -192,6 +196,16 @@ const contributors = computed(() =>
 .thank-you-text strong {
   color: #e8341c;
   font-weight: 600;
+}
+
+.contributors-link {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.contributors-link:hover {
+  color: #ff8d78;
 }
 
 @media (max-width: 959px) {

@@ -61,6 +61,7 @@ defineProps<{
     v-else-if="slide.kind === 'contributor-spotlight'"
     :deck="record.deck"
     :generated="record.generated"
+    :site="site"
     :slide="slide"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
