@@ -1,9 +1,11 @@
 import { describe, expect, it } from 'vitest'
 
 import { TdCliApplicationService } from './TdCliApplicationService'
+import { YamlWriter } from '../io/YamlWriter'
 
 import type { GitHubClient } from '../github/GitHubClient.types'
 import type { SiteConfig } from '../config/Config.types'
+import type { FileSystem } from '../io/FileSystem'
 import type { GeneratedPresentationData, PresentationIndexEntry, QuarterWindow } from '../generation/Generation.types'
 
 class StubContentConfigLoader {
@@ -59,6 +61,28 @@ class StubPresentationIndexLoader {
     quarter: number,
   ): string | undefined {
     return entries.find((entry) => entry.year === year && entry.quarter === quarter)?.id
+  }
+}
+
+class StubPresentationIndexStore {
+  public readonly writes: PresentationIndexEntry[][] = []
+
+  public constructor(private readonly entries: PresentationIndexEntry[]) {}
+
+  public async load(): Promise<PresentationIndexEntry[]> {
+    return this.entries
+  }
+
+  public findPresentationIdForQuarter(
+    entries: PresentationIndexEntry[],
+    year: number,
+    quarter: number,
+  ): string | undefined {
+    return entries.find((entry) => entry.year === year && entry.quarter === quarter)?.id
+  }
+
+  public async write(_paths: unknown, entries: PresentationIndexEntry[]): Promise<void> {
+    this.writes.push(entries)
   }
 }
 
@@ -135,6 +159,23 @@ class StubGeneratedDataBuilder {
       },
       merged_prs: [],
     }
+  }
+}
+
+class MemoryFileSystem implements FileSystem {
+  public readonly writes = new Map<string, string>()
+
+  public fileExists(_path: string): Promise<boolean> {
+    return Promise.resolve(false)
+  }
+
+  public readTextFile(_path: string): Promise<string> {
+    return Promise.reject(new Error('Not used'))
+  }
+
+  public writeTextFile(path: string, content: string): Promise<void> {
+    this.writes.set(path, content)
+    return Promise.resolve()
   }
 }
 
@@ -221,7 +262,92 @@ describe('TdCliApplicationService', () => {
     expect(generatedDataStore.writes).toHaveLength(0)
   })
 
-  it('keeps non-fetch commands explicitly unimplemented for now', async () => {
+  it('initializes a new presentation scaffold and updates the index when the quarter is new', async () => {
+    const fileSystem = new MemoryFileSystem()
+    const generatedDataStore = new StubGeneratedDataStore()
+    const presentationIndexStore = new StubPresentationIndexStore([
+      {
+        id: '2025-q4',
+        year: 2025,
+        quarter: 4,
+        title: 'Previous',
+        subtitle: 'Q4 2025',
+        summary: 'Summary',
+        published: true,
+        featured: false,
+      },
+    ])
+    const service = new TdCliApplicationService({
+      cliRoot: '/repo/cli',
+      presentationIndexStore: presentationIndexStore as never,
+      generatedDataStore: generatedDataStore as never,
+      yamlWriter: new YamlWriter(fileSystem),
+      quarterResolver: new StubQuarterResolver() as never,
+    })
+
+    await expect(service.initPresentation({
+      year: 2026,
+      quarter: 1,
+    })).resolves.toMatchObject({
+      presentationId: '2026-q1',
+      createdPaths: [
+        '/repo/content/presentations/2026-q1/presentation.yaml',
+        '/repo/content/presentations/2026-q1/generated.yaml',
+        '/repo/content/presentations/index.yaml',
+      ],
+    })
+
+    expect(fileSystem.writes.get('/repo/content/presentations/2026-q1/presentation.yaml')).toContain('template: hero')
+    expect(generatedDataStore.writes).toHaveLength(1)
+    expect(presentationIndexStore.writes).toHaveLength(1)
+  })
+
+  it('rejects existing quarters unless force is enabled, and force overwrites scaffold files without rewriting the index', async () => {
+    const fileSystem = new MemoryFileSystem()
+    const generatedDataStore = new StubGeneratedDataStore()
+    const presentationIndexStore = new StubPresentationIndexStore([
+      {
+        id: '2026-q1',
+        year: 2026,
+        quarter: 1,
+        title: 'Existing',
+        subtitle: 'Q1 2026',
+        summary: 'Summary',
+        published: true,
+        featured: true,
+      },
+    ])
+    const service = new TdCliApplicationService({
+      cliRoot: '/repo/cli',
+      presentationIndexStore: presentationIndexStore as never,
+      generatedDataStore: generatedDataStore as never,
+      yamlWriter: new YamlWriter(fileSystem),
+      quarterResolver: new StubQuarterResolver() as never,
+    })
+
+    await expect(service.initPresentation({
+      year: 2026,
+      quarter: 1,
+    })).rejects.toThrow(
+      'Presentation "2026-q1" already exists for Q1 2026. Use force to overwrite scaffold files.',
+    )
+
+    await expect(service.initPresentation({
+      year: 2026,
+      quarter: 1,
+      force: true,
+    })).resolves.toMatchObject({
+      presentationId: '2026-q1',
+      createdPaths: [
+        '/repo/content/presentations/2026-q1/presentation.yaml',
+        '/repo/content/presentations/2026-q1/generated.yaml',
+      ],
+    })
+
+    expect(presentationIndexStore.writes).toHaveLength(0)
+  })
+
+  it('keeps build, serve, and validate explicitly unimplemented for now', async () => {
     const service = new TdCliApplicationService({
       cliRoot: '/repo/cli',
       contentConfigLoader: new StubContentConfigLoader() as never,
@@ -233,9 +359,6 @@ describe('TdCliApplicationService', () => {
       gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),
     })
 
-    await expect(service.initPresentation({ year: 2026, quarter: 1 })).rejects.toThrow(
-      'initPresentation is not implemented yet.',
-    )
     await expect(service.buildSite({ mode: 'production' })).rejects.toThrow(
       'buildSite is not implemented yet.',
     )

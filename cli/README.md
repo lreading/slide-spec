@@ -9,6 +9,7 @@ Current scope:
 - `.env` token loading
 - typed GitHub client
 - quarter-based generated-data fetching
+- quarter-based presentation scaffolding
 
 Commands:
 - `npm run lint`
@@ -26,5 +27,6 @@ Current source of truth:
 
 Current status:
 - `fetchPresentationData(...)` is implemented in the application layer
+- `initPresentation(...)` is implemented in the application layer
 - command parsing is not implemented yet
-- `init`, `build`, `serve`, and `validate` command flows are not implemented yet
+- `build`, `serve`, and `validate` command flows are not implemented yet

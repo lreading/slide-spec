@@ -10,6 +10,7 @@ describe('FileSystemPaths', () => {
     expect(paths.getRepoRoot()).toBe('/workspace/project')
     expect(paths.getSiteConfigPath()).toBe('/workspace/project/content/site.yaml')
     expect(paths.getPresentationsIndexPath()).toBe('/workspace/project/content/presentations/index.yaml')
+    expect(paths.getPresentationPath('2026-q1')).toBe('/workspace/project/content/presentations/2026-q1/presentation.yaml')
     expect(paths.getGeneratedPath('2026-q1')).toBe('/workspace/project/content/presentations/2026-q1/generated.yaml')
     expect(paths.getEnvPath()).toBe('/workspace/project/cli/.env')
   })

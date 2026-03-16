@@ -23,6 +23,10 @@ export class FileSystemPaths {
     return resolve(this.getRepoRoot(), 'content', 'presentations', presentationId, 'generated.yaml')
   }
 
+  public getPresentationPath(presentationId: string): string {
+    return resolve(this.getRepoRoot(), 'content', 'presentations', presentationId, 'presentation.yaml')
+  }
+
   public getEnvPath(): string {
     return resolve(this.getCliRoot(), '.env')
   }
