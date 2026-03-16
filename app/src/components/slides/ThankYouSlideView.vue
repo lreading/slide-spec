@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 import mascotUrl from '../../assets/mascot.png'
 import AccentDivider from '../ui/AccentDivider.vue'
 import FloatingMascot from '../ui/FloatingMascot.vue'
@@ -12,12 +14,19 @@ import type {
   ThankYouSlide,
 } from '../../types/content'
 
-defineProps<{
+const props = defineProps<{
   deck: PresentationDeck
   generated: GeneratedPresentationData
   site: SiteContent
   slide: ThankYouSlide
 }>()
+
+const markLabel = computed(
+  () =>
+    props.site.presentation_chrome?.mark_label?.trim()
+    || props.site.navigation?.brand_title?.trim()
+    || props.site.title,
+)
 </script>
 
 <template>
@@ -49,30 +58,30 @@ defineProps<{
         <ResourcePillLink
           :href="site.links.repository.url"
           :icon="['fab', 'github']"
-          eyebrow="Source Code"
-          title="GitHub Repo"
+          :eyebrow="site.links.repository.eyebrow"
+          :title="site.links.repository.label"
         />
         <ResourcePillLink
           :href="site.links.docs.url"
           icon="book"
-          eyebrow="Documentation"
-          title="Read the Docs"
+          :eyebrow="site.links.docs.eyebrow"
+          :title="site.links.docs.label"
         />
         <ResourcePillLink
           :href="site.links.owasp.url"
           icon="shield-alt"
-          eyebrow="Foundation"
-          title="OWASP Project"
+          :eyebrow="site.links.owasp.eyebrow"
+          :title="site.links.owasp.label"
         />
       </div>
     </div>
 
     <div class="footer-wrap">
-      <p class="footer-quote">"making threat modeling less threatening"</p>
+      <p class="footer-quote">"{{ slide.quote ?? site.tagline }}"</p>
     </div>
 
     <div class="deck-mark">
-      <span class="deck-mark__name">Threat Dragon</span>
+      <span class="deck-mark__name">{{ markLabel }}</span>
       <span class="deck-mark__subtitle">{{ deck.subtitle }}</span>
     </div>
   </div>

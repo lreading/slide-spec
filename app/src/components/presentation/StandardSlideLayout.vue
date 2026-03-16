@@ -22,6 +22,9 @@ withDefaults(
 const site = contentRepository.getSiteContent()
 const logoUrl = computed(() => site.presentation_logo?.url?.trim() || undefined)
 const logoAlt = computed(() => site.presentation_logo?.alt?.trim() || site.title)
+const markLabel = computed(
+  () => site.presentation_chrome?.mark_label?.trim() || site.navigation?.brand_title?.trim() || site.title,
+)
 </script>
 
 <template>
@@ -56,7 +59,7 @@ const logoAlt = computed(() => site.presentation_logo?.alt?.trim() || site.title
         </div>
 
         <div v-if="deckSubtitle" class="deck-mark z-10">
-          <span class="deck-mark__name">Threat Dragon</span>
+          <span class="deck-mark__name">{{ markLabel }}</span>
           <span class="deck-mark__subtitle">{{ deckSubtitle }}</span>
         </div>
       </div>

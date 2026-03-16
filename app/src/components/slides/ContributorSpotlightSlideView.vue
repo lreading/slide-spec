@@ -37,6 +37,13 @@ const contributors = computed(() =>
   }),
 )
 const contributorsUrl = computed(() => `${props.site.links.repository.url}/graphs/contributors`)
+const bannerContent = computed(() => ({
+  prefix: props.slide.banner_prefix?.trim() || 'Special thanks to all',
+  linkLabel: props.slide.contributors_link_label?.trim() || 'contributors',
+  suffix:
+    props.slide.banner_suffix?.trim()
+    || 'who submitted PRs, reported bugs, and improved docs this quarter!',
+}))
 </script>
 
 <template>
@@ -86,12 +93,11 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
 
     <CalloutBanner class="thank-you-banner" variant="dashed" align="center">
       <p class="thank-you-text">
-        <FontAwesomeIcon icon="heart" class="text-[#e8341c] mr-2" /> Special thanks to
+        <FontAwesomeIcon icon="heart" class="text-[#e8341c] mr-2" /> {{ bannerContent.prefix }}
         <a class="contributors-link" :href="contributorsUrl" target="_blank" rel="noreferrer">
-          <strong>all {{ generated.contributors.total }} contributors</strong>
+          <strong>{{ generated.contributors.total }} {{ bannerContent.linkLabel }}</strong>
         </a>
-        who submitted PRs,
-        reported bugs, and improved docs this quarter!
+        {{ bannerContent.suffix }}
       </p>
     </CalloutBanner>
   </StandardSlideLayout>

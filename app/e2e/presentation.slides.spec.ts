@@ -116,8 +116,11 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         )
         await expect(page.getByText(spotlight.summary)).toBeVisible()
       }
+      const contributorsLinkLabel = contributorSlide.contributors_link_label ?? 'contributors'
       await expect(
-        page.getByRole('link', { name: new RegExp(`all ${record.generated.contributors.total} contributors`, 'i') }),
+        page.getByRole('link', {
+          name: new RegExp(`${record.generated.contributors.total}\\s+${contributorsLinkLabel}`, 'i'),
+        }),
       ).toHaveAttribute('href', `${site.links.repository.url}/graphs/contributors`)
       break
     }
@@ -128,7 +131,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(
         page.getByText(communitySlide.section_heading ?? '', { exact: true }).first(),
       ).toBeVisible()
-      await expect(page.getByText('Stats This Quarter')).toBeVisible()
+      await expect(page.getByText(communitySlide.stats_heading ?? 'Stats This Quarter')).toBeVisible()
       for (const statKey of communitySlide.stat_keys) {
         const stat = record.generated.stats[statKey]
         await expect(page.getByText(stat.label)).toBeVisible()
@@ -155,7 +158,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         await expect(page.getByText(card.description)).toBeVisible()
         await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
       }
-      await expect(page.getByText('Open Source and Community Driven')).toBeVisible()
+      await expect(page.getByText(contributeSlide.footer_text ?? 'Open Source and Community Driven')).toBeVisible()
       await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
         'href',
         site.links.repository.url,
@@ -165,23 +168,27 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
     case 'thank-you':
       await expect(page.getByRole('heading', { name: /thank you/i })).toBeVisible()
       await expect(page.getByText(slide.message)).toBeVisible()
-      await expect(page.getByText('Source Code')).toBeVisible()
-      await expect(page.getByText('Documentation')).toBeVisible()
-      await expect(page.getByText('Foundation')).toBeVisible()
-      await expect(page.getByRole('link', { name: 'GitHub Repo' })).toHaveAttribute(
+      await expect(page.getByText(site.links.repository.eyebrow ?? '')).toBeVisible()
+      await expect(page.getByText(site.links.docs.eyebrow ?? '')).toBeVisible()
+      await expect(page.getByText(site.links.owasp.eyebrow ?? '')).toBeVisible()
+      await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
         'href',
         site.links.repository.url,
       )
-      await expect(page.getByRole('link', { name: 'Read the Docs' })).toHaveAttribute(
+      await expect(page.getByRole('link', { name: site.links.docs.label })).toHaveAttribute(
         'href',
         site.links.docs.url,
       )
-      await expect(page.getByRole('link', { name: 'OWASP Project' })).toHaveAttribute(
+      await expect(page.getByRole('link', { name: site.links.owasp.label })).toHaveAttribute(
         'href',
         site.links.owasp.url,
       )
-      await expect(page.getByText('"making threat modeling less threatening"')).toBeVisible()
-      await expect(page.getByText('Threat Dragon', { exact: true })).toBeVisible()
+      await expect(page.getByText(`"${slide.quote ?? site.tagline}"`)).toBeVisible()
+      await expect(
+        page.getByText(site.presentation_chrome?.mark_label ?? site.navigation?.brand_title ?? site.title, {
+          exact: true,
+        }),
+      ).toBeVisible()
       break
   }
 }

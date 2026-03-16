@@ -53,6 +53,11 @@ const timelineStages = computed(() =>
   }),
 )
 const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallbackSection)
+const roadmapLabels = computed(() => ({
+  deliverables: props.deck.roadmap?.deliverables_heading?.trim() || 'Key deliverables',
+  focusAreas: props.deck.roadmap?.focus_areas_heading?.trim() || 'Focus areas',
+  footerLink: props.deck.roadmap?.footer_link_label?.trim() || 'View full roadmap & milestones on GitHub',
+}))
 </script>
 
 <template>
@@ -77,12 +82,12 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
       <div class="details-grid">
         <section class="detail-card detail-card--primary">
           <p class="card-eyebrow">{{ activeStage.label }}</p>
-          <h2 class="card-title">Key deliverables</h2>
+          <h2 class="card-title">{{ roadmapLabels.deliverables }}</h2>
           <ContentList :items="activeStage.items" marker="icon" icon="chevron-right" class="detail-list" />
         </section>
 
         <section class="detail-card detail-card--secondary">
-          <SectionHeading icon="bullseye" title="Focus areas" />
+          <SectionHeading icon="bullseye" :title="roadmapLabels.focusAreas" />
           <KeyValueRows
             :rows="activeStage.themes.map((theme) => ({ key: theme.category, value: theme.target }))"
             class="themes-grid"
@@ -94,7 +99,7 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
         class="footer-link"
         :href="site.links.repository.url"
         :icon="['fab', 'github']"
-        label="View full roadmap & milestones on GitHub"
+        :label="roadmapLabels.footerLink"
       />
     </div>
   </StandardSlideLayout>

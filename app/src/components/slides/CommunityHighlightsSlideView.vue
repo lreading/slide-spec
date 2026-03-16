@@ -75,7 +75,7 @@ const mentionCards = computed(() =>
       </div>
 
       <div class="right-column">
-        <SectionHeading :icon="'chart-line'" title="Stats This Quarter" />
+        <SectionHeading :icon="'chart-line'" :title="slide.stats_heading ?? 'Stats This Quarter'" />
         <div class="stats-grid">
           <MetricStatCard
             v-for="stat in stats"

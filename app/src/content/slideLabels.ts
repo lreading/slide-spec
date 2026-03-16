@@ -16,11 +16,13 @@ export const getSlideLabel = (
   slide: PresentationSlide,
   deck: PresentationDeck,
 ): string => {
-  if (slide.kind === 'roadmap') {
-    const activeSection = deck.roadmap?.sections[slide.stage]
+  if (slide.title) {
+    return slide.title
+  }
 
-    if (activeSection) {
-      return `Roadmap: ${activeSection.label}`
+  if (slide.kind === 'roadmap') {
+    if (deck.roadmap?.agenda_label) {
+      return deck.roadmap.agenda_label
     }
   }
 

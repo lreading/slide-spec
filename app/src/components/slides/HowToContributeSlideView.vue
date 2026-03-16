@@ -61,7 +61,7 @@ const repositoryLink = computed(() => props.site.links.repository)
     <CalloutBanner class="footer-cta">
       <div class="repo-info">
         <FontAwesomeIcon :icon="['fab', 'github']" class="text-xl mr-3" />
-        <p>Open Source and Community Driven</p>
+        <p>{{ slide.footer_text ?? 'Open Source and Community Driven' }}</p>
       </div>
       <template v-if="repositoryLink" #action>
         <FooterActionLink :href="repositoryLink.url" icon="code" :label="repositoryLink.label" />

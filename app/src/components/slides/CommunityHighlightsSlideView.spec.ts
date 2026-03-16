@@ -114,4 +114,34 @@ describe('CommunityHighlightsSlideView', () => {
 
     expect(wrapper.text()).toContain('Community Activity')
   })
+
+  it('falls back to default title, stats heading, and mention icon when optional values are missing', () => {
+    const wrapper = mount(CommunityHighlightsSlideView, {
+      props: {
+        deck: record.deck,
+        generated: record.generated,
+        slide: {
+          ...slide,
+          title: undefined,
+          stats_heading: undefined,
+          mentions: [
+            ...slide.mentions,
+            {
+              type: 'Community tooling',
+              title: 'A fourth mention to exercise icon fallback behavior',
+            },
+          ],
+        },
+        slideNumber: 7,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.text()).toContain('Community Highlights')
+    expect(wrapper.text()).toContain('Stats This Quarter')
+    expect(wrapper.text()).toContain('Community tooling')
+
+    const mentionTypes = wrapper.findAll('.mention-type')
+    expect(mentionTypes[3]?.text()).toContain('Community tooling')
+  })
 })

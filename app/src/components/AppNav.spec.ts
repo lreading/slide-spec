@@ -95,4 +95,46 @@ describe('AppNav', () => {
       params: { presentationId: '2026-q2' },
     })
   })
+
+  it('falls back to default navigation labels when config values are blank', async () => {
+    vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
+      title: 'Threat Dragon Quarterly Updates',
+      tagline: 'Quarterly updates',
+      home_intro: 'Intro',
+      home_cta_label: 'Latest',
+      presentations_cta_label: 'Presentations',
+      navigation: {
+        brand_title: '   ',
+        home_label: '   ',
+        presentations_label: '   ',
+        latest_presentation_label: '   ',
+        toggle_label: '   ',
+      },
+      links: {
+        repository: {
+          label: 'Repo',
+          url: 'https://example.com/repo',
+        },
+      },
+    })
+
+    const router = createAppRouter(true)
+    await router.push('/')
+    await router.isReady()
+
+    const wrapper = mount(AppNav, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('Threat Dragon Updates')
+    expect(wrapper.text()).toContain('Home')
+    expect(wrapper.text()).toContain('Presentations')
+    expect(wrapper.text()).toContain('Latest Presentation')
+    expect(wrapper.get('.app-nav__toggle').attributes('aria-label')).toBe('Toggle navigation')
+  })
 })

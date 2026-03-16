@@ -5,6 +5,10 @@ presentation:
   title: OWASP Threat Dragon Quarterly Community Update
   subtitle: Q1 2026
   roadmap:
+    agenda_label: Roadmap
+    deliverables_heading: Key deliverables
+    focus_areas_heading: Focus areas
+    footer_link_label: View full roadmap & milestones on GitHub
     sections:
       completed:
         label: Completed
@@ -131,6 +135,9 @@ presentation:
       enabled: true
       title: Contributor Spotlight
       subtitle: Recognizing our top community contributors this quarter
+      banner_prefix: Special thanks to all
+      contributors_link_label: contributors
+      banner_suffix: who submitted PRs, reported bugs, and improved docs this quarter!
       spotlight:
         - login: schen_dev
           focus_area: UI & Accessibility
@@ -146,6 +153,7 @@ presentation:
       title: Community Highlights
       subtitle: Notable community activity and ecosystem updates from Q1 2026
       section_heading: Community Activity
+      stats_heading: Stats This Quarter
       stat_keys:
         - stars
         - issues_closed
@@ -168,6 +176,7 @@ presentation:
       enabled: true
       title: How to Contribute
       subtitle: Join the mission to make threat modeling less threatening
+      footer_text: Open Source and Community Driven
       cards:
         - title: Report Bugs
           description: Found an issue? Let us know! Please include reproduction steps, environment details, and screenshots if possible.
@@ -189,3 +198,4 @@ presentation:
       enabled: true
       heading: Thank you
       message: See you next quarter.
+      quote: making threat modeling less threatening

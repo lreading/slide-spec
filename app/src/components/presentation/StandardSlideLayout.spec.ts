@@ -16,6 +16,7 @@ describe('StandardSlideLayout', () => {
         subtitle: 'Future direction',
         slideNumber: 4,
         slideTotal: 12,
+        deckSubtitle: 'Q1 2026',
       },
       slots: {
         default: '<div class="slot-marker">Body</div>',
@@ -25,6 +26,7 @@ describe('StandardSlideLayout', () => {
     expect(wrapper.text()).toContain('Roadmap')
     expect(wrapper.text()).toContain('Future direction')
     expect(wrapper.text()).toContain('4/12')
+    expect(wrapper.text()).toContain('Threat Dragon')
     expect(wrapper.find('.bg-dots').exists()).toBe(true)
     expect(wrapper.find('.logo-image').attributes('src')).toBe('/cupcake-logo.png')
     expect(wrapper.find('.slot-marker').exists()).toBe(true)
@@ -101,5 +103,35 @@ describe('StandardSlideLayout', () => {
 
     expect(wrapper.find('.logo-image').attributes('src')).toBe('https://example.com/logo.png')
     expect(wrapper.find('.logo-image').attributes('alt')).toBe('Threat Dragon Updates')
+  })
+
+  it('falls back to the navigation brand when no presentation mark label is configured', () => {
+    vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
+      title: 'Threat Dragon Quarterly Updates',
+      tagline: 'Quarterly updates',
+      home_intro: 'Intro',
+      home_cta_label: 'Latest',
+      presentations_cta_label: 'Presentations',
+      navigation: {
+        brand_title: 'Threat Dragon Updates',
+      },
+      links: {
+        repository: {
+          label: 'Repo',
+          url: 'https://example.com/repo',
+        },
+      },
+    })
+
+    const wrapper = mount(StandardSlideLayout, {
+      props: {
+        title: 'Agenda',
+        slideNumber: 2,
+        slideTotal: 12,
+        deckSubtitle: 'Q1 2026',
+      },
+    })
+
+    expect(wrapper.text()).toContain('Threat Dragon Updates')
   })
 })

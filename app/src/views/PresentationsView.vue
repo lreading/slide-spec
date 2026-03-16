@@ -14,6 +14,27 @@ const search = ref('')
 const selectedYear = ref<string>('all')
 const currentPage = ref(1)
 const pageSize = 12
+const pageContent = computed(() => ({
+  title: site.presentations_page?.title?.trim() || site.presentations_page_title?.trim() || 'All presentations',
+  searchLabel: site.presentations_page?.search_label?.trim() || 'Search',
+  searchPlaceholder: site.presentations_page?.search_placeholder?.trim() || 'Search presentations...',
+  yearLabel: site.presentations_page?.year_label?.trim() || 'Year',
+  allYearsLabel: site.presentations_page?.all_years_label?.trim() || 'All years',
+  openPresentationLabel:
+    site.presentations_page?.open_presentation_label?.trim() || 'Open presentation',
+  emptyTitle: site.presentations_page?.empty_title?.trim() || 'No matching presentations',
+  emptyMessage:
+    site.presentations_page?.empty_message?.trim() || 'Try a different year or a broader search term.',
+  previousPageLabel: site.presentations_page?.previous_page_label?.trim() || 'Previous',
+  nextPageLabel: site.presentations_page?.next_page_label?.trim() || 'Next',
+  pageLabel: site.presentations_page?.page_label?.trim() || 'Page',
+  showingLabel: site.presentations_page?.showing_label?.trim() || 'Showing',
+  totalLabel: site.presentations_page?.total_label?.trim() || 'total',
+  presentationSingularLabel:
+    site.presentations_page?.presentation_singular_label?.trim() || 'presentation',
+  presentationPluralLabel:
+    site.presentations_page?.presentation_plural_label?.trim() || 'presentations',
+}))
 
 const availableYears = computed(() => catalog.listYears())
 const activeYear = computed(() =>
@@ -50,26 +71,26 @@ function goToPage(page: number): void {
   <main class="page">
     <div class="page-header presentations-header">
       <div class="presentations-heading">
-        <p class="presentations-eyebrow">{{ site.presentations_page_title ?? 'All presentations' }}</p>
+        <p class="presentations-eyebrow">{{ pageContent.title }}</p>
       </div>
     </div>
 
     <section class="presentations-panel">
       <div class="presentations-toolbar">
         <label class="presentations-field">
-          <span class="presentations-field__label">Search</span>
+          <span class="presentations-field__label">{{ pageContent.searchLabel }}</span>
           <input
             v-model="search"
             class="presentations-input"
             type="search"
-            placeholder="Search title, summary, quarter, or year"
+            :placeholder="pageContent.searchPlaceholder"
           />
         </label>
 
         <label class="presentations-field presentations-field--year">
-          <span class="presentations-field__label">Year</span>
+          <span class="presentations-field__label">{{ pageContent.yearLabel }}</span>
           <select v-model="selectedYear" class="presentations-select">
-            <option value="all">All years</option>
+            <option value="all">{{ pageContent.allYearsLabel }}</option>
             <option v-for="year in availableYears" :key="year" :value="String(year)">
               {{ year }}
             </option>
@@ -79,13 +100,12 @@ function goToPage(page: number): void {
 
       <div class="presentations-results-summary">
         <p>
-          <strong>{{ pageResult.totalItems }}</strong> presentation{{
-            pageResult.totalItems === 1 ? '' : 's'
-          }}
-          total
+          <strong>{{ pageResult.totalItems }}</strong>
+          {{ pageResult.totalItems === 1 ? pageContent.presentationSingularLabel : pageContent.presentationPluralLabel }}
+          {{ pageContent.totalLabel }}
         </p>
         <p v-if="pageResult.totalItems > 0">
-          Page {{ pageResult.page }} of {{ pageResult.totalPages }} · Showing
+          {{ pageContent.pageLabel }} {{ pageResult.page }} of {{ pageResult.totalPages }} · {{ pageContent.showingLabel }}
           {{ pageResult.startItem }}-{{ pageResult.endItem }}
         </p>
       </div>
@@ -107,15 +127,15 @@ function goToPage(page: number): void {
               :to="{ name: 'presentation', params: { presentationId: entry.id } }"
               class="presentations-link"
             >
-              Open presentation
+              {{ pageContent.openPresentationLabel }}
             </ActionButton>
           </div>
         </article>
       </div>
 
       <div v-else class="presentations-empty">
-        <h2>No matching presentations</h2>
-        <p>Try a different year or a broader search term.</p>
+        <h2>{{ pageContent.emptyTitle }}</h2>
+        <p>{{ pageContent.emptyMessage }}</p>
       </div>
 
       <div v-if="pageResult.totalPages > 1" class="presentations-pagination">
@@ -125,7 +145,7 @@ function goToPage(page: number): void {
           type="button"
           @click="goToPage(pageResult.page - 1)"
         >
-          Previous
+          {{ pageContent.previousPageLabel }}
         </button>
 
         <button
@@ -149,7 +169,7 @@ function goToPage(page: number): void {
           type="button"
           @click="goToPage(pageResult.page + 1)"
         >
-          Next
+          {{ pageContent.nextPageLabel }}
         </button>
       </div>
     </section>

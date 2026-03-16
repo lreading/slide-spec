@@ -28,14 +28,36 @@ describe('ContributorSpotlightSlideView', () => {
     })
 
     expect(wrapper.findAll('.profile-card')).toHaveLength(slide.spotlight.length)
-    expect(wrapper.text()).toContain('Special thanks to')
-    expect(wrapper.text()).toContain('all 24 contributors')
+    expect(wrapper.text()).toContain('Special thanks to all')
+    expect(wrapper.text()).toContain('24 contributors')
     expect(wrapper.get('.contributors-link').attributes('href')).toBe(
       'https://github.com/OWASP/threat-dragon/graphs/contributors',
     )
     expect(wrapper.findAll('.github-handle')[0]?.attributes('href')).toBe(
       'https://github.com/schen_dev',
     )
+  })
+
+  it('falls back to default banner copy when banner fields are missing', () => {
+    const wrapper = mount(ContributorSpotlightSlideView, {
+      props: {
+        deck: record.deck,
+        generated: record.generated,
+        site,
+        slide: {
+          ...slide,
+          banner_prefix: undefined,
+          contributors_link_label: undefined,
+          banner_suffix: undefined,
+        },
+        slideNumber: 6,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.text()).toContain('Special thanks to all')
+    expect(wrapper.text()).toContain('24 contributors')
+    expect(wrapper.text()).toContain('who submitted PRs, reported bugs, and improved docs this quarter!')
   })
 
   it('falls back to login names and the default icon when generated data is missing', () => {

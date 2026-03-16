@@ -5,11 +5,19 @@ import { useRoute } from 'vue-router'
 import { contentRepository } from '../content/ContentRepository'
 
 const route = useRoute()
+const site = contentRepository.getSiteContent()
 const presentations = contentRepository.listPresentations()
 const mobileOpen = ref(false)
 
 const featuredPresentation = computed(() => presentations.find((entry) => entry.featured) ?? presentations[0])
-const brandTitle = 'Threat Dragon Updates'
+const navigationContent = computed(() => ({
+  brandTitle: site.navigation?.brand_title?.trim() || 'Threat Dragon Updates',
+  homeLabel: site.navigation?.home_label?.trim() || 'Home',
+  presentationsLabel: site.navigation?.presentations_label?.trim() || 'Presentations',
+  latestPresentationLabel:
+    site.navigation?.latest_presentation_label?.trim() || 'Latest Presentation',
+  toggleLabel: site.navigation?.toggle_label?.trim() || 'Toggle navigation',
+}))
 const presentationRoute = computed(() =>
   route.name === 'presentation' && typeof route.params.presentationId === 'string'
     ? { name: 'presentation' as const, params: { presentationId: route.params.presentationId } }
@@ -29,7 +37,7 @@ watch(
   <header class="app-nav">
     <div class="app-nav__inner">
       <RouterLink :to="{ name: 'home' }" class="app-nav__brand">
-        <span class="app-nav__title">{{ brandTitle }}</span>
+        <span class="app-nav__title">{{ navigationContent.brandTitle }}</span>
       </RouterLink>
 
       <button
@@ -37,7 +45,7 @@ watch(
         class="app-nav__toggle"
         :aria-expanded="mobileOpen ? 'true' : 'false'"
         aria-controls="app-nav-links"
-        aria-label="Toggle navigation"
+        :aria-label="navigationContent.toggleLabel"
         @click="mobileOpen = !mobileOpen"
       >
         <span class="app-nav__toggle-line" :class="{ 'app-nav__toggle-line--top-open': mobileOpen }"></span>
@@ -47,21 +55,21 @@ watch(
 
       <nav id="app-nav-links" class="app-nav__links" :class="{ 'app-nav__links--open': mobileOpen }">
         <RouterLink :to="{ name: 'home' }" class="app-nav__link" :class="{ 'app-nav__link--active': route.name === 'home' }">
-          Home
+          {{ navigationContent.homeLabel }}
         </RouterLink>
         <RouterLink
           :to="{ name: 'presentations' }"
           class="app-nav__link"
           :class="{ 'app-nav__link--active': route.name === 'presentations' }"
         >
-          Presentations
+          {{ navigationContent.presentationsLabel }}
         </RouterLink>
         <RouterLink
           :to="presentationRoute"
           class="app-nav__link"
           :class="{ 'app-nav__link--active': isPresentationActive }"
         >
-          Latest Presentation
+          {{ navigationContent.latestPresentationLabel }}
         </RouterLink>
       </nav>
     </div>

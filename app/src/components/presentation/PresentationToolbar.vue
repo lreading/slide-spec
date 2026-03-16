@@ -4,6 +4,10 @@ import ActionButton from '../ui/ActionButton.vue'
 defineProps<{
   slideNumber: number
   slideTotal: number
+  navigationLabel?: string
+  previousSlideLabel?: string
+  nextSlideLabel?: string
+  presentationModeLabel?: string
 }>()
 
 defineEmits<{
@@ -15,12 +19,12 @@ defineEmits<{
 
 <template>
   <div class="toolbar">
-    <div class="toolbar-group toolbar-group--nav" aria-label="Slide navigation">
+    <div class="toolbar-group toolbar-group--nav" :aria-label="navigationLabel ?? 'Slide navigation'">
       <button
         type="button"
         class="toolbar-icon-button"
-        aria-label="Previous slide"
-        title="Previous slide"
+        :aria-label="previousSlideLabel ?? 'Previous slide'"
+        :title="previousSlideLabel ?? 'Previous slide'"
         @click="$emit('previous')"
       >
         <FontAwesomeIcon :icon="['fas', 'arrow-left']" />
@@ -31,8 +35,8 @@ defineEmits<{
       <button
         type="button"
         class="toolbar-icon-button"
-        aria-label="Next slide"
-        title="Next slide"
+        :aria-label="nextSlideLabel ?? 'Next slide'"
+        :title="nextSlideLabel ?? 'Next slide'"
         @click="$emit('next')"
       >
         <FontAwesomeIcon :icon="['fas', 'arrow-right']" />
@@ -41,7 +45,7 @@ defineEmits<{
 
     <div class="toolbar-group toolbar-group--meta">
       <ActionButton type="button" class="toolbar-mode-button" @click="$emit('toggleMode')">
-        Presentation mode
+        {{ presentationModeLabel ?? 'Presentation mode' }}
       </ActionButton>
     </div>
   </div>

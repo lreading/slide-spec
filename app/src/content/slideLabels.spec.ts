@@ -34,10 +34,16 @@ describe('getSlideLabel', () => {
     }
 
     expect(
-      getSlideLabel(roadmapSlide, {
+      getSlideLabel(
+        {
+          ...roadmapSlide,
+          title: undefined,
+        },
+        {
         ...record.deck,
         roadmap: undefined,
-      }),
+        },
+      ),
     ).toBe('Roadmap')
   })
 })

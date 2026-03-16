@@ -8,6 +8,22 @@ site:
   presentation_logo:
     url: /cupcake-logo.png
     alt: Threat Dragon logo
+  navigation:
+    brand_title: Threat Dragon Updates
+    home_label: Home
+    presentations_label: Presentations
+    latest_presentation_label: Latest Presentation
+    toggle_label: Toggle navigation
+  app_footer:
+    repository_label: github.com/lreading/td-project-updates
+    repository_url: https://github.com/lreading/td-project-updates
+  presentation_chrome:
+    mark_label: Threat Dragon
+  presentation_toolbar:
+    navigation_label: Slide navigation
+    previous_slide_label: Previous slide
+    next_slide_label: Next slide
+    presentation_mode_label: Presentation mode
   home_hero:
     title_primary: OWASP
     title_accent: Threat Dragon
@@ -16,13 +32,31 @@ site:
   home_cta_label: View latest presentation
   presentations_cta_label: View all presentations
   presentations_page_title: All presentations
+  presentations_page:
+    search_label: Search
+    search_placeholder: Search presentations...
+    year_label: Year
+    all_years_label: All years
+    open_presentation_label: Open presentation
+    empty_title: No matching presentations
+    empty_message: Try a different year or a broader search term.
+    previous_page_label: Previous
+    next_page_label: Next
+    page_label: Page
+    showing_label: Showing
+    total_label: total
+    presentation_singular_label: presentation
+    presentation_plural_label: presentations
   links:
     repository:
       label: GitHub Repo
       url: https://github.com/OWASP/threat-dragon
+      eyebrow: Source Code
     docs:
       label: Threat Dragon Docs
       url: https://www.threatdragon.com/docs
+      eyebrow: Documentation
     owasp:
       label: OWASP Project
       url: https://owasp.org/www-project-threat-dragon/
+      eyebrow: Foundation
