@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import SectionHeading from '../ui/SectionHeading.vue'
 
 import type {
   PresentationDeck,
@@ -91,12 +92,7 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
         </section>
 
         <section class="detail-card detail-card--secondary">
-          <div class="section-header">
-            <h2 class="section-title">
-              <FontAwesomeIcon icon="bullseye" class="section-title__icon" />
-              Focus areas
-            </h2>
-          </div>
+          <SectionHeading icon="bullseye" title="Focus areas" />
           <div class="themes-grid">
             <div
               v-for="theme in activeStage.themes"
@@ -302,26 +298,6 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
   margin-top: 0.28rem;
   color: #e8341c;
   flex-shrink: 0;
-}
-
-.section-header {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #333344;
-}
-
-.section-title {
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
-  margin: 0;
-  color: #ffffff;
-  font-size: 1.15rem;
-  font-weight: 600;
-}
-
-.section-title__icon {
-  color: #e8341c;
 }
 
 .themes-grid {

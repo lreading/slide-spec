@@ -3,6 +3,7 @@ import mascotUrl from '../../assets/mascot.png'
 import AccentDivider from '../ui/AccentDivider.vue'
 import FloatingMascot from '../ui/FloatingMascot.vue'
 import HeroDecor from '../ui/HeroDecor.vue'
+import ResourcePillLink from '../ui/ResourcePillLink.vue'
 
 import type {
   GeneratedPresentationData,
@@ -45,27 +46,24 @@ defineProps<{
       </div>
 
       <div class="actions">
-        <a :href="site.links.repository.url" target="_blank" rel="noreferrer" class="pill-btn">
-          <i class="fab fa-github pill-icon"></i>
-          <div class="pill-copy">
-            <span class="pill-eyebrow">Source Code</span>
-            <span class="pill-title">GitHub Repo</span>
-          </div>
-        </a>
-        <a :href="site.links.docs.url" target="_blank" rel="noreferrer" class="pill-btn">
-          <i class="fas fa-book pill-icon"></i>
-          <div class="pill-copy">
-            <span class="pill-eyebrow">Documentation</span>
-            <span class="pill-title">Read the Docs</span>
-          </div>
-        </a>
-        <a :href="site.links.owasp.url" target="_blank" rel="noreferrer" class="pill-btn">
-          <i class="fas fa-shield-alt pill-icon"></i>
-          <div class="pill-copy">
-            <span class="pill-eyebrow">Foundation</span>
-            <span class="pill-title">OWASP Project</span>
-          </div>
-        </a>
+        <ResourcePillLink
+          :href="site.links.repository.url"
+          :icon="['fab', 'github']"
+          eyebrow="Source Code"
+          title="GitHub Repo"
+        />
+        <ResourcePillLink
+          :href="site.links.docs.url"
+          icon="book"
+          eyebrow="Documentation"
+          title="Read the Docs"
+        />
+        <ResourcePillLink
+          :href="site.links.owasp.url"
+          icon="shield-alt"
+          eyebrow="Foundation"
+          title="OWASP Project"
+        />
       </div>
     </div>
 
@@ -144,55 +142,6 @@ defineProps<{
   margin-top: 1.5rem;
   flex-wrap: wrap;
   justify-content: center;
-}
-
-.pill-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  border-radius: 9999px;
-  background-color: rgba(37, 37, 53, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
-}
-
-.pill-btn:hover {
-  border-color: #e8341c;
-  background-color: rgba(232, 52, 28, 0.1);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.pill-icon {
-  font-size: 1.5rem;
-  color: #d1d5db;
-  transition: color 0.3s ease;
-}
-
-.pill-btn:hover .pill-icon {
-  color: #e8341c;
-}
-
-.pill-copy {
-  display: flex;
-  flex-direction: column;
-  text-align: left;
-}
-
-.pill-eyebrow {
-  font-size: 0.75rem;
-  line-height: 1rem;
-  color: #9ca3af;
-  font-family: var(--font-mono);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.pill-title {
-  color: #ffffff;
-  font-weight: 600;
 }
 
 .footer-wrap {

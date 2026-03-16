@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import SectionHeading from '../ui/SectionHeading.vue'
 
 import type {
   CommunityHighlightsSlide,
@@ -48,12 +49,7 @@ const mentionCards = computed(() =>
   >
     <div class="content-grid">
       <div class="left-column">
-        <div class="section-header">
-          <h2 class="section-title">
-            <FontAwesomeIcon icon="bullhorn" />
-            {{ slide.section_heading ?? 'Community Activity' }}
-          </h2>
-        </div>
+        <SectionHeading :icon="'bullhorn'" :title="slide.section_heading ?? 'Community Activity'" />
         <div class="mentions-list">
           <component
             :is="mention.isLinked ? 'a' : 'div'"
@@ -75,9 +71,7 @@ const mentionCards = computed(() =>
       </div>
 
       <div class="right-column">
-        <div class="section-header">
-          <h2 class="section-title"><FontAwesomeIcon icon="chart-line" /> Stats This Quarter</h2>
-        </div>
+        <SectionHeading :icon="'chart-line'" title="Stats This Quarter" />
         <div class="stats-grid">
           <div v-for="stat in stats" :key="stat.label" class="stat-card">
             <div class="stat-icon">
@@ -101,29 +95,6 @@ const mentionCards = computed(() =>
   grid-template-columns: 1fr 1fr;
   gap: 40px;
   flex: 1;
-}
-
-.section-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 25px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #333344;
-}
-
-.section-title {
-  font-size: 20px;
-  font-weight: 600;
-  color: #ffffff;
-  margin: 0;
-  display: flex;
-  align-items: center;
-}
-
-.section-title :deep(svg) {
-  color: #e8341c;
-  margin-right: 12px;
-  flex-shrink: 0;
 }
 
 .mentions-list {
