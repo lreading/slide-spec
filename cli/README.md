@@ -16,7 +16,7 @@ Commands:
 
 Environment:
 - copy `.env.example` to `.env`
-- set `GITHUB_TOKEN`
+- set `GITHUB_PAT`
 
 Current source of truth:
 - GitHub fetch target comes from `../content/site.yaml`

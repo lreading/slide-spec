@@ -19,5 +19,5 @@ export interface GitHubRepositoryRef {
 }
 
 export interface CliEnvironment {
-  githubToken: string
+  githubAccessToken: string
 }

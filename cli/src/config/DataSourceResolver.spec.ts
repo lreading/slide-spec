@@ -47,5 +47,36 @@ describe('DataSourceResolver', () => {
         },
       ],
     })).toThrow('GitHub data source URL "https://github.com/OWASP" must target a repository root.')
+
+    expect(() => resolver.resolveGitHubRepository({
+      data_sources: [
+        {
+          type: 'github',
+          url: 'not-a-url',
+        },
+      ],
+    })).toThrow('GitHub data source URL "not-a-url" is invalid.')
+
+    expect(() => resolver.resolveGitHubRepository({
+      data_sources: [
+        {
+          type: 'github',
+          url: 'https://gitlab.com/OWASP/threat-dragon',
+        },
+      ],
+    })).toThrow(
+      'GitHub data source URL "https://gitlab.com/OWASP/threat-dragon" must point to github.com.',
+    )
+
+    expect(() => resolver.resolveGitHubRepository({
+      data_sources: [
+        {
+          type: 'github',
+          url: 'https://github.com/OWASP/.git',
+        },
+      ],
+    })).toThrow(
+      'GitHub data source URL "https://github.com/OWASP/.git" must target a repository root.',
+    )
   })
 })

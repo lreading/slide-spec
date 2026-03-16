@@ -17,14 +17,14 @@ export class EnvLoader {
 
     const envSource = await this.fileSystem.readTextFile(envPath)
     const parsed = parse(envSource)
-    const githubToken = parsed.GITHUB_TOKEN?.trim()
+    const githubAccessToken = parsed.GITHUB_PAT?.trim() || parsed.GITHUB_TOKEN?.trim()
 
-    if (!githubToken) {
-      throw new Error(`Missing GITHUB_TOKEN in "${envPath}".`)
+    if (!githubAccessToken) {
+      throw new Error(`Missing GITHUB_PAT in "${envPath}".`)
     }
 
     return {
-      githubToken,
+      githubAccessToken,
     }
   }
 }

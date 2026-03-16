@@ -23,14 +23,22 @@ class MemoryFileSystem implements FileSystem {
 }
 
 describe('EnvLoader', () => {
-  it('loads the GitHub token from the cli .env file', async () => {
+  it('loads the GitHub token from GITHUB_PAT and falls back to GITHUB_TOKEN', async () => {
     const paths = new FileSystemPaths('/workspace/project/cli')
     const loader = new EnvLoader(new MemoryFileSystem({
-      '/workspace/project/cli/.env': 'GITHUB_TOKEN=test-token',
+      '/workspace/project/cli/.env': 'GITHUB_PAT=test-token',
     }))
 
     await expect(loader.loadEnvironment(paths)).resolves.toEqual({
-      githubToken: 'test-token',
+      githubAccessToken: 'test-token',
+    })
+
+    await expect(
+      new EnvLoader(new MemoryFileSystem({
+        '/workspace/project/cli/.env': 'GITHUB_TOKEN=fallback-token',
+      })).loadEnvironment(paths),
+    ).resolves.toEqual({
+      githubAccessToken: 'fallback-token',
     })
   })
 
@@ -45,6 +53,6 @@ describe('EnvLoader', () => {
       new EnvLoader(new MemoryFileSystem({
         '/workspace/project/cli/.env': 'ANOTHER_VALUE=1',
       })).loadEnvironment(paths),
-    ).rejects.toThrow('Missing GITHUB_TOKEN in "/workspace/project/cli/.env".')
+    ).rejects.toThrow('Missing GITHUB_PAT in "/workspace/project/cli/.env".')
   })
 })
