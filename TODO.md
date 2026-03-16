@@ -2,15 +2,6 @@
 - Add some info about keyboard shortcuts before entering presentation mode.  Not sure how yet.. either a small ui addition near the button, or something that is dismissable (if dismissable, make sure we save to localStorage a "do not show again" type of setting or whatever)
 - Add a documentation site (focus on schema, template, etc)
 
-# Data
-- Rename deck to presentation, ensure consistency in naming (file and data properties, should match our "business terms", slides, presentation, etc)
-- Try to keep names for the data for the content in all of the different slides as consistent as possible.  We will be migrating to a "template" format.
-- Ensure that all text, except for links, comes from the data files.  This includes website title, EVERYTHING in EVERY slide, etc.
-- Create a plan on how we can use these data classes with slide TEMPLATES, so that way they aren't as tightly coupled to OSS work
-- Add data validation per template type
-- Add data validation to site, index, and generated files as well
-- Ensure we are not duplicating data unless necessary. If a slide wants the github url, that's fine, but we could also make an exception for that to be duplicated because they may not want to reference the current project url for some reason in a given slide?
-
 # Scripts
 - Start fleshing out what data can be pulled dynamically
 - Make sure thee main config file is the source of truth for things like gh repo

@@ -1,6 +1,9 @@
 site:
   title: Threat Dragon Quarterly Updates
   mascot_alt: Cupcake mascot
+  data_sources:
+    - type: github
+      url: https://github.com/OWASP/threat-dragon
   project_badge:
     label: OWASP Lab Project
     fa_icon: fa-flask

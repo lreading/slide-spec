@@ -144,6 +144,12 @@ describe('ContentValidator', () => {
       validator.validateSiteDocument({
         site: {
           title: 'Threat Dragon Quarterly Updates',
+          data_sources: [
+            {
+              type: 'github',
+              url: 'https://github.com/OWASP/threat-dragon',
+            },
+          ],
           home_intro: 'Intro',
           home_cta_label: 'View latest presentation',
           presentations_cta_label: 'View all presentations',
@@ -252,6 +258,37 @@ describe('ContentValidator', () => {
         },
       }),
     ).toThrow('site.yaml.site.links.repository.url must be a string.')
+
+    expect(() =>
+      validator.validateSiteDocument({
+        site: {
+          title: 'Test',
+          data_sources: [
+            {
+              type: 'gitlab',
+              url: 'https://gitlab.com/example/project',
+            },
+          ],
+          home_intro: 'Intro',
+          home_cta_label: 'Open',
+          presentations_cta_label: 'Presentations',
+          links: {
+            repository: {
+              label: 'GitHub Repo',
+              url: 'https://github.com/OWASP/threat-dragon',
+            },
+            docs: {
+              label: 'Docs',
+              url: 'https://example.com/docs',
+            },
+            owasp: {
+              label: 'OWASP',
+              url: 'https://example.com/owasp',
+            },
+          },
+        },
+      }),
+    ).toThrow('site.yaml.site.data_sources[0].type must be "github".')
   })
 
   it('rejects blank authored content and incomplete grouped fields', () => {

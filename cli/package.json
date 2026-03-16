@@ -1,0 +1,29 @@
+{
+  "name": "td-updates-cli",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
+    "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
+    "test": "vitest run",
+    "coverage": "vitest run --coverage --coverage.thresholds.perFile=true --coverage.thresholds.statements=80 --coverage.thresholds.branches=80 --coverage.thresholds.functions=80 --coverage.thresholds.lines=80",
+    "verify": "npm run lint && npm run test && npm run build"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3",
+    "yaml": "^2.8.2"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.12.0",
+    "@vitest/coverage-v8": "^4.1.0",
+    "eslint": "^10.0.3",
+    "globals": "^17.4.0",
+    "typescript": "~5.9.3",
+    "typescript-eslint": "^8.57.0",
+    "vitest": "^4.1.0"
+  }
+}

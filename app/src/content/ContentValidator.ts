@@ -92,6 +92,27 @@ function assertPresentationLogo(value: unknown, path: string): void {
   assert(value.url !== undefined || value.alt === undefined, `${path}.alt requires ${path}.url.`)
 }
 
+function assertDataSource(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNonBlankString(value.type, `${path}.type`)
+  assert(value.type === 'github', `${path}.type must be "github".`)
+  assertNonBlankString(value.url, `${path}.url`)
+
+  let parsedUrl: URL
+
+  try {
+    parsedUrl = new URL(value.url)
+  } catch {
+    throw new Error(`${path}.url must be a valid URL.`)
+  }
+
+  const hostname = parsedUrl.hostname.toLowerCase()
+  assert(
+    hostname === 'github.com' || hostname === 'www.github.com',
+    `${path}.url must point to github.com.`,
+  )
+}
+
 function assertNavigationContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertOptionalString(value.brand_title, `${path}.brand_title`)
@@ -209,6 +230,11 @@ export class ContentValidator {
     const site = document.site
     assertNonBlankString(site.title, 'site.yaml.site.title')
     assertOptionalString(site.mascot_alt, 'site.yaml.site.mascot_alt')
+    if (site.data_sources !== undefined) {
+      assert(Array.isArray(site.data_sources), 'site.yaml.site.data_sources must be an array.')
+      site.data_sources.forEach((source, index) =>
+        assertDataSource(source, `site.yaml.site.data_sources[${index}]`))
+    }
     assertNonBlankString(site.home_intro, 'site.yaml.site.home_intro')
     assertNonBlankString(site.home_cta_label, 'site.yaml.site.home_cta_label')
     assertNonBlankString(site.presentations_cta_label, 'site.yaml.site.presentations_cta_label')

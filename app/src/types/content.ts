@@ -11,6 +11,11 @@ export interface PresentationLogo {
   alt?: string
 }
 
+export interface DataSource {
+  type: 'github'
+  url: string
+}
+
 export interface ProjectBadge {
   label?: string
   fa_icon?: string
@@ -69,6 +74,7 @@ export interface PresentationsPageContent {
 export interface SiteContent {
   title: string
   mascot_alt?: string
+  data_sources?: DataSource[]
   project_badge?: ProjectBadge
   presentation_logo?: PresentationLogo
   navigation?: NavigationContent
