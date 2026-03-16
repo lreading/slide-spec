@@ -4,6 +4,140 @@ import { ContentValidator } from './ContentValidator'
 
 const validator = new ContentValidator()
 
+const createValidPresentationDocument = () => ({
+  presentation: {
+    id: '2026-q1',
+    year: 2026,
+    quarter: 1,
+    title: 'Quarterly Community Update',
+    subtitle: 'Q1 2026',
+    roadmap: {
+      sections: {
+        completed: {
+          label: 'Completed',
+          summary: 'Done',
+          items: ['One'],
+          themes: [{ category: 'Theme', target: 'Target' }],
+        },
+        'in-progress': {
+          label: 'In Progress',
+          summary: 'Doing',
+          items: ['Two'],
+          themes: [{ category: 'Theme', target: 'Target' }],
+        },
+        planned: {
+          label: 'Planned',
+          summary: 'Soon',
+          items: ['Three'],
+          themes: [{ category: 'Theme', target: 'Target' }],
+        },
+        future: {
+          label: 'Future',
+          summary: 'Later',
+          items: ['Four'],
+          themes: [{ category: 'Theme', target: 'Target' }],
+        },
+      },
+    },
+    slides: [
+      {
+        template: 'hero',
+        enabled: true,
+        content: {
+          title_primary: 'Threat Dragon',
+        },
+      },
+      {
+        template: 'agenda',
+        enabled: true,
+        title: 'Agenda',
+        content: {},
+      },
+      {
+        template: 'section-list-grid',
+        enabled: true,
+        title: 'Updates',
+        content: {
+          sections: [
+            {
+              title: 'Section',
+              bullets: ['Bullet'],
+            },
+          ],
+        },
+      },
+      {
+        template: 'timeline',
+        enabled: true,
+        title: 'Releases',
+        content: {
+          featured_release_ids: ['v1.0.0'],
+          latest_badge_label: 'Latest',
+          footer_link_label: 'View all releases on GitHub',
+        },
+      },
+      {
+        template: 'progress-timeline',
+        enabled: true,
+        title: 'Roadmap',
+        content: {
+          stage: 'completed',
+        },
+      },
+      {
+        template: 'people',
+        enabled: true,
+        title: 'Contributor spotlight',
+        content: {
+          spotlight: [
+            {
+              login: 'octocat',
+              summary: 'Summary',
+            },
+          ],
+        },
+      },
+      {
+        template: 'metrics-and-links',
+        enabled: true,
+        title: 'Community highlights',
+        content: {
+          stat_keys: ['stars'],
+          mentions: [
+            {
+              type: 'Blog post',
+              title: 'Community article',
+            },
+          ],
+        },
+      },
+      {
+        template: 'action-cards',
+        enabled: true,
+        title: 'How to contribute',
+        content: {
+          cards: [
+            {
+              title: 'Report bugs',
+              description: 'Open an issue',
+              url_label: 'Issues',
+              url: 'https://github.com/OWASP/threat-dragon/issues',
+            },
+          ],
+        },
+      },
+      {
+        template: 'closing',
+        enabled: true,
+        content: {
+          heading: 'Thank you',
+          message: 'See you next quarter.',
+        },
+      },
+    ],
+  },
+})
+
 describe('ContentValidator', () => {
   it('accepts valid site, presentation index, presentation, and generated documents', () => {
     expect(() =>
@@ -49,115 +183,7 @@ describe('ContentValidator', () => {
       }),
     ).not.toThrow()
 
-    expect(() =>
-      validator.validatePresentationDocument({
-        presentation: {
-          id: '2026-q1',
-          year: 2026,
-          quarter: 1,
-          title: 'Quarterly Community Update',
-          subtitle: 'Q1 2026',
-          roadmap: {
-            sections: {
-              completed: {
-                label: 'Completed',
-                summary: 'Done',
-                items: ['One'],
-                themes: [{ category: 'Theme', target: 'Target' }],
-              },
-              'in-progress': {
-                label: 'In Progress',
-                summary: 'Doing',
-                items: ['Two'],
-                themes: [{ category: 'Theme', target: 'Target' }],
-              },
-              planned: {
-                label: 'Planned',
-                summary: 'Soon',
-                items: ['Three'],
-                themes: [{ category: 'Theme', target: 'Target' }],
-              },
-              future: {
-                label: 'Future',
-                summary: 'Later',
-                items: ['Four'],
-                themes: [{ category: 'Theme', target: 'Target' }],
-              },
-            },
-          },
-          slides: [
-            {
-              kind: 'title',
-              template: 'hero',
-              enabled: true,
-              title_primary: 'Threat Dragon',
-            },
-            {
-              kind: 'releases',
-              template: 'timeline',
-              enabled: true,
-              title: 'Releases',
-              featured_release_ids: ['v1.0.0'],
-              latest_badge_label: 'Latest',
-              footer_link_label: 'View all releases on GitHub',
-            },
-            {
-              kind: 'roadmap',
-              template: 'progress-timeline',
-              enabled: true,
-              title: 'Roadmap',
-              stage: 'completed',
-            },
-            {
-              kind: 'contributor-spotlight',
-              template: 'people',
-              enabled: true,
-              title: 'Contributor spotlight',
-              spotlight: [
-                {
-                  login: 'octocat',
-                  summary: 'Summary',
-                },
-              ],
-            },
-            {
-              kind: 'community-highlights',
-              template: 'metrics-and-links',
-              enabled: true,
-              title: 'Community highlights',
-              stat_keys: ['stars'],
-              mentions: [
-                {
-                  type: 'Blog post',
-                  title: 'Community article',
-                },
-              ],
-            },
-            {
-              kind: 'how-to-contribute',
-              template: 'action-cards',
-              enabled: true,
-              title: 'How to contribute',
-              cards: [
-                {
-                  title: 'Report bugs',
-                  description: 'Open an issue',
-                  url_label: 'Issues',
-                  url: 'https://github.com/OWASP/threat-dragon/issues',
-                },
-              ],
-            },
-            {
-              kind: 'thank-you',
-              template: 'closing',
-              enabled: true,
-              heading: 'Thank you',
-              message: 'See you next quarter.',
-            },
-          ],
-        },
-      }),
-    ).not.toThrow()
+    expect(() => validator.validatePresentationDocument(createValidPresentationDocument())).not.toThrow()
 
     expect(() =>
       validator.validateGeneratedDocument({
@@ -259,66 +285,50 @@ describe('ContentValidator', () => {
       'site.yaml.site.app_footer must provide both repository_label and repository_url together.',
     )
 
-    expect(() =>
-      validator.validatePresentationDocument({
-        presentation: {
-          id: '2026-q1',
-          year: 2026,
-          quarter: 1,
-          title: 'Quarterly Community Update',
-          subtitle: 'Q1 2026',
-          slides: [
-            {
-              kind: 'agenda',
-              enabled: true,
-              title: '   ',
-            },
-          ],
-        },
-      }),
-    ).toThrow('presentation document.presentation.slides[0].title must not be blank.')
+    const document = createValidPresentationDocument()
+    document.presentation.slides = [
+      {
+        template: 'agenda',
+        enabled: true,
+        title: '   ',
+        content: {},
+      },
+    ]
+
+    expect(() => validator.validatePresentationDocument(document)).toThrow(
+      'presentation document.presentation.slides[0].title must not be blank.',
+    )
   })
 
   it('rejects unsupported or mismatched template ids', () => {
-    expect(() =>
-      validator.validatePresentationDocument({
-        presentation: {
-          id: '2026-q1',
-          year: 2026,
-          quarter: 1,
-          title: 'Quarterly Community Update',
-          subtitle: 'Q1 2026',
-          slides: [
-            {
-              kind: 'title',
-              template: 'not-real',
-              enabled: true,
-              title_primary: 'Threat Dragon',
-            },
-          ],
+    const unsupportedTemplateDocument = createValidPresentationDocument()
+    unsupportedTemplateDocument.presentation.slides = [
+      {
+        template: 'not-real',
+        enabled: true,
+        content: {
+          title_primary: 'Threat Dragon',
         },
-      }),
-    ).toThrow('presentation document.presentation.slides[0].template must be a supported template id.')
+      } as never,
+    ]
 
-    expect(() =>
-      validator.validatePresentationDocument({
-        presentation: {
-          id: '2026-q1',
-          year: 2026,
-          quarter: 1,
-          title: 'Quarterly Community Update',
-          subtitle: 'Q1 2026',
-          slides: [
-            {
-              kind: 'title',
-              template: 'people',
-              enabled: true,
-              title_primary: 'Threat Dragon',
-            },
-          ],
+    expect(() => validator.validatePresentationDocument(unsupportedTemplateDocument)).toThrow(
+      'presentation document.presentation.slides[0].template must be a supported template id.',
+    )
+
+    const mismatchedKindDocument = createValidPresentationDocument()
+    mismatchedKindDocument.presentation.slides = [
+      {
+        kind: 'title',
+        template: 'people',
+        enabled: true,
+        content: {
+          title_primary: 'Threat Dragon',
         },
-      }),
-    ).toThrow(
+      } as never,
+    ]
+
+    expect(() => validator.validatePresentationDocument(mismatchedKindDocument)).toThrow(
       'presentation document.presentation.slides[0].template must be "hero" for kind "title".',
     )
   })
@@ -352,24 +362,34 @@ describe('ContentValidator', () => {
     ).toThrow('presentations/index.yaml.presentations[1].id must be unique.')
   })
 
-  it('rejects unsupported slide kinds', () => {
-    expect(() =>
-      validator.validatePresentationDocument({
-        presentation: {
-          id: '2026-q1',
-          year: 2026,
-          quarter: 1,
-          title: 'Quarterly Community Update',
-          subtitle: 'Q1 2026',
-          slides: [
-            {
-              kind: 'unknown',
-              enabled: true,
-            },
-          ],
+  it('rejects unsupported legacy kinds and missing content blocks', () => {
+    const unsupportedKindDocument = createValidPresentationDocument()
+    unsupportedKindDocument.presentation.slides = [
+      {
+        kind: 'unknown',
+        template: 'hero',
+        enabled: true,
+        content: {
+          title_primary: 'Threat Dragon',
         },
-      }),
-    ).toThrow('presentation document.presentation.slides[0].kind must be a supported slide kind.')
+      } as never,
+    ]
+
+    expect(() => validator.validatePresentationDocument(unsupportedKindDocument)).toThrow(
+      'presentation document.presentation.slides[0].kind must be a supported slide kind.',
+    )
+
+    const missingContentDocument = createValidPresentationDocument()
+    missingContentDocument.presentation.slides = [
+      {
+        template: 'hero',
+        enabled: true,
+      } as never,
+    ]
+
+    expect(() => validator.validatePresentationDocument(missingContentDocument)).toThrow(
+      'presentation document.presentation.slides[0].content must be an object.',
+    )
   })
 
   it('rejects invalid generated metric values', () => {

@@ -7,9 +7,9 @@ import TitleSlideView from './TitleSlideView.vue'
 describe('TitleSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const site = contentRepository.getSiteContent()
-  const slide = record.presentation.slides.find((entry) => entry.kind === 'title')
+  const slide = record.presentation.slides.find((entry) => entry.template === 'hero')
 
-  if (!slide || slide.kind !== 'title') {
+  if (!slide || slide.template !== 'hero') {
     throw new Error('Expected title slide in fixture data')
   }
 
@@ -42,9 +42,12 @@ describe('TitleSlideView', () => {
         site,
         slide: {
           ...slide,
-          title_primary: undefined,
-          title_accent: undefined,
-          subtitle_prefix: undefined,
+          content: {
+            ...slide.content,
+            title_primary: undefined,
+            title_accent: undefined,
+            subtitle_prefix: undefined,
+          },
         },
       },
     })
@@ -63,10 +66,13 @@ describe('TitleSlideView', () => {
         },
         slide: {
           ...slide,
-          title_primary: undefined,
-          title_accent: 'Threat Dragon',
-          subtitle_prefix: 'Quarterly Community Update',
-          quote: undefined,
+          content: {
+            ...slide.content,
+            title_primary: undefined,
+            title_accent: 'Threat Dragon',
+            subtitle_prefix: 'Quarterly Community Update',
+            quote: undefined,
+          },
         },
       },
     })

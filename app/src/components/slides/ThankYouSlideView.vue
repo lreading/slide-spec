@@ -46,9 +46,9 @@ const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
       </div>
 
       <div class="text-block">
-        <h1 class="hero-title">{{ slide.heading }}<span class="accent-text">!</span></h1>
+        <h1 class="hero-title">{{ slide.content.heading }}<span class="accent-text">!</span></h1>
         <AccentDivider width="4rem" :opacity="0.8" padding="0.5rem 0" />
-        <h2 class="hero-subtitle">{{ slide.message }}</h2>
+        <h2 class="hero-subtitle">{{ slide.content.message }}</h2>
       </div>
 
       <div class="actions">
@@ -73,8 +73,8 @@ const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
       </div>
     </div>
 
-    <div v-if="slide.quote" class="footer-wrap">
-      <p class="footer-quote">"{{ slide.quote }}"</p>
+    <div v-if="slide.content.quote" class="footer-wrap">
+      <p class="footer-quote">"{{ slide.content.quote }}"</p>
     </div>
 
     <div v-if="markLabel" class="presentation-mark">

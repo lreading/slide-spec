@@ -47,7 +47,7 @@ const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
           {{ slideContent.subtitlePrefix }} —
           <span class="hero-subtitle-strong">{{ presentation.subtitle }}</span>
         </h2>
-        <p v-if="slide.quote" class="hero-quote">"{{ slide.quote }}"</p>
+        <p v-if="slide.content.quote" class="hero-quote">"{{ slide.content.quote }}"</p>
       </div>
     </div>
 

@@ -24,7 +24,7 @@ const props = defineProps<{
 
 const avatarIcons = ['user-astronaut', 'user-ninja', 'user-secret']
 const contributors = computed(() =>
-  props.slide.spotlight.map((entry, index) => {
+  props.slide.content.spotlight.map((entry, index) => {
     const contributor = props.generated.contributors.authors.find((author) => author.login === entry.login)
 
     return {
@@ -38,9 +38,9 @@ const contributors = computed(() =>
 )
 const contributorsUrl = computed(() => `${props.site.links.repository.url}/graphs/contributors`)
 const bannerContent = computed(() => ({
-  prefix: props.slide.banner_prefix?.trim(),
-  linkLabel: props.slide.contributors_link_label?.trim(),
-  suffix: props.slide.banner_suffix?.trim(),
+  prefix: props.slide.content.banner_prefix?.trim(),
+  linkLabel: props.slide.content.contributors_link_label?.trim(),
+  suffix: props.slide.content.banner_suffix?.trim(),
 }))
 const showBanner = computed(
   () =>

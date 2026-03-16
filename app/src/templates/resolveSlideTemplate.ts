@@ -17,5 +17,21 @@ const legacySlideKindTemplateMap: Record<SlideKind, SlideTemplateId> = {
 export const getLegacyTemplateIdForSlideKind = (kind: SlideKind): SlideTemplateId =>
   legacySlideKindTemplateMap[kind]
 
-export const resolveSlideTemplateId = (slide: PresentationSlide): SlideTemplateId =>
-  slide.template ?? getLegacyTemplateIdForSlideKind(slide.kind)
+export interface SlideTemplateSource {
+  template?: SlideTemplateId
+  kind?: SlideKind
+}
+
+export const resolveSlideTemplateId = (
+  slide: PresentationSlide | SlideTemplateSource,
+): SlideTemplateId => {
+  if (slide.template) {
+    return slide.template
+  }
+
+  if (slide.kind) {
+    return getLegacyTemplateIdForSlideKind(slide.kind)
+  }
+
+  throw new Error('Slide is missing both template and legacy kind.')
+}

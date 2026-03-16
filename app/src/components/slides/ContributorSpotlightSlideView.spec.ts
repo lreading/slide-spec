@@ -8,10 +8,10 @@ describe('ContributorSpotlightSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const site = contentRepository.getSiteContent()
   const slide = record.presentation.slides.find(
-    (entry) => entry.kind === 'contributor-spotlight',
+    (entry) => entry.template === 'people',
   )
 
-  if (!slide || slide.kind !== 'contributor-spotlight') {
+  if (!slide || slide.template !== 'people') {
     throw new Error('Expected contributor-spotlight slide in fixture data')
   }
 
@@ -27,7 +27,7 @@ describe('ContributorSpotlightSlideView', () => {
       },
     })
 
-    expect(wrapper.findAll('.profile-card')).toHaveLength(slide.spotlight.length)
+    expect(wrapper.findAll('.profile-card')).toHaveLength(slide.content.spotlight.length)
     expect(wrapper.text()).toContain('Special thanks to all')
     expect(wrapper.text()).toContain('24 contributors')
     expect(wrapper.get('.contributors-link').attributes('href')).toBe(
@@ -46,9 +46,12 @@ describe('ContributorSpotlightSlideView', () => {
         site,
         slide: {
           ...slide,
-          banner_prefix: undefined,
-          contributors_link_label: undefined,
-          banner_suffix: undefined,
+          content: {
+            ...slide.content,
+            banner_prefix: undefined,
+            contributors_link_label: undefined,
+            banner_suffix: undefined,
+          },
         },
         slideNumber: 6,
         slideTotal: 12,
@@ -61,13 +64,16 @@ describe('ContributorSpotlightSlideView', () => {
   it('falls back to login names and the default icon when generated data is missing', () => {
     const fallbackSlide = {
       ...slide,
-      spotlight: [
-        ...slide.spotlight,
-        {
-          login: 'mystery_contributor',
-          summary: 'Helped clean up release automation and packaging workflows.',
-        },
-      ],
+      content: {
+        ...slide.content,
+        spotlight: [
+          ...slide.content.spotlight,
+          {
+            login: 'mystery_contributor',
+            summary: 'Helped clean up release automation and packaging workflows.',
+          },
+        ],
+      },
     }
 
     const wrapper = mount(ContributorSpotlightSlideView, {

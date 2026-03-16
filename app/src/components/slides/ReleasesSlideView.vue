@@ -24,7 +24,7 @@ const props = defineProps<{
 const formatter = new Intl.DateTimeFormat('en-US', { dateStyle: 'long' })
 const releases = computed(() =>
   props.generated.releases
-    .filter((release) => props.slide.featured_release_ids.includes(release.id))
+    .filter((release) => props.slide.content.featured_release_ids.includes(release.id))
     .map((release) => ({
       ...release,
       githubUrl: release.url || `${props.site.links.repository.url}/releases/tag/${release.version}`,
@@ -53,15 +53,15 @@ const releasesUrl = computed(() => `${props.site.links.repository.url}/releases`
         :date="formatter.format(new Date(release.published_at))"
         :items="release.summary_bullets"
         :highlighted="index === 0"
-        :badge-label="index === 0 ? slide.latest_badge_label : undefined"
+        :badge-label="index === 0 ? slide.content.latest_badge_label : undefined"
       />
 
-      <div v-if="slide.footer_link_label" class="cta-container">
+      <div v-if="slide.content.footer_link_label" class="cta-container">
         <FooterActionLink
           class="github-link"
           :href="releasesUrl"
           :icon="['fab', 'github']"
-          :label="slide.footer_link_label"
+          :label="slide.content.footer_link_label"
         />
       </div>
     </div>

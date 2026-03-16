@@ -6,12 +6,14 @@ import RoadmapSlideView from './RoadmapSlideView.vue'
 
 describe('RoadmapSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
-  const roadmapSlides = record.presentation.slides.filter((slide) => slide.kind === 'roadmap')
+  const roadmapSlides = record.presentation.slides.filter(
+    (slide) => slide.template === 'progress-timeline',
+  )
 
   it('renders the active roadmap stage from shared deck roadmap data', () => {
     const slide = roadmapSlides[1]
 
-    if (!slide || slide.kind !== 'roadmap') {
+    if (!slide || slide.template !== 'progress-timeline') {
       throw new Error('Expected roadmap slide in fixture data')
     }
 
@@ -35,7 +37,7 @@ describe('RoadmapSlideView', () => {
   it('renders without fallback copy when roadmap data is unavailable', () => {
     const slide = roadmapSlides[0]
 
-    if (!slide || slide.kind !== 'roadmap') {
+    if (!slide || slide.template !== 'progress-timeline') {
       throw new Error('Expected roadmap slide in fixture data')
     }
 

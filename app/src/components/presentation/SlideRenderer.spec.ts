@@ -52,7 +52,8 @@ describe('SlideRenderer', () => {
         slide: {
           ...slide,
           template: undefined,
-        },
+          kind: 'title',
+        } as never,
         slideNumber: 1,
         slideTotal: slides.length,
       },

@@ -45,19 +45,19 @@ function formatTrendLabel(
 }
 
 const stats = computed(() =>
-  props.slide.stat_keys.map((key, index) => ({
+  props.slide.content.stat_keys.map((key, index) => ({
     ...props.generated.stats[key],
     icon: statIcons[index],
     trend: formatTrendLabel(
       props.generated.stats[key].previous,
       props.generated.stats[key].delta,
-      props.slide.trend_suffix,
+      props.slide.content.trend_suffix,
     ),
   })),
 )
 
 const mentionCards = computed(() =>
-  props.slide.mentions.map((mention, index) => ({
+  props.slide.content.mentions.map((mention, index) => ({
     ...mention,
     icon: mentionIcons[index] ?? 'rss',
     isLinked: Boolean(mention.url),
@@ -76,9 +76,9 @@ const mentionCards = computed(() =>
     <div class="content-grid">
       <div class="left-column">
         <SectionHeading
-          v-if="slide.section_heading"
+          v-if="slide.content.section_heading"
           :icon="'bullhorn'"
-          :title="slide.section_heading"
+          :title="slide.content.section_heading"
         />
         <div class="mentions-list">
           <SurfaceCard
@@ -104,9 +104,9 @@ const mentionCards = computed(() =>
 
       <div class="right-column">
         <SectionHeading
-          v-if="slide.stats_heading"
+          v-if="slide.content.stats_heading"
           :icon="'chart-line'"
-          :title="slide.stats_heading"
+          :title="slide.content.stats_heading"
         />
         <div class="stats-grid">
           <MetricStatCard

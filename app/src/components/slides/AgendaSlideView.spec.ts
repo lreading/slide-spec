@@ -6,9 +6,9 @@ import AgendaSlideView from './AgendaSlideView.vue'
 
 describe('AgendaSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
-  const slide = record.presentation.slides.find((entry) => entry.kind === 'agenda')
+  const slide = record.presentation.slides.find((entry) => entry.template === 'agenda')
 
-  if (!slide || slide.kind !== 'agenda') {
+  if (!slide || slide.template !== 'agenda') {
     throw new Error('Expected agenda slide in fixture data')
   }
 

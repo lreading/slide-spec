@@ -6,9 +6,9 @@ import RecentUpdatesSlideView from './RecentUpdatesSlideView.vue'
 
 describe('RecentUpdatesSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
-  const slide = record.presentation.slides.find((entry) => entry.kind === 'recent-updates')
+  const slide = record.presentation.slides.find((entry) => entry.template === 'section-list-grid')
 
-  if (!slide || slide.kind !== 'recent-updates') {
+  if (!slide || slide.template !== 'section-list-grid') {
     throw new Error('Expected recent updates slide in fixture data')
   }
 
@@ -23,8 +23,8 @@ describe('RecentUpdatesSlideView', () => {
     })
 
     expect(wrapper.text()).toContain('What Happened Since Last Update')
-    expect(wrapper.text()).toContain(slide.sections[0].title)
-    expect(wrapper.text()).toContain(slide.sections[0].bullets[0])
+    expect(wrapper.text()).toContain(slide.content.sections[0].title)
+    expect(wrapper.text()).toContain(slide.content.sections[0].bullets[0])
   })
 
   it('omits the title heading when the slide title is missing', () => {

@@ -87,9 +87,9 @@ export const resolveHomeHeroContent = (
 export const resolveTitleSlideContent = (
   slide: TitleSlide,
 ): TitleSlideResolvedContent => ({
-  titlePrimary: trimOrUndefined(slide.title_primary),
-  titleAccent: trimOrUndefined(slide.title_accent),
-  subtitlePrefix: trimOrUndefined(slide.subtitle_prefix),
+  titlePrimary: trimOrUndefined(slide.content.title_primary),
+  titleAccent: trimOrUndefined(slide.content.title_accent),
+  subtitlePrefix: trimOrUndefined(slide.content.subtitle_prefix),
 })
 
 export const resolveRoadmapLabels = (

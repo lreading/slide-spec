@@ -7,9 +7,9 @@ import ThankYouSlideView from './ThankYouSlideView.vue'
 describe('ThankYouSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const site = contentRepository.getSiteContent()
-  const slide = record.presentation.slides.find((entry) => entry.kind === 'thank-you')
+  const slide = record.presentation.slides.find((entry) => entry.template === 'closing')
 
-  if (!slide || slide.kind !== 'thank-you') {
+  if (!slide || slide.template !== 'closing') {
     throw new Error('Expected thank-you slide in fixture data')
   }
 
@@ -44,7 +44,10 @@ describe('ThankYouSlideView', () => {
         },
         slide: {
           ...slide,
-          quote: undefined,
+          content: {
+            ...slide.content,
+            quote: undefined,
+          },
         },
       },
     })

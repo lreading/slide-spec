@@ -25,7 +25,7 @@ const icons = ['wrench', 'star', 'users']
   >
     <div class="feature-grid">
       <SurfaceCard
-        v-for="(section, index) in slide.sections"
+        v-for="(section, index) in slide.content.sections"
         :key="section.title"
         class="feature-card"
         accent="left"

@@ -8,11 +8,11 @@ export const getSlideLabel = (
     return slide.title
   }
 
-  if (slide.kind === 'thank-you') {
-    return slide.heading
+  if (slide.template === 'closing') {
+    return slide.content.heading
   }
 
-  if (slide.kind === 'roadmap') {
+  if (slide.template === 'progress-timeline') {
     if (presentation.roadmap?.agenda_label) {
       return presentation.roadmap.agenda_label
     }

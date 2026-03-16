@@ -54,9 +54,10 @@ presentation:
   title: Q1
   subtitle: Q1 2026
   slides:
-    - kind: title
+    - template: hero
       enabled: true
-      title_primary: Q1
+      content:
+        title_primary: Q1
 `,
   '/virtual/presentations/2026-q1/generated.yaml': `
 generated:
@@ -78,9 +79,10 @@ presentation:
   title: Q4
   subtitle: Q4 2025
   slides:
-    - kind: title
+    - template: hero
       enabled: true
-      title_primary: Q4
+      content:
+        title_primary: Q4
 `,
   '/virtual/presentations/2025-q4/generated.yaml': `
 generated:

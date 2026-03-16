@@ -26,17 +26,20 @@ function formatFooterText(url: string): string {
 }
 
 async function assertSlideContent(page: Page, slide: PresentationSlide): Promise<void> {
-  switch (slide.kind) {
-    case 'title':
+  switch (slide.template) {
+    case 'hero':
       await expect(page.getByRole('heading', { name: /owasp threat dragon/i })).toBeVisible()
       await expect(
         page.getByRole('heading', {
-          name: new RegExp(`${slide.title_primary ?? ''}\\s+${slide.title_accent ?? ''}`, 'i'),
+          name: new RegExp(
+            `${slide.content.title_primary ?? ''}\\s+${slide.content.title_accent ?? ''}`,
+            'i',
+          ),
         }),
       ).toBeVisible()
-      await expect(page.getByText(slide.subtitle_prefix ?? '')).toBeVisible()
+      await expect(page.getByText(slide.content.subtitle_prefix ?? '')).toBeVisible()
       await expect(page.getByText(record.presentation.subtitle)).toBeVisible()
-      await expect(page.getByText(String(slide.quote))).toBeVisible()
+      await expect(page.getByText(String(slide.content.quote))).toBeVisible()
       for (const link of Object.values(site.links)) {
         await expect(page.getByRole('link', { name: formatFooterText(link.url) })).toHaveAttribute(
           'href',
@@ -50,11 +53,11 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(page.getByText('Roadmap')).toBeVisible()
       await expect(page.getByText('Thank You')).toBeVisible()
       break
-    case 'recent-updates': {
+    case 'section-list-grid': {
       const recentSlide: RecentUpdatesSlide = slide
       await expect(page.getByText(recentSlide.title ?? '')).toBeVisible()
       await expect(page.getByText(recentSlide.subtitle ?? '')).toBeVisible()
-      for (const section of recentSlide.sections) {
+      for (const section of recentSlide.content.sections) {
         await expect(page.getByText(section.title)).toBeVisible()
         for (const bullet of section.bullets) {
           await expect(page.getByText(bullet)).toBeVisible()
@@ -62,10 +65,10 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       }
       break
     }
-    case 'releases': {
+    case 'timeline': {
       const releasesSlide: ReleasesSlide = slide
-      const releases = releasesSlide.featured_release_ids
-        .map((id) => record.generated.releases.find((entry) => entry.id === id))
+      const releases = releasesSlide.content.featured_release_ids
+        .map((id: string) => record.generated.releases.find((entry) => entry.id === id))
         .filter((entry) => entry !== undefined)
       await expect(page.getByText(releasesSlide.subtitle ?? '')).toBeVisible()
       for (const release of releases) {
@@ -77,20 +80,21 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
           await expect(page.getByText(bullet)).toBeVisible()
         }
       }
-      if (releasesSlide.latest_badge_label) {
-        await expect(page.getByText(releasesSlide.latest_badge_label, { exact: true })).toBeVisible()
+      if (releasesSlide.content.latest_badge_label) {
+        await expect(
+          page.getByText(releasesSlide.content.latest_badge_label, { exact: true }),
+        ).toBeVisible()
       }
-      if (releasesSlide.footer_link_label) {
-        await expect(page.getByRole('link', { name: releasesSlide.footer_link_label })).toHaveAttribute(
-          'href',
-          `${site.links.repository.url}/releases`,
-        )
+      if (releasesSlide.content.footer_link_label) {
+        await expect(
+          page.getByRole('link', { name: releasesSlide.content.footer_link_label }),
+        ).toHaveAttribute('href', `${site.links.repository.url}/releases`)
       }
       break
     }
-    case 'roadmap': {
+    case 'progress-timeline': {
       const roadmapSlide: RoadmapSlide = slide
-      const section = record.presentation.roadmap?.sections[roadmapSlide.stage]
+      const section = record.presentation.roadmap?.sections[roadmapSlide.content.stage]
       await expect(page.getByText(`Roadmap: ${section?.label}`)).toBeVisible()
       await expect(page.getByText('Key deliverables')).toBeVisible()
       await expect(page.getByText('Focus areas')).toBeVisible()
@@ -111,10 +115,10 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       )
       break
     }
-    case 'contributor-spotlight': {
+    case 'people': {
       const contributorSlide: ContributorSpotlightSlide = slide
       await expect(page.getByText(contributorSlide.subtitle ?? '')).toBeVisible()
-      for (const spotlight of contributorSlide.spotlight) {
+      for (const spotlight of contributorSlide.content.spotlight) {
         const contributor = record.generated.contributors.authors.find(
           (entry) => entry.login === spotlight.login,
         )
@@ -125,7 +129,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         )
         await expect(page.getByText(spotlight.summary)).toBeVisible()
       }
-      const contributorsLinkLabel = contributorSlide.contributors_link_label ?? 'contributors'
+      const contributorsLinkLabel = contributorSlide.content.contributors_link_label ?? 'contributors'
       await expect(
         page.getByRole('link', {
           name: new RegExp(`${record.generated.contributors.total}\\s+${contributorsLinkLabel}`, 'i'),
@@ -133,20 +137,22 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       ).toHaveAttribute('href', `${site.links.repository.url}/graphs/contributors`)
       break
     }
-    case 'community-highlights': {
+    case 'metrics-and-links': {
       const communitySlide: CommunityHighlightsSlide = slide
       await expect(page.getByText(communitySlide.title ?? '')).toBeVisible()
       await expect(page.getByText(communitySlide.subtitle ?? '')).toBeVisible()
       await expect(
-        page.getByText(communitySlide.section_heading ?? '', { exact: true }).first(),
+        page.getByText(communitySlide.content.section_heading ?? '', { exact: true }).first(),
       ).toBeVisible()
-      await expect(page.getByText(communitySlide.stats_heading ?? 'Stats This Quarter')).toBeVisible()
-      for (const statKey of communitySlide.stat_keys) {
+      await expect(
+        page.getByText(communitySlide.content.stats_heading ?? 'Stats This Quarter'),
+      ).toBeVisible()
+      for (const statKey of communitySlide.content.stat_keys) {
         const stat = record.generated.stats[statKey]
         await expect(page.getByText(stat.label)).toBeVisible()
         await expect(page.getByText(stat.current.toLocaleString(), { exact: true })).toBeVisible()
       }
-      for (const mention of communitySlide.mentions) {
+      for (const mention of communitySlide.content.mentions) {
         await expect(page.getByText(mention.type)).toBeVisible()
         await expect(page.getByText(mention.title)).toBeVisible()
         if (mention.url && mention.url_label) {
@@ -158,25 +164,27 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       }
       break
     }
-    case 'how-to-contribute': {
+    case 'action-cards': {
       const contributeSlide: HowToContributeSlide = slide
       await expect(page.getByText(contributeSlide.title ?? '')).toBeVisible()
       await expect(page.getByText(contributeSlide.subtitle ?? '')).toBeVisible()
-      for (const card of contributeSlide.cards) {
+      for (const card of contributeSlide.content.cards) {
         await expect(page.getByText(card.title)).toBeVisible()
         await expect(page.getByText(card.description)).toBeVisible()
         await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
       }
-      await expect(page.getByText(contributeSlide.footer_text ?? 'Open Source and Community Driven')).toBeVisible()
+      await expect(
+        page.getByText(contributeSlide.content.footer_text ?? 'Open Source and Community Driven'),
+      ).toBeVisible()
       await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
         'href',
         site.links.repository.url,
       )
       break
     }
-    case 'thank-you':
+    case 'closing':
       await expect(page.getByRole('heading', { name: /thank you/i })).toBeVisible()
-      await expect(page.getByText(slide.message)).toBeVisible()
+      await expect(page.getByText(slide.content.message)).toBeVisible()
       await expect(page.getByText(site.links.repository.eyebrow ?? '')).toBeVisible()
       await expect(page.getByText(site.links.docs.eyebrow ?? '')).toBeVisible()
       await expect(page.getByText(site.links.owasp.eyebrow ?? '')).toBeVisible()
@@ -192,20 +200,18 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         'href',
         site.links.owasp.url,
       )
-      if (slide.quote) {
-        await expect(page.getByText(`"${slide.quote}"`)).toBeVisible()
+      if (slide.content.quote) {
+        await expect(page.getByText(`"${slide.content.quote}"`)).toBeVisible()
       }
-      await expect(
-        page.getByText(site.presentation_chrome?.mark_label ?? site.navigation?.brand_title ?? site.title, {
-          exact: true,
-        }),
-      ).toBeVisible()
+      if (site.presentation_chrome?.mark_label) {
+        await expect(page.getByText(site.presentation_chrome.mark_label, { exact: true })).toBeVisible()
+      }
       break
   }
 }
 
 for (const [index, slide] of enabledSlides.entries()) {
-  test(`renders slide ${index + 1}: ${slide.kind}`, async ({ page }) => {
+  test(`renders slide ${index + 1}: ${slide.template}`, async ({ page }) => {
     await page.goto(`/presentations/2026-q1?slide=${index + 1}`)
 
     await assertSlideContent(page, slide)

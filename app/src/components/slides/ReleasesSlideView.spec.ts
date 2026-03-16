@@ -7,9 +7,9 @@ import ReleasesSlideView from './ReleasesSlideView.vue'
 describe('ReleasesSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const site = contentRepository.getSiteContent()
-  const slide = record.presentation.slides.find((entry) => entry.kind === 'releases')
+  const slide = record.presentation.slides.find((entry) => entry.template === 'timeline')
 
-  if (!slide || slide.kind !== 'releases') {
+  if (!slide || slide.template !== 'timeline') {
     throw new Error('Expected releases slide in fixture data')
   }
 
@@ -27,7 +27,7 @@ describe('ReleasesSlideView', () => {
 
     const releaseCards = wrapper.findAll('.release-card')
 
-    expect(releaseCards).toHaveLength(slide.featured_release_ids.length)
+    expect(releaseCards).toHaveLength(slide.content.featured_release_ids.length)
     expect(releaseCards[0]?.attributes('href')).toBe(
       'https://github.com/OWASP/threat-dragon/releases/tag/v2.3.0',
     )
@@ -46,8 +46,11 @@ describe('ReleasesSlideView', () => {
         site,
         slide: {
           ...slide,
-          latest_badge_label: undefined,
-          footer_link_label: undefined,
+          content: {
+            ...slide.content,
+            latest_badge_label: undefined,
+            footer_link_label: undefined,
+          },
         },
         slideNumber: 4,
         slideTotal: 12,

@@ -71,24 +71,24 @@ presentation:
           - category: Sustainability
             target: Grow maintainer leverage so roadmap execution remains steady quarter over quarter.
   slides:
-    - kind: title
-      template: hero
+    - template: hero
       enabled: true
-      title_primary: OWASP
-      title_accent: Threat Dragon
-      subtitle_prefix: Quarterly Community Update
-      quote: making threat modeling less threatening
-    - kind: agenda
-      template: agenda
+      content:
+        title_primary: OWASP
+        title_accent: Threat Dragon
+        subtitle_prefix: Quarterly Community Update
+        quote: making threat modeling less threatening
+    - template: agenda
       enabled: true
       title: Agenda
       subtitle: Overview of today's update
-    - kind: recent-updates
-      template: section-list-grid
+      content: {}
+    - template: section-list-grid
       enabled: true
       title: What Happened Since Last Update
       subtitle: Summary of key activities and progress
-      sections:
+      content:
+        sections:
         - title: Fixes and improvements
           bullets:
             - Performance optimization for large threat models
@@ -110,104 +110,104 @@ presentation:
             - Launched new documentation portal theme
             - Translated UI into 3 new languages
             - Over 500 new stars on GitHub repository
-    - kind: releases
-      template: timeline
+    - template: timeline
       enabled: true
       title: Releases
       subtitle: Recent version history and changelog
-      latest_badge_label: Latest
-      footer_link_label: View all releases on GitHub
-      featured_release_ids:
-        - v2.3.0
-        - v2.2.1
-        - v2.2.0
-    - kind: roadmap
-      template: progress-timeline
+      content:
+        latest_badge_label: Latest
+        footer_link_label: View all releases on GitHub
+        featured_release_ids:
+          - v2.3.0
+          - v2.2.1
+          - v2.2.0
+    - template: progress-timeline
       enabled: true
       title: "Roadmap: Completed"
-      stage: completed
-    - kind: roadmap
-      template: progress-timeline
+      content:
+        stage: completed
+    - template: progress-timeline
       enabled: true
       title: "Roadmap: In Progress"
-      stage: in-progress
-    - kind: roadmap
-      template: progress-timeline
+      content:
+        stage: in-progress
+    - template: progress-timeline
       enabled: true
       title: "Roadmap: Planned"
-      stage: planned
-    - kind: roadmap
-      template: progress-timeline
+      content:
+        stage: planned
+    - template: progress-timeline
       enabled: true
       title: "Roadmap: Future"
-      stage: future
-    - kind: contributor-spotlight
-      template: people
+      content:
+        stage: future
+    - template: people
       enabled: true
       title: Contributor Spotlight
       subtitle: Recognizing our top community contributors this quarter
-      banner_prefix: Special thanks to all
-      contributors_link_label: contributors
-      banner_suffix: who submitted PRs, reported bugs, and improved docs this quarter!
-      spotlight:
-        - login: schen_dev
-          summary: Led the complete overhaul of the dark mode color system and fixed 12 accessibility issues in the diagram editor, making Threat Dragon usable for everyone.
-        - login: mjohnson_sec
-          summary: Implemented the new custom rule template engine that allows organizations to define their own threat libraries and compliance checks.
-        - login: erodriguez_docs
-          summary: Rewrote the entire Getting Started guide series and added comprehensive examples for cloud-native threat modeling scenarios.
-    - kind: community-highlights
-      template: metrics-and-links
+      content:
+        banner_prefix: Special thanks to all
+        contributors_link_label: contributors
+        banner_suffix: who submitted PRs, reported bugs, and improved docs this quarter!
+        spotlight:
+          - login: schen_dev
+            summary: Led the complete overhaul of the dark mode color system and fixed 12 accessibility issues in the diagram editor, making Threat Dragon usable for everyone.
+          - login: mjohnson_sec
+            summary: Implemented the new custom rule template engine that allows organizations to define their own threat libraries and compliance checks.
+          - login: erodriguez_docs
+            summary: Rewrote the entire Getting Started guide series and added comprehensive examples for cloud-native threat modeling scenarios.
+    - template: metrics-and-links
       enabled: true
       title: Community Highlights
       subtitle: Notable community activity and ecosystem updates from Q1 2026
-      section_heading: Community Activity
-      stats_heading: Stats This Quarter
-      trend_suffix: vs last presentation
-      stat_keys:
-        - stars
-        - issues_closed
-        - prs_merged
-        - new_contributors
-      mentions:
-        - type: Conference talk
-          title: '"Scaling Threat Modeling with OWASP Threat Dragon" at AppSec Global 2025'
-          url_label: Watch recording on YouTube
-          url: https://www.youtube.com/
-        - type: Interop tool
-          title: Community-maintained export bridge for pulling Threat Dragon models into architecture review workflows
-          url_label: Explore the prototype on GitHub
-          url: https://github.com/OWASP/threat-dragon
-        - type: Blog post
-          title: Open source threat modeling round-up featuring Threat Dragon in a broader secure design toolkit
-          url_label: Read the write-up
-          url: https://owasp.org/
-    - kind: how-to-contribute
-      template: action-cards
+      content:
+        section_heading: Community Activity
+        stats_heading: Stats This Quarter
+        trend_suffix: vs last presentation
+        stat_keys:
+          - stars
+          - issues_closed
+          - prs_merged
+          - new_contributors
+        mentions:
+          - type: Conference talk
+            title: '"Scaling Threat Modeling with OWASP Threat Dragon" at AppSec Global 2025'
+            url_label: Watch recording on YouTube
+            url: https://www.youtube.com/
+          - type: Interop tool
+            title: Community-maintained export bridge for pulling Threat Dragon models into architecture review workflows
+            url_label: Explore the prototype on GitHub
+            url: https://github.com/OWASP/threat-dragon
+          - type: Blog post
+            title: Open source threat modeling round-up featuring Threat Dragon in a broader secure design toolkit
+            url_label: Read the write-up
+            url: https://owasp.org/
+    - template: action-cards
       enabled: true
       title: How to Contribute
       subtitle: Join the mission to make threat modeling less threatening
-      footer_text: Open Source and Community Driven
-      cards:
-        - title: Report Bugs
-          description: Found an issue? Let us know! Please include reproduction steps, environment details, and screenshots if possible.
-          url_label: Submit an issue
-          url: https://github.com/OWASP/threat-dragon/issues
-        - title: Submit Code
-          description: Pick up an issue labelled "good first issue". Fork the repository, branch off main, and submit your Pull Request.
-          url_label: Read CONTRIBUTING.md
-          url: https://github.com/OWASP/threat-dragon/blob/main/CONTRIBUTING.md
-        - title: Improve Docs
-          description: Help us make Threat Dragon easier to use. Fix typos, add user guides, or improve the API documentation.
-          url_label: Edit docs on GitHub
-          url: https://github.com/OWASP/threat-dragon
-        - title: Spread the Word
-          description: Share your threat models, write blog posts, give talks, or simply star the repository to help us grow.
-          url_label: Share & Star
-          url: https://github.com/OWASP/threat-dragon
-    - kind: thank-you
-      template: closing
+      content:
+        footer_text: Open Source and Community Driven
+        cards:
+          - title: Report Bugs
+            description: Found an issue? Let us know! Please include reproduction steps, environment details, and screenshots if possible.
+            url_label: Submit an issue
+            url: https://github.com/OWASP/threat-dragon/issues
+          - title: Submit Code
+            description: Pick up an issue labelled "good first issue". Fork the repository, branch off main, and submit your Pull Request.
+            url_label: Read CONTRIBUTING.md
+            url: https://github.com/OWASP/threat-dragon/blob/main/CONTRIBUTING.md
+          - title: Improve Docs
+            description: Help us make Threat Dragon easier to use. Fix typos, add user guides, or improve the API documentation.
+            url_label: Edit docs on GitHub
+            url: https://github.com/OWASP/threat-dragon
+          - title: Spread the Word
+            description: Share your threat models, write blog posts, give talks, or simply star the repository to help us grow.
+            url_label: Share & Star
+            url: https://github.com/OWASP/threat-dragon
+    - template: closing
       enabled: true
-      heading: Thank you
-      message: See you next quarter.
-      quote: making threat modeling less threatening
+      content:
+        heading: Thank you
+        message: See you next quarter.
+        quote: making threat modeling less threatening

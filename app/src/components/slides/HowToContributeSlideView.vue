@@ -20,7 +20,7 @@ const props = defineProps<{
 const icons = ['bug', 'code-branch', 'book', 'bullhorn']
 const trailingIcons = ['arrow-right', 'arrow-right', 'arrow-right', 'star']
 const repositoryLink = computed(() => props.site.links.repository)
-const showFooterCta = computed(() => Boolean(props.slide.footer_text?.trim()) || Boolean(repositoryLink.value))
+const showFooterCta = computed(() => Boolean(props.slide.content.footer_text?.trim()) || Boolean(repositoryLink.value))
 </script>
 
 <template>
@@ -35,7 +35,7 @@ const showFooterCta = computed(() => Boolean(props.slide.footer_text?.trim()) ||
   >
     <div class="contribution-grid">
       <SurfaceCard
-        v-for="(card, index) in slide.cards"
+        v-for="(card, index) in slide.content.cards"
         :key="card.title"
         class="contrib-card"
         :interactive="true"
@@ -62,7 +62,7 @@ const showFooterCta = computed(() => Boolean(props.slide.footer_text?.trim()) ||
     <CalloutBanner v-if="showFooterCta" class="footer-cta">
       <div class="repo-info">
         <FontAwesomeIcon :icon="['fab', 'github']" class="text-xl mr-3" />
-        <p v-if="slide.footer_text">{{ slide.footer_text }}</p>
+        <p v-if="slide.content.footer_text">{{ slide.content.footer_text }}</p>
       </div>
       <template v-if="repositoryLink" #action>
         <FooterActionLink :href="repositoryLink.url" icon="code" :label="repositoryLink.label" />

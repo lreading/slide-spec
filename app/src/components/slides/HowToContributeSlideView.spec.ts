@@ -14,35 +14,37 @@ const presentation: PresentationContent = {
 }
 
 const slide: HowToContributeSlide = {
-  kind: 'how-to-contribute',
+  template: 'action-cards',
   enabled: true,
   subtitle: 'Join the mission',
-  cards: [
-    {
-      title: 'Report Bugs',
-      description: 'File issues with reproduction steps.',
-      url_label: 'Submit an issue',
-      url: 'https://example.com/issues',
-    },
-    {
-      title: 'Submit Code',
-      description: 'Open a pull request.',
-      url_label: 'Read CONTRIBUTING.md',
-      url: 'https://example.com/contributing',
-    },
-    {
-      title: 'Improve Docs',
-      description: 'Help improve the docs.',
-      url_label: 'Edit docs',
-      url: 'https://example.com/docs',
-    },
-    {
-      title: 'Spread the Word',
-      description: 'Share the project.',
-      url_label: 'Share it',
-      url: 'https://example.com/share',
-    },
-  ],
+  content: {
+    cards: [
+      {
+        title: 'Report Bugs',
+        description: 'File issues with reproduction steps.',
+        url_label: 'Submit an issue',
+        url: 'https://example.com/issues',
+      },
+      {
+        title: 'Submit Code',
+        description: 'Open a pull request.',
+        url_label: 'Read CONTRIBUTING.md',
+        url: 'https://example.com/contributing',
+      },
+      {
+        title: 'Improve Docs',
+        description: 'Help improve the docs.',
+        url_label: 'Edit docs',
+        url: 'https://example.com/docs',
+      },
+      {
+        title: 'Spread the Word',
+        description: 'Share the project.',
+        url_label: 'Share it',
+        url: 'https://example.com/share',
+      },
+    ],
+  },
 }
 
 describe('HowToContributeSlideView', () => {
@@ -114,7 +116,10 @@ describe('HowToContributeSlideView', () => {
         site,
         slide: {
           ...slide,
-          footer_text: undefined,
+          content: {
+            ...slide.content,
+            footer_text: undefined,
+          },
         },
         slideNumber: 11,
         slideTotal: 12,

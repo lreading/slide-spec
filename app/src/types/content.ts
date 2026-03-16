@@ -105,53 +105,46 @@ export type SlideKind =
   | 'how-to-contribute'
   | 'thank-you'
 
-export interface BaseSlide {
-  kind: SlideKind
-  template?: SlideTemplateId
+export interface SlideBase<TTemplate extends SlideTemplateId, TContent> {
+  template: TTemplate
+  kind?: SlideKind
   enabled: boolean
   title?: string
   subtitle?: string
+  content: TContent
 }
 
-export interface TitleSlide extends BaseSlide {
-  kind: 'title'
+export interface HeroSlideContent {
   title_primary?: string
   title_accent?: string
   subtitle_prefix?: string
   quote?: string
 }
 
-export interface AgendaSlide extends BaseSlide {
-  kind: 'agenda'
-}
+export type AgendaSlideContent = Record<string, never>
 
-export interface RecentUpdatesSlide extends BaseSlide {
-  kind: 'recent-updates'
+export interface SectionListGridSlideContent {
   sections: ContentSection[]
 }
 
-export interface ReleasesSlide extends BaseSlide {
-  kind: 'releases'
+export interface TimelineSlideContent {
   latest_badge_label?: string
   footer_link_label?: string
   featured_release_ids: string[]
 }
 
-export interface RoadmapSlide extends BaseSlide {
-  kind: 'roadmap'
+export interface ProgressTimelineSlideContent {
   stage: RoadmapStageStatus
 }
 
-export interface ContributorSpotlightSlide extends BaseSlide {
-  kind: 'contributor-spotlight'
+export interface PeopleSlideContent {
   banner_prefix?: string
   contributors_link_label?: string
   banner_suffix?: string
   spotlight: SpotlightEntry[]
 }
 
-export interface CommunityHighlightsSlide extends BaseSlide {
-  kind: 'community-highlights'
+export interface MetricsAndLinksSlideContent {
   section_heading?: string
   stats_heading?: string
   trend_suffix?: string
@@ -159,18 +152,34 @@ export interface CommunityHighlightsSlide extends BaseSlide {
   mentions: CommunityMention[]
 }
 
-export interface HowToContributeSlide extends BaseSlide {
-  kind: 'how-to-contribute'
+export interface ActionCardsSlideContent {
   footer_text?: string
   cards: ContributionCard[]
 }
 
-export interface ThankYouSlide extends BaseSlide {
-  kind: 'thank-you'
+export interface ClosingSlideContent {
   heading: string
   message: string
   quote?: string
 }
+
+export type TitleSlide = SlideBase<'hero', HeroSlideContent>
+
+export type AgendaSlide = SlideBase<'agenda', AgendaSlideContent>
+
+export type RecentUpdatesSlide = SlideBase<'section-list-grid', SectionListGridSlideContent>
+
+export type ReleasesSlide = SlideBase<'timeline', TimelineSlideContent>
+
+export type RoadmapSlide = SlideBase<'progress-timeline', ProgressTimelineSlideContent>
+
+export type ContributorSpotlightSlide = SlideBase<'people', PeopleSlideContent>
+
+export type CommunityHighlightsSlide = SlideBase<'metrics-and-links', MetricsAndLinksSlideContent>
+
+export type HowToContributeSlide = SlideBase<'action-cards', ActionCardsSlideContent>
+
+export type ThankYouSlide = SlideBase<'closing', ClosingSlideContent>
 
 export type PresentationSlide =
   | TitleSlide

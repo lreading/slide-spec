@@ -8,8 +8,6 @@ describe('resolveSlideTemplateId', () => {
       resolveSlideTemplateId({
         kind: 'title',
         template: 'hero',
-        enabled: true,
-        title_primary: 'Threat Dragon',
       }),
     ).toBe('hero')
   })
@@ -18,11 +16,13 @@ describe('resolveSlideTemplateId', () => {
     expect(
       resolveSlideTemplateId({
         kind: 'community-highlights',
-        enabled: true,
-        title: 'Community Highlights',
-        stat_keys: [],
-        mentions: [],
       }),
     ).toBe('metrics-and-links')
+  })
+
+  it('throws when neither template nor kind is provided', () => {
+    expect(() => resolveSlideTemplateId({})).toThrow(
+      'Slide is missing both template and legacy kind.',
+    )
   })
 })

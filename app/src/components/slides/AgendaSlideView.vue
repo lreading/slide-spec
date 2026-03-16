@@ -18,9 +18,9 @@ const agendaItems = computed(() => {
   let roadmapIncluded = false
 
   return props.presentation.slides
-    .filter((entry) => entry.enabled && entry.kind !== 'title' && entry.kind !== 'agenda')
+    .filter((entry) => entry.enabled && entry.template !== 'hero' && entry.template !== 'agenda')
     .flatMap((entry) => {
-      if (entry.kind === 'roadmap') {
+      if (entry.template === 'progress-timeline') {
         if (roadmapIncluded) {
           return []
         }

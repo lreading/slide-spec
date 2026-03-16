@@ -15,9 +15,9 @@ import {
 describe('contentDefaults', () => {
   const site = contentRepository.getSiteContent()
   const record = contentRepository.getPresentation('2026-q1')
-  const titleSlide = record.presentation.slides.find((slide) => slide.kind === 'title')
+  const titleSlide = record.presentation.slides.find((slide) => slide.template === 'hero')
 
-  if (!titleSlide || titleSlide.kind !== 'title') {
+  if (!titleSlide || titleSlide.template !== 'hero') {
     throw new Error('Expected title slide in fixture data')
   }
 
@@ -122,9 +122,12 @@ describe('contentDefaults', () => {
     expect(
       resolveTitleSlideContent({
         ...titleSlide,
-        title_primary: '   ',
-        title_accent: '   ',
-        subtitle_prefix: '   ',
+        content: {
+          ...titleSlide.content,
+          title_primary: '   ',
+          title_accent: '   ',
+          subtitle_prefix: '   ',
+        },
       }),
     ).toEqual({
       titlePrimary: undefined,

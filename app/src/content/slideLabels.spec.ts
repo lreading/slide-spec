@@ -7,7 +7,9 @@ describe('getSlideLabel', () => {
   const record = contentRepository.getPresentation('2026-q1')
 
   it('uses authored titles for roadmap slides when present', () => {
-    const roadmapSlides = record.presentation.slides.filter((slide) => slide.kind === 'roadmap')
+    const roadmapSlides = record.presentation.slides.filter(
+      (slide) => slide.template === 'progress-timeline',
+    )
 
     expect(roadmapSlides).toHaveLength(4)
     expect(getSlideLabel(roadmapSlides[0], record.presentation)).toBe('Roadmap: Completed')
@@ -17,9 +19,9 @@ describe('getSlideLabel', () => {
   })
 
   it('uses authored titles for non-roadmap slides when present', () => {
-    const releasesSlide = record.presentation.slides.find((slide) => slide.kind === 'releases')
+    const releasesSlide = record.presentation.slides.find((slide) => slide.template === 'timeline')
 
-    if (!releasesSlide || releasesSlide.kind !== 'releases') {
+    if (!releasesSlide || releasesSlide.template !== 'timeline') {
       throw new Error('Expected releases slide in fixture data')
     }
 
@@ -27,9 +29,11 @@ describe('getSlideLabel', () => {
   })
 
   it('uses the shared roadmap agenda label when a roadmap slide title is missing', () => {
-    const roadmapSlide = record.presentation.slides.find((slide) => slide.kind === 'roadmap')
+    const roadmapSlide = record.presentation.slides.find(
+      (slide) => slide.template === 'progress-timeline',
+    )
 
-    if (!roadmapSlide || roadmapSlide.kind !== 'roadmap') {
+    if (!roadmapSlide || roadmapSlide.template !== 'progress-timeline') {
       throw new Error('Expected roadmap slide in fixture data')
     }
 
@@ -47,9 +51,9 @@ describe('getSlideLabel', () => {
   })
 
   it('returns undefined when a non-roadmap slide does not provide a title', () => {
-    const releasesSlide = record.presentation.slides.find((slide) => slide.kind === 'releases')
+    const releasesSlide = record.presentation.slides.find((slide) => slide.template === 'timeline')
 
-    if (!releasesSlide || releasesSlide.kind !== 'releases') {
+    if (!releasesSlide || releasesSlide.template !== 'timeline') {
       throw new Error('Expected releases slide in fixture data')
     }
 
@@ -65,19 +69,21 @@ describe('getSlideLabel', () => {
   })
 
   it('uses the thank-you heading when that slide does not provide a title', () => {
-    const thankYouSlide = record.presentation.slides.find((slide) => slide.kind === 'thank-you')
+    const thankYouSlide = record.presentation.slides.find((slide) => slide.template === 'closing')
 
-    if (!thankYouSlide || thankYouSlide.kind !== 'thank-you') {
+    if (!thankYouSlide || thankYouSlide.template !== 'closing') {
       throw new Error('Expected thank-you slide in fixture data')
     }
 
-    expect(getSlideLabel(thankYouSlide, record.presentation)).toBe(thankYouSlide.heading)
+    expect(getSlideLabel(thankYouSlide, record.presentation)).toBe(thankYouSlide.content.heading)
   })
 
   it('returns undefined when roadmap title and shared agenda label are both missing', () => {
-    const roadmapSlide = record.presentation.slides.find((slide) => slide.kind === 'roadmap')
+    const roadmapSlide = record.presentation.slides.find(
+      (slide) => slide.template === 'progress-timeline',
+    )
 
-    if (!roadmapSlide || roadmapSlide.kind !== 'roadmap') {
+    if (!roadmapSlide || roadmapSlide.template !== 'progress-timeline') {
       throw new Error('Expected roadmap slide in fixture data')
     }
 

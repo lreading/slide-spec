@@ -26,7 +26,7 @@ const props = defineProps<{
 
 const stageOrder: RoadmapStageStatus[] = ['completed', 'in-progress', 'planned', 'future']
 const sections = computed(() => props.presentation.roadmap?.sections)
-const activeStageIndex = computed(() => stageOrder.indexOf(props.slide.stage))
+const activeStageIndex = computed(() => stageOrder.indexOf(props.slide.content.stage))
 const timelineStages = computed(() =>
   stageOrder.map((status, index) => {
     let progressState: 'viewed' | 'current' | 'upcoming' = 'upcoming'
@@ -40,12 +40,12 @@ const timelineStages = computed(() =>
     return {
       status,
       section: sections.value?.[status],
-      isActive: status === props.slide.stage,
+      isActive: status === props.slide.content.stage,
       progressState,
     }
   }),
 )
-const activeStage = computed(() => sections.value?.[props.slide.stage])
+const activeStage = computed(() => sections.value?.[props.slide.content.stage])
 const roadmapLabels = computed(() => resolveRoadmapLabels(props.presentation))
 </script>
 

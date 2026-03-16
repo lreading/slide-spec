@@ -6,7 +6,6 @@ import type {
   GeneratedPresentationData,
   HowToContributeSlide,
   MetricValue,
-  RecentUpdatesSlide,
   PresentationContent,
   PresentationIndexEntry,
   PresentationSlide,
@@ -22,6 +21,18 @@ import type {
 } from '../types/content'
 import { getLegacyTemplateIdForSlideKind } from '../templates/resolveSlideTemplate'
 import { isSlideTemplateId } from '../templates/templateIds'
+
+const legacySlideKinds = new Set([
+  'title',
+  'agenda',
+  'recent-updates',
+  'releases',
+  'roadmap',
+  'contributor-spotlight',
+  'community-highlights',
+  'how-to-contribute',
+  'thank-you',
+])
 
 interface PresentationIndexDocument {
   presentations: PresentationIndexEntry[]
@@ -78,6 +89,10 @@ function assertOptionalString(value: unknown, path: string): void {
   }
 }
 
+function isLegacySlideKind(value: unknown): value is PresentationSlide['kind'] {
+  return typeof value === 'string' && legacySlideKinds.has(value)
+}
+
 function assertLink(value: unknown, path: string): asserts value is SiteLink {
   assert(isRecord(value), `${path} must be an object.`)
   assertNonBlankString(value.label, `${path}.label`)
@@ -87,14 +102,13 @@ function assertLink(value: unknown, path: string): asserts value is SiteLink {
 
 function assertProjectBadge(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
-  const badge = value
-  assertOptionalString(badge.label, `${path}.label`)
-  assertOptionalString(badge.fa_icon, `${path}.fa_icon`)
-  assertOptionalString(badge.icon_position, `${path}.icon_position`)
-  assert(badge.label !== undefined || badge.fa_icon !== undefined, `${path} must include label or fa_icon.`)
-  if (badge.icon_position !== undefined) {
+  assertOptionalString(value.label, `${path}.label`)
+  assertOptionalString(value.fa_icon, `${path}.fa_icon`)
+  assertOptionalString(value.icon_position, `${path}.icon_position`)
+  assert(value.label !== undefined || value.fa_icon !== undefined, `${path} must include label or fa_icon.`)
+  if (value.icon_position !== undefined) {
     assert(
-      badge.icon_position === 'before' || badge.icon_position === 'after',
+      value.icon_position === 'before' || value.icon_position === 'after',
       `${path}.icon_position must be "before" or "after".`,
     )
   }
@@ -102,10 +116,9 @@ function assertProjectBadge(value: unknown, path: string): void {
 
 function assertPresentationLogo(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
-  const logo = value
-  assertOptionalString(logo.url, `${path}.url`)
-  assertOptionalString(logo.alt, `${path}.alt`)
-  assert(logo.url !== undefined || logo.alt === undefined, `${path}.alt requires ${path}.url.`)
+  assertOptionalString(value.url, `${path}.url`)
+  assertOptionalString(value.alt, `${path}.alt`)
+  assert(value.url !== undefined || value.alt === undefined, `${path}.alt requires ${path}.url.`)
 }
 
 function assertNavigationContent(value: unknown, path: string): void {
@@ -196,195 +209,183 @@ function assertSpotlightEntry(value: unknown, path: string): asserts value is Sp
   assertNonBlankString(value.summary, `${path}.summary`)
 }
 
-function assertRoadmapStageContent(
-  value: unknown,
-  path: string,
-): asserts value is RoadmapStageContent {
+function assertRoadmapStageContent(value: unknown, path: string): asserts value is RoadmapStageContent {
   assert(isRecord(value), `${path} must be an object.`)
-  const stage = value
-  assertNonBlankString(stage.label, `${path}.label`)
-  assertNonBlankString(stage.summary, `${path}.summary`)
-  assertStringArray(stage.items, `${path}.items`)
-  assert(Array.isArray(stage.themes), `${path}.themes must be an array.`)
-  const themes = stage.themes as unknown[]
+  assertNonBlankString(value.label, `${path}.label`)
+  assertNonBlankString(value.summary, `${path}.summary`)
+  assertStringArray(value.items, `${path}.items`)
+  assert(Array.isArray(value.themes), `${path}.themes must be an array.`)
+  const themes = value.themes as unknown[]
   themes.forEach((theme, index) => {
     assert(isRecord(theme), `${path}.themes[${index}] must be an object.`)
-    const themeRecord = theme
-    assertNonBlankString(themeRecord.category, `${path}.themes[${index}].category`)
-    assertNonBlankString(themeRecord.target, `${path}.themes[${index}].target`)
+    assertNonBlankString(theme.category, `${path}.themes[${index}].category`)
+    assertNonBlankString(theme.target, `${path}.themes[${index}].target`)
   })
 }
 
 function assertRoadmapContent(value: unknown, path: string): asserts value is RoadmapContent {
   assert(isRecord(value), `${path} must be an object.`)
-  const roadmap = value
-  assertOptionalString(roadmap.agenda_label, `${path}.agenda_label`)
-  assertOptionalString(roadmap.deliverables_heading, `${path}.deliverables_heading`)
-  assertOptionalString(roadmap.focus_areas_heading, `${path}.focus_areas_heading`)
-  assertOptionalString(roadmap.footer_link_label, `${path}.footer_link_label`)
-  assert(isRecord(roadmap.sections), `${path}.sections must be an object.`)
-  const sections = roadmap.sections
-  assertRoadmapStageContent(sections.completed, `${path}.sections.completed`)
-  assertRoadmapStageContent(sections['in-progress'], `${path}.sections.in-progress`)
-  assertRoadmapStageContent(sections.planned, `${path}.sections.planned`)
-  assertRoadmapStageContent(sections.future, `${path}.sections.future`)
+  assertOptionalString(value.agenda_label, `${path}.agenda_label`)
+  assertOptionalString(value.deliverables_heading, `${path}.deliverables_heading`)
+  assertOptionalString(value.focus_areas_heading, `${path}.focus_areas_heading`)
+  assertOptionalString(value.footer_link_label, `${path}.footer_link_label`)
+  assert(isRecord(value.sections), `${path}.sections must be an object.`)
+  assertRoadmapStageContent(value.sections.completed, `${path}.sections.completed`)
+  assertRoadmapStageContent(value.sections['in-progress'], `${path}.sections.in-progress`)
+  assertRoadmapStageContent(value.sections.planned, `${path}.sections.planned`)
+  assertRoadmapStageContent(value.sections.future, `${path}.sections.future`)
 }
 
-function assertBaseSlide(value: unknown, path: string): asserts value is PresentationSlide {
+function assertSlideBase(value: unknown, path: string): asserts value is PresentationSlide {
   assert(isRecord(value), `${path} must be an object.`)
-  assertNonBlankString(value.kind, `${path}.kind`)
-  assertOptionalString(value.template, `${path}.template`)
+  assertNonBlankString(value.template, `${path}.template`)
+  assert(
+    isSlideTemplateId(value.template),
+    `${path}.template must be a supported template id.`,
+  )
+  if (value.kind !== undefined) {
+    assertNonBlankString(value.kind, `${path}.kind`)
+    assert(isLegacySlideKind(value.kind), `${path}.kind must be a supported slide kind.`)
+    assert(
+      value.template === getLegacyTemplateIdForSlideKind(value.kind),
+      `${path}.template must be "${getLegacyTemplateIdForSlideKind(value.kind)}" for kind "${value.kind}".`,
+    )
+  }
   assertBoolean(value.enabled, `${path}.enabled`)
   assertOptionalString(value.title, `${path}.title`)
   assertOptionalString(value.subtitle, `${path}.subtitle`)
-
-  if (value.template !== undefined) {
-    const template = value.template as string
-    const legacyKind = value.kind as PresentationSlide['kind']
-
-    assert(
-      isSlideTemplateId(template),
-      `${path}.template must be a supported template id.`,
-    )
-    assert(
-      template === getLegacyTemplateIdForSlideKind(legacyKind),
-      `${path}.template must be "${getLegacyTemplateIdForSlideKind(legacyKind)}" for kind "${value.kind}".`,
-    )
-  }
+  assert(isRecord(value.content), `${path}.content must be an object.`)
 }
 
 function assertTitleSlide(value: unknown, path: string): void {
-  assertBaseSlide(value, path)
+  assertSlideBase(value, path)
   const slide = value as TitleSlide
-  assertOptionalString(slide.title_primary, `${path}.title_primary`)
-  assertOptionalString(slide.title_accent, `${path}.title_accent`)
-  assertOptionalString(slide.subtitle_prefix, `${path}.subtitle_prefix`)
-  assertOptionalString(slide.quote, `${path}.quote`)
+  assertOptionalString(slide.content.title_primary, `${path}.content.title_primary`)
+  assertOptionalString(slide.content.title_accent, `${path}.content.title_accent`)
+  assertOptionalString(slide.content.subtitle_prefix, `${path}.content.subtitle_prefix`)
+  assertOptionalString(slide.content.quote, `${path}.content.quote`)
   assert(
-    slide.title_primary !== undefined || slide.title_accent !== undefined,
-    `${path} must include title_primary or title_accent.`,
+    slide.content.title_primary !== undefined || slide.content.title_accent !== undefined,
+    `${path}.content must include title_primary or title_accent.`,
   )
 }
 
 function assertAgendaSlide(value: unknown, path: string): void {
-  assertBaseSlide(value, path)
+  assertSlideBase(value, path)
   assertNonBlankString((value as { title?: unknown }).title, `${path}.title`)
 }
 
 function assertRecentUpdatesSlide(value: unknown, path: string): void {
-  assertBaseSlide(value, path)
-  const slide = value as RecentUpdatesSlide
+  assertSlideBase(value, path)
+  const slide = value as { title?: unknown; content: Record<string, unknown> }
   assertNonBlankString(slide.title, `${path}.title`)
-  assert(Array.isArray(slide.sections), `${path}.sections must be an array.`)
-  const sections = slide.sections as unknown[]
-  sections.forEach((section, index) => assertContentSection(section, `${path}.sections[${index}]`))
+  assert(Array.isArray(slide.content.sections), `${path}.content.sections must be an array.`)
+  const sections = slide.content.sections as unknown[]
+  sections.forEach((section, index) =>
+    assertContentSection(section, `${path}.content.sections[${index}]`))
 }
 
-function assertReleasesSlide(value: unknown, path: string): asserts value is ReleasesSlide {
-  assertBaseSlide(value, path)
+function assertReleasesSlide(value: unknown, path: string): void {
+  assertSlideBase(value, path)
   const slide = value as ReleasesSlide
   assertNonBlankString(slide.title, `${path}.title`)
-  assertOptionalString(slide.latest_badge_label, `${path}.latest_badge_label`)
-  assertOptionalString(slide.footer_link_label, `${path}.footer_link_label`)
-  assertStringArray(slide.featured_release_ids, `${path}.featured_release_ids`)
+  assertOptionalString(slide.content.latest_badge_label, `${path}.content.latest_badge_label`)
+  assertOptionalString(slide.content.footer_link_label, `${path}.content.footer_link_label`)
+  assertStringArray(slide.content.featured_release_ids, `${path}.content.featured_release_ids`)
 }
 
 function assertRoadmapSlide(value: unknown, path: string): void {
-  assertBaseSlide(value, path)
+  assertSlideBase(value, path)
   const slide = value as RoadmapSlide
   assertNonBlankString(slide.title, `${path}.title`)
-  assertNonBlankString(slide.stage, `${path}.stage`)
+  assertNonBlankString(slide.content.stage, `${path}.content.stage`)
 }
 
-function assertContributorSpotlightSlide(
-  value: unknown,
-  path: string,
-): asserts value is ContributorSpotlightSlide {
-  assertBaseSlide(value, path)
+function assertContributorSpotlightSlide(value: unknown, path: string): void {
+  assertSlideBase(value, path)
   const slide = value as ContributorSpotlightSlide
   assertNonBlankString(slide.title, `${path}.title`)
-  assertOptionalString(slide.banner_prefix, `${path}.banner_prefix`)
-  assertOptionalString(slide.contributors_link_label, `${path}.contributors_link_label`)
-  assertOptionalString(slide.banner_suffix, `${path}.banner_suffix`)
-  assert(Array.isArray(slide.spotlight), `${path}.spotlight must be an array.`)
-  const spotlight = slide.spotlight as unknown[]
-  spotlight.forEach((entry, index) => assertSpotlightEntry(entry, `${path}.spotlight[${index}]`))
+  assertOptionalString(slide.content.banner_prefix, `${path}.content.banner_prefix`)
+  assertOptionalString(
+    slide.content.contributors_link_label,
+    `${path}.content.contributors_link_label`,
+  )
+  assertOptionalString(slide.content.banner_suffix, `${path}.content.banner_suffix`)
+  assert(Array.isArray(slide.content.spotlight), `${path}.content.spotlight must be an array.`)
+  slide.content.spotlight.forEach((entry, index) =>
+    assertSpotlightEntry(entry, `${path}.content.spotlight[${index}]`))
 }
 
-function assertCommunityHighlightsSlide(
-  value: unknown,
-  path: string,
-): asserts value is CommunityHighlightsSlide {
-  assertBaseSlide(value, path)
+function assertCommunityHighlightsSlide(value: unknown, path: string): void {
+  assertSlideBase(value, path)
   const slide = value as CommunityHighlightsSlide
   assertNonBlankString(slide.title, `${path}.title`)
-  assertOptionalString(slide.section_heading, `${path}.section_heading`)
-  assertOptionalString(slide.stats_heading, `${path}.stats_heading`)
-  assertOptionalString(slide.trend_suffix, `${path}.trend_suffix`)
-  assertStringArray(slide.stat_keys, `${path}.stat_keys`)
-  assert(Array.isArray(slide.mentions), `${path}.mentions must be an array.`)
-  const mentions = slide.mentions as unknown[]
+  assertOptionalString(slide.content.section_heading, `${path}.content.section_heading`)
+  assertOptionalString(slide.content.stats_heading, `${path}.content.stats_heading`)
+  assertOptionalString(slide.content.trend_suffix, `${path}.content.trend_suffix`)
+  assertStringArray(slide.content.stat_keys, `${path}.content.stat_keys`)
+  assert(Array.isArray(slide.content.mentions), `${path}.content.mentions must be an array.`)
+  const mentions = slide.content.mentions as unknown[]
   mentions.forEach((mention, index) => {
-    assert(isRecord(mention), `${path}.mentions[${index}] must be an object.`)
-    const mentionRecord = mention
-    assertNonBlankString(mentionRecord.type, `${path}.mentions[${index}].type`)
-    assertNonBlankString(mentionRecord.title, `${path}.mentions[${index}].title`)
-    assertOptionalString(mentionRecord.url_label, `${path}.mentions[${index}].url_label`)
-    assertOptionalString(mentionRecord.url, `${path}.mentions[${index}].url`)
+    assert(isRecord(mention), `${path}.content.mentions[${index}] must be an object.`)
+    assertNonBlankString(mention.type, `${path}.content.mentions[${index}].type`)
+    assertNonBlankString(mention.title, `${path}.content.mentions[${index}].title`)
+    assertOptionalString(mention.url_label, `${path}.content.mentions[${index}].url_label`)
+    assertOptionalString(mention.url, `${path}.content.mentions[${index}].url`)
   })
 }
 
 function assertHowToContributeSlide(value: unknown, path: string): void {
-  assertBaseSlide(value, path)
+  assertSlideBase(value, path)
   const slide = value as HowToContributeSlide
   assertNonBlankString(slide.title, `${path}.title`)
-  assertOptionalString(slide.footer_text, `${path}.footer_text`)
-  assert(Array.isArray(slide.cards), `${path}.cards must be an array.`)
-  const cards = slide.cards as unknown[]
-  cards.forEach((card, index) => assertContributionCard(card, `${path}.cards[${index}]`))
+  assertOptionalString(slide.content.footer_text, `${path}.content.footer_text`)
+  assert(Array.isArray(slide.content.cards), `${path}.content.cards must be an array.`)
+  slide.content.cards.forEach((card, index) =>
+    assertContributionCard(card, `${path}.content.cards[${index}]`))
 }
 
 function assertThankYouSlide(value: unknown, path: string): void {
-  assertBaseSlide(value, path)
+  assertSlideBase(value, path)
   const slide = value as ThankYouSlide
-  assertNonBlankString(slide.heading, `${path}.heading`)
-  assertNonBlankString(slide.message, `${path}.message`)
-  assertOptionalString(slide.quote, `${path}.quote`)
+  assertNonBlankString(slide.content.heading, `${path}.content.heading`)
+  assertNonBlankString(slide.content.message, `${path}.content.message`)
+  assertOptionalString(slide.content.quote, `${path}.content.quote`)
 }
 
 function validateSlide(value: unknown, path: string): void {
-  assertBaseSlide(value, path)
+  assertSlideBase(value, path)
 
-  switch (value.kind) {
-    case 'title':
+  switch (value.template) {
+    case 'hero':
       assertTitleSlide(value, path)
       break
     case 'agenda':
       assertAgendaSlide(value, path)
       break
-    case 'recent-updates':
+    case 'section-list-grid':
       assertRecentUpdatesSlide(value, path)
       break
-    case 'releases':
+    case 'timeline':
       assertReleasesSlide(value, path)
       break
-    case 'roadmap':
+    case 'progress-timeline':
       assertRoadmapSlide(value, path)
       break
-    case 'contributor-spotlight':
+    case 'people':
       assertContributorSpotlightSlide(value, path)
       break
-    case 'community-highlights':
+    case 'metrics-and-links':
       assertCommunityHighlightsSlide(value, path)
       break
-    case 'how-to-contribute':
+    case 'action-cards':
       assertHowToContributeSlide(value, path)
       break
-    case 'thank-you':
+    case 'closing':
       assertThankYouSlide(value, path)
       break
     default:
-      throw new Error(`${path}.kind must be a supported slide kind.`)
+      throw new Error(`${path}.template must be a supported template id.`)
   }
 }
 
@@ -428,35 +429,29 @@ export class ContentValidator {
     assertLink(site.links.owasp, 'site.yaml.site.links.owasp')
   }
 
-  public validatePresentationIndexDocument(
-    document: unknown,
-  ): asserts document is PresentationIndexDocument {
+  public validatePresentationIndexDocument(document: unknown): asserts document is PresentationIndexDocument {
     assert(isRecord(document), 'presentations/index.yaml must be an object.')
     assert(Array.isArray(document.presentations), 'presentations/index.yaml.presentations must be an array.')
 
     const ids = new Set<string>()
-
     const presentations = document.presentations as unknown[]
     presentations.forEach((entry, index) => {
       const path = `presentations/index.yaml.presentations[${index}]`
       assert(isRecord(entry), `${path} must be an object.`)
-      const presentation = entry
-      assertNonBlankString(presentation.id, `${path}.id`)
-      assert(!ids.has(presentation.id), `${path}.id must be unique.`)
-      ids.add(presentation.id)
-      assertNumber(presentation.year, `${path}.year`)
-      assertNumber(presentation.quarter, `${path}.quarter`)
-      assertNonBlankString(presentation.title, `${path}.title`)
-      assertNonBlankString(presentation.subtitle, `${path}.subtitle`)
-      assertNonBlankString(presentation.summary, `${path}.summary`)
-      assertBoolean(presentation.published, `${path}.published`)
-      assertBoolean(presentation.featured, `${path}.featured`)
+      assertNonBlankString(entry.id, `${path}.id`)
+      assert(!ids.has(entry.id), `${path}.id must be unique.`)
+      ids.add(entry.id)
+      assertNumber(entry.year, `${path}.year`)
+      assertNumber(entry.quarter, `${path}.quarter`)
+      assertNonBlankString(entry.title, `${path}.title`)
+      assertNonBlankString(entry.subtitle, `${path}.subtitle`)
+      assertNonBlankString(entry.summary, `${path}.summary`)
+      assertBoolean(entry.published, `${path}.published`)
+      assertBoolean(entry.featured, `${path}.featured`)
     })
   }
 
-  public validatePresentationDocument(
-    document: unknown,
-  ): asserts document is PresentationDocument {
+  public validatePresentationDocument(document: unknown): asserts document is PresentationDocument {
     assert(isRecord(document), 'presentation document must be an object.')
     assert(isRecord(document.presentation), 'presentation document.presentation must be an object.')
     const presentation = document.presentation
@@ -481,9 +476,8 @@ export class ContentValidator {
     const generated = document.generated
     assertNonBlankString(generated.id, 'generated document.generated.id')
     assert(isRecord(generated.period), 'generated document.generated.period must be an object.')
-    const period = generated.period
-    assertNonBlankString(period.start, 'generated document.generated.period.start')
-    assertNonBlankString(period.end, 'generated document.generated.period.end')
+    assertNonBlankString(generated.period.start, 'generated document.generated.period.start')
+    assertNonBlankString(generated.period.end, 'generated document.generated.period.end')
     assertOptionalString(
       generated.previous_presentation_id,
       'generated document.generated.previous_presentation_id',
@@ -499,31 +493,28 @@ export class ContentValidator {
     releases.forEach((release, index) => {
       const path = `generated document.generated.releases[${index}]`
       assert(isRecord(release), `${path} must be an object.`)
-      const releaseRecord = release
-      assertNonBlankString(releaseRecord.id, `${path}.id`)
-      assertNonBlankString(releaseRecord.version, `${path}.version`)
-      assertNonBlankString(releaseRecord.published_at, `${path}.published_at`)
-      assertNonBlankString(releaseRecord.url, `${path}.url`)
-      assertStringArray(releaseRecord.summary_bullets, `${path}.summary_bullets`)
+      assertNonBlankString(release.id, `${path}.id`)
+      assertNonBlankString(release.version, `${path}.version`)
+      assertNonBlankString(release.published_at, `${path}.published_at`)
+      assertNonBlankString(release.url, `${path}.url`)
+      assertStringArray(release.summary_bullets, `${path}.summary_bullets`)
     })
 
     assert(isRecord(generated.contributors), 'generated document.generated.contributors must be an object.')
-    const contributors = generated.contributors
-    assertNumber(contributors.total, 'generated document.generated.contributors.total')
+    assertNumber(generated.contributors.total, 'generated document.generated.contributors.total')
     assert(
-      Array.isArray(contributors.authors),
+      Array.isArray(generated.contributors.authors),
       'generated document.generated.contributors.authors must be an array.',
     )
-    const authors = contributors.authors as unknown[]
+    const authors = generated.contributors.authors as unknown[]
     authors.forEach((author, index) => {
       const path = `generated document.generated.contributors.authors[${index}]`
       assert(isRecord(author), `${path} must be an object.`)
-      const authorRecord = author
-      assertNonBlankString(authorRecord.login, `${path}.login`)
-      assertNonBlankString(authorRecord.name, `${path}.name`)
-      assertNonBlankString(authorRecord.avatar_url, `${path}.avatar_url`)
-      assertNumber(authorRecord.merged_prs, `${path}.merged_prs`)
-      assertBoolean(authorRecord.first_time, `${path}.first_time`)
+      assertNonBlankString(author.login, `${path}.login`)
+      assertNonBlankString(author.name, `${path}.name`)
+      assertNonBlankString(author.avatar_url, `${path}.avatar_url`)
+      assertNumber(author.merged_prs, `${path}.merged_prs`)
+      assertBoolean(author.first_time, `${path}.first_time`)
     })
   }
 
@@ -542,11 +533,19 @@ export class ContentValidator {
     )
     assert(
       indexEntry.year === presentation.year,
-      `Presentation year mismatch for "${indexEntry.id}".`,
+      `Presentation year mismatch between index "${indexEntry.year}" and presentation "${presentation.year}".`,
     )
     assert(
       indexEntry.quarter === presentation.quarter,
-      `Presentation quarter mismatch for "${indexEntry.id}".`,
+      `Presentation quarter mismatch between index "${indexEntry.quarter}" and presentation "${presentation.quarter}".`,
+    )
+    assert(
+      indexEntry.title === presentation.title,
+      `Presentation title mismatch between index "${indexEntry.title}" and presentation "${presentation.title}".`,
+    )
+    assert(
+      indexEntry.subtitle === presentation.subtitle,
+      `Presentation subtitle mismatch between index "${indexEntry.subtitle}" and presentation "${presentation.subtitle}".`,
     )
   }
 }
