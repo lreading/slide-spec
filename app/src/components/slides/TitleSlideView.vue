@@ -18,6 +18,11 @@ const props = defineProps<{
 }>()
 
 const badge = computed(() => getProjectBadgeDisplay(props.site))
+const titlePrimary = computed(() => props.slide.title_primary?.trim() || 'OWASP')
+const titleAccent = computed(() => props.slide.title_accent?.trim() || 'Threat Dragon')
+const subtitlePrefix = computed(
+  () => props.slide.subtitle_prefix?.trim() || 'Quarterly Community Update',
+)
 </script>
 
 <template>
@@ -32,10 +37,12 @@ const badge = computed(() => getProjectBadgeDisplay(props.site))
       </div>
 
       <div class="text-block">
-        <h1 class="hero-title">OWASP <span class="accent-text">Threat Dragon</span></h1>
+        <h1 class="hero-title">
+          {{ titlePrimary }} <span class="accent-text">{{ titleAccent }}</span>
+        </h1>
         <AccentDivider />
         <h2 class="hero-subtitle">
-          Quarterly Community Update —
+          {{ subtitlePrefix }} —
           <span class="hero-subtitle-strong">{{ deck.subtitle }}</span>
         </h2>
         <p class="hero-quote">"{{ slide.quote }}"</p>

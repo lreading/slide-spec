@@ -11,7 +11,7 @@ describe('SlideRenderer', () => {
 
   it('renders every enabled slide kind from the YAML deck', () => {
     const headings = [
-      'OWASP Threat Dragon Quarterly Community Update',
+      'OWASP Threat Dragon',
       'Agenda',
       'What Happened Since Last Update',
       'Releases',
@@ -22,7 +22,7 @@ describe('SlideRenderer', () => {
       'Contributor Spotlight',
       'Community Highlights',
       'How to Contribute',
-      'Thank You',
+      'Thank you',
     ]
 
     slides.forEach((slide, index) => {

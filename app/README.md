@@ -1,5 +1,7 @@
 # Threat Dragon Slides App
 
+## TODO: Rewrite this, not helpful at all
+
 This directory contains the Vue 3 + TypeScript web application for the quarterly Threat Dragon presentation site.
 
 Commands:
@@ -11,3 +13,6 @@ Commands:
 - `npm run coverage`
 - `npm run build`
 - `npm run verify`
+- `npm run e2e`
+
+

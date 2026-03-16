@@ -40,9 +40,9 @@ defineProps<{
       </div>
 
       <div class="text-block">
-        <h1 class="hero-title">Thank <span class="accent-text">You!</span></h1>
+        <h1 class="hero-title">{{ slide.heading }}<span class="accent-text">!</span></h1>
         <AccentDivider width="4rem" :opacity="0.8" padding="0.5rem 0" />
-        <h2 class="hero-subtitle">See you next quarter 🐉</h2>
+        <h2 class="hero-subtitle">{{ slide.message }}</h2>
       </div>
 
       <div class="actions">

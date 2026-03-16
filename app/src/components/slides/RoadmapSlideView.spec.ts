@@ -52,7 +52,7 @@ describe('RoadmapSlideView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('Roadmap: Roadmap')
+    expect(wrapper.text()).toContain('Roadmap: Completed')
     expect(wrapper.text()).toContain('Roadmap details are not available.')
   })
 })

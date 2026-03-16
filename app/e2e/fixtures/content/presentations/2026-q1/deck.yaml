@@ -157,11 +157,11 @@ presentation:
           url_label: Watch recording on YouTube
           url: https://www.youtube.com/
         - type: Interop tool
-          title: 'Community-maintained export bridge for pulling Threat Dragon models into architecture review workflows'
+          title: Community-maintained export bridge for pulling Threat Dragon models into architecture review workflows
           url_label: Explore the prototype on GitHub
           url: https://github.com/OWASP/threat-dragon
         - type: Blog post
-          title: 'Open source threat modeling round-up featuring Threat Dragon in a broader secure design toolkit'
+          title: Open source threat modeling round-up featuring Threat Dragon in a broader secure design toolkit
           url_label: Read the write-up
           url: https://owasp.org/
     - kind: how-to-contribute

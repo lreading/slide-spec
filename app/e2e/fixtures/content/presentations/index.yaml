@@ -1,0 +1,9 @@
+presentations:
+  - id: 2026-q1
+    year: 2026
+    quarter: 1
+    title: OWASP Threat Dragon Quarterly Community Update
+    subtitle: Q1 2026
+    summary: Product progress, releases, contributor recognition, and community growth.
+    published: true
+    featured: true

@@ -41,7 +41,7 @@ const contributorsUrl = computed(() => `${props.site.links.repository.url}/graph
 
 <template>
   <StandardSlideLayout
-    title="Contributor Spotlight"
+    :title="slide.title ?? 'Contributor Spotlight'"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

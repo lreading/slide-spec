@@ -36,7 +36,7 @@ const agendaItems = computed(() => {
 
 <template>
   <StandardSlideLayout
-    title="Agenda"
+    :title="slide.title ?? 'Agenda'"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

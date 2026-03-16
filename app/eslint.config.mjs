@@ -9,12 +9,38 @@ const typeCheckedParserOptions = {
   tsconfigRootDir: import.meta.dirname,
 }
 
+const e2eParserOptions = {
+  projectService: {
+    allowDefaultProject: ['e2e/*.ts', 'e2e/support/*.ts', 'playwright.config.ts'],
+    defaultProject: 'tsconfig.node.json',
+  },
+  tsconfigRootDir: import.meta.dirname,
+}
+
 export default tseslint.config(
   {
     ignores: ['coverage/**', 'dist/**'],
   },
   {
+    files: ['e2e/**/*.ts', 'playwright.config.ts'],
+    extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
+    languageOptions: {
+      ecmaVersion: 'latest',
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+      parserOptions: e2eParserOptions,
+    },
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-unsafe-argument': 'off',
+    },
+  },
+  {
     files: ['**/*.{ts,mts,cts,tsx}'],
+    ignores: ['e2e/**/*.ts', 'playwright.config.ts'],
     extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
       ecmaVersion: 'latest',

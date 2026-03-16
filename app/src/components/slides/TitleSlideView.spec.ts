@@ -34,4 +34,22 @@ describe('TitleSlideView', () => {
     expect(wrapper.text()).toContain('threatdragon.com/docs')
     expect(wrapper.text()).toContain('owasp.org/www-project-threat-dragon')
   })
+
+  it('falls back to default hero labels when title config is missing', () => {
+    const wrapper = mount(TitleSlideView, {
+      props: {
+        deck: record.deck,
+        site,
+        slide: {
+          ...slide,
+          title_primary: undefined,
+          title_accent: undefined,
+          subtitle_prefix: undefined,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('OWASP Threat Dragon')
+    expect(wrapper.text()).toContain('Quarterly Community Update')
+  })
 })

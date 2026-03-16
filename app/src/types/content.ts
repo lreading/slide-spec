@@ -14,14 +14,22 @@ export interface ProjectBadge {
   icon_position?: 'before' | 'after'
 }
 
+export interface HomeHeroContent {
+  title_primary?: string
+  title_accent?: string
+  subtitle?: string
+}
+
 export interface SiteContent {
   title: string
   tagline: string
   project_badge?: ProjectBadge
   presentation_logo?: PresentationLogo
+  home_hero?: HomeHeroContent
   home_intro: string
   home_cta_label: string
   presentations_cta_label: string
+  presentations_page_title?: string
   links: Record<string, SiteLink>
 }
 
@@ -50,11 +58,15 @@ export type SlideKind =
 export interface BaseSlide {
   kind: SlideKind
   enabled: boolean
+  title?: string
   subtitle?: string
 }
 
 export interface TitleSlide extends BaseSlide {
   kind: 'title'
+  title_primary?: string
+  title_accent?: string
+  subtitle_prefix?: string
   quote?: string
 }
 

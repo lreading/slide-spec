@@ -7,6 +7,7 @@ import { buildPresentationPagination } from '../content/PresentationPagination'
 import { contentRepository } from '../content/ContentRepository'
 
 const presentations = contentRepository.listPresentations()
+const site = contentRepository.getSiteContent()
 const catalog = new PresentationCatalog(presentations)
 
 const search = ref('')
@@ -49,7 +50,7 @@ function goToPage(page: number): void {
   <main class="page">
     <div class="page-header presentations-header">
       <div class="presentations-heading">
-        <p class="presentations-eyebrow">All presentations</p>
+        <p class="presentations-eyebrow">{{ site.presentations_page_title ?? 'All presentations' }}</p>
       </div>
     </div>
 

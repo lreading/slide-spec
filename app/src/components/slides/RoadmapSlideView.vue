@@ -57,7 +57,7 @@ const activeStage = computed(() => sections.value?.[props.slide.stage] ?? fallba
 
 <template>
   <StandardSlideLayout
-    :title="`Roadmap: ${activeStage.label}`"
+    :title="slide.title ?? `Roadmap: ${activeStage.label}`"
     :subtitle="slide.subtitle ?? activeStage.summary"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

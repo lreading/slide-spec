@@ -24,7 +24,7 @@ const repositoryLink = computed(() => props.site.links.repository)
 
 <template>
   <StandardSlideLayout
-    title="How to Contribute"
+    :title="slide.title ?? 'How to Contribute'"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

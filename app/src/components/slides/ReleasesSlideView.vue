@@ -35,7 +35,7 @@ const releasesUrl = computed(() => `${props.site.links.repository.url}/releases`
 
 <template>
   <StandardSlideLayout
-    title="Releases"
+    :title="slide.title ?? 'Releases'"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"

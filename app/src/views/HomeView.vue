@@ -16,6 +16,11 @@ const presentations = contentRepository.listPresentations()
 
 const featuredPresentation = computed(() => presentations.find((entry) => entry.featured) ?? presentations[0])
 const badge = computed(() => getProjectBadgeDisplay(site))
+const heroContent = computed(() => ({
+  titlePrimary: site.home_hero?.title_primary?.trim() || 'OWASP',
+  titleAccent: site.home_hero?.title_accent?.trim() || 'Threat Dragon',
+  subtitle: site.home_hero?.subtitle?.trim() || 'Community Updates',
+}))
 </script>
 
 <template>
@@ -42,13 +47,15 @@ const badge = computed(() => getProjectBadgeDisplay(site))
       </div>
 
       <div class="hero-copy">
-        <h1 class="hero-title">OWASP <span class="accent-text">Threat Dragon</span></h1>
+        <h1 class="hero-title">
+          {{ heroContent.titlePrimary }} <span class="accent-text">{{ heroContent.titleAccent }}</span>
+        </h1>
         <AccentDivider />
         <h2 class="hero-subtitle">
-          Community Updates
+          {{ heroContent.subtitle }}
         </h2>
         <p class="hero-description">
-          roadmap, releases, community and more
+          {{ site.home_intro }}
         </p>
       </div>
     </div>

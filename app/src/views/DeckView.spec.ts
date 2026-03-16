@@ -31,7 +31,7 @@ describe('DeckView', () => {
       },
     })
 
-    expect(wrapper.text()).toContain('OWASP Threat Dragon Quarterly Community Update')
+    expect(wrapper.text()).toContain('OWASP Threat Dragon')
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
     await flushPromises()

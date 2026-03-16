@@ -15,6 +15,8 @@ coverage/
 app/dist/
 app/dist-ssr/
 app/coverage/
+app/playwright-report/
+app/test-results/
 
 # Logs
 logs/

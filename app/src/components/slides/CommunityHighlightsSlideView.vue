@@ -43,7 +43,7 @@ const mentionCards = computed(() =>
 
 <template>
   <StandardSlideLayout
-    title="Community Highlights"
+    :title="slide.title ?? 'Community Highlights'"
     :subtitle="slide.subtitle"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
