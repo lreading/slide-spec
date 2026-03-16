@@ -7,7 +7,7 @@ import ContributorSpotlightSlideView from './ContributorSpotlightSlideView.vue'
 describe('ContributorSpotlightSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const site = contentRepository.getSiteContent()
-  const slide = record.deck.slides.find(
+  const slide = record.presentation.slides.find(
     (entry) => entry.kind === 'contributor-spotlight',
   )
 
@@ -18,7 +18,7 @@ describe('ContributorSpotlightSlideView', () => {
   it('renders contributor spotlight entries from generated contributor data', () => {
     const wrapper = mount(ContributorSpotlightSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         site,
         slide,
@@ -41,7 +41,7 @@ describe('ContributorSpotlightSlideView', () => {
   it('falls back to default banner copy when banner fields are missing', () => {
     const wrapper = mount(ContributorSpotlightSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         site,
         slide: {
@@ -75,7 +75,7 @@ describe('ContributorSpotlightSlideView', () => {
 
     const wrapper = mount(ContributorSpotlightSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         site,
         slide: fallbackSlide,

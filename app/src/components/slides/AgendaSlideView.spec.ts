@@ -6,7 +6,7 @@ import AgendaSlideView from './AgendaSlideView.vue'
 
 describe('AgendaSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
-  const slide = record.deck.slides.find((entry) => entry.kind === 'agenda')
+  const slide = record.presentation.slides.find((entry) => entry.kind === 'agenda')
 
   if (!slide || slide.kind !== 'agenda') {
     throw new Error('Expected agenda slide in fixture data')
@@ -15,7 +15,7 @@ describe('AgendaSlideView', () => {
   it('collapses multiple roadmap slides into a single agenda entry', () => {
     const wrapper = mount(AgendaSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         slide,
         slideNumber: 2,
         slideTotal: 12,

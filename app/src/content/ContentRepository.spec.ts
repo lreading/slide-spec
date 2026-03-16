@@ -102,7 +102,7 @@ describe('ContentRepository', () => {
   it('returns the merged presentation record for a quarter', () => {
     const repository = new ContentRepository(files)
 
-    expect(repository.getPresentation('2026-q1').deck.subtitle).toBe('Q1 2026')
+    expect(repository.getPresentation('2026-q1').presentation.subtitle).toBe('Q1 2026')
   })
 
   it('throws for unknown presentations', () => {

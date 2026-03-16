@@ -7,7 +7,7 @@ import ReleasesSlideView from './ReleasesSlideView.vue'
 describe('ReleasesSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const site = contentRepository.getSiteContent()
-  const slide = record.deck.slides.find((entry) => entry.kind === 'releases')
+  const slide = record.presentation.slides.find((entry) => entry.kind === 'releases')
 
   if (!slide || slide.kind !== 'releases') {
     throw new Error('Expected releases slide in fixture data')
@@ -16,7 +16,7 @@ describe('ReleasesSlideView', () => {
   it('links release cards and the footer CTA to GitHub release pages', () => {
     const wrapper = mount(ReleasesSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         site,
         slide,

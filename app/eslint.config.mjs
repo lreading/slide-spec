@@ -9,14 +9,6 @@ const typeCheckedParserOptions = {
   tsconfigRootDir: import.meta.dirname,
 }
 
-const e2eParserOptions = {
-  projectService: {
-    allowDefaultProject: ['e2e/*.ts', 'e2e/support/*.ts', 'playwright.config.ts'],
-    defaultProject: 'tsconfig.node.json',
-  },
-  tsconfigRootDir: import.meta.dirname,
-}
-
 export default tseslint.config(
   {
     ignores: ['coverage/**', 'dist/**'],
@@ -30,7 +22,7 @@ export default tseslint.config(
       globals: {
         ...globals.node,
       },
-      parserOptions: e2eParserOptions,
+      parserOptions: typeCheckedParserOptions,
     },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',

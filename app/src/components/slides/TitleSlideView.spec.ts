@@ -7,7 +7,7 @@ import TitleSlideView from './TitleSlideView.vue'
 describe('TitleSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const site = contentRepository.getSiteContent()
-  const slide = record.deck.slides.find((entry) => entry.kind === 'title')
+  const slide = record.presentation.slides.find((entry) => entry.kind === 'title')
 
   if (!slide || slide.kind !== 'title') {
     throw new Error('Expected title slide in fixture data')
@@ -16,7 +16,7 @@ describe('TitleSlideView', () => {
   it('renders clickable footer links from site config', () => {
     const wrapper = mount(TitleSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         site,
         slide,
       },
@@ -38,7 +38,7 @@ describe('TitleSlideView', () => {
   it('falls back to default hero labels when title config is missing', () => {
     const wrapper = mount(TitleSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         site,
         slide: {
           ...slide,

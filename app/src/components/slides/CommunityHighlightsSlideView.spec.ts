@@ -6,7 +6,7 @@ import CommunityHighlightsSlideView from './CommunityHighlightsSlideView.vue'
 
 describe('CommunityHighlightsSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
-  const slide = record.deck.slides.find(
+  const slide = record.presentation.slides.find(
     (entry) => entry.kind === 'community-highlights',
   )
 
@@ -17,7 +17,7 @@ describe('CommunityHighlightsSlideView', () => {
   it('renders the configured mentions and quarterly stats', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         slide,
         slideNumber: 7,
@@ -42,7 +42,7 @@ describe('CommunityHighlightsSlideView', () => {
 
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         slide: reorderedSlide,
         slideNumber: 7,
@@ -82,7 +82,7 @@ describe('CommunityHighlightsSlideView', () => {
 
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         slide: mixedLinkSlide,
         slideNumber: 7,
@@ -101,7 +101,7 @@ describe('CommunityHighlightsSlideView', () => {
   it('falls back to the default section heading when none is configured', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         slide: {
           ...slide,
@@ -118,7 +118,7 @@ describe('CommunityHighlightsSlideView', () => {
   it('falls back to default title, stats heading, and mention icon when optional values are missing', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         slide: {
           ...slide,

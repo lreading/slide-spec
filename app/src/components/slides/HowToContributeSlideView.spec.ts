@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import type { HowToContributeSlide, PresentationDeck, SiteContent } from '../../types/content'
 import HowToContributeSlideView from './HowToContributeSlideView.vue'
 
-const deck: PresentationDeck = {
+const presentation: PresentationDeck = {
   id: '2026-q1',
   year: 2026,
   quarter: 1,
@@ -63,7 +63,7 @@ describe('HowToContributeSlideView', () => {
 
     const wrapper = mount(HowToContributeSlideView, {
       props: {
-        deck,
+        deck: presentation,
         site,
         slide,
         slideNumber: 11,
@@ -89,7 +89,7 @@ describe('HowToContributeSlideView', () => {
 
     const wrapper = mount(HowToContributeSlideView, {
       props: {
-        deck,
+        deck: presentation,
         site,
         slide,
         slideNumber: 11,

@@ -50,7 +50,7 @@ export class FixtureRepository {
 
     return {
       index,
-      deck: this.readDocument<PresentationDocument>(`presentations/${id}/deck.yaml`).presentation,
+      presentation: this.readDocument<PresentationDocument>(`presentations/${id}/deck.yaml`).presentation,
       generated: this.readDocument<GeneratedDocument>(`presentations/${id}/generated.yaml`).generated,
     }
   }

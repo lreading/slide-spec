@@ -7,7 +7,7 @@ import SlideRenderer from './SlideRenderer.vue'
 describe('SlideRenderer', () => {
   const site = contentRepository.getSiteContent()
   const record = contentRepository.getPresentation('2026-q1')
-  const slides = record.deck.slides.filter((slide) => slide.enabled)
+  const slides = record.presentation.slides.filter((slide) => slide.enabled)
 
   it('renders every enabled slide kind from the YAML deck', () => {
     const headings = [

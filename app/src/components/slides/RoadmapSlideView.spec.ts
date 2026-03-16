@@ -6,7 +6,7 @@ import RoadmapSlideView from './RoadmapSlideView.vue'
 
 describe('RoadmapSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
-  const roadmapSlides = record.deck.slides.filter((slide) => slide.kind === 'roadmap')
+  const roadmapSlides = record.presentation.slides.filter((slide) => slide.kind === 'roadmap')
 
   it('renders the active roadmap stage from shared deck roadmap data', () => {
     const slide = roadmapSlides[1]
@@ -17,7 +17,7 @@ describe('RoadmapSlideView', () => {
 
     const wrapper = mount(RoadmapSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         site: contentRepository.getSiteContent(),
         slide,
         slideNumber: 5,
@@ -42,7 +42,7 @@ describe('RoadmapSlideView', () => {
     const wrapper = mount(RoadmapSlideView, {
       props: {
         deck: {
-          ...record.deck,
+          ...record.presentation,
           roadmap: undefined,
         },
         site: contentRepository.getSiteContent(),

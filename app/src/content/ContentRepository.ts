@@ -59,7 +59,7 @@ export class ContentRepository {
 
     return {
       index,
-      deck: this.readDocument<DeckDocument>(`presentations/${id}/deck.yaml`).presentation,
+      presentation: this.readDocument<DeckDocument>(`presentations/${id}/deck.yaml`).presentation,
       generated: this.readDocument<GeneratedDocument>(`presentations/${id}/generated.yaml`).generated,
     }
   }

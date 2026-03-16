@@ -18,7 +18,7 @@ test('supports keyboard navigation on the presentation page', async ({ page }) =
 
   await page.keyboard.press('ArrowLeft')
   await expect(page).toHaveURL(/slide=1/)
-  await expect(page.getByText(presentation.deck.subtitle)).toBeVisible()
+  await expect(page.getByText(presentation.presentation.subtitle)).toBeVisible()
 })
 
 test('enters and exits presentation mode cleanly', async ({ page }) => {

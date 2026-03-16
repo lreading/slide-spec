@@ -271,6 +271,6 @@ export interface GeneratedPresentationData {
 
 export interface PresentationRecord {
   index: PresentationIndexEntry
-  deck: PresentationDeck
+  presentation: PresentationDeck
   generated: GeneratedPresentationData
 }

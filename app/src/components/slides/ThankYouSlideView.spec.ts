@@ -7,7 +7,7 @@ import ThankYouSlideView from './ThankYouSlideView.vue'
 describe('ThankYouSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const site = contentRepository.getSiteContent()
-  const slide = record.deck.slides.find((entry) => entry.kind === 'thank-you')
+  const slide = record.presentation.slides.find((entry) => entry.kind === 'thank-you')
 
   if (!slide || slide.kind !== 'thank-you') {
     throw new Error('Expected thank-you slide in fixture data')
@@ -16,7 +16,7 @@ describe('ThankYouSlideView', () => {
   it('renders the configured thank-you content and deck mark', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         site,
         slide,
@@ -32,7 +32,7 @@ describe('ThankYouSlideView', () => {
   it('falls back to the site tagline and navigation brand when chrome content is missing', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         site: {
           ...site,
@@ -56,7 +56,7 @@ describe('ThankYouSlideView', () => {
   it('falls back to the site title when no presentation chrome or navigation brand is configured', () => {
     const wrapper = mount(ThankYouSlideView, {
       props: {
-        deck: record.deck,
+        deck: record.presentation,
         generated: record.generated,
         site: {
           ...site,

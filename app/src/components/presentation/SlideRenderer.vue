@@ -23,27 +23,27 @@ defineProps<{
 <template>
   <TitleSlideView
     v-if="slide.kind === 'title'"
-    :deck="record.deck"
+    :deck="record.presentation"
     :site="site"
     :slide="slide"
   />
   <AgendaSlideView
     v-else-if="slide.kind === 'agenda'"
-    :deck="record.deck"
+    :deck="record.presentation"
     :slide="slide"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
   />
   <RecentUpdatesSlideView
     v-else-if="slide.kind === 'recent-updates'"
-    :deck="record.deck"
+    :deck="record.presentation"
     :slide="slide"
     :slide-number="slideNumber"
     :slide-total="slideTotal"
   />
   <ReleasesSlideView
     v-else-if="slide.kind === 'releases'"
-    :deck="record.deck"
+    :deck="record.presentation"
     :generated="record.generated"
     :site="site"
     :slide="slide"
@@ -52,7 +52,7 @@ defineProps<{
   />
   <RoadmapSlideView
     v-else-if="slide.kind === 'roadmap'"
-    :deck="record.deck"
+    :deck="record.presentation"
     :site="site"
     :slide="slide"
     :slide-number="slideNumber"
@@ -60,7 +60,7 @@ defineProps<{
   />
   <ContributorSpotlightSlideView
     v-else-if="slide.kind === 'contributor-spotlight'"
-    :deck="record.deck"
+    :deck="record.presentation"
     :generated="record.generated"
     :site="site"
     :slide="slide"
@@ -69,7 +69,7 @@ defineProps<{
   />
   <CommunityHighlightsSlideView
     v-else-if="slide.kind === 'community-highlights'"
-    :deck="record.deck"
+    :deck="record.presentation"
     :generated="record.generated"
     :slide="slide"
     :slide-number="slideNumber"
@@ -77,7 +77,7 @@ defineProps<{
   />
   <HowToContributeSlideView
     v-else-if="slide.kind === 'how-to-contribute'"
-    :deck="record.deck"
+    :deck="record.presentation"
     :site="site"
     :slide="slide"
     :slide-number="slideNumber"
@@ -85,7 +85,7 @@ defineProps<{
   />
   <ThankYouSlideView
     v-else
-    :deck="record.deck"
+    :deck="record.presentation"
     :generated="record.generated"
     :site="site"
     :slide="slide"

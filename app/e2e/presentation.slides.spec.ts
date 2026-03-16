@@ -16,7 +16,7 @@ import type {
 const fixtures = new FixtureRepository()
 const site = fixtures.getSiteContent()
 const record = fixtures.getPresentation('2026-q1')
-const enabledSlides = record.deck.slides.filter((slide) => slide.enabled)
+const enabledSlides = record.presentation.slides.filter((slide) => slide.enabled)
 
 function formatFooterText(url: string): string {
   const parsed = new URL(url)
@@ -35,7 +35,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         }),
       ).toBeVisible()
       await expect(page.getByText(slide.subtitle_prefix ?? '')).toBeVisible()
-      await expect(page.getByText(record.deck.subtitle)).toBeVisible()
+      await expect(page.getByText(record.presentation.subtitle)).toBeVisible()
       await expect(page.getByText(String(slide.quote))).toBeVisible()
       for (const link of Object.values(site.links)) {
         await expect(page.getByRole('link', { name: formatFooterText(link.url) })).toHaveAttribute(
@@ -81,11 +81,11 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
     }
     case 'roadmap': {
       const roadmapSlide: RoadmapSlide = slide
-      const section = record.deck.roadmap?.sections[roadmapSlide.stage]
+      const section = record.presentation.roadmap?.sections[roadmapSlide.stage]
       await expect(page.getByText(`Roadmap: ${section?.label}`)).toBeVisible()
       await expect(page.getByText('Key deliverables')).toBeVisible()
       await expect(page.getByText('Focus areas')).toBeVisible()
-      for (const stage of Object.values(record.deck.roadmap?.sections ?? {})) {
+      for (const stage of Object.values(record.presentation.roadmap?.sections ?? {})) {
         await expect(page.getByText(stage.label, { exact: true }).first()).toBeVisible()
       }
       await expect(page.getByText(section?.summary ?? '', { exact: true }).first()).toBeVisible()
