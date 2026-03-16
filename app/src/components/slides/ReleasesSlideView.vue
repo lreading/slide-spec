@@ -7,13 +7,13 @@ import TimelineEventCard from '../ui/TimelineEventCard.vue'
 
 import type {
   GeneratedPresentationData,
-  PresentationDeck,
+  PresentationContent,
   ReleasesSlide,
   SiteContent,
 } from '../../types/content'
 
 const props = defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   generated: GeneratedPresentationData
   site: SiteContent
   slide: ReleasesSlide

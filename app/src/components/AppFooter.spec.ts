@@ -21,7 +21,6 @@ describe('AppFooter', () => {
   it('hides the footer link when footer config is missing', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
-      tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',

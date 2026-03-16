@@ -63,7 +63,6 @@ describe('HomeView', () => {
   it('omits home hero headings when hero config is missing', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
-      tagline: 'making threat modeling less threatening',
       home_intro: 'Fallback intro',
       home_cta_label: 'View latest presentation',
       presentations_cta_label: 'View all presentations',

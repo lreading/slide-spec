@@ -10,14 +10,14 @@ import SectionHeading from '../ui/SectionHeading.vue'
 import { resolveRoadmapLabels } from '../../content/contentDefaults'
 
 import type {
-  PresentationDeck,
+  PresentationContent,
   RoadmapSlide,
   RoadmapStageStatus,
   SiteContent,
 } from '../../types/content'
 
 const props = defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   site: SiteContent
   slide: RoadmapSlide
   slideNumber: number

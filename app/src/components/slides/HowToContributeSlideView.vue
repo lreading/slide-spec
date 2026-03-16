@@ -7,10 +7,10 @@ import FooterActionLink from '../ui/FooterActionLink.vue'
 import IconBadge from '../ui/IconBadge.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
-import type { HowToContributeSlide, PresentationDeck, SiteContent } from '../../types/content'
+import type { HowToContributeSlide, PresentationContent, SiteContent } from '../../types/content'
 
 const props = defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   site: SiteContent
   slide: HowToContributeSlide
   slideNumber: number

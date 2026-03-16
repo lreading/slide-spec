@@ -1,10 +1,10 @@
 import { describe, expect, it } from 'vitest'
 
-import { DeckNavigation } from './DeckNavigation'
+import { PresentationNavigation } from './PresentationNavigation'
 
-describe('DeckNavigation', () => {
+describe('PresentationNavigation', () => {
   it('moves within the presentation bounds', () => {
-    const navigation = new DeckNavigation(12)
+    const navigation = new PresentationNavigation(12)
 
     expect(navigation.first()).toBe(1)
     expect(navigation.last()).toBe(12)
@@ -14,7 +14,7 @@ describe('DeckNavigation', () => {
   })
 
   it('normalizes invalid route values', () => {
-    const navigation = new DeckNavigation(4)
+    const navigation = new PresentationNavigation(4)
 
     expect(navigation.resolve(undefined)).toBe(1)
     expect(navigation.resolve('2')).toBe(2)

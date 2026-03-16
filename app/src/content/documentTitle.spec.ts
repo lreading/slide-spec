@@ -69,7 +69,6 @@ describe('resolveDocumentTitle', () => {
   it('falls back to the site title when the presentations-page title is not configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
-      tagline: 'Tagline',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',

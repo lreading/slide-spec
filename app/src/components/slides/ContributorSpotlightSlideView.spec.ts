@@ -65,7 +65,6 @@ describe('ContributorSpotlightSlideView', () => {
         ...slide.spotlight,
         {
           login: 'mystery_contributor',
-          focus_area: 'Release Engineering',
           summary: 'Helped clean up release automation and packaging workflows.',
         },
       ],

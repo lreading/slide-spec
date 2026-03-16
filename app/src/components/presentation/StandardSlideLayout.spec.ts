@@ -62,7 +62,6 @@ describe('StandardSlideLayout', () => {
   it('falls back to the dragon icon when no presentation logo is configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
-      tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -89,7 +88,6 @@ describe('StandardSlideLayout', () => {
   it('omits the alt text when the logo alt is blank', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
-      tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -120,7 +118,6 @@ describe('StandardSlideLayout', () => {
   it('omits the presentation mark when no explicit chrome label is configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
-      tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -141,6 +138,6 @@ describe('StandardSlideLayout', () => {
       },
     })
 
-    expect(wrapper.find('.deck-mark').exists()).toBe(false)
+    expect(wrapper.find('.presentation-mark').exists()).toBe(false)
   })
 })

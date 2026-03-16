@@ -6,7 +6,7 @@ import { parse } from 'yaml'
 
 import type {
   GeneratedPresentationData,
-  PresentationDeck,
+  PresentationContent,
   PresentationIndexEntry,
   PresentationRecord,
   SiteContent,
@@ -21,7 +21,7 @@ interface SiteDocument {
 }
 
 interface PresentationDocument {
-  presentation: PresentationDeck
+  presentation: PresentationContent
 }
 
 interface GeneratedDocument {
@@ -50,7 +50,7 @@ export class FixtureRepository {
 
     return {
       index,
-      presentation: this.readDocument<PresentationDocument>(`presentations/${id}/deck.yaml`).presentation,
+      presentation: this.readDocument<PresentationDocument>(`presentations/${id}/presentation.yaml`).presentation,
       generated: this.readDocument<GeneratedDocument>(`presentations/${id}/generated.yaml`).generated,
     }
   }

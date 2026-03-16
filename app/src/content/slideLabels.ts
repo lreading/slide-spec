@@ -1,8 +1,8 @@
-import type { PresentationDeck, PresentationSlide } from '../types/content'
+import type { PresentationContent, PresentationSlide } from '../types/content'
 
 export const getSlideLabel = (
   slide: PresentationSlide,
-  presentation: PresentationDeck,
+  presentation: PresentationContent,
 ): string | undefined => {
   if (slide.title) {
     return slide.title

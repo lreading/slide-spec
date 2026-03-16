@@ -2,9 +2,9 @@ import { flushPromises, mount, RouterLinkStub } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { createAppRouter } from '../router'
-import DeckView from './DeckView.vue'
+import PresentationView from './PresentationView.vue'
 
-describe('DeckView', () => {
+describe('PresentationView', () => {
   const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
 
   beforeEach(() => {
@@ -24,7 +24,7 @@ describe('DeckView', () => {
     await router.push('/presentations/2026-q1?slide=1')
     await router.isReady()
 
-    const wrapper = mount(DeckView, {
+    const wrapper = mount(PresentationView, {
       global: {
         plugins: [router],
         stubs: {
@@ -49,7 +49,7 @@ describe('DeckView', () => {
     await router.push('/presentations/2026-q1?slide=999&mode=presentation')
     await router.isReady()
 
-    const wrapper = mount(DeckView, {
+    const wrapper = mount(PresentationView, {
       global: {
         plugins: [router],
         stubs: {
@@ -92,7 +92,7 @@ describe('DeckView', () => {
     await router.push('/presentations/2026-q1?slide=3')
     await router.isReady()
 
-    const wrapper = mount(DeckView, {
+    const wrapper = mount(PresentationView, {
       global: {
         plugins: [router],
         stubs: {
@@ -151,7 +151,7 @@ describe('DeckView', () => {
     await router.push('/presentations/2026-q1?slide=2')
     await router.isReady()
 
-    const wrapper = mount(DeckView, {
+    const wrapper = mount(PresentationView, {
       global: {
         plugins: [router],
         stubs: {
@@ -189,7 +189,7 @@ describe('DeckView', () => {
     await router.push('/presentations/2026-q1?slide=3')
     await router.isReady()
 
-    const wrapper = mount(DeckView, {
+    const wrapper = mount(PresentationView, {
       global: {
         plugins: [router],
         stubs: {
@@ -211,7 +211,7 @@ describe('DeckView', () => {
     await router.push('/presentations/2026-q1?slide=2')
     await router.isReady()
 
-    const wrapper = mount(DeckView, {
+    const wrapper = mount(PresentationView, {
       global: {
         plugins: [router],
         stubs: {

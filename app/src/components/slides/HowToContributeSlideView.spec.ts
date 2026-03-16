@@ -1,10 +1,10 @@
 import { mount } from '@vue/test-utils'
 import { describe, expect, it } from 'vitest'
 
-import type { HowToContributeSlide, PresentationDeck, SiteContent } from '../../types/content'
+import type { HowToContributeSlide, PresentationContent, SiteContent } from '../../types/content'
 import HowToContributeSlideView from './HowToContributeSlideView.vue'
 
-const presentation: PresentationDeck = {
+const presentation: PresentationContent = {
   id: '2026-q1',
   year: 2026,
   quarter: 1,
@@ -49,7 +49,6 @@ describe('HowToContributeSlideView', () => {
   it('uses the configured repository link in the footer', () => {
     const site: SiteContent = {
       title: 'Threat Dragon Updates',
-      tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'View latest presentation',
       presentations_cta_label: 'View all presentations',
@@ -80,7 +79,6 @@ describe('HowToContributeSlideView', () => {
   it('omits the repository footer link when no repository link is configured', () => {
     const site: SiteContent = {
       title: 'Threat Dragon Updates',
-      tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'View latest presentation',
       presentations_cta_label: 'View all presentations',
@@ -104,7 +102,6 @@ describe('HowToContributeSlideView', () => {
   it('omits the footer callout entirely when footer copy and repository link are both missing', () => {
     const site: SiteContent = {
       title: 'Threat Dragon Updates',
-      tagline: 'Quarterly updates',
       home_intro: 'Intro',
       home_cta_label: 'View latest presentation',
       presentations_cta_label: 'View all presentations',

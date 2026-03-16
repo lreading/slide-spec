@@ -48,7 +48,7 @@ export class ContentRepository {
       throw new Error(`Unknown presentation "${id}".`)
     }
 
-    const presentationDocument = this.readDocument(`presentations/${id}/deck.yaml`)
+    const presentationDocument = this.readDocument(`presentations/${id}/presentation.yaml`)
     const generatedDocument = this.readDocument(`presentations/${id}/generated.yaml`)
 
     this.validator.validatePresentationDocument(presentationDocument)

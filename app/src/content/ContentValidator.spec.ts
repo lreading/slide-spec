@@ -10,7 +10,6 @@ describe('ContentValidator', () => {
       validator.validateSiteDocument({
         site: {
           title: 'Threat Dragon Quarterly Updates',
-          tagline: 'making threat modeling less threatening',
           home_intro: 'Intro',
           home_cta_label: 'View latest presentation',
           presentations_cta_label: 'View all presentations',
@@ -19,6 +18,14 @@ describe('ContentValidator', () => {
               label: 'GitHub Repo',
               url: 'https://github.com/OWASP/threat-dragon',
               eyebrow: 'Source Code',
+            },
+            docs: {
+              label: 'Docs',
+              url: 'https://example.com/docs',
+            },
+            owasp: {
+              label: 'OWASP',
+              url: 'https://example.com/owasp',
             },
           },
         },
@@ -87,6 +94,7 @@ describe('ContentValidator', () => {
             {
               kind: 'releases',
               enabled: true,
+              title: 'Releases',
               featured_release_ids: ['v1.0.0'],
               latest_badge_label: 'Latest',
               footer_link_label: 'View all releases on GitHub',
@@ -94,15 +102,16 @@ describe('ContentValidator', () => {
             {
               kind: 'roadmap',
               enabled: true,
+              title: 'Roadmap',
               stage: 'completed',
             },
             {
               kind: 'contributor-spotlight',
               enabled: true,
+              title: 'Contributor spotlight',
               spotlight: [
                 {
                   login: 'octocat',
-                  focus_area: 'Docs',
                   summary: 'Summary',
                 },
               ],
@@ -110,6 +119,7 @@ describe('ContentValidator', () => {
             {
               kind: 'community-highlights',
               enabled: true,
+              title: 'Community highlights',
               stat_keys: ['stars'],
               mentions: [
                 {
@@ -121,6 +131,7 @@ describe('ContentValidator', () => {
             {
               kind: 'how-to-contribute',
               enabled: true,
+              title: 'How to contribute',
               cards: [
                 {
                   title: 'Report bugs',
@@ -188,7 +199,6 @@ describe('ContentValidator', () => {
       validator.validateSiteDocument({
         site: {
           title: 'Test',
-          tagline: 'Tagline',
           home_intro: 'Intro',
           home_cta_label: 'Open',
           presentations_cta_label: 'Presentations',
@@ -197,10 +207,69 @@ describe('ContentValidator', () => {
               label: 'GitHub Repo',
               url: 42,
             },
+            docs: {
+              label: 'Docs',
+              url: 'https://example.com/docs',
+            },
+            owasp: {
+              label: 'OWASP',
+              url: 'https://example.com/owasp',
+            },
           },
         },
       }),
     ).toThrow('site.yaml.site.links.repository.url must be a string.')
+  })
+
+  it('rejects blank authored content and incomplete grouped fields', () => {
+    expect(() =>
+      validator.validateSiteDocument({
+        site: {
+          title: 'Test',
+          home_intro: 'Intro',
+          home_cta_label: 'Open',
+          presentations_cta_label: 'Presentations',
+          app_footer: {
+            repository_label: 'GitHub',
+          },
+          links: {
+            repository: {
+              label: 'GitHub Repo',
+              url: 'https://example.com/repository',
+            },
+            docs: {
+              label: 'Docs',
+              url: 'https://example.com/docs',
+            },
+            owasp: {
+              label: 'OWASP',
+              url: 'https://example.com/owasp',
+            },
+          },
+        },
+      }),
+    ).toThrow(
+      'site.yaml.site.app_footer must provide both repository_label and repository_url together.',
+    )
+
+    expect(() =>
+      validator.validatePresentationDocument({
+        presentation: {
+          id: '2026-q1',
+          year: 2026,
+          quarter: 1,
+          title: 'Quarterly Community Update',
+          subtitle: 'Q1 2026',
+          slides: [
+            {
+              kind: 'agenda',
+              enabled: true,
+              title: '   ',
+            },
+          ],
+        },
+      }),
+    ).toThrow('presentation document.presentation.slides[0].title must not be blank.')
   })
 
   it('rejects duplicate presentation ids in the index', () => {

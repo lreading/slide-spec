@@ -9,11 +9,11 @@ import SurfaceCard from '../ui/SurfaceCard.vue'
 import type {
   CommunityHighlightsSlide,
   GeneratedPresentationData,
-  PresentationDeck,
+  PresentationContent,
 } from '../../types/content'
 
 const props = defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   generated: GeneratedPresentationData
   slide: CommunityHighlightsSlide
   slideNumber: number

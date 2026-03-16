@@ -3,10 +3,10 @@ import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
 import IconBadge from '../ui/IconBadge.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
-import type { PresentationDeck, RecentUpdatesSlide } from '../../types/content'
+import type { PresentationContent, RecentUpdatesSlide } from '../../types/content'
 
 defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   slide: RecentUpdatesSlide
   slideNumber: number
   slideTotal: number

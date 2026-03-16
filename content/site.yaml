@@ -1,6 +1,6 @@
 site:
   title: Threat Dragon Quarterly Updates
-  tagline: making threat modeling less threatening
+  mascot_alt: Cupcake mascot
   project_badge:
     label: OWASP Lab Project
     fa_icon: fa-flask

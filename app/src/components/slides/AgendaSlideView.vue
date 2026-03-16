@@ -5,10 +5,10 @@ import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import { getSlideLabel } from '../../content/slideLabels'
-import type { AgendaSlide, PresentationDeck } from '../../types/content'
+import type { AgendaSlide, PresentationContent } from '../../types/content'
 
 const props = defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   slide: AgendaSlide
   slideNumber: number
   slideTotal: number

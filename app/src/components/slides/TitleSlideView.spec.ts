@@ -52,4 +52,28 @@ describe('TitleSlideView', () => {
     expect(wrapper.find('.hero-title').exists()).toBe(false)
     expect(wrapper.find('.hero-subtitle').exists()).toBe(false)
   })
+
+  it('supports accent-only titles and omits mascot alt text when not authored', () => {
+    const wrapper = mount(TitleSlideView, {
+      props: {
+        presentation: record.presentation,
+        site: {
+          ...site,
+          mascot_alt: undefined,
+        },
+        slide: {
+          ...slide,
+          title_primary: undefined,
+          title_accent: 'Threat Dragon',
+          subtitle_prefix: 'Quarterly Community Update',
+          quote: undefined,
+        },
+      },
+    })
+
+    expect(wrapper.find('.hero-title')?.text()).toContain('Threat Dragon')
+    expect(wrapper.find('.hero-subtitle').exists()).toBe(true)
+    expect(wrapper.find('.hero-quote').exists()).toBe(false)
+    expect(wrapper.get('.floating-mascot__image').attributes('alt')).toBeUndefined()
+  })
 })

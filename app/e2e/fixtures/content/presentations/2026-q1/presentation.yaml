@@ -142,13 +142,10 @@ presentation:
       banner_suffix: who submitted PRs, reported bugs, and improved docs this quarter!
       spotlight:
         - login: schen_dev
-          focus_area: UI & Accessibility
           summary: Led the complete overhaul of the dark mode color system and fixed 12 accessibility issues in the diagram editor, making Threat Dragon usable for everyone.
         - login: mjohnson_sec
-          focus_area: Core Engine
           summary: Implemented the new custom rule template engine that allows organizations to define their own threat libraries and compliance checks.
         - login: erodriguez_docs
-          focus_area: Documentation
           summary: Rewrote the entire Getting Started guide series and added comprehensive examples for cloud-native threat modeling scenarios.
     - kind: community-highlights
       enabled: true

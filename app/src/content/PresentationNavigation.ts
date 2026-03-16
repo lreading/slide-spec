@@ -1,4 +1,4 @@
-export class DeckNavigation {
+export class PresentationNavigation {
   private readonly slideCount: number
 
   public constructor(slideCount: number) {

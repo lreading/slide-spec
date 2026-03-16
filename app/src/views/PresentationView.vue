@@ -4,7 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { contentRepository } from '../content/ContentRepository'
 import { resolvePresentationToolbarContent } from '../content/contentDefaults'
-import { DeckNavigation } from '../content/DeckNavigation'
+import { PresentationNavigation } from '../content/PresentationNavigation'
 import PresentationToolbar from '../components/presentation/PresentationToolbar.vue'
 import SlideRenderer from '../components/presentation/SlideRenderer.vue'
 
@@ -17,7 +17,7 @@ const toolbarContent = resolvePresentationToolbarContent(site)
 const presentationId = computed(() => String(route.params.presentationId))
 const record = computed(() => contentRepository.getPresentation(presentationId.value))
 const slides = computed(() => record.value.presentation.slides.filter((slide) => slide.enabled))
-const navigator = computed(() => new DeckNavigation(slides.value.length))
+const navigator = computed(() => new PresentationNavigation(slides.value.length))
 const slideNumber = computed(() => navigator.value.resolve(route.query.slide))
 const currentSlide = computed(() => slides.value[slideNumber.value - 1])
 const isPresentationMode = computed(() => route.query.mode === 'presentation')
@@ -143,7 +143,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <main class="page deck-page" :class="{ 'deck-page--presentation': isPresentationActive }">
+  <main class="page presentation-page" :class="{ 'presentation-page--presentation': isPresentationActive }">
     <PresentationToolbar
       v-if="!isPresentationActive"
       :slide-number="slideNumber"
@@ -171,7 +171,7 @@ onUnmounted(() => {
 </template>
 
 <style scoped>
-.deck-page {
+.presentation-page {
   display: flex;
   flex: 1;
   flex-direction: column;
@@ -188,13 +188,13 @@ onUnmounted(() => {
   width: 100%;
 }
 
-.deck-page--presentation {
+.presentation-page--presentation {
   gap: 0;
   padding: 0.35rem;
   overflow: hidden;
 }
 
-.deck-page--presentation .slide-stage {
+.presentation-page--presentation .slide-stage {
   overflow: hidden;
 }
 
@@ -206,7 +206,7 @@ onUnmounted(() => {
 }
 
 @media (max-width: 767px) {
-  .deck-page--presentation {
+  .presentation-page--presentation {
     padding: 0.25rem;
   }
 

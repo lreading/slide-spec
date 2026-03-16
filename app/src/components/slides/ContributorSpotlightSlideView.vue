@@ -9,12 +9,12 @@ import SurfaceCard from '../ui/SurfaceCard.vue'
 import type {
   ContributorSpotlightSlide,
   GeneratedPresentationData,
-  PresentationDeck,
+  PresentationContent,
   SiteContent,
 } from '../../types/content'
 
 const props = defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   generated: GeneratedPresentationData
   site: SiteContent
   slide: ContributorSpotlightSlide

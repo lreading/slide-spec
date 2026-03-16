@@ -66,7 +66,7 @@ export interface PresentationsPageContent {
 
 export interface SiteContent {
   title: string
-  tagline: string
+  mascot_alt?: string
   project_badge?: ProjectBadge
   presentation_logo?: PresentationLogo
   navigation?: NavigationContent
@@ -180,7 +180,7 @@ export type PresentationSlide =
   | HowToContributeSlide
   | ThankYouSlide
 
-export interface PresentationDeck {
+export interface PresentationContent {
   id: string
   year: number
   quarter: number
@@ -219,7 +219,6 @@ export interface RoadmapContent {
 
 export interface SpotlightEntry {
   login: string
-  focus_area: string
   summary: string
 }
 
@@ -274,6 +273,6 @@ export interface GeneratedPresentationData {
 
 export interface PresentationRecord {
   index: PresentationIndexEntry
-  presentation: PresentationDeck
+  presentation: PresentationContent
   generated: GeneratedPresentationData
 }

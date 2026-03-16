@@ -18,6 +18,7 @@ const presentations = contentRepository.listPresentations()
 const featuredPresentation = computed(() => presentations.find((entry) => entry.featured) ?? presentations[0])
 const badge = computed(() => getProjectBadgeDisplay(site))
 const heroContent = computed(() => resolveHomeHeroContent(site))
+const mascotAlt = computed(() => site.mascot_alt?.trim() || undefined)
 </script>
 
 <template>
@@ -40,7 +41,7 @@ const heroContent = computed(() => resolveHomeHeroContent(site))
       </div>
 
       <div class="mascot-wrap">
-        <FloatingMascot :src="mascotUrl" alt="Cupcake Mascot" size="clamp(9rem, 18vw, 12rem)" />
+        <FloatingMascot :src="mascotUrl" :alt="mascotAlt" size="clamp(9rem, 18vw, 12rem)" />
       </div>
 
       <div class="hero-copy">

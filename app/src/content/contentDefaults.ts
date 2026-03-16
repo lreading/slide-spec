@@ -2,7 +2,7 @@ import type {
   AppFooterContent,
   HomeHeroContent,
   NavigationContent,
-  PresentationDeck,
+  PresentationContent,
   PresentationToolbarContent,
   PresentationsPageContent,
   SiteContent,
@@ -93,7 +93,7 @@ export const resolveTitleSlideContent = (
 })
 
 export const resolveRoadmapLabels = (
-  presentation: PresentationDeck,
+  presentation: PresentationContent,
 ): RoadmapResolvedLabels => ({
   deliverables: trimOrUndefined(presentation.roadmap?.deliverables_heading),
   focusAreas: trimOrUndefined(presentation.roadmap?.focus_areas_heading),

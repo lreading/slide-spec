@@ -57,9 +57,9 @@ const markLabel = computed(() => resolvePresentationChromeLabel(site))
           <slot />
         </div>
 
-        <div v-if="presentationSubtitle && markLabel" class="deck-mark z-10">
-          <span class="deck-mark__name">{{ markLabel }}</span>
-          <span class="deck-mark__subtitle">{{ presentationSubtitle }}</span>
+        <div v-if="presentationSubtitle && markLabel" class="presentation-mark z-10">
+          <span class="presentation-mark__name">{{ markLabel }}</span>
+          <span class="presentation-mark__subtitle">{{ presentationSubtitle }}</span>
         </div>
       </div>
     </div>
@@ -194,7 +194,7 @@ const markLabel = computed(() => resolvePresentationChromeLabel(site))
   z-index: 0;
 }
 
-.deck-mark {
+.presentation-mark {
   position: absolute;
   right: 2rem;
   bottom: 2rem;
@@ -207,12 +207,12 @@ const markLabel = computed(() => resolvePresentationChromeLabel(site))
   line-height: 1.25rem;
 }
 
-.deck-mark__name {
+.presentation-mark__name {
   color: #9ca3af;
   font-weight: 500;
 }
 
-.deck-mark__subtitle {
+.presentation-mark__subtitle {
   color: #e8341c;
   font-weight: 700;
 }
@@ -234,7 +234,7 @@ const markLabel = computed(() => resolvePresentationChromeLabel(site))
     padding: 32px 24px !important;
   }
 
-  .deck-mark {
+  .presentation-mark {
     right: 1.5rem;
     bottom: 0.9rem;
   }
@@ -247,7 +247,7 @@ const markLabel = computed(() => resolvePresentationChromeLabel(site))
     flex-direction: column;
   }
 
-  .deck-mark {
+  .presentation-mark {
     position: relative;
     right: auto;
     bottom: auto;

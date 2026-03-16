@@ -50,7 +50,7 @@ describe('ThankYouSlideView', () => {
     })
 
     expect(wrapper.find('.footer-quote').exists()).toBe(false)
-    expect(wrapper.find('.deck-mark').exists()).toBe(false)
+    expect(wrapper.find('.presentation-mark').exists()).toBe(false)
   })
 
   it('omits the deck mark when no presentation chrome label is configured', () => {
@@ -68,6 +68,6 @@ describe('ThankYouSlideView', () => {
       },
     })
 
-    expect(wrapper.find('.deck-mark').exists()).toBe(false)
+    expect(wrapper.find('.presentation-mark').exists()).toBe(false)
   })
 })

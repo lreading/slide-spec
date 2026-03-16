@@ -6,7 +6,6 @@ const files = {
   '/virtual/site.yaml': `
 site:
   title: Test Site
-  tagline: Test Tagline
   project_badge:
     label: Demo
     fa_icon: fa-flask
@@ -17,7 +16,16 @@ site:
   home_intro: Intro
   home_cta_label: Open
   presentations_cta_label: Presentations
-  links: {}
+  links:
+    repository:
+      label: Repository
+      url: https://example.com/repository
+    docs:
+      label: Docs
+      url: https://example.com/docs
+    owasp:
+      label: OWASP
+      url: https://example.com/owasp
 `,
   '/virtual/presentations/index.yaml': `
 presentations:
@@ -38,7 +46,7 @@ presentations:
     published: true
     featured: true
 `,
-  '/virtual/presentations/2026-q1/deck.yaml': `
+  '/virtual/presentations/2026-q1/presentation.yaml': `
 presentation:
   id: 2026-q1
   year: 2026
@@ -48,6 +56,7 @@ presentation:
   slides:
     - kind: title
       enabled: true
+      title_primary: Q1
 `,
   '/virtual/presentations/2026-q1/generated.yaml': `
 generated:
@@ -61,7 +70,7 @@ generated:
     total: 0
     authors: []
 `,
-  '/virtual/presentations/2025-q4/deck.yaml': `
+  '/virtual/presentations/2025-q4/presentation.yaml': `
 presentation:
   id: 2025-q4
   year: 2025
@@ -71,6 +80,7 @@ presentation:
   slides:
     - kind: title
       enabled: true
+      title_primary: Q4
 `,
   '/virtual/presentations/2025-q4/generated.yaml': `
 generated:

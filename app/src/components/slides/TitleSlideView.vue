@@ -10,16 +10,17 @@ import SiteFooterLinks from '../ui/SiteFooterLinks.vue'
 import { resolveTitleSlideContent } from '../../content/contentDefaults'
 import { getProjectBadgeDisplay } from '../../content/projectBadge'
 
-import type { PresentationDeck, SiteContent, TitleSlide } from '../../types/content'
+import type { PresentationContent, SiteContent, TitleSlide } from '../../types/content'
 
 const props = defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   site: SiteContent
   slide: TitleSlide
 }>()
 
 const badge = computed(() => getProjectBadgeDisplay(props.site))
 const slideContent = computed(() => resolveTitleSlideContent(props.slide))
+const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
 </script>
 
 <template>
@@ -30,7 +31,7 @@ const slideContent = computed(() => resolveTitleSlideContent(props.slide))
       <ProjectBadgePill v-if="badge" :badge="badge" class="title-badge" />
 
       <div class="relative group">
-        <FloatingMascot :src="mascotUrl" alt="Cupcake Mascot" size="clamp(9rem, 18vw, 12rem)" />
+        <FloatingMascot :src="mascotUrl" :alt="mascotAlt" size="clamp(9rem, 18vw, 12rem)" />
       </div>
 
       <div class="text-block">

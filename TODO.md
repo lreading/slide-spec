@@ -1,3 +1,6 @@
+# UI
+- Add some info about keyboard shortcuts before entering presentation mode.  Not sure how yet.. either a small ui addition near the button, or something that is dismissable (if dismissable, make sure we save to localStorage a "do not show again" type of setting or whatever)
+
 # Data
 - Rename deck to presentation, ensure consistency in naming (file and data properties, should match our "business terms", slides, presentation, etc)
 - Try to keep names for the data for the content in all of the different slides as consistent as possible.  We will be migrating to a "template" format.

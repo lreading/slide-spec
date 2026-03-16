@@ -7,7 +7,6 @@ describe('getProjectBadgeDisplay', () => {
     expect(
       getProjectBadgeDisplay({
         title: 'Threat Dragon Quarterly Updates',
-        tagline: 'making threat modeling less threatening',
         project_badge: {
           label: 'OWASP Lab Project',
           fa_icon: 'fa-flask',
@@ -29,7 +28,6 @@ describe('getProjectBadgeDisplay', () => {
     expect(
       getProjectBadgeDisplay({
         title: 'Threat Dragon Quarterly Updates',
-        tagline: 'making threat modeling less threatening',
         project_badge: {
           fa_icon: 'fab fa-github',
         },
@@ -49,7 +47,6 @@ describe('getProjectBadgeDisplay', () => {
     expect(
       getProjectBadgeDisplay({
         title: 'Threat Dragon Quarterly Updates',
-        tagline: 'making threat modeling less threatening',
         home_intro: 'Quarterly community updates',
         home_cta_label: 'View latest presentation',
         presentations_cta_label: 'View all presentations',
@@ -60,7 +57,6 @@ describe('getProjectBadgeDisplay', () => {
     expect(
       getProjectBadgeDisplay({
         title: 'Threat Dragon Quarterly Updates',
-        tagline: 'making threat modeling less threatening',
         project_badge: {
           label: '   ',
           fa_icon: '   ',
@@ -77,7 +73,6 @@ describe('getProjectBadgeDisplay', () => {
     expect(
       getProjectBadgeDisplay({
         title: 'Threat Dragon Quarterly Updates',
-        tagline: 'making threat modeling less threatening',
         project_badge: {
           label: 'Custom Badge',
           fa_icon: 'fa-flag',

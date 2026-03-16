@@ -32,4 +32,14 @@ describe('FloatingMascot', () => {
     expect(wrapper.attributes('style')).toContain('--floating-mascot-size: 200px')
     expect(wrapper.attributes('style')).toContain('--floating-mascot-glow-opacity: 0.55')
   })
+
+  it('omits the alt attribute when none is provided', () => {
+    const wrapper = mount(FloatingMascot, {
+      props: {
+        src: '/cupcake.png',
+      },
+    })
+
+    expect(wrapper.get('img').attributes('alt')).toBeUndefined()
+  })
 })

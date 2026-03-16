@@ -10,19 +10,20 @@ import { resolvePresentationChromeLabel } from '../../content/contentDefaults'
 
 import type {
   GeneratedPresentationData,
-  PresentationDeck,
+  PresentationContent,
   SiteContent,
   ThankYouSlide,
 } from '../../types/content'
 
 const props = defineProps<{
-  presentation: PresentationDeck
+  presentation: PresentationContent
   generated: GeneratedPresentationData
   site: SiteContent
   slide: ThankYouSlide
 }>()
 
 const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
+const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
 </script>
 
 <template>
@@ -38,7 +39,7 @@ const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
       <div class="relative group mascot-wrap">
         <FloatingMascot
           :src="mascotUrl"
-          alt="Cupcake Mascot"
+          :alt="mascotAlt"
           size="clamp(150px, 20vw, 200px)"
           :glow-opacity="0.5"
         />
@@ -76,9 +77,9 @@ const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
       <p class="footer-quote">"{{ slide.quote }}"</p>
     </div>
 
-    <div v-if="markLabel" class="deck-mark">
-      <span class="deck-mark__name">{{ markLabel }}</span>
-      <span class="deck-mark__subtitle">{{ presentation.subtitle }}</span>
+    <div v-if="markLabel" class="presentation-mark">
+      <span class="presentation-mark__name">{{ markLabel }}</span>
+      <span class="presentation-mark__subtitle">{{ presentation.subtitle }}</span>
     </div>
   </div>
 </template>
@@ -171,7 +172,7 @@ const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
   letter-spacing: 0.05em;
 }
 
-.deck-mark {
+.presentation-mark {
   position: absolute;
   right: 2rem;
   bottom: 1.7rem;
@@ -185,12 +186,12 @@ const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
   line-height: 1.25rem;
 }
 
-.deck-mark__name {
+.presentation-mark__name {
   color: #9ca3af;
   font-weight: 500;
 }
 
-.deck-mark__subtitle {
+.presentation-mark__subtitle {
   color: #e8341c;
   font-weight: 700;
 }
@@ -243,7 +244,7 @@ const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
     margin-top: 1rem;
   }
 
-  .deck-mark {
+  .presentation-mark {
     position: relative;
     right: auto;
     bottom: auto;

@@ -4,7 +4,7 @@ import { computed } from 'vue'
 const props = withDefaults(
   defineProps<{
     src: string
-    alt: string
+    alt?: string
     size?: string
     glowOpacity?: number
   }>(),
