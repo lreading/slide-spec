@@ -88,11 +88,13 @@ describe('ContentValidator', () => {
           slides: [
             {
               kind: 'title',
+              template: 'hero',
               enabled: true,
               title_primary: 'Threat Dragon',
             },
             {
               kind: 'releases',
+              template: 'timeline',
               enabled: true,
               title: 'Releases',
               featured_release_ids: ['v1.0.0'],
@@ -101,12 +103,14 @@ describe('ContentValidator', () => {
             },
             {
               kind: 'roadmap',
+              template: 'progress-timeline',
               enabled: true,
               title: 'Roadmap',
               stage: 'completed',
             },
             {
               kind: 'contributor-spotlight',
+              template: 'people',
               enabled: true,
               title: 'Contributor spotlight',
               spotlight: [
@@ -118,6 +122,7 @@ describe('ContentValidator', () => {
             },
             {
               kind: 'community-highlights',
+              template: 'metrics-and-links',
               enabled: true,
               title: 'Community highlights',
               stat_keys: ['stars'],
@@ -130,6 +135,7 @@ describe('ContentValidator', () => {
             },
             {
               kind: 'how-to-contribute',
+              template: 'action-cards',
               enabled: true,
               title: 'How to contribute',
               cards: [
@@ -143,6 +149,7 @@ describe('ContentValidator', () => {
             },
             {
               kind: 'thank-you',
+              template: 'closing',
               enabled: true,
               heading: 'Thank you',
               message: 'See you next quarter.',
@@ -270,6 +277,50 @@ describe('ContentValidator', () => {
         },
       }),
     ).toThrow('presentation document.presentation.slides[0].title must not be blank.')
+  })
+
+  it('rejects unsupported or mismatched template ids', () => {
+    expect(() =>
+      validator.validatePresentationDocument({
+        presentation: {
+          id: '2026-q1',
+          year: 2026,
+          quarter: 1,
+          title: 'Quarterly Community Update',
+          subtitle: 'Q1 2026',
+          slides: [
+            {
+              kind: 'title',
+              template: 'not-real',
+              enabled: true,
+              title_primary: 'Threat Dragon',
+            },
+          ],
+        },
+      }),
+    ).toThrow('presentation document.presentation.slides[0].template must be a supported template id.')
+
+    expect(() =>
+      validator.validatePresentationDocument({
+        presentation: {
+          id: '2026-q1',
+          year: 2026,
+          quarter: 1,
+          title: 'Quarterly Community Update',
+          subtitle: 'Q1 2026',
+          slides: [
+            {
+              kind: 'title',
+              template: 'people',
+              enabled: true,
+              title_primary: 'Threat Dragon',
+            },
+          ],
+        },
+      }),
+    ).toThrow(
+      'presentation document.presentation.slides[0].template must be "hero" for kind "title".',
+    )
   })
 
   it('rejects duplicate presentation ids in the index', () => {

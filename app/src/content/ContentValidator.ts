@@ -20,6 +20,8 @@ import type {
   ThankYouSlide,
   TitleSlide,
 } from '../types/content'
+import { getLegacyTemplateIdForSlideKind } from '../templates/resolveSlideTemplate'
+import { isSlideTemplateId } from '../templates/templateIds'
 
 interface PresentationIndexDocument {
   presentations: PresentationIndexEntry[]
@@ -231,9 +233,24 @@ function assertRoadmapContent(value: unknown, path: string): asserts value is Ro
 function assertBaseSlide(value: unknown, path: string): asserts value is PresentationSlide {
   assert(isRecord(value), `${path} must be an object.`)
   assertNonBlankString(value.kind, `${path}.kind`)
+  assertOptionalString(value.template, `${path}.template`)
   assertBoolean(value.enabled, `${path}.enabled`)
   assertOptionalString(value.title, `${path}.title`)
   assertOptionalString(value.subtitle, `${path}.subtitle`)
+
+  if (value.template !== undefined) {
+    const template = value.template as string
+    const legacyKind = value.kind as PresentationSlide['kind']
+
+    assert(
+      isSlideTemplateId(template),
+      `${path}.template must be a supported template id.`,
+    )
+    assert(
+      template === getLegacyTemplateIdForSlideKind(legacyKind),
+      `${path}.template must be "${getLegacyTemplateIdForSlideKind(legacyKind)}" for kind "${value.kind}".`,
+    )
+  }
 }
 
 function assertTitleSlide(value: unknown, path: string): void {

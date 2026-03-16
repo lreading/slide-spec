@@ -1,93 +1,33 @@
 <script setup lang="ts">
-import AgendaSlideView from '../slides/AgendaSlideView.vue'
-import CommunityHighlightsSlideView from '../slides/CommunityHighlightsSlideView.vue'
-import ContributorSpotlightSlideView from '../slides/ContributorSpotlightSlideView.vue'
-import HowToContributeSlideView from '../slides/HowToContributeSlideView.vue'
-import RecentUpdatesSlideView from '../slides/RecentUpdatesSlideView.vue'
-import ReleasesSlideView from '../slides/ReleasesSlideView.vue'
-import RoadmapSlideView from '../slides/RoadmapSlideView.vue'
-import ThankYouSlideView from '../slides/ThankYouSlideView.vue'
-import TitleSlideView from '../slides/TitleSlideView.vue'
+import { computed } from 'vue'
 
 import type { PresentationRecord, PresentationSlide, SiteContent } from '../../types/content'
+import { getSlideTemplateDefinition } from '../../templates/registry'
+import { resolveSlideTemplateId } from '../../templates/resolveSlideTemplate'
 
-defineProps<{
+const props = defineProps<{
   record: PresentationRecord
   site: SiteContent
   slide: PresentationSlide
   slideNumber: number
   slideTotal: number
 }>()
+
+const templateDefinition = computed(() =>
+  getSlideTemplateDefinition(resolveSlideTemplateId(props.slide)),
+)
+
+const templateProps = computed(() =>
+  templateDefinition.value.createProps({
+    record: props.record,
+    site: props.site,
+    slide: props.slide,
+    slideNumber: props.slideNumber,
+    slideTotal: props.slideTotal,
+  }),
+)
 </script>
 
 <template>
-  <TitleSlideView
-    v-if="slide.kind === 'title'"
-    :presentation="record.presentation"
-    :site="site"
-    :slide="slide"
-  />
-  <AgendaSlideView
-    v-else-if="slide.kind === 'agenda'"
-    :presentation="record.presentation"
-    :slide="slide"
-    :slide-number="slideNumber"
-    :slide-total="slideTotal"
-  />
-  <RecentUpdatesSlideView
-    v-else-if="slide.kind === 'recent-updates'"
-    :presentation="record.presentation"
-    :slide="slide"
-    :slide-number="slideNumber"
-    :slide-total="slideTotal"
-  />
-  <ReleasesSlideView
-    v-else-if="slide.kind === 'releases'"
-    :presentation="record.presentation"
-    :generated="record.generated"
-    :site="site"
-    :slide="slide"
-    :slide-number="slideNumber"
-    :slide-total="slideTotal"
-  />
-  <RoadmapSlideView
-    v-else-if="slide.kind === 'roadmap'"
-    :presentation="record.presentation"
-    :site="site"
-    :slide="slide"
-    :slide-number="slideNumber"
-    :slide-total="slideTotal"
-  />
-  <ContributorSpotlightSlideView
-    v-else-if="slide.kind === 'contributor-spotlight'"
-    :presentation="record.presentation"
-    :generated="record.generated"
-    :site="site"
-    :slide="slide"
-    :slide-number="slideNumber"
-    :slide-total="slideTotal"
-  />
-  <CommunityHighlightsSlideView
-    v-else-if="slide.kind === 'community-highlights'"
-    :presentation="record.presentation"
-    :generated="record.generated"
-    :slide="slide"
-    :slide-number="slideNumber"
-    :slide-total="slideTotal"
-  />
-  <HowToContributeSlideView
-    v-else-if="slide.kind === 'how-to-contribute'"
-    :presentation="record.presentation"
-    :site="site"
-    :slide="slide"
-    :slide-number="slideNumber"
-    :slide-total="slideTotal"
-  />
-  <ThankYouSlideView
-    v-else
-    :presentation="record.presentation"
-    :generated="record.generated"
-    :site="site"
-    :slide="slide"
-  />
+  <component :is="templateDefinition.component" v-bind="templateProps" />
 </template>

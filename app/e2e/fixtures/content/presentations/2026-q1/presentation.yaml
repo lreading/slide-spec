@@ -72,16 +72,19 @@ presentation:
             target: Grow maintainer leverage so roadmap execution remains steady quarter over quarter.
   slides:
     - kind: title
+      template: hero
       enabled: true
       title_primary: OWASP
       title_accent: Threat Dragon
       subtitle_prefix: Quarterly Community Update
       quote: making threat modeling less threatening
     - kind: agenda
+      template: agenda
       enabled: true
       title: Agenda
       subtitle: Overview of today's update
     - kind: recent-updates
+      template: section-list-grid
       enabled: true
       title: What Happened Since Last Update
       subtitle: Summary of key activities and progress
@@ -108,6 +111,7 @@ presentation:
             - Translated UI into 3 new languages
             - Over 500 new stars on GitHub repository
     - kind: releases
+      template: timeline
       enabled: true
       title: Releases
       subtitle: Recent version history and changelog
@@ -118,22 +122,27 @@ presentation:
         - v2.2.1
         - v2.2.0
     - kind: roadmap
+      template: progress-timeline
       enabled: true
       title: "Roadmap: Completed"
       stage: completed
     - kind: roadmap
+      template: progress-timeline
       enabled: true
       title: "Roadmap: In Progress"
       stage: in-progress
     - kind: roadmap
+      template: progress-timeline
       enabled: true
       title: "Roadmap: Planned"
       stage: planned
     - kind: roadmap
+      template: progress-timeline
       enabled: true
       title: "Roadmap: Future"
       stage: future
     - kind: contributor-spotlight
+      template: people
       enabled: true
       title: Contributor Spotlight
       subtitle: Recognizing our top community contributors this quarter
@@ -148,6 +157,7 @@ presentation:
         - login: erodriguez_docs
           summary: Rewrote the entire Getting Started guide series and added comprehensive examples for cloud-native threat modeling scenarios.
     - kind: community-highlights
+      template: metrics-and-links
       enabled: true
       title: Community Highlights
       subtitle: Notable community activity and ecosystem updates from Q1 2026
@@ -173,6 +183,7 @@ presentation:
           url_label: Read the write-up
           url: https://owasp.org/
     - kind: how-to-contribute
+      template: action-cards
       enabled: true
       title: How to Contribute
       subtitle: Join the mission to make threat modeling less threatening
@@ -195,6 +206,7 @@ presentation:
           url_label: Share & Star
           url: https://github.com/OWASP/threat-dragon
     - kind: thank-you
+      template: closing
       enabled: true
       heading: Thank you
       message: See you next quarter.

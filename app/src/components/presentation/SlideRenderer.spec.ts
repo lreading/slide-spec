@@ -11,7 +11,7 @@ describe('SlideRenderer', () => {
   const record = contentRepository.getPresentation('2026-q1')
   const slides = record.presentation.slides.filter((slide) => slide.enabled)
 
-  it('renders every enabled slide kind from the YAML deck', () => {
+  it('renders every enabled slide from the YAML presentation', () => {
     const headings = [
       'OWASP Threat Dragon',
       'Agenda',
@@ -40,5 +40,24 @@ describe('SlideRenderer', () => {
 
       expect(normalizeText(wrapper.text())).toContain(headings[index])
     })
+  })
+
+  it('falls back to the legacy kind mapping when template is absent', () => {
+    const slide = slides[0]
+
+    const wrapper = mount(SlideRenderer, {
+      props: {
+        record,
+        site,
+        slide: {
+          ...slide,
+          template: undefined,
+        },
+        slideNumber: 1,
+        slideTotal: slides.length,
+      },
+    })
+
+    expect(normalizeText(wrapper.text())).toContain('OWASP Threat Dragon')
   })
 })

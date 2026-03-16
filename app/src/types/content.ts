@@ -1,3 +1,5 @@
+import type { SlideTemplateId } from '../templates/templateIds'
+
 export interface SiteLink {
   label: string
   url: string
@@ -105,6 +107,7 @@ export type SlideKind =
 
 export interface BaseSlide {
   kind: SlideKind
+  template?: SlideTemplateId
   enabled: boolean
   title?: string
   subtitle?: string
