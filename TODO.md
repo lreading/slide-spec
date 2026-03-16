@@ -1,5 +1,6 @@
 # UI
 - Add some info about keyboard shortcuts before entering presentation mode.  Not sure how yet.. either a small ui addition near the button, or something that is dismissable (if dismissable, make sure we save to localStorage a "do not show again" type of setting or whatever)
+- Add a documentation site (focus on schema, template, etc)
 
 # Data
 - Rename deck to presentation, ensure consistency in naming (file and data properties, should match our "business terms", slides, presentation, etc)

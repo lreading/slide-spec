@@ -41,24 +41,4 @@ describe('SlideRenderer', () => {
       expect(normalizeText(wrapper.text())).toContain(headings[index])
     })
   })
-
-  it('falls back to the legacy kind mapping when template is absent', () => {
-    const slide = slides[0]
-
-    const wrapper = mount(SlideRenderer, {
-      props: {
-        record,
-        site,
-        slide: {
-          ...slide,
-          template: undefined,
-          kind: 'title',
-        } as never,
-        slideNumber: 1,
-        slideTotal: slides.length,
-      },
-    })
-
-    expect(normalizeText(wrapper.text())).toContain('OWASP Threat Dragon')
-  })
 })

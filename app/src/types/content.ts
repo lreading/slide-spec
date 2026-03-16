@@ -94,20 +94,8 @@ export interface PresentationIndexEntry {
   featured: boolean
 }
 
-export type SlideKind =
-  | 'title'
-  | 'agenda'
-  | 'recent-updates'
-  | 'releases'
-  | 'roadmap'
-  | 'contributor-spotlight'
-  | 'community-highlights'
-  | 'how-to-contribute'
-  | 'thank-you'
-
 export interface SlideBase<TTemplate extends SlideTemplateId, TContent> {
   template: TTemplate
-  kind?: SlideKind
   enabled: boolean
   title?: string
   subtitle?: string

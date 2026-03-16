@@ -3,25 +3,11 @@ import type {
   MetricValue,
   PresentationContent,
   PresentationIndexEntry,
-  SlideKind,
   SiteContent,
   SiteLink,
 } from '../types/content'
-import { getLegacyTemplateIdForSlideKind } from '../templates/resolveSlideTemplate'
 import { isSlideTemplateId } from '../templates/templateIds'
 import { validateTemplateSlide } from '../templates/validation'
-
-const legacySlideKinds = new Set([
-  'title',
-  'agenda',
-  'recent-updates',
-  'releases',
-  'roadmap',
-  'contributor-spotlight',
-  'community-highlights',
-  'how-to-contribute',
-  'thank-you',
-])
 
 interface PresentationIndexDocument {
   presentations: PresentationIndexEntry[]
@@ -76,10 +62,6 @@ function assertOptionalString(value: unknown, path: string): void {
   if (value !== undefined) {
     assertNonBlankString(value, path)
   }
-}
-
-function isLegacySlideKind(value: unknown): value is SlideKind {
-  return typeof value === 'string' && legacySlideKinds.has(value)
 }
 
 function assertLink(value: unknown, path: string): asserts value is SiteLink {
@@ -212,14 +194,6 @@ function validateSlide(value: unknown, path: string): void {
     isSlideTemplateId(value.template),
     `${path}.template must be a supported template id.`,
   )
-  if (value.kind !== undefined) {
-    assertNonBlankString(value.kind, `${path}.kind`)
-    assert(isLegacySlideKind(value.kind), `${path}.kind must be a supported slide kind.`)
-    assert(
-      value.template === getLegacyTemplateIdForSlideKind(value.kind),
-      `${path}.template must be "${getLegacyTemplateIdForSlideKind(value.kind)}" for kind "${value.kind}".`,
-    )
-  }
   assertBoolean(value.enabled, `${path}.enabled`)
   assertOptionalString(value.title, `${path}.title`)
   assertOptionalString(value.subtitle, `${path}.subtitle`)

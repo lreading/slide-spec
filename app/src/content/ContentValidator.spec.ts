@@ -315,22 +315,6 @@ describe('ContentValidator', () => {
     expect(() => validator.validatePresentationDocument(unsupportedTemplateDocument)).toThrow(
       'presentation document.presentation.slides[0].template must be a supported template id.',
     )
-
-    const mismatchedKindDocument = createValidPresentationDocument()
-    mismatchedKindDocument.presentation.slides = [
-      {
-        kind: 'title',
-        template: 'people',
-        enabled: true,
-        content: {
-          title_primary: 'Threat Dragon',
-        },
-      } as never,
-    ]
-
-    expect(() => validator.validatePresentationDocument(mismatchedKindDocument)).toThrow(
-      'presentation document.presentation.slides[0].template must be "hero" for kind "title".',
-    )
   })
 
   it('rejects duplicate presentation ids in the index', () => {
@@ -362,23 +346,7 @@ describe('ContentValidator', () => {
     ).toThrow('presentations/index.yaml.presentations[1].id must be unique.')
   })
 
-  it('rejects unsupported legacy kinds and missing content blocks', () => {
-    const unsupportedKindDocument = createValidPresentationDocument()
-    unsupportedKindDocument.presentation.slides = [
-      {
-        kind: 'unknown',
-        template: 'hero',
-        enabled: true,
-        content: {
-          title_primary: 'Threat Dragon',
-        },
-      } as never,
-    ]
-
-    expect(() => validator.validatePresentationDocument(unsupportedKindDocument)).toThrow(
-      'presentation document.presentation.slides[0].kind must be a supported slide kind.',
-    )
-
+  it('rejects missing content blocks', () => {
     const missingContentDocument = createValidPresentationDocument()
     missingContentDocument.presentation.slides = [
       {
