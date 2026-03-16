@@ -26,5 +26,9 @@ describe('NodeFileSystem', () => {
     await expect(fileSystem.fileExists(filePath)).resolves.toBe(true)
     await expect(fileSystem.fileExists(join(directory, 'missing.txt'))).resolves.toBe(false)
     await expect(fileSystem.readTextFile(filePath)).resolves.toBe('hello world')
+
+    const nestedFilePath = join(directory, 'nested', 'written.txt')
+    await fileSystem.writeTextFile(nestedFilePath, 'written content')
+    await expect(fileSystem.readTextFile(nestedFilePath)).resolves.toBe('written content')
   })
 })

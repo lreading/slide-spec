@@ -32,6 +32,8 @@ export interface GitHubPullRequestSummary {
   mergedAt: string
   url: string
   authorLogin?: string
+  authorName?: string
+  authorAvatarUrl?: string
 }
 
 export interface GitHubIssueSummary {

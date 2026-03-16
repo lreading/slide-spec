@@ -15,6 +15,14 @@ export class FileSystemPaths {
     return resolve(this.getRepoRoot(), 'content', 'site.yaml')
   }
 
+  public getPresentationsIndexPath(): string {
+    return resolve(this.getRepoRoot(), 'content', 'presentations', 'index.yaml')
+  }
+
+  public getGeneratedPath(presentationId: string): string {
+    return resolve(this.getRepoRoot(), 'content', 'presentations', presentationId, 'generated.yaml')
+  }
+
   public getEnvPath(): string {
     return resolve(this.getCliRoot(), '.env')
   }

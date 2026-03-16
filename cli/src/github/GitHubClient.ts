@@ -47,6 +47,22 @@ function getGraphNodeLogin(value: unknown): string | undefined {
   return optionalString(value.login)
 }
 
+function getGraphNodeName(value: unknown): string | undefined {
+  if (!isRecord(value)) {
+    return undefined
+  }
+
+  return optionalString(value.name)
+}
+
+function getGraphNodeAvatarUrl(value: unknown): string | undefined {
+  if (!isRecord(value)) {
+    return undefined
+  }
+
+  return optionalString(value.avatarUrl)
+}
+
 function toSearchQuery(repository: GitHubRepositoryRef, qualifiers: string[]): string {
   return [`repo:${repository.owner}/${repository.repo}`, ...qualifiers].join(' ')
 }
@@ -54,9 +70,9 @@ function toSearchQuery(repository: GitHubRepositoryRef, qualifiers: string[]): s
 export class FetchGitHubTransport implements GitHubTransport {
   public async send(request: GitHubRequest): Promise<GitHubResponse> {
     const response = await fetch(request.url, {
-      method: request.method,
+      ...(request.body ? { body: request.body } : {}),
       headers: request.headers,
-      body: request.body,
+      method: request.method,
     })
 
     return {
@@ -243,7 +259,7 @@ export class GitHubApiClient implements GitHubClient {
 
   private async requestJson(url: string, method: 'GET' | 'POST', body?: string): Promise<unknown> {
     const response = await this.transport.send({
-      body,
+      ...(body ? { body } : {}),
       headers: this.createHeaders(method === 'POST'),
       method,
       url,
@@ -332,6 +348,8 @@ export class GitHubApiClient implements GitHubClient {
     }
 
     const authorLogin = getGraphNodeLogin(node.author)
+    const authorName = getGraphNodeName(node.author)
+    const authorAvatarUrl = getGraphNodeAvatarUrl(node.author)
 
     return {
       number: assertNumber(node.number, `pullRequest[${index}].number`),
@@ -339,6 +357,8 @@ export class GitHubApiClient implements GitHubClient {
       mergedAt: assertString(node.mergedAt, `pullRequest[${index}].mergedAt`),
       url: assertString(node.url, `pullRequest[${index}].url`),
       ...(authorLogin ? { authorLogin } : {}),
+      ...(authorName ? { authorName } : {}),
+      ...(authorAvatarUrl ? { authorAvatarUrl } : {}),
     }
   }
 
@@ -367,6 +387,13 @@ const searchPullRequestsQuery = `
           url
           author {
             login
+            ... on User {
+              name
+              avatarUrl
+            }
+            ... on Bot {
+              avatarUrl
+            }
           }
         }
       }

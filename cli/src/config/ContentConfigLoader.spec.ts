@@ -21,6 +21,10 @@ class MemoryFileSystem implements FileSystem {
 
     return Promise.resolve(source)
   }
+
+  public writeTextFile(_path: string, _content: string): Promise<void> {
+    return Promise.resolve()
+  }
 }
 
 describe('ContentConfigLoader', () => {

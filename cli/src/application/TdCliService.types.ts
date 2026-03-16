@@ -1,3 +1,5 @@
+import type { GeneratedPresentationData } from '../generation/Generation.types'
+
 export interface InitPresentationInput {
   year: number
   quarter: number
@@ -20,6 +22,7 @@ export interface FetchPresentationDataResult {
   presentationId: string
   generatedPath: string
   previousPresentationId?: string
+  generated: GeneratedPresentationData
   warnings: string[]
 }
 

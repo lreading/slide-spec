@@ -7,6 +7,8 @@ Current scope:
 - site config loading
 - GitHub data-source resolution
 - `.env` token loading
+- typed GitHub client
+- quarter-based generated-data fetching
 
 Commands:
 - `npm run lint`
@@ -23,5 +25,6 @@ Current source of truth:
 - fetch code will use `site.data_sources`
 
 Current status:
+- `fetchPresentationData(...)` is implemented in the application layer
 - command parsing is not implemented yet
-- GitHub transport is not implemented yet
+- `init`, `build`, `serve`, and `validate` command flows are not implemented yet
