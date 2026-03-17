@@ -19,6 +19,8 @@ app/dist-ssr/
 app/coverage/
 app/playwright-report/
 app/test-results/
+.vitepress/cache/
+.vitepress/dist/
 
 # Logs
 logs/
