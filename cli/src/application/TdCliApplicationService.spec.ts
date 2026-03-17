@@ -93,20 +93,23 @@ class StubGeneratedDataBuilder {
   public async build(input: {
     presentationId: string
     previousPeriod?: { start: string; end: string }
-  }): Promise<GeneratedPresentationData> {
+  }) {
     return {
-      id: input.presentationId,
-      period: {
-        start: '2026-01-01',
-        end: '2026-03-31',
+      generated: {
+        id: input.presentationId,
+        period: {
+          start: '2026-01-01',
+          end: '2026-03-31',
+        },
+        stats: {},
+        releases: [],
+        contributors: {
+          total: input.previousPeriod ? 1 : 0,
+          authors: [],
+        },
+        merged_prs: [],
       },
-      stats: {},
-      releases: [],
-      contributors: {
-        total: input.previousPeriod ? 1 : 0,
-        authors: [],
-      },
-      merged_prs: [],
+      warnings: [],
     }
   }
 }
@@ -145,6 +148,9 @@ class MemoryFileSystem implements FileSystem {
 
 class StubGitHubClient implements GitHubClient {
   public async getRepositoryMetadata() {
+    return Promise.reject(new Error('Not used in service-level test'))
+  }
+  public async getStargazerCountAt() {
     return Promise.reject(new Error('Not used in service-level test'))
   }
   public async listReleases() {
@@ -206,7 +212,7 @@ describe('TdCliApplicationService', () => {
     })).resolves.toMatchObject({
       presentationId: '2026-q1',
       generatedPath: '/repo/content/presentations/2026-q1/generated.yaml',
-      warnings: ['Historical star snapshots are not available; star previous value defaulted to 0.'],
+      warnings: [],
     })
 
     expect(generatedDataStore.writes).toHaveLength(1)
@@ -235,7 +241,6 @@ describe('TdCliApplicationService', () => {
       generatedPath: '/repo/content/presentations/2026-q1/generated.yaml',
       warnings: [
         'Previous period comparison disabled; previous values defaulted to 0.',
-        'Historical star snapshots are not available; star previous value defaulted to 0.',
       ],
     })
 

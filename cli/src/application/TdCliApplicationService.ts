@@ -126,7 +126,7 @@ export class TdCliApplicationService implements TdCliService {
     const repository = this.dataSourceResolver.resolveGitHubRepository(siteConfig)
     const environment = await this.envLoader.loadEnvironment(this.paths)
     const gitHubClient = this.gitHubClientFactory(environment.githubAccessToken)
-    const generated = await this.generatedDataBuilder.build({
+    const buildResult = await this.generatedDataBuilder.build({
       client: gitHubClient,
       presentationId: input.presentationId,
       currentPeriod: periods.current,
@@ -135,16 +135,16 @@ export class TdCliApplicationService implements TdCliService {
     })
     const generatedPath = input.write === false
       ? this.paths.getGeneratedPath(input.presentationId)
-      : await this.generatedDataStore.writeGeneratedData(this.paths, input.presentationId, generated)
+      : await this.generatedDataStore.writeGeneratedData(this.paths, input.presentationId, buildResult.generated)
     const warnings = [
+      ...buildResult.warnings,
       ...(input.noPreviousPeriod ? ['Previous period comparison disabled; previous values defaulted to 0.'] : []),
-      'Historical star snapshots are not available; star previous value defaulted to 0.',
     ]
 
     return {
       presentationId: input.presentationId,
       generatedPath,
-      generated,
+      generated: buildResult.generated,
       warnings,
     }
   }

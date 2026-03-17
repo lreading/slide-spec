@@ -133,24 +133,40 @@ export class InitPresentationBuilder {
           current: 0,
           previous: 0,
           delta: 0,
+          metadata: {
+            comparison_status: 'unavailable',
+            warning_codes: ['placeholder_data'],
+          },
         },
         issues_closed: {
           label: 'Issues closed',
           current: 0,
           previous: 0,
           delta: 0,
+          metadata: {
+            comparison_status: 'unavailable',
+            warning_codes: ['placeholder_data'],
+          },
         },
         prs_merged: {
           label: 'PRs Merged',
           current: 0,
           previous: 0,
           delta: 0,
+          metadata: {
+            comparison_status: 'unavailable',
+            warning_codes: ['placeholder_data'],
+          },
         },
         new_contributors: {
           label: 'New contributors',
           current: 0,
           previous: 0,
           delta: 0,
+          metadata: {
+            comparison_status: 'unavailable',
+            warning_codes: ['placeholder_data'],
+          },
         },
       },
       releases: [],

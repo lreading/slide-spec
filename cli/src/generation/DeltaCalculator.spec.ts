@@ -11,6 +11,10 @@ describe('DeltaCalculator', () => {
       current: 50,
       previous: 40,
       delta: 10,
+      metadata: {
+        comparison_status: 'complete',
+        warning_codes: [],
+      },
     })
 
     expect(calculator.createMetric('GitHub Stars', 50)).toEqual({
@@ -18,6 +22,10 @@ describe('DeltaCalculator', () => {
       current: 50,
       previous: 0,
       delta: 50,
+      metadata: {
+        comparison_status: 'complete',
+        warning_codes: [],
+      },
     })
   })
 })

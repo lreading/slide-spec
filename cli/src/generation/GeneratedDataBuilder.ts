@@ -1,7 +1,8 @@
 import { ContributorAnalyzer } from './ContributorAnalyzer'
 import { DeltaCalculator } from './DeltaCalculator'
 
-import type { GeneratedPresentationData, ReleaseEntry } from './Generation.types'
+import type { GeneratedDataBuildResult, ReleaseEntry } from './Generation.types'
+import type { MetricMetadata } from './Generation.types'
 import type { GitHubClient, GitHubReleaseSummary, GitHubRepositoryMetadata } from '../github/GitHubClient.types'
 import type { GitHubRepositoryRef } from '../config/Config.types'
 import type { ReportingPeriod } from './Generation.types'
@@ -21,13 +22,20 @@ const metricLabels = {
   stars: 'GitHub Stars',
 } as const
 
+interface StarSnapshotResult {
+  current: number
+  previous: number
+  metadata: MetricMetadata
+  warnings: string[]
+}
+
 export class GeneratedDataBuilder {
   public constructor(
     private readonly deltaCalculator: DeltaCalculator = new DeltaCalculator(),
     private readonly contributorAnalyzer: ContributorAnalyzer = new ContributorAnalyzer(),
   ) {}
 
-  public async build(input: BuildGeneratedDataInput): Promise<GeneratedPresentationData> {
+  public async build(input: BuildGeneratedDataInput): Promise<GeneratedDataBuildResult> {
     const repositoryMetadata = await input.client.getRepositoryMetadata(input.repository)
     const releases = await input.client.listReleases(input.repository)
     const mergedPullRequests = await input.client.listMergedPullRequests(input.repository, input.currentPeriod)
@@ -50,50 +58,133 @@ export class GeneratedDataBuilder {
     const previousContributorAnalysis = input.previousPeriod
       ? this.contributorAnalyzer.analyze(previousMergedPullRequests, previousHistoricalAuthors)
       : undefined
-    const previousStars = 0
+    const starSnapshot = await this.resolveStarSnapshot(input, repositoryMetadata.stars)
 
     return {
-      id: input.presentationId,
-      period: {
-        start: input.currentPeriod.start,
-        end: input.currentPeriod.end,
+      generated: {
+        id: input.presentationId,
+        period: {
+          start: input.currentPeriod.start,
+          end: input.currentPeriod.end,
+        },
+        stats: {
+          stars: this.deltaCalculator.createMetric(
+            metricLabels.stars,
+            starSnapshot.current,
+            starSnapshot.previous,
+            starSnapshot.metadata,
+          ),
+          issues_closed: this.deltaCalculator.createMetric(
+            metricLabels.issues_closed,
+            closedIssues.length,
+            previousClosedIssues.length,
+            this.createComparisonMetadata(input.previousPeriod),
+          ),
+          prs_merged: this.deltaCalculator.createMetric(
+            metricLabels.prs_merged,
+            mergedPullRequests.length,
+            previousMergedPullRequests.length,
+            this.createComparisonMetadata(input.previousPeriod),
+          ),
+          new_contributors: this.deltaCalculator.createMetric(
+            metricLabels.new_contributors,
+            contributorAnalysis.newContributorCount,
+            previousContributorAnalysis?.newContributorCount ?? 0,
+            this.createComparisonMetadata(input.previousPeriod),
+          ),
+        },
+        releases: this.selectReleases(releases, repositoryMetadata, input.currentPeriod),
+        contributors: {
+          total: contributorAnalysis.total,
+          authors: contributorAnalysis.authors,
+        },
+        merged_prs: mergedPullRequests
+          .filter((pullRequest) => pullRequest.authorLogin)
+          .sort((left, right) => left.mergedAt.localeCompare(right.mergedAt))
+          .map((pullRequest) => ({
+            number: pullRequest.number,
+            title: pullRequest.title,
+            merged_at: pullRequest.mergedAt,
+            author_login: pullRequest.authorLogin as string,
+          })),
       },
-      stats: {
-        stars: this.deltaCalculator.createMetric(
-          metricLabels.stars,
-          repositoryMetadata.stars,
-          previousStars,
-        ),
-        issues_closed: this.deltaCalculator.createMetric(
-          metricLabels.issues_closed,
-          closedIssues.length,
-          previousClosedIssues.length,
-        ),
-        prs_merged: this.deltaCalculator.createMetric(
-          metricLabels.prs_merged,
-          mergedPullRequests.length,
-          previousMergedPullRequests.length,
-        ),
-        new_contributors: this.deltaCalculator.createMetric(
-          metricLabels.new_contributors,
-          contributorAnalysis.newContributorCount,
-          previousContributorAnalysis?.newContributorCount ?? 0,
-        ),
-      },
-      releases: this.selectReleases(releases, repositoryMetadata, input.currentPeriod),
-      contributors: {
-        total: contributorAnalysis.total,
-        authors: contributorAnalysis.authors,
-      },
-      merged_prs: mergedPullRequests
-        .filter((pullRequest) => pullRequest.authorLogin)
-        .sort((left, right) => left.mergedAt.localeCompare(right.mergedAt))
-        .map((pullRequest) => ({
-          number: pullRequest.number,
-          title: pullRequest.title,
-          merged_at: pullRequest.mergedAt,
-          author_login: pullRequest.authorLogin as string,
-        })),
+      warnings: starSnapshot.warnings,
+    }
+  }
+
+  private async resolveStarSnapshot(
+    input: BuildGeneratedDataInput,
+    currentStars: number,
+  ): Promise<StarSnapshotResult> {
+    const warnings: string[] = []
+    const warningCodes: string[] = []
+    const currentCutoff = this.toPeriodCutoff(input.currentPeriod.end)
+
+    let resolvedCurrent = currentStars
+
+    try {
+      resolvedCurrent = await input.client.getStargazerCountAt(input.repository, currentCutoff)
+    } catch {
+      warningCodes.push('current_snapshot_fallback')
+      warnings.push('Historical star snapshot for the current period was unavailable; current stars use repository metadata.')
+    }
+
+    if (!input.previousPeriod) {
+      return {
+        current: resolvedCurrent,
+        previous: 0,
+        metadata: {
+          comparison_status: 'skipped',
+          warning_codes: ['comparison_disabled', ...warningCodes],
+        },
+        warnings,
+      }
+    }
+
+    const previousCutoff = this.toPeriodCutoff(input.previousPeriod.end)
+
+    try {
+      return {
+        current: resolvedCurrent,
+        previous: await input.client.getStargazerCountAt(input.repository, previousCutoff),
+        metadata: {
+          comparison_status: warningCodes.length > 0 ? 'partial' : 'complete',
+          warning_codes: warningCodes,
+        },
+        warnings,
+      }
+    } catch {
+      warningCodes.push('previous_snapshot_unavailable')
+      return {
+        current: resolvedCurrent,
+        previous: 0,
+        metadata: {
+          comparison_status: 'partial',
+          warning_codes: warningCodes,
+        },
+        warnings: [
+          ...warnings,
+          'Historical star snapshot for the previous period was unavailable; previous stars defaulted to 0.',
+        ],
+      }
+    }
+  }
+
+  private toPeriodCutoff(end: string): string {
+    return `${end}T23:59:59Z`
+  }
+
+  private createComparisonMetadata(previousPeriod?: ReportingPeriod): MetricMetadata {
+    if (!previousPeriod) {
+      return {
+        comparison_status: 'skipped',
+        warning_codes: ['comparison_disabled'],
+      }
+    }
+
+    return {
+      comparison_status: 'complete',
+      warning_codes: [],
     }
   }
 

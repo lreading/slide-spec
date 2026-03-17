@@ -140,6 +140,7 @@ export interface PeopleSlideContent {
 export interface MetricsAndLinksSlideContent {
   section_heading?: string
   stats_heading?: string
+  show_deltas?: boolean
   trend_suffix?: string
   stat_keys: string[]
   mentions: CommunityMention[]
@@ -240,11 +241,19 @@ export interface ContributionCard {
   url: string
 }
 
+export type MetricComparisonStatus = 'complete' | 'partial' | 'skipped' | 'unavailable'
+
+export interface MetricMetadata {
+  comparison_status: MetricComparisonStatus
+  warning_codes: string[]
+}
+
 export interface MetricValue {
   label: string
   current: number
   previous: number
   delta: number
+  metadata: MetricMetadata
 }
 
 export interface ReleaseEntry {

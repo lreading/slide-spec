@@ -76,6 +76,34 @@ describe('GitHubApiClient', () => {
     expect(transport.requests[0]?.headers.Authorization).toBe('Bearer secret-token')
   })
 
+  it('counts stargazers up to a cutoff date via GraphQL history', async () => {
+    const transport = new StubTransport([
+      createJsonResponse({
+        data: {
+          repository: {
+            stargazers: {
+              edges: [
+                { starredAt: '2025-12-01T00:00:00Z' },
+                { starredAt: '2026-01-15T00:00:00Z' },
+                { starredAt: '2026-04-01T00:00:00Z' },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      }),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.getStargazerCountAt(repository, '2026-03-31T23:59:59Z'),
+    ).resolves.toBe(2)
+  })
+
   it('paginates releases from the REST API', async () => {
     const transport = new StubTransport([
       createJsonResponse(Array.from({ length: 100 }, (_, index) => ({
@@ -369,6 +397,23 @@ describe('GitHubApiClient', () => {
         end: '2026-03-31',
       }),
     ).rejects.toThrow('GitHub GraphQL search response must contain nodes and pageInfo.')
+
+    await expect(
+      new GitHubApiClient({
+        token: 'secret-token',
+        transport: new StubTransport([
+          createJsonResponse({
+            data: {
+              repository: {
+                stargazers: {
+                  pageInfo: {},
+                },
+              },
+            },
+          }),
+        ]),
+      }).getStargazerCountAt(repository, '2026-03-31T23:59:59Z'),
+    ).rejects.toThrow('GitHub GraphQL stargazer response must contain edges and pageInfo.')
 
     await expect(
       new GitHubApiClient({

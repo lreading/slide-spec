@@ -1,6 +1,8 @@
 # UI
 - Add some info about keyboard shortcuts before entering presentation mode.  Not sure how yet.. either a small ui addition near the button, or something that is dismissable (if dismissable, make sure we save to localStorage a "do not show again" type of setting or whatever)
-- Add a documentation site (focus on schema, template, etc)
+- Add a documentation site (focus on schema, templates, etc)
+  - Not sure if we should use readthedocs or jekyll+gh pages or something else
+
 
 # Scripts
 - Start fleshing out what data can be pulled dynamically

@@ -48,11 +48,13 @@ const stats = computed(() =>
   props.slide.content.stat_keys.map((key, index) => ({
     ...props.generated.stats[key],
     icon: statIcons[index],
-    trend: formatTrendLabel(
-      props.generated.stats[key].previous,
-      props.generated.stats[key].delta,
-      props.slide.content.trend_suffix,
-    ),
+    trend: props.slide.content.show_deltas === false
+      ? undefined
+      : formatTrendLabel(
+          props.generated.stats[key].previous,
+          props.generated.stats[key].delta,
+          props.slide.content.trend_suffix,
+        ),
   })),
 )
 

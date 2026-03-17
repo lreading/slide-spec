@@ -139,6 +139,27 @@ describe('CommunityHighlightsSlideView', () => {
     expect(wrapper.find('.metric-stat-card__trend').exists()).toBe(false)
   })
 
+  it('omits all trend labels when show_deltas is false', () => {
+    const wrapper = mount(CommunityHighlightsSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: record.generated,
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            show_deltas: false,
+            stat_keys: ['stars', 'issues_closed'],
+          },
+        },
+        slideNumber: 7,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.findAll('.metric-stat-card__trend')).toHaveLength(0)
+  })
+
   it('uses an absolute delta trend when there is no previous value', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {

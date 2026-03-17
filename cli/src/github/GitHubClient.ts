@@ -135,6 +135,38 @@ export class GitHubApiClient implements GitHubClient {
     }
   }
 
+  public async getStargazerCountAt(repository: GitHubRepositoryRef, at: string): Promise<number> {
+    let afterCursor: string | null = null
+    let count = 0
+
+    while (true) {
+      const payload = await this.requestGraphQl(stargazerHistoryQuery, {
+        after: afterCursor,
+        name: repository.repo,
+        owner: repository.owner,
+      })
+      const stargazerPage = this.getStargazerPayload(payload)
+
+      for (const edge of stargazerPage.edges) {
+        const starredAt = assertString(edge.starredAt, 'stargazer.starredAt')
+
+        if (starredAt > at) {
+          return count
+        }
+
+        count += 1
+      }
+
+      if (!stargazerPage.pageInfo.hasNextPage) {
+        break
+      }
+
+      afterCursor = stargazerPage.pageInfo.endCursor
+    }
+
+    return count
+  }
+
   public async listReleases(repository: GitHubRepositoryRef): Promise<GitHubReleaseSummary[]> {
     const releases: GitHubReleaseSummary[] = []
     let page = 1
@@ -342,6 +374,46 @@ export class GitHubApiClient implements GitHubClient {
     }
   }
 
+  private getStargazerPayload(payload: unknown): {
+    edges: Array<{ starredAt: unknown }>
+    pageInfo: {
+      hasNextPage: boolean
+      endCursor: string | null
+    }
+  } {
+    if (
+      !isRecord(payload)
+      || !isRecord(payload.data)
+      || !isRecord(payload.data.repository)
+      || !isRecord(payload.data.repository.stargazers)
+    ) {
+      throw new Error('GitHub GraphQL stargazer response must contain data.repository.stargazers.')
+    }
+
+    const stargazers = payload.data.repository.stargazers
+    if (!Array.isArray(stargazers.edges) || !isRecord(stargazers.pageInfo)) {
+      throw new Error('GitHub GraphQL stargazer response must contain edges and pageInfo.')
+    }
+
+    return {
+      edges: stargazers.edges.map((edge, index) => {
+        if (!isRecord(edge)) {
+          throw new Error(`GitHub stargazer edge[${index}] must be an object.`)
+        }
+
+        return {
+          starredAt: edge.starredAt,
+        }
+      }),
+      pageInfo: {
+        hasNextPage: Boolean(stargazers.pageInfo.hasNextPage),
+        endCursor: typeof stargazers.pageInfo.endCursor === 'string'
+          ? stargazers.pageInfo.endCursor
+          : null,
+      },
+    }
+  }
+
   private mapPullRequestNode(node: unknown, index: number): GitHubPullRequestSummary {
     if (!isRecord(node)) {
       throw new Error(`GitHub pull request search node[${index}] must be an object.`)
@@ -406,7 +478,7 @@ const searchPullRequestsQuery = `
 `
 
 const searchIssuesQuery = `
-  query SearchClosedIssues($query: String!, $after: String) {
+query SearchClosedIssues($query: String!, $after: String) {
     search(query: $query, type: ISSUE, first: 100, after: $after) {
       nodes {
         ... on Issue {
@@ -421,5 +493,21 @@ const searchIssuesQuery = `
         endCursor
       }
     }
+}
+`
+
+const stargazerHistoryQuery = `
+query StargazerHistory($owner: String!, $name: String!, $after: String) {
+  repository(owner: $owner, name: $name) {
+    stargazers(first: 100, after: $after, orderBy: { field: STARRED_AT, direction: ASC }) {
+      edges {
+        starredAt
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
   }
+}
 `

@@ -6,27 +6,39 @@ generated:
   stats:
     stars:
       label: GitHub Stars
-      current: 1350
-      previous: 0
-      delta: 1350
+      current: 1351
+      previous: 1263
+      delta: 88
+      metadata:
+        comparison_status: complete
+        warning_codes: []
     issues_closed:
       label: Issues closed
       current: 30
       previous: 14
       delta: 16
+      metadata:
+        comparison_status: complete
+        warning_codes: []
     prs_merged:
       label: PRs Merged
-      current: 25
+      current: 26
       previous: 17
-      delta: 8
+      delta: 9
+      metadata:
+        comparison_status: complete
+        warning_codes: []
     new_contributors:
       label: New contributors
-      current: 3
+      current: 4
       previous: 5
-      delta: -2
+      delta: -1
+      metadata:
+        comparison_status: complete
+        warning_codes: []
   releases: []
   contributors:
-    total: 5
+    total: 6
     authors:
       - login: jgadsden
         name: Jon Gadsden
@@ -47,6 +59,11 @@ generated:
         name: Sneha
         avatar_url: https://avatars.githubusercontent.com/u/243399891?v=4
         merged_prs: 3
+        first_time: true
+      - login: AndreFerreiraMsc
+        name: André R. Ferreira
+        avatar_url: https://avatars.githubusercontent.com/u/186318329?u=8fc321eec0a7c3c0a1f93a2865d8574c8a70238d&v=4
+        merged_prs: 1
         first_time: true
       - login: Mahaboobunnisa123
         name: Mahaboobunnisa Md
@@ -155,3 +172,7 @@ generated:
       title: "Contributing: Requirement to Manually Test Changes"
       merged_at: 2026-03-15T21:42:50Z
       author_login: lreading
+    - number: 1501
+      title: Update Brazilian Portuguese translation
+      merged_at: 2026-03-16T17:05:19Z
+      author_login: AndreFerreiraMsc

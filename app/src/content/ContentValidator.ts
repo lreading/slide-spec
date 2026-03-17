@@ -185,6 +185,13 @@ function assertMetricValue(value: unknown, path: string): asserts value is Metri
   assertNumber(value.current, `${path}.current`)
   assertNumber(value.previous, `${path}.previous`)
   assertNumber(value.delta, `${path}.delta`)
+  assert(isRecord(value.metadata), `${path}.metadata must be an object.`)
+  assertNonBlankString(value.metadata.comparison_status, `${path}.metadata.comparison_status`)
+  assert(
+    ['complete', 'partial', 'skipped', 'unavailable'].includes(value.metadata.comparison_status),
+    `${path}.metadata.comparison_status must be one of complete, partial, skipped, or unavailable.`,
+  )
+  assertStringArray(value.metadata.warning_codes, `${path}.metadata.warning_codes`)
 }
 
 function assertRoadmapStageContent(value: unknown, path: string): void {

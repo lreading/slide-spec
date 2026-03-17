@@ -45,6 +45,7 @@ export interface GitHubIssueSummary {
 
 export interface GitHubClient {
   getRepositoryMetadata(repository: GitHubRepositoryRef): Promise<GitHubRepositoryMetadata>
+  getStargazerCountAt(repository: GitHubRepositoryRef, at: string): Promise<number>
   listReleases(repository: GitHubRepositoryRef): Promise<GitHubReleaseSummary[]>
   listMergedPullRequests(
     repository: GitHubRepositoryRef,

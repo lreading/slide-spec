@@ -18,11 +18,19 @@ export interface ResolvedReportingPeriod {
   previous: ReportingPeriod
 }
 
+export type MetricComparisonStatus = 'complete' | 'partial' | 'skipped' | 'unavailable'
+
+export interface MetricMetadata {
+  comparison_status: MetricComparisonStatus
+  warning_codes: string[]
+}
+
 export interface MetricValue {
   label: string
   current: number
   previous: number
   delta: number
+  metadata: MetricMetadata
 }
 
 export interface ReleaseEntry {
@@ -62,4 +70,9 @@ export interface GeneratedPresentationData {
     authors: ContributorEntry[]
   }
   merged_prs: MergedPullRequestEntry[]
+}
+
+export interface GeneratedDataBuildResult {
+  generated: GeneratedPresentationData
+  warnings: string[]
 }

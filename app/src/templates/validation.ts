@@ -31,6 +31,12 @@ function assertOptionalString(value: unknown, path: string): void {
   }
 }
 
+function assertOptionalBoolean(value: unknown, path: string): void {
+  if (value !== undefined) {
+    assert(typeof value === 'boolean', `${path} must be a boolean.`)
+  }
+}
+
 function assertStringArray(value: unknown, path: string): asserts value is string[] {
   assert(Array.isArray(value), `${path} must be an array.`)
   const entries = value as unknown[]
@@ -115,6 +121,7 @@ const metricsAndLinksValidator: SlideTemplateValidator = (slide, path) => {
   const content = slide.content as Record<string, unknown>
   assertOptionalString(content.section_heading, `${path}.content.section_heading`)
   assertOptionalString(content.stats_heading, `${path}.content.stats_heading`)
+  assertOptionalBoolean(content.show_deltas, `${path}.content.show_deltas`)
   assertOptionalString(content.trend_suffix, `${path}.content.trend_suffix`)
   assertStringArray(content.stat_keys, `${path}.content.stat_keys`)
   assert(Array.isArray(content.mentions), `${path}.content.mentions must be an array.`)

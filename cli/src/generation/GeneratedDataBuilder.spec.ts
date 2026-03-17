@@ -43,6 +43,10 @@ class StubGitHubClient implements GitHubClient {
     ]
   }
 
+  public async getStargazerCountAt(_repository: GitHubRepositoryRef, at: string): Promise<number> {
+    return at.startsWith('2025-12-31') ? 200 : 250
+  }
+
   public async listMergedPullRequests(_repository: GitHubRepositoryRef, dateRange: ReportingPeriod) {
     if (dateRange.start === '2025-10-01') {
       return [
@@ -123,16 +127,27 @@ describe('GeneratedDataBuilder', () => {
   }
 
   it('builds generated presentation data with previous-period deltas and contributor analysis', async () => {
-    const generated = await builder.build({
+    const result = await builder.build({
       client: new StubGitHubClient(),
       presentationId: '2026-q1',
       currentPeriod,
       previousPeriod,
       repository,
     })
+    const generated = result.generated
 
-    expect(generated.stats.stars?.delta).toBe(250)
+    expect(result.warnings).toEqual([])
+    expect(generated.stats.stars?.delta).toBe(50)
+    expect(generated.stats.stars?.previous).toBe(200)
+    expect(generated.stats.stars?.metadata).toEqual({
+      comparison_status: 'complete',
+      warning_codes: [],
+    })
     expect(generated.stats.prs_merged?.delta).toBe(1)
+    expect(generated.stats.prs_merged?.metadata).toEqual({
+      comparison_status: 'complete',
+      warning_codes: [],
+    })
     expect(generated.stats.new_contributors?.current).toBe(1)
     expect(generated.stats.issues_closed?.previous).toBe(1)
     expect(generated.releases[0]?.summary_bullets).toEqual(['Added thing', 'Fixed thing'])
@@ -157,15 +172,20 @@ describe('GeneratedDataBuilder', () => {
   })
 
   it('falls back to zero previous values when no previous generated data exists', async () => {
-    const generated = await builder.build({
+    const result = await builder.build({
       client: new StubGitHubClient(),
       presentationId: '2026-q1',
       currentPeriod,
       repository,
     })
+    const generated = result.generated
 
     expect(generated.stats.stars?.previous).toBe(0)
     expect(generated.stats.stars?.delta).toBe(250)
+    expect(generated.stats.stars?.metadata).toEqual({
+      comparison_status: 'skipped',
+      warning_codes: ['comparison_disabled'],
+    })
   })
 
   it('filters out releases outside the current period and falls back to repository name when no bullets or release name exist', async () => {
@@ -199,12 +219,12 @@ describe('GeneratedDataBuilder', () => {
       }
     }
 
-    const generated = await builder.build({
+    const generated = (await builder.build({
       client: new SparseReleaseClient(),
       presentationId: '2026-q1',
       currentPeriod,
       repository,
-    })
+    })).generated
 
     expect(generated.releases).toEqual([
       {
@@ -214,6 +234,33 @@ describe('GeneratedDataBuilder', () => {
         url: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.2.0',
         summary_bullets: ['Release for OWASP/threat-dragon'],
       },
+    ])
+  })
+
+  it('falls back to repository metadata and warning text when star history is unavailable', async () => {
+    class FailingStarClient extends StubGitHubClient {
+      public override async getStargazerCountAt(): Promise<number> {
+        throw new Error('GraphQL unavailable')
+      }
+    }
+
+    const result = await builder.build({
+      client: new FailingStarClient(),
+      presentationId: '2026-q1',
+      currentPeriod,
+      previousPeriod,
+      repository,
+    })
+
+    expect(result.generated.stats.stars?.current).toBe(250)
+    expect(result.generated.stats.stars?.previous).toBe(0)
+    expect(result.generated.stats.stars?.metadata).toEqual({
+      comparison_status: 'partial',
+      warning_codes: ['current_snapshot_fallback', 'previous_snapshot_unavailable'],
+    })
+    expect(result.warnings).toEqual([
+      'Historical star snapshot for the current period was unavailable; current stars use repository metadata.',
+      'Historical star snapshot for the previous period was unavailable; previous stars defaulted to 0.',
     ])
   })
 })

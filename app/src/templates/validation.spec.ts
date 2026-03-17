@@ -140,4 +140,24 @@ describe('template validation', () => {
       ).toThrow(expectations[templateId])
     })
   })
+
+  it('rejects non-boolean show_deltas for metrics-and-links slides', () => {
+    const definition = getSlideTemplateDefinition('metrics-and-links')
+
+    expect(() =>
+      definition.validate(
+        {
+          template: 'metrics-and-links',
+          enabled: true,
+          title: 'Metrics',
+          content: {
+            show_deltas: 'yes',
+            stat_keys: ['stars'],
+            mentions: [],
+          },
+        } as unknown as Record<string, unknown>,
+        'slides[metrics-and-links]',
+      ),
+    ).toThrow('slides[metrics-and-links].content.show_deltas must be a boolean.')
+  })
 })

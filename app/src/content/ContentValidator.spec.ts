@@ -203,6 +203,10 @@ describe('ContentValidator', () => {
               current: 10,
               previous: 9,
               delta: 1,
+              metadata: {
+                comparison_status: 'complete',
+                warning_codes: [],
+              },
             },
           },
           releases: [
@@ -408,6 +412,10 @@ describe('ContentValidator', () => {
               current: '10',
               previous: 9,
               delta: 1,
+              metadata: {
+                comparison_status: 'complete',
+                warning_codes: [],
+              },
             },
           },
           releases: [],
@@ -418,6 +426,39 @@ describe('ContentValidator', () => {
         },
       }),
     ).toThrow('generated document.generated.stats.stars.current must be a number.')
+  })
+
+  it('rejects invalid generated metric metadata', () => {
+    expect(() =>
+      validator.validateGeneratedDocument({
+        generated: {
+          id: '2026-q1',
+          period: {
+            start: '2026-01-01',
+            end: '2026-03-31',
+          },
+          stats: {
+            stars: {
+              label: 'Stars',
+              current: 10,
+              previous: 9,
+              delta: 1,
+              metadata: {
+                comparison_status: 'unknown',
+                warning_codes: [],
+              },
+            },
+          },
+          releases: [],
+          contributors: {
+            total: 0,
+            authors: [],
+          },
+        },
+      }),
+    ).toThrow(
+      'generated document.generated.stats.stars.metadata.comparison_status must be one of complete, partial, skipped, or unavailable.',
+    )
   })
 
   it('rejects inconsistent presentation records', () => {
