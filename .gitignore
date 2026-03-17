@@ -1,5 +1,6 @@
 # Local / Testing files
 AGENTS.md
+agents/
 html/
 backups/
 
@@ -36,9 +37,6 @@ lerna-debug.log*
 *.local
 .eslintcache
 app/.eslintcache
-
-# Project-specific exclusions
-/docs/
 
 # Editor and OS files
 .DS_Store
