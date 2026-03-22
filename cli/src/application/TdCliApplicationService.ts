@@ -1,5 +1,4 @@
 import { ContentConfigLoader } from '../config/ContentConfigLoader'
-import { resolveCliRoot } from '../config/CliRuntimePaths'
 import { DataSourceResolver } from '../config/DataSourceResolver'
 import { EnvLoader } from '../config/EnvLoader'
 import { FileSystemPaths } from '../io/FileSystemPaths'
@@ -11,7 +10,11 @@ import { PresentationIndexStore } from '../init/PresentationIndexStore'
 import { PresentationIndexLoader } from '../generation/PresentationIndexLoader'
 import { ReportingPeriodResolver } from '../generation/ReportingPeriodResolver'
 import { YamlWriter } from '../io/YamlWriter'
-import { NodeProcessRunner } from '../process/ProcessRunner'
+import { NodeFileSystem } from '../io/FileSystem'
+import { ProjectContentValidator } from '../validation/ProjectContentValidator'
+import { BrowserOpener } from '../runtime/BrowserOpener'
+import { StaticSiteServer } from '../runtime/StaticSiteServer'
+import { ViteSiteBuilder } from '../runtime/ViteSiteBuilder'
 
 import type { TdCliService } from './TdCliService'
 import type {
@@ -27,10 +30,10 @@ import type {
   ValidateContentResult,
 } from './TdCliService.types'
 import type { GitHubClient } from '../github/GitHubClient.types'
-import type { ProcessRunner } from '../process/ProcessRunner'
+import type { FileSystem } from '../io/FileSystem'
 
 interface TdCliApplicationServiceOptions {
-  cliRoot?: string
+  projectRoot?: string
   contentConfigLoader?: ContentConfigLoader
   dataSourceResolver?: DataSourceResolver
   envLoader?: EnvLoader
@@ -42,11 +45,15 @@ interface TdCliApplicationServiceOptions {
   reportingPeriodResolver?: ReportingPeriodResolver
   yamlWriter?: YamlWriter
   gitHubClientFactory?: (token: string) => GitHubClient
-  processRunner?: ProcessRunner
+  siteBuilder?: ViteSiteBuilder
+  staticSiteServer?: StaticSiteServer
+  contentValidator?: ProjectContentValidator
+  browserOpener?: BrowserOpener
+  fileSystem?: FileSystem
 }
 
 export class TdCliApplicationService implements TdCliService {
-  private readonly paths: FileSystemPaths
+  private readonly defaultProjectRoot: string
   private readonly contentConfigLoader: ContentConfigLoader
   private readonly dataSourceResolver: DataSourceResolver
   private readonly envLoader: EnvLoader
@@ -58,10 +65,14 @@ export class TdCliApplicationService implements TdCliService {
   private readonly reportingPeriodResolver: ReportingPeriodResolver
   private readonly yamlWriter: YamlWriter
   private readonly gitHubClientFactory: (token: string) => GitHubClient
-  private readonly processRunner: ProcessRunner
+  private readonly siteBuilder: ViteSiteBuilder
+  private readonly staticSiteServer: StaticSiteServer
+  private readonly contentValidator: ProjectContentValidator
+  private readonly browserOpener: BrowserOpener
+  private readonly fileSystem: FileSystem
 
   public constructor(options: TdCliApplicationServiceOptions = {}) {
-    this.paths = new FileSystemPaths(options.cliRoot ?? resolveCliRoot(process.cwd(), import.meta.url))
+    this.defaultProjectRoot = options.projectRoot ?? process.cwd()
     this.contentConfigLoader = options.contentConfigLoader ?? new ContentConfigLoader()
     this.dataSourceResolver = options.dataSourceResolver ?? new DataSourceResolver()
     this.envLoader = options.envLoader ?? new EnvLoader()
@@ -73,12 +84,18 @@ export class TdCliApplicationService implements TdCliService {
     this.reportingPeriodResolver = options.reportingPeriodResolver ?? new ReportingPeriodResolver()
     this.yamlWriter = options.yamlWriter ?? new YamlWriter()
     this.gitHubClientFactory = options.gitHubClientFactory ?? ((token: string) => new GitHubApiClient({ token }))
-    this.processRunner = options.processRunner ?? new NodeProcessRunner()
+    this.siteBuilder = options.siteBuilder ?? new ViteSiteBuilder()
+    this.staticSiteServer = options.staticSiteServer ?? new StaticSiteServer()
+    this.contentValidator = options.contentValidator ?? new ProjectContentValidator()
+    this.browserOpener = options.browserOpener ?? new BrowserOpener()
+    this.fileSystem = options.fileSystem ?? new NodeFileSystem()
   }
 
   public async initPresentation(input: InitPresentationInput): Promise<InitPresentationResult> {
+    const paths = this.getPaths(input.projectRoot)
+    const createdPaths: string[] = []
     const period = this.reportingPeriodResolver.resolve(input.fromDate, input.toDate).current
-    const entries = await this.presentationIndexStore.load(this.paths)
+    const entries = await this.presentationIndexStore.load(paths)
     const existingPresentation = this.presentationIndexStore.findPresentationById(entries, input.presentationId)
 
     if (existingPresentation && !input.force) {
@@ -98,34 +115,41 @@ export class TdCliApplicationService implements TdCliService {
     const generatedDocument = this.initPresentationBuilder.buildGeneratedData(
       scaffold,
     )
-    const presentationPath = this.paths.getPresentationPath(input.presentationId)
-    const generatedPath = this.paths.getGeneratedPath(input.presentationId)
+    if (!await this.fileSystem.fileExists(paths.getSiteConfigPath())) {
+      await this.yamlWriter.writeDocument(paths.getSiteConfigPath(), this.initPresentationBuilder.buildSiteDocument())
+      createdPaths.push(paths.getSiteConfigPath())
+    }
+    const presentationPath = paths.getPresentationPath(input.presentationId)
+    const generatedPath = paths.getGeneratedPath(input.presentationId)
 
     await this.yamlWriter.writeDocument(presentationPath, presentationDocument)
-    await this.generatedDataStore.writeGeneratedData(this.paths, input.presentationId, generatedDocument)
+    await this.generatedDataStore.writeGeneratedData(paths, input.presentationId, generatedDocument)
+    createdPaths.push(presentationPath, generatedPath)
 
     if (!existingPresentation) {
-      await this.presentationIndexStore.write(this.paths, [
-        this.initPresentationBuilder.buildIndexEntry(scaffold),
+      const isFirstPresentation = entries.length === 0
+      await this.presentationIndexStore.write(paths, [
+        this.initPresentationBuilder.buildIndexEntry(scaffold, {
+          published: true,
+          featured: isFirstPresentation,
+        }),
         ...entries,
       ])
+      createdPaths.push(paths.getPresentationsIndexPath())
     }
 
     return {
       presentationId: input.presentationId,
-      createdPaths: [
-        presentationPath,
-        generatedPath,
-        ...(existingPresentation ? [] : [this.paths.getPresentationsIndexPath()]),
-      ],
+      createdPaths,
     }
   }
 
   public async fetchPresentationData(input: FetchPresentationDataInput): Promise<FetchPresentationDataResult> {
+    const paths = this.getPaths(input.projectRoot)
     const periods = this.reportingPeriodResolver.resolve(input.fromDate, input.toDate)
-    const siteConfig = await this.contentConfigLoader.loadSiteConfig(this.paths)
+    const siteConfig = await this.contentConfigLoader.loadSiteConfig(paths)
     const repository = this.dataSourceResolver.resolveGitHubRepository(siteConfig)
-    const environment = await this.envLoader.loadEnvironment(this.paths)
+    const environment = await this.envLoader.loadEnvironment(paths)
     const gitHubClient = this.gitHubClientFactory(environment.githubAccessToken)
     const buildResult = await this.generatedDataBuilder.build({
       client: gitHubClient,
@@ -135,8 +159,8 @@ export class TdCliApplicationService implements TdCliService {
       repository,
     })
     const generatedPath = input.write === false
-      ? this.paths.getGeneratedPath(input.presentationId)
-      : await this.generatedDataStore.writeGeneratedData(this.paths, input.presentationId, buildResult.generated)
+      ? paths.getGeneratedPath(input.presentationId)
+      : await this.generatedDataStore.writeGeneratedData(paths, input.presentationId, buildResult.generated)
     const warnings = [
       ...buildResult.warnings,
       ...(input.noPreviousPeriod ? ['Previous period comparison disabled; previous values defaulted to 0.'] : []),
@@ -150,44 +174,35 @@ export class TdCliApplicationService implements TdCliService {
     }
   }
 
-  public async buildSite(_input: BuildSiteInput): Promise<BuildSiteResult> {
-    await this.processRunner.run(this.getNpmCommand(), ['run', 'build'], {
-      cwd: this.paths.getAppRoot(),
-    })
+  public async buildSite(input: BuildSiteInput): Promise<BuildSiteResult> {
+    const paths = this.getPaths(input.projectRoot)
+    await this.siteBuilder.build(paths)
 
     return {
-      outputPath: `${this.paths.getAppRoot()}/dist`,
+      outputPath: paths.getDistPath(),
     }
   }
 
   public async serveSite(input: ServeSiteInput): Promise<ServeSiteResult> {
+    const paths = this.getPaths(input.projectRoot)
     const host = input.host ?? '127.0.0.1'
     const port = input.port ?? 5173
-    const args = [
-      'run',
-      'dev',
-      '--',
-      '--host',
-      host,
-      '--port',
-      String(port),
-      '--strictPort',
-      ...(input.open ? ['--open'] : []),
-    ]
+    await this.siteBuilder.build(paths)
+    await this.staticSiteServer.start(paths.getDistPath(), host, port)
+    const url = `http://${host}:${port}/`
 
-    await this.processRunner.start(this.getNpmCommand(), args, {
-      cwd: this.paths.getAppRoot(),
-    })
+    if (input.open) {
+      this.browserOpener.open(url)
+    }
 
     return {
-      url: `http://${host}:${port}/`,
+      url,
     }
   }
 
-  public async validateContent(_input: ValidateContentInput): Promise<ValidateContentResult> {
-    await this.processRunner.run(this.getNpmCommand(), ['run', 'validate:content'], {
-      cwd: this.paths.getAppRoot(),
-    })
+  public async validateContent(input: ValidateContentInput): Promise<ValidateContentResult> {
+    const paths = this.getPaths(input.projectRoot)
+    await this.contentValidator.validate(paths)
 
     return {
       valid: true,
@@ -195,7 +210,7 @@ export class TdCliApplicationService implements TdCliService {
     }
   }
 
-  private getNpmCommand(): string {
-    return process.platform === 'win32' ? 'npm.cmd' : 'npm'
+  private getPaths(projectRoot?: string): FileSystemPaths {
+    return new FileSystemPaths(projectRoot ?? this.defaultProjectRoot)
   }
 }

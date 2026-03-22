@@ -9,11 +9,11 @@
     "exactOptionalPropertyTypes": true,
     "declaration": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": "..",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "../shared/src/**/*.ts"],
   "exclude": ["dist", "coverage"]
 }

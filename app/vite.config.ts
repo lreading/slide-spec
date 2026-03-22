@@ -3,6 +3,9 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
+  server: {
+    allowedHosts: ['localhost', '06ed-64-223-218-131.ngrok-free.app']
+  },
   test: {
     environment: 'jsdom',
     include: ['src/**/*.spec.ts'],

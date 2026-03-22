@@ -52,7 +52,7 @@ presentations:
       new PresentationIndexLoader(new YamlReader(fileSystem)),
       new YamlWriter(fileSystem),
     )
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
     const entries = await store.load(paths)
 
     expect(store.findPresentationById(entries, '2025-q4')?.id).toBe('2025-q4')
@@ -80,7 +80,7 @@ presentations:
       new PresentationIndexLoader(new YamlReader(fileSystem)),
       new YamlWriter(fileSystem),
     )
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
 
     await store.write(paths, [
       {
@@ -125,5 +125,29 @@ presentations:
     expect(content.indexOf('id: 2026-q1-b')).toBeLessThan(content.indexOf('id: 2026-q1-a'))
     expect(content.indexOf('id: 2026-q1-a')).toBeLessThan(content.indexOf('id: 2026-q2'))
     expect(content.indexOf('id: 2026-q2')).toBeLessThan(content.indexOf('id: 2025-q4'))
+  })
+
+  it('returns an empty list when the index file does not exist', async () => {
+    const fileSystem = new MemoryFileSystem({})
+    const store = new PresentationIndexStore(
+      new PresentationIndexLoader(new YamlReader(fileSystem)),
+      new YamlWriter(fileSystem),
+    )
+
+    await expect(store.load(new FileSystemPaths('/workspace/project'))).resolves.toEqual([])
+  })
+
+  it('rethrows non-missing index errors', async () => {
+    const fileSystem = new MemoryFileSystem({
+      '/workspace/project/content/presentations/index.yaml': 'presentations: nope',
+    })
+    const store = new PresentationIndexStore(
+      new PresentationIndexLoader(new YamlReader(fileSystem)),
+      new YamlWriter(fileSystem),
+    )
+
+    await expect(store.load(new FileSystemPaths('/workspace/project'))).rejects.toThrow(
+      'content/presentations/index.yaml must contain a presentations array.',
+    )
   })
 })

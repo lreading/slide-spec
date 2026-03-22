@@ -29,7 +29,7 @@ class MemoryFileSystem implements FileSystem {
 
 describe('ContentConfigLoader', () => {
   it('loads the site config from the main content file', async () => {
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
     const loader = new ContentConfigLoader(new YamlReader(new MemoryFileSystem({
       '/workspace/project/content/site.yaml': `
 site:
@@ -50,7 +50,7 @@ site:
   })
 
   it('rejects documents without a top-level site object', async () => {
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
     const loader = new ContentConfigLoader(new YamlReader(new MemoryFileSystem({
       '/workspace/project/content/site.yaml': 'title: nope',
     })))

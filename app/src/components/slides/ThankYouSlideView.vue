@@ -153,7 +153,7 @@ const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
 .footer-wrap {
   position: absolute;
   right: 0;
-  bottom: 0.9rem;
+  bottom: 1.45rem;
   left: 0;
   width: 100%;
   z-index: 10;

@@ -41,7 +41,7 @@ describe('ReleasesSlideView', () => {
     expect(wrapper.get('.github-link').attributes('href')).toBe(
       'https://github.com/OWASP/threat-dragon/releases',
     )
-    expect(wrapper.text()).toContain('View all releases on GitHub')
+    expect(wrapper.text()).toContain('View release history on GitHub')
   })
 
   it('renders authored featured releases with fallback GitHub URLs and non-primary icons', () => {
@@ -145,9 +145,36 @@ describe('ReleasesSlideView', () => {
     })
 
     expect(wrapper.findAll('.release-card')).toHaveLength(0)
+    expect(wrapper.text()).toContain(slide.content.empty_state_title ?? '')
+    expect(wrapper.text()).toContain(slide.content.empty_state_message ?? '')
     expect(wrapper.text()).not.toContain('Latest')
     expect(wrapper.get('.github-link').attributes('href')).toBe(
       'https://github.com/OWASP/threat-dragon/releases',
     )
+  })
+
+  it('omits the empty state when no authored empty-state copy is provided', () => {
+    const wrapper = mount(ReleasesSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: {
+          ...record.generated,
+          releases: [],
+        },
+        site,
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            empty_state_title: undefined,
+            empty_state_message: undefined,
+          },
+        },
+        slideNumber: 4,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.empty-state').exists()).toBe(false)
   })
 })

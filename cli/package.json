@@ -1,20 +1,40 @@
 {
-  "name": "td-updates-cli",
-  "private": true,
+  "name": "@oss-slides/cli",
   "version": "0.0.0",
   "type": "module",
+  "bin": {
+    "oss-slides": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "cli": "tsx src/index.ts",
-    "build": "tsup src/index.ts --format esm --dts --out-dir dist --clean",
+    "build": "tsx scripts/sync-runtime-template.ts --out runtime-template && tsup src/index.ts --format esm --dts --out-dir dist --clean && tsx scripts/sync-runtime-template.ts --out dist/runtime-template",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
     "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
     "test": "vitest run",
     "coverage": "vitest run --coverage --coverage.thresholds.perFile=true --coverage.thresholds.statements=80 --coverage.thresholds.branches=80 --coverage.thresholds.functions=80 --coverage.thresholds.lines=80",
-    "verify": "npm run lint && npm run test && npm run build"
+    "verify": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "dependencies": {
+    "@fontsource/poppins": "^5.2.7",
+    "@fontsource/roboto-mono": "^5.2.8",
+    "@fortawesome/fontawesome-free": "^7.2.0",
+    "@fortawesome/fontawesome-svg-core": "^7.2.0",
+    "@fortawesome/free-brands-svg-icons": "^7.2.0",
+    "@fortawesome/free-solid-svg-icons": "^7.2.0",
+    "@fortawesome/vue-fontawesome": "^3.1.3",
+    "@vitejs/plugin-vue": "^6.0.5",
+    "autoprefixer": "^10.4.27",
     "dotenv": "^17.2.3",
+    "postcss": "^8.5.8",
+    "tailwindcss": "^3.4.19",
+    "vite": "^8.0.0",
+    "vue": "^3.5.30",
+    "vue-router": "^5.0.3",
     "yaml": "^2.8.2"
   },
   "devDependencies": {

@@ -10,9 +10,10 @@ export class EnvLoader {
   public constructor(private readonly fileSystem: FileSystem = new NodeFileSystem()) {}
 
   public async loadEnvironment(paths: FileSystemPaths): Promise<CliEnvironment> {
-    const envPath = paths.getEnvPath()
-    if (!(await this.fileSystem.fileExists(envPath))) {
-      throw new Error(`Missing .env file at "${envPath}".`)
+    const envPath = await this.findEnvPath(paths)
+
+    if (!envPath) {
+      throw new Error(`Missing .env file at "${paths.getEnvPath()}".`)
     }
 
     const envSource = await this.fileSystem.readTextFile(envPath)
@@ -26,5 +27,17 @@ export class EnvLoader {
     return {
       githubAccessToken,
     }
+  }
+
+  private async findEnvPath(paths: FileSystemPaths): Promise<string | undefined> {
+    const candidates = [paths.getEnvPath(), paths.getLegacyMonorepoEnvPath()]
+
+    for (const candidate of candidates) {
+      if (await this.fileSystem.fileExists(candidate)) {
+        return candidate
+      }
+    }
+
+    return undefined
   }
 }

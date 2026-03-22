@@ -14,11 +14,14 @@ dist/
 coverage/
 .vite/
 *.tsbuildinfo
+*.tgz
 app/dist/
 app/dist-ssr/
 app/coverage/
 app/playwright-report/
 app/test-results/
+cli/runtime-template/
+cli/.runtime-workspaces/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
 

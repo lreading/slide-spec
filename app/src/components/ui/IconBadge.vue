@@ -35,7 +35,7 @@ const styleVars = computed(() => ({
 </script>
 
 <template>
-  <div class="icon-badge" :class="`icon-badge--${shape}`" :style="styleVars">
+  <div class="icon-badge" :class="`icon-badge--${shape}`" :style="styleVars" v-bind="$attrs">
     <FontAwesomeIcon :icon="icon" class="icon-badge__icon" />
   </div>
 </template>

@@ -2,29 +2,29 @@ generated:
   id: 2026-q1
   period:
     start: 2026-01-01
-    end: 2026-03-31
+    end: 2026-03-22
   stats:
     stars:
       label: GitHub Stars
-      current: 1351
+      current: 1355
       previous: 1263
-      delta: 88
+      delta: 92
       metadata:
         comparison_status: complete
         warning_codes: []
     issues_closed:
       label: Issues closed
-      current: 30
+      current: 31
       previous: 14
-      delta: 16
+      delta: 17
       metadata:
         comparison_status: complete
         warning_codes: []
     prs_merged:
       label: PRs Merged
-      current: 26
+      current: 27
       previous: 17
-      delta: 9
+      delta: 10
       metadata:
         comparison_status: complete
         warning_codes: []
@@ -48,7 +48,7 @@ generated:
       - login: lreading
         name: Leo
         avatar_url: https://avatars.githubusercontent.com/u/5851985?u=99b9298dfd5651861ff9b1068f27151022730731&v=4
-        merged_prs: 7
+        merged_prs: 8
         first_time: false
       - login: Ajith-Penmatsa-GGL
         name: Ajith-Penmatsa-GGL
@@ -176,3 +176,7 @@ generated:
       title: Update Brazilian Portuguese translation
       merged_at: 2026-03-16T17:05:19Z
       author_login: AndreFerreiraMsc
+    - number: 1494
+      title: Desktop e2e coverage
+      merged_at: 2026-03-21T13:51:02Z
+      author_login: lreading

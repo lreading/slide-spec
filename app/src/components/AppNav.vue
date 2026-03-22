@@ -15,7 +15,9 @@ const navigationContent = computed(() => resolveNavigationContent(site))
 const presentationRoute = computed(() =>
   route.name === 'presentation' && typeof route.params.presentationId === 'string'
     ? { name: 'presentation' as const, params: { presentationId: route.params.presentationId } }
-    : { name: 'presentation' as const, params: { presentationId: featuredPresentation.value.id } },
+    : featuredPresentation.value
+      ? { name: 'presentation' as const, params: { presentationId: featuredPresentation.value.id } }
+      : null,
 )
 const isPresentationActive = computed(() => route.name === 'presentation')
 
@@ -65,7 +67,7 @@ watch(
           {{ navigationContent.presentations_label }}
         </RouterLink>
         <RouterLink
-          v-if="navigationContent.latest_presentation_label"
+          v-if="navigationContent.latest_presentation_label && presentationRoute"
           :to="presentationRoute"
           class="app-nav__link"
           :class="{ 'app-nav__link--active': isPresentationActive }"

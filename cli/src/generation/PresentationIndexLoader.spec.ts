@@ -29,7 +29,7 @@ class MemoryFileSystem implements FileSystem {
 
 describe('PresentationIndexLoader', () => {
   it('loads presentation index entries and can find a presentation by id', async () => {
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
     const loader = new PresentationIndexLoader(new YamlReader(new MemoryFileSystem({
       '/workspace/project/content/presentations/index.yaml': `
 presentations:
@@ -50,7 +50,7 @@ presentations:
   })
 
   it('rejects malformed index documents', async () => {
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
     const loader = new PresentationIndexLoader(new YamlReader(new MemoryFileSystem({
       '/workspace/project/content/presentations/index.yaml': 'presentations: nope',
     })))
@@ -61,7 +61,7 @@ presentations:
   })
 
   it('rejects malformed index entries and field types', async () => {
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
 
     await expect(
       new PresentationIndexLoader(new YamlReader(new MemoryFileSystem({

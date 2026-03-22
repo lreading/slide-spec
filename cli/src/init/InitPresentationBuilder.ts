@@ -13,6 +13,29 @@ export interface PresentationDocument {
   }
 }
 
+export interface SiteDocument {
+  site: {
+    title: string
+    home_intro: string
+    home_cta_label: string
+    presentations_cta_label: string
+    links: {
+      repository: {
+        label: string
+        url: string
+      }
+      docs: {
+        label: string
+        url: string
+      }
+      owasp: {
+        label: string
+        url: string
+      }
+    }
+  }
+}
+
 export interface InitPresentationContent {
   presentationId: string
   title: string
@@ -21,15 +44,48 @@ export interface InitPresentationContent {
   period: ReportingPeriod
 }
 
+interface IndexEntryOptions {
+  featured: boolean
+  published: boolean
+}
+
 export class InitPresentationBuilder {
-  public buildIndexEntry(input: InitPresentationContent): PresentationIndexEntry {
+  public buildSiteDocument(): SiteDocument {
+    return {
+      site: {
+        title: 'OSS Slides',
+        home_intro: 'Presentation updates site.',
+        home_cta_label: 'View latest presentation',
+        presentations_cta_label: 'All presentations',
+        links: {
+          repository: {
+            label: 'Project repository',
+            url: 'https://example.com/repository',
+          },
+          docs: {
+            label: 'Project documentation',
+            url: 'https://example.com/docs',
+          },
+          owasp: {
+            label: 'Project website',
+            url: 'https://example.com',
+          },
+        },
+      },
+    }
+  }
+
+  public buildIndexEntry(
+    input: InitPresentationContent,
+    options: IndexEntryOptions,
+  ): PresentationIndexEntry {
     return {
       id: input.presentationId,
       title: input.title,
       subtitle: input.subtitle,
       summary: input.summary,
-      published: false,
-      featured: false,
+      published: options.published,
+      featured: options.featured,
     }
   }
 

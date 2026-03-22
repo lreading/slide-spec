@@ -29,7 +29,7 @@ export class ContentRepository {
   public getSiteContent(): SiteContent {
     const document = this.readDocument('site.yaml')
     this.validator.validateSiteDocument(document)
-    return document.site
+    return document.site as unknown as SiteContent
   }
 
   public listPresentations(): PresentationIndexEntry[] {
@@ -59,7 +59,7 @@ export class ContentRepository {
 
     return {
       index,
-      presentation: presentationDocument.presentation,
+      presentation: presentationDocument.presentation as unknown as PresentationRecord['presentation'],
       generated: generatedDocument.generated,
     }
   }

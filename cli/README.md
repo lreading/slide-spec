@@ -1,6 +1,10 @@
 # CLI
 
-This project will become the repository CLI for authoring and data-fetch workflows.
+This package is the authoring CLI for a presentation project that stores authored/generated YAML under `content/` and produces static output in `dist/`.
+
+Package identity:
+- npm package: `@oss-slides/cli`
+- executable: `oss-slides`
 
 Current scope:
 - service interface for future CLI commands
@@ -11,7 +15,7 @@ Current scope:
 - period-based generated-data fetching
 - presentation scaffolding from explicit ids, titles, subtitles, and date ranges
 - thin CLI command routing
-- app build/serve/validate delegation
+- embedded static-site build/serve against a target project root
 
 Commands:
 - `npm run lint`
@@ -21,19 +25,19 @@ Commands:
 - `npm run verify`
 
 Environment:
-- copy `.env.example` to `.env`
+- copy `.env.example` to `<project-root>/.env`
 - set `GITHUB_PAT`
 
 Fine-grained PAT setup:
 1. Create a fine-grained personal access token in GitHub.
 2. Set `Resource owner` to the account or organization that owns the target repository.
-3. Under `Repository access`, select `Only select repositories` and choose the repository configured in `../content/site.yaml`.
+3. Under `Repository access`, select `Only select repositories` and choose the repository configured in `<project-root>/content/site.yaml`.
 4. Under `Repository permissions`, grant:
    - `Contents: Read-only`
    - `Pull requests: Read-only`
    - `Issues: Read-only`
    - `Metadata: Read-only`
-5. Save the token in `cli/.env` as `GITHUB_PAT=...`.
+5. Save the token in `<project-root>/.env` as `GITHUB_PAT=...`.
 
 Notes:
 - If the repository belongs to an organization, the token may require org approval before it works.
@@ -44,21 +48,41 @@ Notes:
   - https://docs.github.com/en/rest/authentication/permissions-required-for-fine-grained-personal-access-tokens
 
 Current source of truth:
-- GitHub fetch target comes from `../content/site.yaml`
+- GitHub fetch target comes from `<project-root>/content/site.yaml`
 - fetch code will use `site.data_sources`
 
 Current status:
 - `fetchPresentationData(...)` is implemented in the application layer
 - `initPresentation(...)` is implemented in the application layer
 - command parsing is implemented
-- `build`, `serve`, and `validate` command flows are implemented
+- `build`, `serve`, and `validate` run against the embedded packaged app runtime
 
 CLI usage:
 - `npm run build`
 - `node ./dist/index.js help`
-- `npm run cli -- init --presentation-id 2026-q2 --title "Community Update" --subtitle "April 2026" --from-date 2026-04-01 --to-date 2026-04-30`
-- `npm run cli -- fetch --presentation-id 2026-q1 --from-date 2026-01-01 --to-date 2026-03-31`
-- `npm run cli -- fetch --presentation-id 2026-q1 --from-date 2026-03-01 --no-previous-period --dry-run`
-- `npm run cli -- build`
-- `npm run cli -- serve --host 127.0.0.1 --port 5173`
-- `npm run cli -- validate`
+- `npm run cli -- init /path/to/project --presentation-id 2026-q2 --title "Community Update" --subtitle "April 2026" --from-date 2026-04-01 --to-date 2026-04-30`
+- `npm run cli -- fetch /path/to/project --presentation-id 2026-q1 --from-date 2026-01-01 --to-date 2026-03-31`
+- `npm run cli -- fetch /path/to/project --presentation-id 2026-q1 --from-date 2026-03-01 --no-previous-period --dry-run`
+- `npm run cli -- build /path/to/project`
+- `npm run cli -- serve /path/to/project --host 127.0.0.1 --port 5173`
+- `npm run cli -- validate /path/to/project`
+
+Installed usage:
+- `npx @oss-slides/cli help`
+- `npx @oss-slides/cli init /path/to/project --presentation-id 2026-q2 --title "Community Update" --subtitle "April 2026" --from-date 2026-04-01 --to-date 2026-04-30`
+- `npx @oss-slides/cli fetch /path/to/project --presentation-id 2026-q1 --from-date 2026-01-01 --to-date 2026-03-31`
+- `npx @oss-slides/cli build /path/to/project`
+- `npx @oss-slides/cli serve /path/to/project --host 127.0.0.1 --port 5173`
+
+Project root expectations:
+- `content/site.yaml`
+- `content/presentations/index.yaml`
+- `content/presentations/<id>/presentation.yaml`
+- `content/presentations/<id>/generated.yaml`
+- `dist/` is created by `build` or `serve`
+
+Notes:
+- If `--project-root` is omitted, the CLI uses the current working directory.
+- For local monorepo compatibility, env loading also falls back to `<project-root>/cli/.env` when `<project-root>/.env` is absent.
+- `serve` builds first, then serves the generated `dist/` directory.
+- A target project does not need a local `app/` directory or Vue source tree.

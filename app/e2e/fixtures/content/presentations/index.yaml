@@ -1,15 +1,13 @@
 presentations:
   - id: 2026-q1
     year: 2026
-    quarter: 1
-    title: OWASP Threat Dragon Quarterly Community Update
+    title: OWASP Threat Dragon Community Update
     subtitle: Q1 2026
     summary: Product progress, releases, contributor recognition, and community growth.
     published: true
     featured: true
   - id: 2025-template-sparse
     year: 2025
-    quarter: 3
     title: Threat Dragon Sparse Template Coverage
     subtitle: Sparse Coverage
     summary: Sparse authored example used to exercise optional template sections.

@@ -1,6 +1,7 @@
 import type { GeneratedPresentationData } from '../generation/Generation.types'
 
 export interface InitPresentationInput {
+  projectRoot?: string
   presentationId: string
   title: string
   subtitle: string
@@ -16,6 +17,7 @@ export interface InitPresentationResult {
 }
 
 export interface FetchPresentationDataInput {
+  projectRoot?: string
   fromDate: string
   toDate?: string
   presentationId: string
@@ -32,6 +34,7 @@ export interface FetchPresentationDataResult {
 }
 
 export interface BuildSiteInput {
+  projectRoot?: string
   mode?: 'production'
 }
 
@@ -40,6 +43,7 @@ export interface BuildSiteResult {
 }
 
 export interface ServeSiteInput {
+  projectRoot?: string
   host?: string
   port?: number
   open?: boolean
@@ -50,6 +54,7 @@ export interface ServeSiteResult {
 }
 
 export interface ValidateContentInput {
+  projectRoot?: string
   strict?: boolean
 }
 

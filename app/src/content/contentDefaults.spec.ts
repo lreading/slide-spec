@@ -109,7 +109,7 @@ describe('contentDefaults', () => {
     expect(resolveTitleSlideContent(titleSlide)).toEqual({
       titlePrimary: 'OWASP',
       titleAccent: 'Threat Dragon',
-      subtitlePrefix: 'Quarterly Community Update',
+      subtitlePrefix: 'Community Update',
     })
     expect(resolveRoadmapLabels(record.presentation)).toEqual({
       deliverables: 'Key deliverables',

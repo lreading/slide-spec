@@ -1,10 +1,9 @@
-export interface SiteDataSource {
-  type: 'github'
-  url: string
-}
+import type { DataSource } from '../../../shared/src/content'
+
+export type SiteDataSource = DataSource
 
 export interface SiteConfig {
-  data_sources?: SiteDataSource[]
+  data_sources?: DataSource[]
 }
 
 export interface SiteDocument {

@@ -71,13 +71,22 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         .map((id: string) => record.generated.releases.find((entry) => entry.id === id))
         .filter((entry) => entry !== undefined)
       await expect(page.getByText(releasesSlide.subtitle ?? '')).toBeVisible()
-      for (const release of releases) {
-        await expect(page.getByRole('link', { name: release.version })).toHaveAttribute(
-          'href',
-          release.url,
-        )
-        for (const bullet of release.summary_bullets) {
-          await expect(page.getByText(bullet)).toBeVisible()
+      if (releases.length > 0) {
+        for (const release of releases) {
+          await expect(page.getByRole('link', { name: release.version })).toHaveAttribute(
+            'href',
+            release.url,
+          )
+          for (const bullet of release.summary_bullets) {
+            await expect(page.getByText(bullet)).toBeVisible()
+          }
+        }
+      } else {
+        if (releasesSlide.content.empty_state_title) {
+          await expect(page.getByText(releasesSlide.content.empty_state_title)).toBeVisible()
+        }
+        if (releasesSlide.content.empty_state_message) {
+          await expect(page.getByText(releasesSlide.content.empty_state_message)).toBeVisible()
         }
       }
       if (releasesSlide.content.latest_badge_label && releases.length > 0) {
@@ -155,7 +164,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         await expect(page.getByText(stat.current.toLocaleString(), { exact: true })).toBeVisible()
       }
       for (const mention of communitySlide.content.mentions) {
-        await expect(page.getByText(mention.type)).toBeVisible()
+        await expect(page.getByText(mention.type, { exact: true }).first()).toBeVisible()
         await expect(page.getByText(mention.title)).toBeVisible()
         if (mention.url && mention.url_label) {
           await expect(page.getByRole('link', { name: new RegExp(mention.url_label, 'i') }).first()).toHaveAttribute(

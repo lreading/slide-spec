@@ -181,13 +181,14 @@ const showBanner = computed(
 }
 
 .quote-icon {
-  color: #333344;
+  color: rgba(255, 255, 255, 0.1);
   font-size: 24px;
   margin-bottom: 10px;
+  transition: color 0.2s ease;
 }
 
 .profile-card:hover .quote-icon {
-  color: rgba(232, 52, 28, 0.2);
+  color: rgba(232, 52, 28, 0.35);
 }
 
 .thank-you-text {
@@ -209,6 +210,7 @@ const showBanner = computed(
 .contributors-link {
   color: inherit;
   text-decoration: none;
+  margin-left: 0.25rem;
   transition: color 0.2s ease;
 }
 

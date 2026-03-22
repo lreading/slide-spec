@@ -30,6 +30,7 @@ const mascotAlt = computed(() => site.mascot_alt?.trim() || undefined)
 
       <div class="hero-actions">
         <ActionButton
+          v-if="featuredPresentation"
           :to="{ name: 'presentation', params: { presentationId: featuredPresentation.id } }"
           class="hero-cta"
         >

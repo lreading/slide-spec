@@ -28,9 +28,9 @@ class MemoryFileSystem implements FileSystem {
 
 describe('EnvLoader', () => {
   it('loads the GitHub token from GITHUB_PAT and falls back to GITHUB_TOKEN', async () => {
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
     const loader = new EnvLoader(new MemoryFileSystem({
-      '/workspace/project/cli/.env': 'GITHUB_PAT=test-token',
+      '/workspace/project/.env': 'GITHUB_PAT=test-token',
     }))
 
     await expect(loader.loadEnvironment(paths)).resolves.toEqual({
@@ -39,24 +39,36 @@ describe('EnvLoader', () => {
 
     await expect(
       new EnvLoader(new MemoryFileSystem({
-        '/workspace/project/cli/.env': 'GITHUB_TOKEN=fallback-token',
+        '/workspace/project/.env': 'GITHUB_TOKEN=fallback-token',
       })).loadEnvironment(paths),
     ).resolves.toEqual({
       githubAccessToken: 'fallback-token',
     })
   })
 
+  it('falls back to project-root cli/.env for local monorepo compatibility', async () => {
+    const paths = new FileSystemPaths('/workspace/project')
+
+    await expect(
+      new EnvLoader(new MemoryFileSystem({
+        '/workspace/project/cli/.env': 'GITHUB_PAT=legacy-token',
+      })).loadEnvironment(paths),
+    ).resolves.toEqual({
+      githubAccessToken: 'legacy-token',
+    })
+  })
+
   it('rejects missing .env files and missing tokens', async () => {
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
 
     await expect(new EnvLoader(new MemoryFileSystem({})).loadEnvironment(paths)).rejects.toThrow(
-      'Missing .env file at "/workspace/project/cli/.env".',
+      'Missing .env file at "/workspace/project/.env".',
     )
 
     await expect(
       new EnvLoader(new MemoryFileSystem({
-        '/workspace/project/cli/.env': 'ANOTHER_VALUE=1',
+        '/workspace/project/.env': 'ANOTHER_VALUE=1',
       })).loadEnvironment(paths),
-    ).rejects.toThrow('Missing GITHUB_PAT in "/workspace/project/cli/.env".')
+    ).rejects.toThrow('Missing GITHUB_PAT in "/workspace/project/.env".')
   })
 })

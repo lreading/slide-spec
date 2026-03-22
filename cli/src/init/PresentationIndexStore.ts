@@ -11,7 +11,15 @@ export class PresentationIndexStore {
   ) {}
 
   public async load(paths: FileSystemPaths): Promise<PresentationIndexEntry[]> {
-    return this.loader.loadPresentations(paths)
+    try {
+      return await this.loader.loadPresentations(paths)
+    } catch (error) {
+      if (error instanceof Error && (error.message.startsWith('ENOENT') || error.message.startsWith('Missing file'))) {
+        return []
+      }
+
+      throw error
+    }
   }
 
   public findPresentationById(

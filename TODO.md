@@ -1,4 +1,6 @@
 # UI
+- Work on interactive CLI / init.  Include things like project name, if it's using github, etc etc.
+- Bunch of UI bugs around padding/margin, spacing issues.
 - Move all of the images and stuff out of the ui, and into the config somewhere.
 - Make sure images are loaded from config and able to be served
 - Add some info about keyboard shortcuts before entering presentation mode.  Not sure how yet.. either a small ui addition near the button, or something that is dismissable (if dismissable, make sure we save to localStorage a "do not show again" type of setting or whatever)

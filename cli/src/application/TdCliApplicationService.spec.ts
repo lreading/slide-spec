@@ -7,7 +7,6 @@ import type { GitHubClient } from '../github/GitHubClient.types'
 import type { SiteConfig } from '../config/Config.types'
 import type { FileSystem } from '../io/FileSystem'
 import type { GeneratedPresentationData, PresentationIndexEntry, ResolvedReportingPeriod } from '../generation/Generation.types'
-import type { ProcessRunner } from '../process/ProcessRunner'
 
 class StubContentConfigLoader {
   public async loadSiteConfig(): Promise<SiteConfig> {
@@ -167,24 +166,36 @@ class StubGitHubClient implements GitHubClient {
   }
 }
 
-class StubProcessRunner implements ProcessRunner {
-  public readonly runCalls: Array<{ command: string; args: string[]; cwd: string }> = []
-  public readonly startCalls: Array<{ command: string; args: string[]; cwd: string }> = []
+class StubSiteBuilder {
+  public readonly builds: string[] = []
 
-  public async run(command: string, args: string[], options: { cwd: string }): Promise<void> {
-    this.runCalls.push({
-      command,
-      args,
-      cwd: options.cwd,
-    })
+  public async build(paths: { getProjectRoot(): string; getDistPath(): string }): Promise<string> {
+    this.builds.push(paths.getProjectRoot())
+    return paths.getDistPath()
   }
+}
 
-  public async start(command: string, args: string[], options: { cwd: string }): Promise<void> {
-    this.startCalls.push({
-      command,
-      args,
-      cwd: options.cwd,
-    })
+class StubStaticSiteServer {
+  public readonly starts: Array<{ root: string; host: string; port: number }> = []
+
+  public async start(root: string, host: string, port: number): Promise<void> {
+    this.starts.push({ root, host, port })
+  }
+}
+
+class StubContentValidator {
+  public readonly validates: string[] = []
+
+  public async validate(paths: { getProjectRoot(): string }): Promise<void> {
+    this.validates.push(paths.getProjectRoot())
+  }
+}
+
+class StubBrowserOpener {
+  public readonly opened: string[] = []
+
+  public open(url: string): void {
+    this.opened.push(url)
   }
 }
 
@@ -196,7 +207,7 @@ describe('TdCliApplicationService', () => {
   it('fetches generated data with previous-period comparison and writes output by default', async () => {
     const generatedDataStore = new StubGeneratedDataStore()
     const service = new TdCliApplicationService({
-      cliRoot: '/repo/cli',
+      projectRoot: '/repo',
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
@@ -222,7 +233,7 @@ describe('TdCliApplicationService', () => {
   it('returns the target path without writing and can skip previous-period comparison', async () => {
     const generatedDataStore = new StubGeneratedDataStore()
     const service = new TdCliApplicationService({
-      cliRoot: '/repo/cli',
+      projectRoot: '/repo',
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
@@ -262,11 +273,12 @@ describe('TdCliApplicationService', () => {
       },
     ])
     const service = new TdCliApplicationService({
-      cliRoot: '/repo/cli',
+      projectRoot: '/repo',
       presentationIndexStore: presentationIndexStore as never,
       generatedDataStore: generatedDataStore as never,
       yamlWriter: new YamlWriter(fileSystem),
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
+      fileSystem,
     })
 
     await expect(service.initPresentation({
@@ -278,6 +290,7 @@ describe('TdCliApplicationService', () => {
     })).resolves.toMatchObject({
       presentationId: '2026-q1',
       createdPaths: [
+        '/repo/content/site.yaml',
         '/repo/content/presentations/2026-q1/presentation.yaml',
         '/repo/content/presentations/2026-q1/generated.yaml',
         '/repo/content/presentations/index.yaml',
@@ -287,6 +300,37 @@ describe('TdCliApplicationService', () => {
     expect(fileSystem.writes.get('/repo/content/presentations/2026-q1/presentation.yaml')).toContain('template: hero')
     expect(generatedDataStore.writes).toHaveLength(1)
     expect(presentationIndexStore.writes).toHaveLength(1)
+    expect(presentationIndexStore.writes[0]?.[0]).toMatchObject({
+      id: '2026-q1',
+      published: true,
+      featured: false,
+    })
+  })
+
+  it('marks the first initialized presentation as featured', async () => {
+    const fileSystem = new MemoryFileSystem()
+    const presentationIndexStore = new StubPresentationIndexStore([])
+    const service = new TdCliApplicationService({
+      projectRoot: '/repo',
+      presentationIndexStore: presentationIndexStore as never,
+      generatedDataStore: new StubGeneratedDataStore() as never,
+      yamlWriter: new YamlWriter(fileSystem),
+      reportingPeriodResolver: new StubReportingPeriodResolver() as never,
+      fileSystem,
+    })
+
+    await service.initPresentation({
+      presentationId: '2026-q1',
+      title: 'Quarterly Community Update',
+      subtitle: 'Q1 2026',
+      fromDate: '2026-01-01',
+    })
+
+    expect(presentationIndexStore.writes[0]?.[0]).toMatchObject({
+      id: '2026-q1',
+      published: true,
+      featured: true,
+    })
   })
 
   it('rejects existing presentation ids unless force is enabled, and force overwrites scaffold files without rewriting the index', async () => {
@@ -304,11 +348,12 @@ describe('TdCliApplicationService', () => {
       },
     ])
     const service = new TdCliApplicationService({
-      cliRoot: '/repo/cli',
+      projectRoot: '/repo',
       presentationIndexStore: presentationIndexStore as never,
       generatedDataStore: generatedDataStore as never,
       yamlWriter: new YamlWriter(fileSystem),
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
+      fileSystem,
     })
 
     await expect(service.initPresentation({
@@ -331,6 +376,7 @@ describe('TdCliApplicationService', () => {
     })).resolves.toMatchObject({
       presentationId: '2026-q1',
       createdPaths: [
+        '/repo/content/site.yaml',
         '/repo/content/presentations/2026-q1/presentation.yaml',
         '/repo/content/presentations/2026-q1/generated.yaml',
       ],
@@ -339,21 +385,27 @@ describe('TdCliApplicationService', () => {
     expect(presentationIndexStore.writes).toHaveLength(0)
   })
 
-  it('delegates build, serve, and validate to the app project', async () => {
-    const processRunner = new StubProcessRunner()
+  it('builds to dist, serves built assets, and validates content directly', async () => {
+    const siteBuilder = new StubSiteBuilder()
+    const staticSiteServer = new StubStaticSiteServer()
+    const contentValidator = new StubContentValidator()
+    const browserOpener = new StubBrowserOpener()
     const service = new TdCliApplicationService({
-      cliRoot: '/repo/cli',
+      projectRoot: '/repo',
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: new StubGeneratedDataStore() as never,
       gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),
-      processRunner,
+      siteBuilder: siteBuilder as never,
+      staticSiteServer: staticSiteServer as never,
+      contentValidator: contentValidator as never,
+      browserOpener: browserOpener as never,
     })
 
     await expect(service.buildSite({ mode: 'production' })).resolves.toEqual({
-      outputPath: '/repo/app/dist',
+      outputPath: '/repo/dist',
     })
     await expect(service.serveSite({
       host: '0.0.0.0',
@@ -367,24 +419,18 @@ describe('TdCliApplicationService', () => {
       errors: [],
     })
 
-    expect(processRunner.runCalls).toEqual([
+    expect(siteBuilder.builds).toEqual([
+      '/repo',
+      '/repo',
+    ])
+    expect(staticSiteServer.starts).toEqual([
       {
-        command: process.platform === 'win32' ? 'npm.cmd' : 'npm',
-        args: ['run', 'build'],
-        cwd: '/repo/app',
-      },
-      {
-        command: process.platform === 'win32' ? 'npm.cmd' : 'npm',
-        args: ['run', 'validate:content'],
-        cwd: '/repo/app',
+        root: '/repo/dist',
+        host: '0.0.0.0',
+        port: 4173,
       },
     ])
-    expect(processRunner.startCalls).toEqual([
-      {
-        command: process.platform === 'win32' ? 'npm.cmd' : 'npm',
-        args: ['run', 'dev', '--', '--host', '0.0.0.0', '--port', '4173', '--strictPort', '--open'],
-        cwd: '/repo/app',
-      },
-    ])
+    expect(contentValidator.validates).toEqual(['/repo'])
+    expect(browserOpener.opened).toEqual(['http://0.0.0.0:4173/'])
   })
 })

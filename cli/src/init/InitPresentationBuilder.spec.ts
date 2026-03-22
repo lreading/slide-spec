@@ -16,13 +16,18 @@ describe('InitPresentationBuilder', () => {
   }
 
   it('builds placeholder index, presentation, and generated documents', () => {
-    expect(builder.buildIndexEntry(initInput)).toEqual({
+    expect(
+      builder.buildIndexEntry(initInput, {
+        published: true,
+        featured: true,
+      }),
+    ).toEqual({
       id: '2026-q1',
       title: 'Quarterly Community Update',
       subtitle: 'Q1 2026',
       summary: 'Replace with a summary before publishing.',
-      published: false,
-      featured: false,
+      published: true,
+      featured: true,
     })
 
     const presentationDocument = builder.buildPresentationDocument(initInput)

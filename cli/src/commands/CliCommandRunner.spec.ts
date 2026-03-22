@@ -71,7 +71,7 @@ describe('CliCommandRunner', () => {
 
     await expect(runner.run([])).resolves.toBe(0)
     expect(output.info).toHaveBeenCalledWith('No command provided. Starting interactive mode.')
-    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides'))
   })
 
   it('prints help for explicit help flags', async () => {
@@ -83,8 +83,8 @@ describe('CliCommandRunner', () => {
     await expect(runner.run(['help', 'fetch'])).resolves.toBe(0)
     await expect(runner.run(['init', '--help'])).resolves.toBe(0)
     expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Commands:'))
-    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates fetch'))
-    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates init'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides fetch'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides init'))
   })
 
   it('dispatches init with parsed options', async () => {
@@ -94,6 +94,7 @@ describe('CliCommandRunner', () => {
 
     await expect(runner.run([
       'init',
+      '/workspace/project',
       '--presentation-id',
       '2026-q1',
       '--title',
@@ -110,6 +111,7 @@ describe('CliCommandRunner', () => {
     ])).resolves.toBe(0)
 
     expect(service.initPresentation).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       presentationId: '2026-q1',
       title: 'Quarterly Community Update',
       subtitle: 'Q1 2026',
@@ -125,14 +127,15 @@ describe('CliCommandRunner', () => {
     const service = createService()
     const output = createOutput()
     const prompter = createPrompter({
+      promptOptional: vi.fn()
+        .mockResolvedValueOnce('/workspace/project')
+        .mockResolvedValueOnce('2026-04-30')
+        .mockResolvedValueOnce('Summary'),
       promptRequired: vi.fn()
         .mockResolvedValueOnce('demo-id')
         .mockResolvedValueOnce('Demo Title')
         .mockResolvedValueOnce('Demo Subtitle')
         .mockResolvedValueOnce('2026-04-01'),
-      promptOptional: vi.fn()
-        .mockResolvedValueOnce('2026-04-30')
-        .mockResolvedValueOnce('Summary'),
       promptBoolean: vi.fn().mockResolvedValueOnce(true),
     })
     const runner = new CliCommandRunner(service, output, prompter)
@@ -140,6 +143,7 @@ describe('CliCommandRunner', () => {
     await expect(runner.run(['init'])).resolves.toBe(0)
 
     expect(service.initPresentation).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       presentationId: 'demo-id',
       title: 'Demo Title',
       subtitle: 'Demo Subtitle',
@@ -158,6 +162,8 @@ describe('CliCommandRunner', () => {
 
     await expect(runner.run([
       'init',
+      '--project-root',
+      '/workspace/project',
       '--presentation-id',
       '2026-q1',
       '--title',
@@ -170,6 +176,8 @@ describe('CliCommandRunner', () => {
 
     await expect(runner.run([
       'fetch',
+      '--project-root',
+      '/workspace/project',
       '--presentation-id',
       'custom-id',
       '--from-date',
@@ -177,12 +185,14 @@ describe('CliCommandRunner', () => {
     ])).resolves.toBe(0)
 
     expect(service.initPresentation).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       presentationId: '2026-q1',
       title: 'Quarterly Community Update',
       subtitle: 'Q1 2026',
       fromDate: '2026-01-01',
     })
     expect(service.fetchPresentationData).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       fromDate: '2026-01-01',
       presentationId: 'custom-id',
     })
@@ -193,10 +203,12 @@ describe('CliCommandRunner', () => {
     const output = createOutput()
     const prompter = createPrompter({
       promptCommand: vi.fn().mockResolvedValue('fetch'),
+      promptOptional: vi.fn()
+        .mockResolvedValueOnce('/workspace/project')
+        .mockResolvedValueOnce('2026-03-31'),
       promptRequired: vi.fn()
         .mockResolvedValueOnce('2026-q1')
         .mockResolvedValueOnce('2026-01-01'),
-      promptOptional: vi.fn().mockResolvedValueOnce('2026-03-31'),
       promptBoolean: vi.fn()
         .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(true),
@@ -206,6 +218,7 @@ describe('CliCommandRunner', () => {
     await expect(runner.run([])).resolves.toBe(0)
 
     expect(service.fetchPresentationData).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       presentationId: '2026-q1',
       fromDate: '2026-01-01',
       toDate: '2026-03-31',
@@ -213,7 +226,7 @@ describe('CliCommandRunner', () => {
       write: false,
     })
     expect(output.info).toHaveBeenCalledWith('Fetched 2026-q1')
-    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates fetch'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides fetch'))
   })
 
   it('dispatches interactive init and validate paths', async () => {
@@ -221,20 +234,22 @@ describe('CliCommandRunner', () => {
     const initOutput = createOutput()
     const initPrompter = createPrompter({
       promptCommand: vi.fn().mockResolvedValue('init'),
+      promptOptional: vi.fn()
+        .mockResolvedValueOnce('/workspace/project')
+        .mockResolvedValueOnce('2026-04-30')
+        .mockResolvedValueOnce('Summary'),
       promptRequired: vi.fn()
         .mockResolvedValueOnce('demo-id')
         .mockResolvedValueOnce('Demo Title')
         .mockResolvedValueOnce('Demo Subtitle')
         .mockResolvedValueOnce('2026-04-01'),
-      promptOptional: vi.fn()
-        .mockResolvedValueOnce('2026-04-30')
-        .mockResolvedValueOnce('Summary'),
       promptBoolean: vi.fn().mockResolvedValueOnce(true),
     })
     const initRunner = new CliCommandRunner(service, initOutput, initPrompter)
 
     await expect(initRunner.run([])).resolves.toBe(0)
     expect(service.initPresentation).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       presentationId: 'demo-id',
       title: 'Demo Title',
       subtitle: 'Demo Subtitle',
@@ -243,18 +258,19 @@ describe('CliCommandRunner', () => {
       summary: 'Summary',
       force: true,
     })
-    expect(initOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates init'))
+    expect(initOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides init'))
 
     const validateOutput = createOutput()
     const validatePrompter = createPrompter({
       promptCommand: vi.fn().mockResolvedValue('validate'),
+      promptOptional: vi.fn().mockResolvedValueOnce('/workspace/project'),
       promptBoolean: vi.fn().mockResolvedValueOnce(true),
     })
     const validateRunner = new CliCommandRunner(service, validateOutput, validatePrompter)
 
     await expect(validateRunner.run([])).resolves.toBe(0)
-    expect(service.validateContent).toHaveBeenCalledWith({ strict: true })
-    expect(validateOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates validate'))
+    expect(service.validateContent).toHaveBeenCalledWith({ projectRoot: '/workspace/project', strict: true })
+    expect(validateOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides validate'))
   })
 
   it('dispatches interactive build and serve paths', async () => {
@@ -265,12 +281,13 @@ describe('CliCommandRunner', () => {
       buildOutput,
       createPrompter({
         promptCommand: vi.fn().mockResolvedValue('build'),
+        promptOptional: vi.fn().mockResolvedValueOnce('/workspace/project'),
       }),
     )
 
     await expect(buildRunner.run([])).resolves.toBe(0)
-    expect(service.buildSite).toHaveBeenCalledWith({ mode: 'production' })
-    expect(buildOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates build'))
+    expect(service.buildSite).toHaveBeenCalledWith({ projectRoot: '/workspace/project', mode: 'production' })
+    expect(buildOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides build'))
 
     const serveOutput = createOutput()
     const serveRunner = new CliCommandRunner(
@@ -278,7 +295,9 @@ describe('CliCommandRunner', () => {
       serveOutput,
       createPrompter({
         promptCommand: vi.fn().mockResolvedValue('serve'),
-        promptOptional: vi.fn().mockResolvedValueOnce('0.0.0.0'),
+        promptOptional: vi.fn()
+          .mockResolvedValueOnce('/workspace/project')
+          .mockResolvedValueOnce('0.0.0.0'),
         promptNumber: vi.fn().mockResolvedValueOnce(4173),
         promptBoolean: vi.fn().mockResolvedValueOnce(true),
       }),
@@ -286,11 +305,12 @@ describe('CliCommandRunner', () => {
 
     await expect(serveRunner.run([])).resolves.toBe(0)
     expect(service.serveSite).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       host: '0.0.0.0',
       port: 4173,
       open: true,
     })
-    expect(serveOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: td-updates serve'))
+    expect(serveOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides serve'))
   })
 
   it('returns a non-zero exit code when interactive mode fails', async () => {
@@ -344,6 +364,8 @@ describe('CliCommandRunner', () => {
 
     await expect(runner.run([
       'fetch',
+      '--project-root',
+      '/workspace/project',
       '--presentation-id',
       'custom-id',
       '--from-date',
@@ -355,6 +377,7 @@ describe('CliCommandRunner', () => {
     ])).resolves.toBe(0)
 
     expect(service.fetchPresentationData).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       fromDate: '2026-01-01',
       toDate: '2026-03-31',
       presentationId: 'custom-id',
@@ -368,17 +391,18 @@ describe('CliCommandRunner', () => {
     const output = createOutput()
     const runner = new CliCommandRunner(service, output)
 
-    await expect(runner.run(['build'])).resolves.toBe(0)
-    await expect(runner.run(['serve', '--host', '0.0.0.0', '--port', '4173', '--open'])).resolves.toBe(0)
-    await expect(runner.run(['validate', '--strict'])).resolves.toBe(0)
+    await expect(runner.run(['build', '--project-root', '/workspace/project'])).resolves.toBe(0)
+    await expect(runner.run(['serve', '--project-root', '/workspace/project', '--host', '0.0.0.0', '--port', '4173', '--open'])).resolves.toBe(0)
+    await expect(runner.run(['validate', '--project-root', '/workspace/project', '--strict'])).resolves.toBe(0)
 
-    expect(service.buildSite).toHaveBeenCalledWith({ mode: 'production' })
+    expect(service.buildSite).toHaveBeenCalledWith({ projectRoot: '/workspace/project', mode: 'production' })
     expect(service.serveSite).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
       host: '0.0.0.0',
       port: 4173,
       open: true,
     })
-    expect(service.validateContent).toHaveBeenCalledWith({ strict: true })
+    expect(service.validateContent).toHaveBeenCalledWith({ projectRoot: '/workspace/project', strict: true })
   })
 
   it('treats a valueless numeric option as omitted', async () => {
@@ -409,8 +433,8 @@ describe('CliCommandRunner', () => {
     const runner = new CliCommandRunner(createService(), output, createPrompter())
 
     await expect(runner.run(['unknown'])).resolves.toBe(1)
-    await expect(runner.run(['build', 'unexpected'])).resolves.toBe(1)
-    await expect(runner.run(['serve', 'unexpected'])).resolves.toBe(1)
+    await expect(runner.run(['build', '/workspace/project', 'extra'])).resolves.toBe(1)
+    await expect(runner.run(['serve', '/workspace/project', 'extra'])).resolves.toBe(1)
     await expect(runner.run(['init', '--presentation-id', 'demo'])).resolves.toBe(1)
     await expect(runner.run(['fetch', '--from-date', '2026-01-01'])).resolves.toBe(1)
     await expect(runner.run(['serve', '--port', 'oops'])).resolves.toBe(1)
@@ -429,6 +453,42 @@ describe('CliCommandRunner', () => {
     )
     expect(output.error).toHaveBeenCalledWith(
       'Missing required options: --presentation-id, --from-date.',
+    )
+  })
+
+  it('supports a positional project root and rejects mixing it with --project-root', async () => {
+    const service = createService()
+    const output = createOutput()
+    const runner = new CliCommandRunner(service, output, createPrompter())
+
+    await expect(runner.run([
+      'fetch',
+      '/workspace/project',
+      '--presentation-id',
+      'custom-id',
+      '--from-date',
+      '2026-01-01',
+    ])).resolves.toBe(0)
+
+    expect(service.fetchPresentationData).toHaveBeenCalledWith({
+      projectRoot: '/workspace/project',
+      presentationId: 'custom-id',
+      fromDate: '2026-01-01',
+    })
+
+    await expect(runner.run([
+      'fetch',
+      '/workspace/project',
+      '--project-root',
+      '/another/project',
+      '--presentation-id',
+      'custom-id',
+      '--from-date',
+      '2026-01-01',
+    ])).resolves.toBe(1)
+
+    expect(output.error).toHaveBeenCalledWith(
+      'Specify the project root either positionally or with --project-root, not both.',
     )
   })
 })

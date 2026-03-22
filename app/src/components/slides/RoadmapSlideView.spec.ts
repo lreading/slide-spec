@@ -28,7 +28,7 @@ describe('RoadmapSlideView', () => {
     })
 
     expect(wrapper.text()).toContain('Roadmap: In Progress')
-    expect(wrapper.text()).toContain('Building cloud-backed project sync experiments')
+    expect(wrapper.text()).toContain('Desktop unit test coverage and desktop end-to-end coverage both landed in March.')
     expect(wrapper.text()).toContain('Focus areas')
     expect(wrapper.findAll('.progress-timeline__item')).toHaveLength(4)
     expect(wrapper.findAll('.progress-timeline__item--current')).toHaveLength(1)

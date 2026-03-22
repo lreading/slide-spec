@@ -24,7 +24,7 @@ describe('ThankYouSlideView', () => {
     })
 
     expect(wrapper.text()).toContain('Thank you')
-    expect(wrapper.text()).toContain('See you next quarter.')
+    expect(wrapper.text()).toContain('See you in the next update.')
     expect(wrapper.text()).toContain('Threat Dragon')
     expect(wrapper.text()).toContain('Q1 2026')
   })

@@ -51,7 +51,7 @@ generated:
 `,
     })
     const store = new GeneratedDataStore(new YamlReader(fileSystem), new YamlWriter(fileSystem))
-    const paths = new FileSystemPaths('/workspace/project/cli')
+    const paths = new FileSystemPaths('/workspace/project')
 
     await expect(store.loadGeneratedData(paths, '2025-q4')).resolves.toMatchObject({
       id: '2025-q4',

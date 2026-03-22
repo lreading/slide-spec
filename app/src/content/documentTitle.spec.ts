@@ -29,7 +29,7 @@ describe('resolveDocumentTitle', () => {
           presentationId: '2026-q1',
         },
       }),
-    ).toBe('OWASP Threat Dragon Quarterly Community Update | Threat Dragon Quarterly Updates')
+    ).toBe('OWASP Threat Dragon Community Update | Threat Dragon Quarterly Updates')
   })
 
   it('falls back to the site title when the presentation cannot be resolved', () => {

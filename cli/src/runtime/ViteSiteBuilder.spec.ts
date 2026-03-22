@@ -1,0 +1,55 @@
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { resolve } from 'node:path'
+
+import { afterEach, describe, expect, it } from 'vitest'
+
+import { FileSystemPaths } from '../io/FileSystemPaths'
+import { ViteSiteBuilder } from './ViteSiteBuilder'
+
+const tempRoots: string[] = []
+
+class StubRuntimeWorkspace {
+  public readonly preparedRoots: string[] = []
+
+  public constructor(private readonly workspaceRoot: string) {}
+
+  public async prepare(): Promise<{ appRoot: string; cleanup(): Promise<void> }> {
+    this.preparedRoots.push(this.workspaceRoot)
+    await mkdir(resolve(this.workspaceRoot, 'app', 'dist'), { recursive: true })
+    await writeFile(resolve(this.workspaceRoot, 'app', 'dist', 'index.html'), '<html>built</html>')
+
+    return {
+      appRoot: resolve(this.workspaceRoot, 'app'),
+      cleanup: async () => {
+        await rm(this.workspaceRoot, { recursive: true, force: true })
+      },
+    }
+  }
+}
+
+describe('ViteSiteBuilder', () => {
+  afterEach(async () => {
+    await Promise.all(tempRoots.splice(0).map((path) => rm(path, { recursive: true, force: true })))
+  })
+
+  it('builds in a runtime workspace and copies dist to the target project', async () => {
+    const projectRoot = await mkdtemp(resolve(tmpdir(), 'oss-slides-builder-project-'))
+    const workspaceRoot = await mkdtemp(resolve(tmpdir(), 'oss-slides-builder-workspace-'))
+    tempRoots.push(projectRoot, workspaceRoot)
+    const viteCalls: string[] = []
+
+    const builder = new ViteSiteBuilder(
+      new StubRuntimeWorkspace(workspaceRoot) as never,
+      async (config) => {
+        viteCalls.push(String(config.root))
+      },
+    )
+
+    const outputPath = await builder.build(new FileSystemPaths(projectRoot))
+
+    expect(outputPath).toBe(resolve(projectRoot, 'dist'))
+    expect(viteCalls).toEqual([resolve(workspaceRoot, 'app')])
+    await expect(readFile(resolve(projectRoot, 'dist', 'index.html'), 'utf8')).resolves.toContain('built')
+  })
+})

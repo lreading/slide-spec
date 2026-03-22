@@ -32,7 +32,7 @@ describe('CommunityHighlightsSlideView', () => {
     throw new Error('Expected community-highlights slide in fixture data')
   }
 
-  it('renders the configured mentions and quarterly stats', () => {
+  it('renders the configured mentions and period stats', () => {
     const wrapper = mount(CommunityHighlightsSlideView, {
       props: {
         presentation: record.presentation,
@@ -55,7 +55,7 @@ describe('CommunityHighlightsSlideView', () => {
     )
     expect(wrapper.text()).toContain('GitHub Stars')
     expect(wrapper.findAll('a.mention-card')).toHaveLength(slide.content.mentions.length)
-    expect(wrapper.text()).toContain('Interop tool')
+    expect(wrapper.text()).toContain('Public roadmap')
   })
 
   it('maps icon/trend slots deterministically for reordered stat keys', () => {
