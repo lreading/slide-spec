@@ -32,9 +32,9 @@ test('renders home content from config-backed fixtures', async ({ page }) => {
     await expect(footerLink).toHaveAttribute('href', link.url)
   }
 
-  await expect(page.getByRole('link', { name: /github.com\/lreading\/td-project-updates/i })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Powered by slide-spec' })).toHaveAttribute(
     'href',
-    'https://github.com/lreading/td-project-updates',
+    'https://github.com/lreading/slide-spec',
   )
 })
 

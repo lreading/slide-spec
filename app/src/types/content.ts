@@ -27,6 +27,11 @@ export interface PresentationLogo {
   alt?: string
 }
 
+export interface MascotContent {
+  url?: string
+  alt?: string
+}
+
 export interface ProjectBadge {
   label?: string
   fa_icon?: string
@@ -52,6 +57,12 @@ export interface AppFooterContent {
   repository_url?: string
 }
 
+export interface AttributionContent {
+  enabled?: boolean
+  label?: string
+  url?: string
+}
+
 export interface PresentationChromeContent {
   mark_label?: string
 }
@@ -61,6 +72,9 @@ export interface PresentationToolbarContent {
   previous_slide_label?: string
   next_slide_label?: string
   presentation_mode_label?: string
+  shortcut_help_title?: string
+  shortcut_help_body?: string
+  shortcut_help_dismiss_label?: string
 }
 
 export interface PresentationsPageContent {
@@ -84,12 +98,13 @@ export interface PresentationsPageContent {
 
 export interface SiteContent {
   title: string
-  mascot_alt?: string
+  mascot?: MascotContent
   data_sources?: DataSource[]
   project_badge?: ProjectBadge
   presentation_logo?: PresentationLogo
   navigation?: NavigationContent
   app_footer?: AppFooterContent
+  attribution?: AttributionContent
   presentation_chrome?: PresentationChromeContent
   presentation_toolbar?: PresentationToolbarContent
   home_hero?: HomeHeroContent

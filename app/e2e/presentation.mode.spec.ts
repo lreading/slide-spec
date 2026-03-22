@@ -11,6 +11,7 @@ test('supports keyboard navigation on the presentation page', async ({ page }) =
   await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Previous slide' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Next slide' })).toBeVisible()
+  await expect(page.getByText('Keyboard shortcuts')).toBeVisible()
 
   await page.keyboard.press('ArrowRight')
   await expect(page).toHaveURL(/slide=2/)
@@ -26,7 +27,7 @@ test('enters and exits presentation mode cleanly', async ({ page }) => {
 
   const modeButton = page.getByRole('button', { name: 'Presentation mode' })
   const navBrand = page.getByRole('link', { name: 'Threat Dragon Updates' })
-  const appFooterLink = page.getByRole('link', { name: /github.com\/lreading\/td-project-updates/i })
+  const appFooterLink = page.getByRole('link', { name: 'Powered by slide-spec' })
 
   await expect(modeButton).toBeVisible()
   await expect(navBrand).toBeVisible()
@@ -44,4 +45,15 @@ test('enters and exits presentation mode cleanly', async ({ page }) => {
   await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeVisible()
   await expect(navBrand).toBeVisible()
   await expect(appFooterLink).toBeVisible()
+})
+
+test('dismisses the shortcut help callout for the current browser origin', async ({ page }) => {
+  await page.goto('/presentations/2026-q1?slide=1')
+
+  await expect(page.getByText('Keyboard shortcuts')).toBeVisible()
+  await page.getByRole('button', { name: 'Do not show again' }).click()
+  await expect(page.getByText('Keyboard shortcuts')).toBeHidden()
+
+  await page.reload()
+  await expect(page.getByText('Keyboard shortcuts')).toBeHidden()
 })

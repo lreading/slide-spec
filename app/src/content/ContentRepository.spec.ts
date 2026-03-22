@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 
-import { ContentRepository } from './ContentRepository'
+import { ContentRepository, selectContentFiles } from './ContentRepository'
 
 const files = {
   '/virtual/site.yaml': `
@@ -99,6 +99,11 @@ generated:
 }
 
 describe('ContentRepository', () => {
+  it('selects fixture files only when fixture mode is enabled', () => {
+    expect(selectContentFiles(undefined, { live: true }, { fixture: true })).toEqual({ live: true })
+    expect(selectContentFiles('fixtures', { live: true }, { fixture: true })).toEqual({ fixture: true })
+  })
+
   it('loads the site content', () => {
     const repository = new ContentRepository(files)
 
@@ -143,5 +148,13 @@ generated:
     expect(() => repository.getPresentation('2026-q1')).toThrow(
       'Presentation id mismatch between index "2026-q1" and generated "2026-q2".',
     )
+  })
+
+  it('throws when a required content file is missing', () => {
+    const repository = new ContentRepository({
+      '/virtual/site.yaml': files['/virtual/site.yaml'],
+    })
+
+    expect(() => repository.listPresentations()).toThrow('Missing content file "presentations/index.yaml".')
   })
 })

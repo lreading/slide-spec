@@ -62,6 +62,11 @@ describe('PresentationsView', () => {
 
     expect(wrapper.text()).toContain('All presentations')
     expect(wrapper.text()).toContain('Q1 2026')
+    expect(wrapper.find('.presentations-primary-link').exists()).toBe(true)
+    expect(wrapper.findComponent(RouterLinkStub).props('to')).toEqual({
+      name: 'presentation',
+      params: { presentationId: '2026-q1' },
+    })
   })
 
   it('filters by search text and year', async () => {

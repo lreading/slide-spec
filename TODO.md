@@ -1,36 +1,75 @@
-# Priority
-- Figure out a new name. Need to search github to make sure no repos exist with that name, no matter who the owner is.
-- Add a footer for powered by <name> and link to github. This should be able to be disabled in the config, but on by default. make sure covered by e2e tests. The link to the github 2
-- Add visual regression testing, make it a gate with a threshold, update AGENTS, etc.
-- Work on interactive CLI / init.  Include things like project name, if it's using github, etc etc. After using interactive mode, the user should have a minimal working config.  Ask them at the end if they want to start the server to see what it made.
-- Move all of the images and stuff out of the ui, and into the config somewhere.
-- Make sure images are loaded from config and able to be served
-- Add some info about keyboard shortcuts before entering presentation mode.  Not sure how yet.. either a small ui addition near the button, or something that is dismissable (if dismissable, make sure we save to localStorage a "do not show again" type of setting or whatever)
-- Add a documentation site (focus on schema, templates, etc), vitepress stub created
-  - Needs schema documentation
-  - Needs documentation for different templates (for slides), including screenshots and an example config
-  - It might be overkill, but a screenshot/legend would help too?  So screenshot, example yaml, spec file, and then k/v by k/v with a screenshot and an arrow pointing to what that config does, AND what happens when it's empty (hide vs empty).
-  - Ensure documentation site is friendly to AI.  Is there an emerging standard similar to robots.txt but for AI?  CF has some kinda structured thing (yaml or json) meant for robots.  Is that the right move, or something else?
-  - Document external connectors
-  - Document happy path
-  - Needs a really great landing page.  People should understand what this is, the benefits of using this, and how to use it and what it might look like. 
-  - Ensure SBOM is available
-  - Add docs on how to get an agent to generate this stuff for you (link to docs site, suggested prompt, etc)
-  - CLI docs, including all flags and use-cases, interactive mode, etc.
-- Accessibility: make sure we do a pass to get the current state
-- README refactor:
-  - Badges at the top (figure out which ones, but include the OSS compliant one, maybe accessibility?)
-  - Immediately obvious what this is, highlight the demo and the docs, quickstart
-  - Incldue info on the different components (high level)
-  - Make sure modules all have their own README - this should be focused on technical bits only
-- Select a LICENSE
-- Create contributing guiddelines
+# Review:
+- Footer link needs margin bottom.
+- Manually test visual regression testing, check images
+- Manually test interactive CLI
+- Check the Ladybird test
+- Check out documentation site
+- Make sure sbom generation is automated and available
+- Ask specifically about "agent friendly" documentation
+- Review Contributing
+- Review README
+- Review License
+
+# Next:
+- Make sure the CLI serve accepts an optional port as a flag
+- Verify help, make sure there's contextual help too and that it's still accurate
+- Is there any precedence for adding a man page for globally installed npm libs? (I don't think so, but maybe check)
+- Ensure cross-compatibility: no unix/linux/macOS/windows code.  Everything should "just work" regardless of operating system
+- Continue expanding CLI - want to make it so you can scaffold a new presentation (slightly different from init, but can borrow the same workflow).  Maybe even rename init to scaffold and just make it use the name as the folder, and validate the name does not already exist? Tool should not overwrite data.
+- Automate the e2e cli test somehow, including visual regression with exact or damn near exact thresholds (cli testing doesn't need to test all templates, so this should be ok?)
+- Test for all threat dragon content, make sure it's all gone
+- Make more plans for more work, figure out what next steps are.
+- GH Actions (needs plans)
+  - PR
+  - push (main)
+  - deploy (tag)
+
+
+# Manual Work
+- Repository branch protections
+- Do we want dependabot?
+- Create project for OSS compliance badge
+- Repo tags: can they be immutable?
+- Make sure NPM listing looks good (does it read from README? that'd be ideal)
+
+
+# GH Actions
+- Find latest version of GH actions that we are going to use, and pin using commit.
+
+## PR
+- Verify / all gates for all components (app, docs, cli)
+  - Should these be individual / parallel steps? Probably
+- As distributed as possible, only make things serial if there are real deps
+- SAST for all
+- DAST (should probably use dist)
+- SCA
+- SBOM
+- Spellcheck for markdown in docs
+- Linkchecker? (maybe)
+- Do we want linting for markdown too?
+
+
+## Main
+- Same checks as PR mostly
+- Deploy the docs
+- Deploy the slides
+
+
+## Publish
+- Runs on tag v*
+- What repo settings do we need to ensure that nobody else can push tags?
+- Trusted publishing for npm to @slide-spec/cli 
+- Do we want to publish @slide-spec/web? Probably not?
+- Needs to pass all gates
+
+
+## Dependabot
+- Do we want an action for it?  If so, how to configure it?
+- Can we enforce automated testing to allow auto-merging??? That'd be so cool, albeit a bit dangerous.
 
 
 # Infrastructure
 - Update repo name, do a pass at updating repo contents. Add branch protections, do a pass at other configuration, and also make sure that tags are immutable (if possible). If NOT possible, develop a pipeline that alerts when an existing tag is overwritten or deleted? Gotta make sure I'm aware of it, maybe make an issue?
-- Claim scope in NPM
-- Set up domain name
 - Figure out deployment model (docs vs slides)
 - Dogfood: create an initial slide for q1 2026. No history yet, good edge case to exercise.
 - Create roadmap and issues

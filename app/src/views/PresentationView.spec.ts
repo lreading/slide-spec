@@ -224,4 +224,28 @@ describe('PresentationView', () => {
     expect(wrapper.find('.slide-stage').exists()).toBe(true)
     wrapper.unmount()
   })
+
+  it('shows and dismisses the shortcut callout using localStorage', async () => {
+    window.localStorage.removeItem('slide-spec.shortcut-help.dismissed')
+
+    const router = createAppRouter(true)
+    await router.push('/presentations/2026-q1?slide=1')
+    await router.isReady()
+
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('Keyboard shortcuts')
+    await wrapper.get('.shortcut-callout__dismiss').trigger('click')
+
+    expect(window.localStorage.getItem('slide-spec.shortcut-help.dismissed')).toBe('true')
+    expect(wrapper.text()).not.toContain('Keyboard shortcuts')
+    wrapper.unmount()
+  })
 })

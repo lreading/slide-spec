@@ -1,0 +1,22 @@
+presentation:
+  id: 2026-03-weekly-briefing
+  year: 2026
+  title: Weekly Browser Briefing
+  subtitle: March 2026
+  slides:
+  - template: hero
+    enabled: true
+    content:
+      title_primary: slide
+      title_accent: spec
+      subtitle_prefix: Example presentation
+      quote: Fixture content for pagination coverage.
+  - template: agenda
+    enabled: true
+    title: Agenda
+    content: {}
+  - template: closing
+    enabled: true
+    content:
+      heading: Done
+      message: Weekly Browser Briefing fixture presentation.

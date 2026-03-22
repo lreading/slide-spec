@@ -7,7 +7,6 @@ describe('InitPresentationBuilder', () => {
   const initInput = {
     presentationId: '2026-q1',
     title: 'Quarterly Community Update',
-    subtitle: 'Q1 2026',
     summary: 'Replace with a summary before publishing.',
     period: {
       start: '2026-01-01',
@@ -24,7 +23,7 @@ describe('InitPresentationBuilder', () => {
     ).toEqual({
       id: '2026-q1',
       title: 'Quarterly Community Update',
-      subtitle: 'Q1 2026',
+      subtitle: 'Replace with a subtitle before publishing.',
       summary: 'Replace with a summary before publishing.',
       published: true,
       featured: true,
@@ -35,6 +34,43 @@ describe('InitPresentationBuilder', () => {
     expect(presentationDocument.presentation.slides[0]).toMatchObject({
       template: 'hero',
       enabled: true,
+    })
+    expect(presentationDocument.presentation.subtitle).toBe('Replace with a subtitle before publishing.')
+
+    expect(builder.buildSiteDocument()).toMatchObject({
+      site: {
+        title: 'Slide Spec',
+        home_intro: 'Create and publish data-driven slide decks.',
+      },
+    })
+    expect(builder.buildSiteDocument({
+      repositoryUrl: 'https://github.com/example/project',
+      docsUrl: 'https://example.com/docs',
+      websiteUrl: 'https://example.com',
+      githubDataSourceUrl: 'https://github.com/OWASP/threat-dragon',
+    })).toMatchObject({
+      site: {
+        data_sources: [
+          {
+            type: 'github',
+            url: 'https://github.com/OWASP/threat-dragon',
+          },
+        ],
+        links: {
+          repository: {
+            label: 'Project repository',
+            url: 'https://github.com/example/project',
+          },
+          docs: {
+            label: 'Project documentation',
+            url: 'https://example.com/docs',
+          },
+          owasp: {
+            label: 'Project website',
+            url: 'https://example.com',
+          },
+        },
+      },
     })
 
     expect(builder.buildGeneratedData(initInput, '2025-q4')).toMatchObject({

@@ -9,23 +9,26 @@ const featured = presentations.find((entry) => entry.featured) ?? presentations[
 
 test('renders the presentations listing and opens the selected presentation', async ({ page }) => {
   await page.goto('/presentations')
+  const summary = page.locator('.presentations-results-summary')
 
   await expect(page.getByText(site.presentations_page?.title ?? '')).toBeVisible()
   await expect(page.getByLabel('Search')).toBeVisible()
   await expect(page.getByLabel('Year')).toBeVisible()
-  await expect(page.getByText(`${presentations.length} presentation`)).toBeVisible()
+  await expect(summary).toContainText(`${presentations.length} presentations total`)
+  await expect(summary).toContainText('Page 1 of 2')
+  await expect(summary).toContainText('Showing 1-12')
   await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
   await expect(page.getByText(featured.summary)).toBeVisible()
   await expect(page.getByText(featured.subtitle)).toBeVisible()
-  await expect(page.getByRole('link', { name: /github.com\/lreading\/td-project-updates/i })).toHaveAttribute(
+  await expect(page.getByRole('link', { name: 'Powered by slide-spec' })).toHaveAttribute(
     'href',
-    'https://github.com/lreading/td-project-updates',
+    'https://github.com/lreading/slide-spec',
   )
 
   await page
     .getByRole('article')
     .filter({ has: page.getByRole('heading', { name: featured.title }) })
-    .getByRole('link', { name: 'Open presentation' })
+    .getByRole('link', { name: featured.title })
     .click()
 
   await expect(page).toHaveURL(new RegExp(`/presentations/${featured.id}`))
@@ -51,4 +54,50 @@ test('supports search and empty-state filtering on the presentations page', asyn
     await page.getByLabel('Year').selectOption(String(featured.year))
     await expect(page.getByRole('heading', { name: featured.title })).toBeVisible()
   }
+})
+
+test('paginates through the archive and opens a title link from page two', async ({ page }) => {
+  await page.goto('/presentations')
+
+  await expect(page.getByText(/Page 1 of 2/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Community Office Hours' })).toBeHidden()
+
+  await page.getByRole('button', { name: 'Next' }).click()
+
+  await expect(page.getByText(/Page 2 of 2/)).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Community Office Hours' })).toBeVisible()
+
+  await page
+    .getByRole('article')
+    .filter({ has: page.getByRole('heading', { name: 'Community Office Hours' }) })
+    .getByRole('link', { name: 'Community Office Hours' })
+    .click()
+
+  await expect(page).toHaveURL(/\/presentations\/2025-04-community-office-hours/)
+  await expect(page.getByText('April 2025')).toBeVisible()
+})
+
+test('paginates to the second page and opens the expected presentation from the title link', async ({ page }) => {
+  await page.goto('/presentations')
+  const summary = page.locator('.presentations-results-summary')
+
+  await expect(summary).toContainText('Page 1 of 2')
+  await expect(summary).toContainText('Showing 1-12')
+  await expect(page.getByRole('heading', { name: 'Community Office Hours' })).toHaveCount(0)
+
+  await page.getByRole('button', { name: 'Next' }).click()
+
+  await expect(summary).toContainText('Page 2 of 2')
+  await expect(summary).toContainText('Showing 13-14')
+  await expect(page.getByRole('heading', { name: 'Release Recap' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: 'Community Office Hours' })).toBeVisible()
+
+  await page
+    .getByRole('article')
+    .filter({ has: page.getByRole('heading', { name: 'Community Office Hours' }) })
+    .getByRole('link', { name: 'Community Office Hours' })
+    .click()
+
+  await expect(page).toHaveURL(/\/presentations\/2025-04-community-office-hours/)
+  await expect(page.getByText('April 2025')).toBeVisible()
 })

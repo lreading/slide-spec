@@ -20,6 +20,7 @@ app/dist-ssr/
 app/coverage/
 app/playwright-report/
 app/test-results/
+app/.visual-baselines/
 cli/runtime-template/
 cli/.runtime-workspaces/
 docs/.vitepress/cache/

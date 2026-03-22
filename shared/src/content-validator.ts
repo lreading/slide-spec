@@ -53,6 +53,13 @@ function assertPresentationLogo(value: unknown, path: string): void {
   assert(value.url !== undefined || value.alt === undefined, `${path}.alt requires ${path}.url.`)
 }
 
+function assertMascotContent(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertOptionalString(value.url, `${path}.url`)
+  assertOptionalString(value.alt, `${path}.alt`)
+  assert(value.url !== undefined || value.alt === undefined, `${path}.alt requires ${path}.url.`)
+}
+
 function assertDataSource(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNonBlankString(value.type, `${path}.type`)
@@ -88,6 +95,20 @@ function assertAppFooterContent(value: unknown, path: string): void {
   )
 }
 
+function assertAttributionContent(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  if (value.enabled !== undefined) {
+    assertBoolean(value.enabled, `${path}.enabled`)
+  }
+  assertOptionalString(value.label, `${path}.label`)
+  assertOptionalString(value.url, `${path}.url`)
+  assert(
+    (value.label === undefined && value.url === undefined)
+      || (value.label !== undefined && value.url !== undefined),
+    `${path} must provide both label and url together.`,
+  )
+}
+
 function assertPresentationChromeContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertOptionalString(value.mark_label, `${path}.mark_label`)
@@ -99,6 +120,9 @@ function assertPresentationToolbarContent(value: unknown, path: string): void {
   assertOptionalString(value.previous_slide_label, `${path}.previous_slide_label`)
   assertOptionalString(value.next_slide_label, `${path}.next_slide_label`)
   assertOptionalString(value.presentation_mode_label, `${path}.presentation_mode_label`)
+  assertOptionalString(value.shortcut_help_title, `${path}.shortcut_help_title`)
+  assertOptionalString(value.shortcut_help_body, `${path}.shortcut_help_body`)
+  assertOptionalString(value.shortcut_help_dismiss_label, `${path}.shortcut_help_dismiss_label`)
 }
 
 function assertHomeHeroContent(value: unknown, path: string): void {
@@ -186,7 +210,6 @@ export class ContentValidator {
     assert(isRecord(document.site), 'site.yaml.site must be an object.')
     const site = document.site
     assertNonBlankString(site.title, 'site.yaml.site.title')
-    assertOptionalString(site.mascot_alt, 'site.yaml.site.mascot_alt')
     if (site.data_sources !== undefined) {
       assert(Array.isArray(site.data_sources), 'site.yaml.site.data_sources must be an array.')
       ;(site.data_sources as unknown[]).forEach((source, index) => assertDataSource(source, `site.yaml.site.data_sources[${index}]`))
@@ -194,10 +217,12 @@ export class ContentValidator {
     assertNonBlankString(site.home_intro, 'site.yaml.site.home_intro')
     assertNonBlankString(site.home_cta_label, 'site.yaml.site.home_cta_label')
     assertNonBlankString(site.presentations_cta_label, 'site.yaml.site.presentations_cta_label')
+    if (site.mascot !== undefined) assertMascotContent(site.mascot, 'site.yaml.site.mascot')
     if (site.project_badge !== undefined) assertProjectBadge(site.project_badge, 'site.yaml.site.project_badge')
     if (site.presentation_logo !== undefined) assertPresentationLogo(site.presentation_logo, 'site.yaml.site.presentation_logo')
     if (site.navigation !== undefined) assertNavigationContent(site.navigation, 'site.yaml.site.navigation')
     if (site.app_footer !== undefined) assertAppFooterContent(site.app_footer, 'site.yaml.site.app_footer')
+    if (site.attribution !== undefined) assertAttributionContent(site.attribution, 'site.yaml.site.attribution')
     if (site.presentation_chrome !== undefined) {
       assertPresentationChromeContent(site.presentation_chrome, 'site.yaml.site.presentation_chrome')
     }

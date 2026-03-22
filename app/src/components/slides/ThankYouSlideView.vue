@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import mascotUrl from '../../assets/mascot.png'
 import AccentDivider from '../ui/AccentDivider.vue'
 import FloatingMascot from '../ui/FloatingMascot.vue'
 import HeroDecor from '../ui/HeroDecor.vue'
 import ResourcePillLink from '../ui/ResourcePillLink.vue'
+import { assetResolver } from '../../content/AssetResolver'
 import { resolvePresentationChromeLabel } from '../../content/contentDefaults'
 
 import type {
@@ -23,7 +23,8 @@ const props = defineProps<{
 }>()
 
 const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
-const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
+const mascotUrl = computed(() => assetResolver.resolve(props.site.mascot?.url))
+const mascotAlt = computed(() => props.site.mascot?.alt?.trim() || undefined)
 </script>
 
 <template>
@@ -36,7 +37,7 @@ const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
     />
 
     <div class="content-wrap">
-      <div class="relative group mascot-wrap">
+      <div v-if="mascotUrl" class="relative group mascot-wrap">
         <FloatingMascot
           :src="mascotUrl"
           :alt="mascotAlt"

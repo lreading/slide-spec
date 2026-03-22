@@ -1,6 +1,8 @@
 site:
   title: Threat Dragon Quarterly Updates
-  mascot_alt: Cupcake mascot
+  mascot:
+    url: content/assets/cupcake-mascot.png
+    alt: Cupcake mascot
   data_sources:
     - type: github
       url: https://github.com/OWASP/threat-dragon
@@ -9,7 +11,7 @@ site:
     fa_icon: fa-flask
     icon_position: before
   presentation_logo:
-    url: /cupcake-logo.png
+    url: content/assets/cupcake-logo.png
     alt: Threat Dragon logo
   navigation:
     brand_title: Threat Dragon Updates
@@ -17,9 +19,10 @@ site:
     presentations_label: Presentations
     latest_presentation_label: Latest Presentation
     toggle_label: Toggle navigation
-  app_footer:
-    repository_label: github.com/lreading/td-project-updates
-    repository_url: https://github.com/lreading/td-project-updates
+  attribution:
+    enabled: true
+    label: Powered by slide-spec
+    url: https://github.com/lreading/slide-spec
   presentation_chrome:
     mark_label: Threat Dragon
   presentation_toolbar:
@@ -27,6 +30,9 @@ site:
     previous_slide_label: Previous slide
     next_slide_label: Next slide
     presentation_mode_label: Presentation mode
+    shortcut_help_title: Keyboard shortcuts
+    shortcut_help_body: Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.
+    shortcut_help_dismiss_label: Do not show again
   home_hero:
     title_primary: OWASP
     title_accent: Threat Dragon

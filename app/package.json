@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:e2e": "vite --mode e2e",
     "build": "npm run typecheck && vite build",
     "preview": "vite preview",
     "validate:content": "tsx scripts/validate-content.ts",
@@ -14,9 +15,12 @@
     "test": "vitest run",
     "coverage": "vitest run --coverage --coverage.thresholds.perFile=true --coverage.thresholds.statements=80 --coverage.thresholds.branches=80 --coverage.thresholds.functions=80 --coverage.thresholds.lines=80",
     "e2e": "playwright test",
+    "a11y": "playwright test e2e/a11y.spec.ts",
+    "visual": "playwright test -c playwright.visual.config.ts",
+    "visual:update": "playwright test -c playwright.visual.config.ts --update-snapshots",
     "e2e:headed": "playwright test --headed",
     "e2e:install": "playwright install chromium",
-    "verify": "npm run lint && npm run test && npm run build"
+    "verify": "npm run lint && npm run test && npm run build && npm run e2e && npm run a11y && npm run visual"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.2.7",
@@ -31,13 +35,13 @@
     "yaml": "^2.8.2"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
     "@eslint/js": "^10.0.1",
     "@playwright/test": "^1.58.2",
     "@types/node": "^24.12.0",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vitest/coverage-v8": "^4.1.0",
     "@vue/test-utils": "^2.4.6",
-    "@playwright/test": "^1.58.2",
     "@vue/tsconfig": "^0.9.0",
     "autoprefixer": "^10.4.27",
     "eslint": "^10.0.3",

@@ -28,7 +28,7 @@ describe('StandardSlideLayout', () => {
     expect(wrapper.text()).toContain('4/12')
     expect(wrapper.text()).toContain('Threat Dragon')
     expect(wrapper.find('.bg-dots').exists()).toBe(true)
-    expect(wrapper.find('.logo-image').attributes('src')).toBe('/cupcake-logo.png')
+    expect(wrapper.find('.logo-image').attributes('src')).toContain('cupcake-logo')
     expect(wrapper.find('.slot-marker').exists()).toBe(true)
   })
 

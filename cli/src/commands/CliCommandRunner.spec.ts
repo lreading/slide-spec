@@ -85,6 +85,7 @@ describe('CliCommandRunner', () => {
     expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Commands:'))
     expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides fetch'))
     expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides init'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Interactive init collects essentials first'))
   })
 
   it('dispatches init with parsed options', async () => {
@@ -99,8 +100,6 @@ describe('CliCommandRunner', () => {
       '2026-q1',
       '--title',
       'Quarterly Community Update',
-      '--subtitle',
-      'Q1 2026',
       '--from-date',
       '2026-01-01',
       '--to-date',
@@ -114,7 +113,6 @@ describe('CliCommandRunner', () => {
       projectRoot: '/workspace/project',
       presentationId: '2026-q1',
       title: 'Quarterly Community Update',
-      subtitle: 'Q1 2026',
       fromDate: '2026-01-01',
       toDate: '2026-03-31',
       summary: 'Summary',
@@ -129,14 +127,20 @@ describe('CliCommandRunner', () => {
     const prompter = createPrompter({
       promptOptional: vi.fn()
         .mockResolvedValueOnce('/workspace/project')
+        .mockResolvedValueOnce('Demo Subtitle')
         .mockResolvedValueOnce('2026-04-30')
-        .mockResolvedValueOnce('Summary'),
+        .mockResolvedValueOnce('Summary')
+        .mockResolvedValueOnce(undefined)
+        .mockResolvedValueOnce(undefined)
+        .mockResolvedValueOnce(undefined),
       promptRequired: vi.fn()
         .mockResolvedValueOnce('demo-id')
         .mockResolvedValueOnce('Demo Title')
-        .mockResolvedValueOnce('Demo Subtitle')
         .mockResolvedValueOnce('2026-04-01'),
-      promptBoolean: vi.fn().mockResolvedValueOnce(true),
+      promptBoolean: vi.fn()
+        .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(true)
+        .mockResolvedValueOnce(false),
     })
     const runner = new CliCommandRunner(service, output, prompter)
 
@@ -152,7 +156,7 @@ describe('CliCommandRunner', () => {
       summary: 'Summary',
       force: true,
     })
-    expect(output.info).toHaveBeenCalledWith('Initialized demo-id')
+    expect(output.info).toHaveBeenCalledWith('Initialized 2026-q1')
   })
 
   it('dispatches init and fetch with only required options', async () => {
@@ -168,8 +172,6 @@ describe('CliCommandRunner', () => {
       '2026-q1',
       '--title',
       'Quarterly Community Update',
-      '--subtitle',
-      'Q1 2026',
       '--from-date',
       '2026-01-01',
     ])).resolves.toBe(0)
@@ -188,7 +190,6 @@ describe('CliCommandRunner', () => {
       projectRoot: '/workspace/project',
       presentationId: '2026-q1',
       title: 'Quarterly Community Update',
-      subtitle: 'Q1 2026',
       fromDate: '2026-01-01',
     })
     expect(service.fetchPresentationData).toHaveBeenCalledWith({
@@ -229,37 +230,8 @@ describe('CliCommandRunner', () => {
     expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides fetch'))
   })
 
-  it('dispatches interactive init and validate paths', async () => {
+  it('dispatches interactive validate path', async () => {
     const service = createService()
-    const initOutput = createOutput()
-    const initPrompter = createPrompter({
-      promptCommand: vi.fn().mockResolvedValue('init'),
-      promptOptional: vi.fn()
-        .mockResolvedValueOnce('/workspace/project')
-        .mockResolvedValueOnce('2026-04-30')
-        .mockResolvedValueOnce('Summary'),
-      promptRequired: vi.fn()
-        .mockResolvedValueOnce('demo-id')
-        .mockResolvedValueOnce('Demo Title')
-        .mockResolvedValueOnce('Demo Subtitle')
-        .mockResolvedValueOnce('2026-04-01'),
-      promptBoolean: vi.fn().mockResolvedValueOnce(true),
-    })
-    const initRunner = new CliCommandRunner(service, initOutput, initPrompter)
-
-    await expect(initRunner.run([])).resolves.toBe(0)
-    expect(service.initPresentation).toHaveBeenCalledWith({
-      projectRoot: '/workspace/project',
-      presentationId: 'demo-id',
-      title: 'Demo Title',
-      subtitle: 'Demo Subtitle',
-      fromDate: '2026-04-01',
-      toDate: '2026-04-30',
-      summary: 'Summary',
-      force: true,
-    })
-    expect(initOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides init'))
-
     const validateOutput = createOutput()
     const validatePrompter = createPrompter({
       promptCommand: vi.fn().mockResolvedValue('validate'),
@@ -449,7 +421,7 @@ describe('CliCommandRunner', () => {
     await expect(runner.run(['fetch'])).resolves.toBe(1)
 
     expect(output.error).toHaveBeenCalledWith(
-      'Missing required options: --title, --subtitle, --from-date.',
+      'Missing required options: --title, --from-date.',
     )
     expect(output.error).toHaveBeenCalledWith(
       'Missing required options: --presentation-id, --from-date.',

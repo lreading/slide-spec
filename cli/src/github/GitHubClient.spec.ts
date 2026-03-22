@@ -76,6 +76,27 @@ describe('GitHubApiClient', () => {
     expect(transport.requests[0]?.headers.Authorization).toBe('Bearer secret-token')
   })
 
+  it('omits auth headers when no token is provided', async () => {
+    const transport = new StubTransport([
+      createJsonResponse({
+        default_branch: 'main',
+        full_name: 'OWASP/threat-dragon',
+        html_url: 'https://github.com/OWASP/threat-dragon',
+        open_issues_count: 12,
+        stargazers_count: 321,
+      }),
+    ])
+
+    const client = new GitHubApiClient({ transport })
+
+    await expect(client.getRepositoryMetadata(repository)).resolves.toMatchObject({
+      owner: 'OWASP',
+      repo: 'threat-dragon',
+    })
+
+    expect(transport.requests[0]?.headers.Authorization).toBeUndefined()
+  })
+
   it('counts stargazers up to a cutoff date via GraphQL history', async () => {
     const transport = new StubTransport([
       createJsonResponse({

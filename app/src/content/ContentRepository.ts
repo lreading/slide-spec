@@ -8,13 +8,26 @@ import type {
   SiteContent,
 } from '../types/content'
 
-const globbedContentFiles = import.meta.glob('../../../content/**/*.yaml', {
+export const selectContentFiles = (
+  source: string | undefined,
+  liveFiles: Record<string, unknown>,
+  fixtureFiles: Record<string, unknown>,
+): Record<string, unknown> => (source === 'fixtures' ? fixtureFiles : liveFiles)
+
+const liveContentFiles = import.meta.glob('../../../content/**/*.yaml', {
+  eager: true,
+  import: 'default',
+  query: '?raw',
+})
+const fixtureContentFiles = import.meta.glob('../../e2e/fixtures/content/**/*.yaml', {
   eager: true,
   import: 'default',
   query: '?raw',
 })
 const rawContentFiles = Object.fromEntries(
-  Object.entries(globbedContentFiles).map(([path, source]) => [path, String(source)]),
+  Object.entries(
+    selectContentFiles(import.meta.env.VITE_CONTENT_SOURCE, liveContentFiles, fixtureContentFiles),
+  ).map(([path, source]) => [path, String(source)]),
 )
 
 export class ContentRepository {

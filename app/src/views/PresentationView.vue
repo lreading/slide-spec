@@ -4,6 +4,7 @@ import { useRoute, useRouter } from 'vue-router'
 
 import { contentRepository } from '../content/ContentRepository'
 import { resolvePresentationToolbarContent } from '../content/contentDefaults'
+import PresentationShortcutCallout from '../components/presentation/PresentationShortcutCallout.vue'
 import { PresentationNavigation } from '../content/PresentationNavigation'
 import PresentationToolbar from '../components/presentation/PresentationToolbar.vue'
 import SlideRenderer from '../components/presentation/SlideRenderer.vue'
@@ -11,9 +12,11 @@ import SlideRenderer from '../components/presentation/SlideRenderer.vue'
 const route = useRoute()
 const router = useRouter()
 const fullscreenActive = ref(false)
+const shortcutHelpDismissed = ref(false)
 
 const site = contentRepository.getSiteContent()
 const toolbarContent = resolvePresentationToolbarContent(site)
+const shortcutStorageKey = 'slide-spec.shortcut-help.dismissed'
 const presentationId = computed(() => String(route.params.presentationId))
 const record = computed(() => contentRepository.getPresentation(presentationId.value))
 const slides = computed(() => record.value.presentation.slides.filter((slide) => slide.enabled))
@@ -25,6 +28,14 @@ const isFullscreenAvailable = typeof document !== 'undefined' && Boolean(documen
 const isPresentationActive = computed(() =>
   isFullscreenAvailable ? fullscreenActive.value : isPresentationMode.value,
 )
+const showShortcutHelp = computed(
+  () =>
+    !isPresentationActive.value
+    && !shortcutHelpDismissed.value
+    && Boolean(toolbarContent.shortcut_help_title)
+    && Boolean(toolbarContent.shortcut_help_body)
+    && Boolean(toolbarContent.shortcut_help_dismiss_label),
+)
 const onKeydown = (event: KeyboardEvent): void => {
   void handleKeydown(event)
 }
@@ -34,6 +45,15 @@ const syncFullscreenState = (): void => {
   if (!fullscreenActive.value && isPresentationMode.value && isFullscreenAvailable) {
     void updateRoute(slideNumber.value, false)
   }
+}
+
+const syncShortcutPreference = (): void => {
+  shortcutHelpDismissed.value = window.localStorage.getItem(shortcutStorageKey) === 'true'
+}
+
+const dismissShortcutHelp = (): void => {
+  window.localStorage.setItem(shortcutStorageKey, 'true')
+  shortcutHelpDismissed.value = true
 }
 
 const updateRoute = async (nextSlide: number, mode = isPresentationMode.value): Promise<void> => {
@@ -130,6 +150,7 @@ watch(
 
 onMounted(() => {
   syncFullscreenState()
+  syncShortcutPreference()
   window.addEventListener('keydown', onKeydown)
   window.addEventListener('resize', syncFullscreenState)
   document.addEventListener('fullscreenchange', syncFullscreenState)
@@ -144,6 +165,14 @@ onUnmounted(() => {
 
 <template>
   <main class="page presentation-page" :class="{ 'presentation-page--presentation': isPresentationActive }">
+    <PresentationShortcutCallout
+      v-if="showShortcutHelp"
+      :title="toolbarContent.shortcut_help_title!"
+      :body="toolbarContent.shortcut_help_body!"
+      :dismiss-label="toolbarContent.shortcut_help_dismiss_label!"
+      @dismiss="dismissShortcutHelp"
+    />
+
     <PresentationToolbar
       v-if="!isPresentationActive"
       :slide-number="slideNumber"
@@ -176,6 +205,7 @@ onUnmounted(() => {
   flex: 1;
   flex-direction: column;
   min-height: 100%;
+  gap: 1rem;
 }
 
 .slide-stage {

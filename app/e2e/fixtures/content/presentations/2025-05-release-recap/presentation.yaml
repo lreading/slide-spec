@@ -1,0 +1,22 @@
+presentation:
+  id: 2025-05-release-recap
+  year: 2025
+  title: Release Recap
+  subtitle: May 2025
+  slides:
+  - template: hero
+    enabled: true
+    content:
+      title_primary: slide
+      title_accent: spec
+      subtitle_prefix: Example presentation
+      quote: Fixture content for pagination coverage.
+  - template: agenda
+    enabled: true
+    title: Agenda
+    content: {}
+  - template: closing
+    enabled: true
+    content:
+      heading: Done
+      message: Release Recap fixture presentation.

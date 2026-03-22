@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest'
 
 import { contentRepository } from './ContentRepository'
 import {
+  resolveAttributionContent,
   resolveAppFooterContent,
   resolveHomeHeroContent,
   resolveNavigationContent,
@@ -30,14 +31,22 @@ describe('contentDefaults', () => {
       toggle_label: 'Toggle navigation',
     })
     expect(resolveAppFooterContent(site)).toEqual({
-      repository_label: 'github.com/lreading/td-project-updates',
-      repository_url: 'https://github.com/lreading/td-project-updates',
+      repository_label: undefined,
+      repository_url: undefined,
+    })
+    expect(resolveAttributionContent(site)).toEqual({
+      enabled: true,
+      label: 'Powered by slide-spec',
+      url: 'https://github.com/lreading/slide-spec',
     })
     expect(resolvePresentationToolbarContent(site)).toEqual({
       navigation_label: 'Slide navigation',
       previous_slide_label: 'Previous slide',
       next_slide_label: 'Next slide',
       presentation_mode_label: 'Presentation mode',
+      shortcut_help_title: 'Keyboard shortcuts',
+      shortcut_help_body: 'Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.',
+      shortcut_help_dismiss_label: 'Do not show again',
     })
     expect(resolvePresentationsPageContent(site).search_placeholder).toBe('Search presentations...')
     expect(resolvePresentationsPageContent(site).page_of_label).toBe('of')
@@ -59,9 +68,9 @@ describe('contentDefaults', () => {
         latest_presentation_label: '   ',
         toggle_label: '   ',
       },
-      app_footer: {
-        repository_label: '   ',
-        repository_url: '   ',
+      attribution: {
+        label: '   ',
+        url: '   ',
       },
       presentation_chrome: {
         mark_label: '   ',
@@ -71,6 +80,9 @@ describe('contentDefaults', () => {
         previous_slide_label: '   ',
         next_slide_label: '   ',
         presentation_mode_label: '   ',
+        shortcut_help_title: '   ',
+        shortcut_help_body: '   ',
+        shortcut_help_dismiss_label: '   ',
       },
       home_hero: {
         title_primary: '   ',
@@ -99,6 +111,11 @@ describe('contentDefaults', () => {
 
     expect(resolveNavigationContent(blankSite).brand_title).toBeUndefined()
     expect(resolveAppFooterContent(blankSite).repository_label).toBeUndefined()
+    expect(resolveAttributionContent(blankSite)).toEqual({
+      enabled: true,
+      label: 'Powered by slide-spec',
+      url: 'https://github.com/lreading/slide-spec',
+    })
     expect(resolvePresentationToolbarContent(blankSite).presentation_mode_label).toBeUndefined()
     expect(resolvePresentationsPageContent(blankSite).title).toBeUndefined()
     expect(resolveHomeHeroContent(blankSite).title_primary).toBeUndefined()

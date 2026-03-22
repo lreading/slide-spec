@@ -13,7 +13,7 @@ export class EnvLoader {
     const envPath = await this.findEnvPath(paths)
 
     if (!envPath) {
-      throw new Error(`Missing .env file at "${paths.getEnvPath()}".`)
+      return {}
     }
 
     const envSource = await this.fileSystem.readTextFile(envPath)
@@ -21,7 +21,7 @@ export class EnvLoader {
     const githubAccessToken = parsed.GITHUB_PAT?.trim() || parsed.GITHUB_TOKEN?.trim()
 
     if (!githubAccessToken) {
-      throw new Error(`Missing GITHUB_PAT in "${envPath}".`)
+      return {}
     }
 
     return {

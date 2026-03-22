@@ -31,7 +31,7 @@ describe('App', () => {
     expect(text).toContain('Home')
     expect(text).toContain('Presentations')
     expect(text).toContain('Latest Presentation')
-    expect(text).toContain('td-project-updates')
+    expect(text).toContain('github.com/lreading/slide-spec')
   })
 
   it('hides the nav during fullscreen presentation', async () => {

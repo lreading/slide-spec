@@ -1,15 +1,99 @@
 presentations:
-  - id: 2026-q1
-    year: 2026
-    title: OWASP Threat Dragon Community Update
-    subtitle: Q1 2026
-    summary: Product progress, releases, contributor recognition, and community growth.
-    published: true
-    featured: true
-  - id: 2025-template-sparse
-    year: 2025
-    title: Threat Dragon Sparse Template Coverage
-    subtitle: Sparse Coverage
-    summary: Sparse authored example used to exercise optional template sections.
-    published: true
-    featured: false
+- id: 2026-q1
+  year: 2026
+  title: OWASP Threat Dragon Community Update
+  subtitle: Q1 2026
+  summary: Product progress, releases, contributor recognition, and community growth.
+  published: true
+  featured: true
+- id: 2025-template-sparse
+  year: 2025
+  title: Threat Dragon Sparse Template Coverage
+  subtitle: Sparse Coverage
+  summary: Sparse authored example used to exercise optional template sections.
+  published: true
+  featured: false
+- id: 2026-01-weekly-briefing
+  year: 2026
+  title: Weekly Browser Briefing
+  subtitle: January 2026
+  summary: Fast-moving browser-engine notes.
+  published: true
+  featured: false
+- id: 2026-02-weekly-briefing
+  year: 2026
+  title: Weekly Browser Briefing
+  subtitle: February 2026
+  summary: Fast-moving browser-engine notes.
+  published: true
+  featured: false
+- id: 2026-03-weekly-briefing
+  year: 2026
+  title: Weekly Browser Briefing
+  subtitle: March 2026
+  summary: Fast-moving browser-engine notes.
+  published: true
+  featured: false
+- id: 2025-12-release-review
+  year: 2025
+  title: Release Review
+  subtitle: December 2025
+  summary: Late-year engineering and release summary.
+  published: true
+  featured: false
+- id: 2025-11-community-roundup
+  year: 2025
+  title: Community Roundup
+  subtitle: November 2025
+  summary: Community progress and contributor highlights.
+  published: true
+  featured: false
+- id: 2025-10-interoperability-notes
+  year: 2025
+  title: Interoperability Notes
+  subtitle: October 2025
+  summary: Interop, tooling, and integration status.
+  published: true
+  featured: false
+- id: 2025-09-platform-update
+  year: 2025
+  title: Platform Update
+  subtitle: September 2025
+  summary: Platform changes and architecture notes.
+  published: true
+  featured: false
+- id: 2025-08-design-review
+  year: 2025
+  title: Design Review
+  subtitle: August 2025
+  summary: Design-system and UX review snapshot.
+  published: true
+  featured: false
+- id: 2025-07-maintainer-sync
+  year: 2025
+  title: Maintainer Sync
+  subtitle: July 2025
+  summary: Maintainer decisions and operating cadence.
+  published: true
+  featured: false
+- id: 2025-06-roadmap-deep-dive
+  year: 2025
+  title: Roadmap Deep Dive
+  subtitle: June 2025
+  summary: Longer-range planning and milestone review.
+  published: true
+  featured: false
+- id: 2025-05-release-recap
+  year: 2025
+  title: Release Recap
+  subtitle: May 2025
+  summary: Recently shipped work and stabilization.
+  published: true
+  featured: false
+- id: 2025-04-community-office-hours
+  year: 2025
+  title: Community Office Hours
+  subtitle: April 2025
+  summary: Questions, demos, and project feedback.
+  published: true
+  featured: false

@@ -44,7 +44,7 @@ interface TdCliApplicationServiceOptions {
   initPresentationBuilder?: InitPresentationBuilder
   reportingPeriodResolver?: ReportingPeriodResolver
   yamlWriter?: YamlWriter
-  gitHubClientFactory?: (token: string) => GitHubClient
+  gitHubClientFactory?: (token?: string) => GitHubClient
   siteBuilder?: ViteSiteBuilder
   staticSiteServer?: StaticSiteServer
   contentValidator?: ProjectContentValidator
@@ -64,7 +64,7 @@ export class TdCliApplicationService implements TdCliService {
   private readonly initPresentationBuilder: InitPresentationBuilder
   private readonly reportingPeriodResolver: ReportingPeriodResolver
   private readonly yamlWriter: YamlWriter
-  private readonly gitHubClientFactory: (token: string) => GitHubClient
+  private readonly gitHubClientFactory: (token?: string) => GitHubClient
   private readonly siteBuilder: ViteSiteBuilder
   private readonly staticSiteServer: StaticSiteServer
   private readonly contentValidator: ProjectContentValidator
@@ -83,7 +83,9 @@ export class TdCliApplicationService implements TdCliService {
     this.initPresentationBuilder = options.initPresentationBuilder ?? new InitPresentationBuilder()
     this.reportingPeriodResolver = options.reportingPeriodResolver ?? new ReportingPeriodResolver()
     this.yamlWriter = options.yamlWriter ?? new YamlWriter()
-    this.gitHubClientFactory = options.gitHubClientFactory ?? ((token: string) => new GitHubApiClient({ token }))
+    this.gitHubClientFactory = options.gitHubClientFactory ?? ((token?: string) => new GitHubApiClient({
+      ...(token !== undefined ? { token } : {}),
+    }))
     this.siteBuilder = options.siteBuilder ?? new ViteSiteBuilder()
     this.staticSiteServer = options.staticSiteServer ?? new StaticSiteServer()
     this.contentValidator = options.contentValidator ?? new ProjectContentValidator()
@@ -107,16 +109,21 @@ export class TdCliApplicationService implements TdCliService {
     const scaffold = {
       presentationId: input.presentationId,
       title: input.title,
-      subtitle: input.subtitle,
       summary: input.summary ?? 'Replace with a summary before publishing.',
       period,
+      ...(input.subtitle !== undefined ? { subtitle: input.subtitle } : {}),
     }
     const presentationDocument = this.initPresentationBuilder.buildPresentationDocument(scaffold)
     const generatedDocument = this.initPresentationBuilder.buildGeneratedData(
       scaffold,
     )
     if (!await this.fileSystem.fileExists(paths.getSiteConfigPath())) {
-      await this.yamlWriter.writeDocument(paths.getSiteConfigPath(), this.initPresentationBuilder.buildSiteDocument())
+      await this.yamlWriter.writeDocument(paths.getSiteConfigPath(), this.initPresentationBuilder.buildSiteDocument({
+        ...(input.repositoryUrl !== undefined ? { repositoryUrl: input.repositoryUrl } : {}),
+        ...(input.docsUrl !== undefined ? { docsUrl: input.docsUrl } : {}),
+        ...(input.websiteUrl !== undefined ? { websiteUrl: input.websiteUrl } : {}),
+        ...(input.githubDataSourceUrl !== undefined ? { githubDataSourceUrl: input.githubDataSourceUrl } : {}),
+      }))
       createdPaths.push(paths.getSiteConfigPath())
     }
     const presentationPath = paths.getPresentationPath(input.presentationId)

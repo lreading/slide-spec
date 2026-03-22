@@ -1,0 +1,17 @@
+# slide-spec
+
+Declarative presentations for YAML-driven slides, GitHub-backed data, and reusable templates.
+
+## Start here
+
+- /quickstart
+- /schema/
+- /templates/
+- /cli/
+
+## What matters
+
+- YAML-first authoring
+- template-driven slides
+- GitHub data import
+- static output with no backend

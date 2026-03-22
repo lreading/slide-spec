@@ -1,17 +1,24 @@
-# Threat Dragon Slides App
+# slide-spec app
 
-## TODO: Rewrite this, not helpful at all
+This package is the Vue 3 + TypeScript presentation app.
 
-This directory contains the Vue 3 + TypeScript web application for the Threat Dragon presentation site.
+It renders authored slide content, reads generated data, and provides the responsive presentation experience used for local development and deployed static hosting.
 
 Commands:
 
 - `npm install`
 - `npm run dev`
-- `npm run lint`
-- `npm run test`
-- `npm run coverage`
 - `npm run build`
 - `npm run verify`
+- `npm run coverage`
 - `npm run e2e`
+- `npm run a11y`
+- `npm run visual`
+- `npm run validate:content`
 
+Notes:
+
+- `npm run visual` runs local Playwright screenshot baselines.
+- `npm run a11y` runs the automated Playwright + axe accessibility audit.
+- Visual baseline files are stored locally and should not be committed.
+- `verify` is the standard local gate before changing app/UI behavior.

@@ -4,11 +4,15 @@ export interface InitPresentationInput {
   projectRoot?: string
   presentationId: string
   title: string
-  subtitle: string
+  subtitle?: string
   fromDate: string
   toDate?: string
   summary?: string
   force?: boolean
+  repositoryUrl?: string
+  docsUrl?: string
+  websiteUrl?: string
+  githubDataSourceUrl?: string
 }
 
 export interface InitPresentationResult {

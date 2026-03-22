@@ -19,6 +19,10 @@ export interface SiteDocument {
     home_intro: string
     home_cta_label: string
     presentations_cta_label: string
+    data_sources?: Array<{
+      type: 'github'
+      url: string
+    }>
     links: {
       repository: {
         label: string
@@ -36,10 +40,17 @@ export interface SiteDocument {
   }
 }
 
+export interface InitSiteContent {
+  repositoryUrl?: string
+  docsUrl?: string
+  websiteUrl?: string
+  githubDataSourceUrl?: string
+}
+
 export interface InitPresentationContent {
   presentationId: string
   title: string
-  subtitle: string
+  subtitle?: string
   summary: string
   period: ReportingPeriod
 }
@@ -50,27 +61,39 @@ interface IndexEntryOptions {
 }
 
 export class InitPresentationBuilder {
-  public buildSiteDocument(): SiteDocument {
+  public buildSiteDocument(input: InitSiteContent = {}): SiteDocument {
+    const links = {
+      repository: {
+        label: 'Project repository',
+        url: input.repositoryUrl ?? 'https://example.com/repository',
+      },
+      docs: {
+        label: 'Project documentation',
+        url: input.docsUrl ?? 'https://example.com/docs',
+      },
+      owasp: {
+        label: 'Project website',
+        url: input.websiteUrl ?? 'https://example.com',
+      },
+    }
+
     return {
       site: {
-        title: 'OSS Slides',
-        home_intro: 'Presentation updates site.',
+        title: 'Slide Spec',
+        home_intro: 'Create and publish data-driven slide decks.',
         home_cta_label: 'View latest presentation',
         presentations_cta_label: 'All presentations',
-        links: {
-          repository: {
-            label: 'Project repository',
-            url: 'https://example.com/repository',
-          },
-          docs: {
-            label: 'Project documentation',
-            url: 'https://example.com/docs',
-          },
-          owasp: {
-            label: 'Project website',
-            url: 'https://example.com',
-          },
-        },
+        ...(input.githubDataSourceUrl
+          ? {
+              data_sources: [
+                {
+                  type: 'github',
+                  url: input.githubDataSourceUrl,
+                },
+              ],
+            }
+          : {}),
+        links,
       },
     }
   }
@@ -82,19 +105,21 @@ export class InitPresentationBuilder {
     return {
       id: input.presentationId,
       title: input.title,
-      subtitle: input.subtitle,
       summary: input.summary,
       published: options.published,
       featured: options.featured,
+      subtitle: input.subtitle ?? 'Replace with a subtitle before publishing.',
     }
   }
 
   public buildPresentationDocument(input: InitPresentationContent): PresentationDocument {
+    const subtitle = input.subtitle ?? 'Replace with a subtitle before publishing.'
+
     return {
       presentation: {
         id: input.presentationId,
         title: input.title,
-        subtitle: input.subtitle,
+        subtitle,
         slides: [
           {
             template: 'hero',

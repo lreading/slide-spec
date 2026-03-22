@@ -58,17 +58,15 @@ describe('EnvLoader', () => {
     })
   })
 
-  it('rejects missing .env files and missing tokens', async () => {
+  it('returns an empty environment when .env is missing or does not include a GitHub token', async () => {
     const paths = new FileSystemPaths('/workspace/project')
 
-    await expect(new EnvLoader(new MemoryFileSystem({})).loadEnvironment(paths)).rejects.toThrow(
-      'Missing .env file at "/workspace/project/.env".',
-    )
+    await expect(new EnvLoader(new MemoryFileSystem({})).loadEnvironment(paths)).resolves.toEqual({})
 
     await expect(
       new EnvLoader(new MemoryFileSystem({
         '/workspace/project/.env': 'ANOTHER_VALUE=1',
       })).loadEnvironment(paths),
-    ).rejects.toThrow('Missing GITHUB_PAT in "/workspace/project/.env".')
+    ).resolves.toEqual({})
   })
 })

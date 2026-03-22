@@ -52,7 +52,7 @@ function goToPage(page: number): void {
   <main class="page">
     <div class="page-header presentations-header">
       <div class="presentations-heading">
-        <p v-if="pageContent.title" class="presentations-eyebrow">{{ pageContent.title }}</p>
+        <h1 v-if="pageContent.title" class="presentations-eyebrow">{{ pageContent.title }}</h1>
       </div>
     </div>
 
@@ -103,8 +103,13 @@ function goToPage(page: number): void {
           </div>
 
           <div class="presentations-copy">
-            <h2 class="presentations-title">{{ entry.title }}</h2>
-            <p class="presentations-summary">{{ entry.summary }}</p>
+            <RouterLink
+              :to="{ name: 'presentation', params: { presentationId: entry.id } }"
+              class="presentations-primary-link"
+            >
+              <h2 class="presentations-title">{{ entry.title }}</h2>
+              <p class="presentations-summary">{{ entry.summary }}</p>
+            </RouterLink>
           </div>
 
           <div class="presentations-actions">
@@ -260,6 +265,51 @@ function goToPage(page: number): void {
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 0.95rem;
   background-color: rgba(37, 37, 53, 0.78);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 160ms ease;
+}
+
+.presentations-primary-link {
+  display: grid;
+  gap: 0.45rem;
+  padding: 0.15rem 0;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 0.5rem;
+  transition:
+    transform 140ms ease,
+    opacity 140ms ease;
+}
+
+.presentations-row:has(.presentations-primary-link:hover),
+.presentations-row:has(.presentations-primary-link:focus-visible) {
+  border-color: rgba(232, 52, 28, 0.24);
+  background-color: rgba(46, 34, 36, 0.92);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.2);
+  transform: translateY(-1px);
+}
+
+.presentations-primary-link:hover .presentations-title,
+.presentations-primary-link:focus-visible .presentations-title {
+  color: var(--accent-bright);
+}
+
+.presentations-primary-link:hover,
+.presentations-primary-link:focus-visible {
+  transform: translateX(0.2rem);
+}
+
+.presentations-primary-link:hover .presentations-summary,
+.presentations-primary-link:focus-visible .presentations-summary {
+  color: var(--primary-text);
+}
+
+.presentations-primary-link:focus-visible {
+  outline: 2px solid rgba(232, 52, 28, 0.45);
+  outline-offset: 0.3rem;
 }
 
 .presentations-meta {

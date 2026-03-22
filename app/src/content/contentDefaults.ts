@@ -1,5 +1,6 @@
 import type {
   AppFooterContent,
+  AttributionContent,
   HomeHeroContent,
   NavigationContent,
   PresentationContent,
@@ -19,6 +20,12 @@ export interface RoadmapResolvedLabels {
   deliverables?: string
   focusAreas?: string
   footerLink?: string
+}
+
+export interface ResolvedAttributionContent {
+  enabled: boolean
+  label: string
+  url: string
 }
 
 const trimOrUndefined = (value: string | undefined): string | undefined => {
@@ -43,6 +50,21 @@ export const resolveAppFooterContent = (
   repository_url: trimOrUndefined(site.app_footer?.repository_url),
 })
 
+const DEFAULT_ATTRIBUTION_LABEL = 'Powered by slide-spec'
+const DEFAULT_ATTRIBUTION_URL = 'https://github.com/lreading/slide-spec'
+
+export const resolveAttributionContent = (
+  site: SiteContent,
+): ResolvedAttributionContent => {
+  const attribution: AttributionContent | undefined = site.attribution
+
+  return {
+    enabled: attribution?.enabled ?? true,
+    label: trimOrUndefined(attribution?.label) ?? DEFAULT_ATTRIBUTION_LABEL,
+    url: trimOrUndefined(attribution?.url) ?? DEFAULT_ATTRIBUTION_URL,
+  }
+}
+
 export const resolvePresentationChromeLabel = (site: SiteContent): string | undefined =>
   trimOrUndefined(site.presentation_chrome?.mark_label)
 
@@ -53,6 +75,9 @@ export const resolvePresentationToolbarContent = (
   previous_slide_label: trimOrUndefined(site.presentation_toolbar?.previous_slide_label),
   next_slide_label: trimOrUndefined(site.presentation_toolbar?.next_slide_label),
   presentation_mode_label: trimOrUndefined(site.presentation_toolbar?.presentation_mode_label),
+  shortcut_help_title: trimOrUndefined(site.presentation_toolbar?.shortcut_help_title),
+  shortcut_help_body: trimOrUndefined(site.presentation_toolbar?.shortcut_help_body),
+  shortcut_help_dismiss_label: trimOrUndefined(site.presentation_toolbar?.shortcut_help_dismiss_label),
 })
 
 export const resolvePresentationsPageContent = (

@@ -1,0 +1,44 @@
+generated:
+  id: 2026-03-weekly-briefing
+  period:
+    start: 2026-03-01
+    end: 2026-03-31
+  previous_presentation_id: previous-2026-03-weekly-briefing
+  stats:
+    stars:
+      label: GitHub Stars
+      current: 100
+      previous: 95
+      delta: 5
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    issues_closed:
+      label: Issues closed
+      current: 5
+      previous: 4
+      delta: 1
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    prs_merged:
+      label: PRs merged
+      current: 3
+      previous: 2
+      delta: 1
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    new_contributors:
+      label: New contributors
+      current: 1
+      previous: 1
+      delta: 0
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+  releases: []
+  contributors:
+    total: 1
+    authors: []
+  merged_prs: []

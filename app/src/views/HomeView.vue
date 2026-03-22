@@ -1,13 +1,13 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import mascotUrl from '../assets/mascot.png'
 import AccentDivider from '../components/ui/AccentDivider.vue'
 import ActionButton from '../components/ui/ActionButton.vue'
 import FloatingMascot from '../components/ui/FloatingMascot.vue'
 import HeroDecor from '../components/ui/HeroDecor.vue'
 import ProjectBadgePill from '../components/ui/ProjectBadgePill.vue'
 import SiteFooterLinks from '../components/ui/SiteFooterLinks.vue'
+import { assetResolver } from '../content/AssetResolver'
 import { getProjectBadgeDisplay } from '../content/projectBadge'
 import { contentRepository } from '../content/ContentRepository'
 import { resolveHomeHeroContent } from '../content/contentDefaults'
@@ -18,7 +18,8 @@ const presentations = contentRepository.listPresentations()
 const featuredPresentation = computed(() => presentations.find((entry) => entry.featured) ?? presentations[0])
 const badge = computed(() => getProjectBadgeDisplay(site))
 const heroContent = computed(() => resolveHomeHeroContent(site))
-const mascotAlt = computed(() => site.mascot_alt?.trim() || undefined)
+const mascotUrl = computed(() => assetResolver.resolve(site.mascot?.url))
+const mascotAlt = computed(() => site.mascot?.alt?.trim() || undefined)
 </script>
 
 <template>
@@ -41,7 +42,7 @@ const mascotAlt = computed(() => site.mascot_alt?.trim() || undefined)
         </ActionButton>
       </div>
 
-      <div class="mascot-wrap">
+      <div v-if="mascotUrl" class="mascot-wrap">
         <FloatingMascot :src="mascotUrl" :alt="mascotAlt" size="clamp(9rem, 18vw, 12rem)" />
       </div>
 

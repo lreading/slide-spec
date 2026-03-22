@@ -1,5 +1,6 @@
 import { TdCliApplicationService } from '../application/TdCliApplicationService'
 import { ReadlineCliPrompter } from './CliPrompter'
+import { InteractiveInitFlow } from './InteractiveInitFlow'
 
 import type { TdCliService } from '../application/TdCliService'
 import type { CliCommandName, CliPrompter } from './CliPrompter'
@@ -21,11 +22,15 @@ interface ParsedCommandInput {
 const CLI_BIN_NAME = 'oss-slides'
 
 export class CliCommandRunner {
+  private readonly interactiveInitFlow: InteractiveInitFlow
+
   public constructor(
     private readonly service: TdCliService = new TdCliApplicationService(),
     private readonly output: CliOutput = console,
     private readonly prompter: CliPrompter = new ReadlineCliPrompter(),
-  ) {}
+  ) {
+    this.interactiveInitFlow = new InteractiveInitFlow(this.service, this.output, this.prompter)
+  }
 
   public async run(argv: string[]): Promise<number> {
     if (argv.length === 0) {
@@ -58,27 +63,27 @@ export class CliCommandRunner {
       }
 
       switch (command) {
-        case 'init':
-          if (argv.slice(1).length === 0) {
-            await this.runInteractiveInit()
-            return 0
-          }
-          await this.runInit(argv.slice(1))
+      case 'init':
+        if (argv.slice(1).length === 0) {
+          await this.runInteractiveInit()
           return 0
-        case 'fetch':
-          await this.runFetch(argv.slice(1))
-          return 0
-        case 'build':
-          await this.runBuild(this.readProjectRoot(this.parseCommandInput(argv.slice(1))))
-          return 0
-        case 'serve':
-          await this.runServe(argv.slice(1))
-          return 0
-        case 'validate':
-          await this.runValidate(argv.slice(1))
-          return 0
-        default:
-          throw new Error(`Unknown command "${command}".`)
+        }
+        await this.runInit(argv.slice(1))
+        return 0
+      case 'fetch':
+        await this.runFetch(argv.slice(1))
+        return 0
+      case 'build':
+        await this.runBuild(this.readProjectRoot(this.parseCommandInput(argv.slice(1))))
+        return 0
+      case 'serve':
+        await this.runServe(argv.slice(1))
+        return 0
+      case 'validate':
+        await this.runValidate(argv.slice(1))
+        return 0
+      default:
+        throw new Error(`Unknown command "${command}".`)
       }
     } catch (error) {
       this.output.error(error instanceof Error ? error.message : String(error))
@@ -203,17 +208,18 @@ export class CliCommandRunner {
 
   private async runInit(args: string[]): Promise<void> {
     const parsed = this.parseCommandInput(args)
-    const required = this.requireStringOptions(parsed.options, ['presentation-id', 'title', 'subtitle', 'from-date'])
+    const required = this.requireStringOptions(parsed.options, ['presentation-id', 'title', 'from-date'])
     const projectRoot = this.readProjectRoot(parsed)
     const force = this.readBooleanOption(parsed.options, 'force')
     const toDate = this.readStringOption(parsed.options, 'to-date')
     const summary = this.readStringOption(parsed.options, 'summary')
+    const subtitle = this.readStringOption(parsed.options, 'subtitle')
     const result = await this.service.initPresentation({
       ...(projectRoot !== undefined ? { projectRoot } : {}),
       presentationId: required['presentation-id'],
       title: required.title,
-      subtitle: required.subtitle,
       fromDate: required['from-date'],
+      ...(subtitle !== undefined ? { subtitle } : {}),
       ...(toDate !== undefined ? { toDate } : {}),
       ...(summary !== undefined ? { summary } : {}),
       ...(force !== undefined ? { force } : {}),
@@ -222,51 +228,7 @@ export class CliCommandRunner {
   }
 
   private async runInteractiveInit(): Promise<void> {
-    const projectRoot = await this.promptOptional(
-      'Target presentation project root. Leave blank to use the current working directory.',
-      'Project root (optional)',
-    )
-    const presentationId = await this.promptRequired(
-      'Unique presentation id used for content/presentations/<id>/',
-      'Presentation id',
-    )
-    const title = await this.promptRequired(
-      'Presentation title shown in listings and the app.',
-      'Title',
-    )
-    const subtitle = await this.promptRequired(
-      'Secondary label shown in listings and slide chrome.',
-      'Subtitle',
-    )
-    const fromDate = await this.promptRequired(
-      'Reporting-period start date in YYYY-MM-DD format.',
-      'From date (YYYY-MM-DD)',
-    )
-    const toDate = await this.promptOptional(
-      'Reporting-period end date in YYYY-MM-DD format. Leave blank if unknown.',
-      'To date (YYYY-MM-DD, optional)',
-    )
-    const summary = await this.promptOptional(
-      'Listing summary shown on the presentations page. Leave blank to use the default scaffold summary.',
-      'Summary (optional)',
-    )
-    const force = await this.promptBoolean(
-      'Overwrite the existing scaffold files if this presentation id already exists.',
-      'Overwrite existing scaffold files',
-      false,
-    )
-
-    await this.service.initPresentation({
-      ...(projectRoot !== undefined ? { projectRoot } : {}),
-      presentationId,
-      title,
-      subtitle,
-      fromDate,
-      ...(toDate !== undefined ? { toDate } : {}),
-      ...(summary !== undefined ? { summary } : {}),
-      ...(force !== undefined ? { force } : {}),
-    })
-    this.output.info(`Initialized ${presentationId}`)
+    await this.interactiveInitFlow.run()
   }
 
   private async promptRequired(helpText: string, label: string): Promise<string> {
@@ -447,25 +409,31 @@ export class CliCommandRunner {
     switch (topic) {
       case 'init':
         return [
-          `Usage: ${CLI_BIN_NAME} init [project-root] [--project-root <path>] --presentation-id <id> --title <title> --subtitle <subtitle> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--force]`,
+          `Usage: ${CLI_BIN_NAME} init [project-root] [--project-root <path>] --presentation-id <id> --title <title> [--subtitle <subtitle>] --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--repository-url <url>] [--docs-url <url>] [--website-url <url>] [--github-data-source-url <url>] [--force]`,
           '',
           'Create a new presentation scaffold with starter presentation and generated YAML files.',
           'Use this before fetch when you are starting a new presentation id.',
+          'Run `init` with no flags for an interactive essentials-first prompt flow.',
+          'Interactive init collects essentials first, then offers GitHub import, links, and local server startup.',
           '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
           '  --project-root <path>   Optional. Named presentation project root',
-          '  --presentation-id <id>   Required. Unique presentation id used for content/presentations/<id>/',
-          '  --title <title>          Required. Presentation title shown in listings and the app',
-          '  --subtitle <subtitle>    Required. Secondary label shown in listings and slide chrome',
-          '  --from-date <date>       Required. Period start date in YYYY-MM-DD format',
-          '  --to-date <date>         Optional. Period end date in YYYY-MM-DD format',
-          '  --summary <summary>      Optional. Listing summary text for the presentations page',
-          '  --force                  Optional. Overwrite scaffold files if the presentation already exists',
+          '  --presentation-id <id>     Required. Unique presentation id used for content/presentations/<id>/',
+          '  --title <title>            Required. Presentation title shown in listings and the app',
+          '  --subtitle <subtitle>      Optional. Secondary label shown in listings and slide chrome',
+          '  --from-date <date>         Required. Period start date in YYYY-MM-DD format',
+          '  --to-date <date>           Optional. Period end date in YYYY-MM-DD format',
+          '  --summary <summary>        Optional. Listing summary text for the presentations page',
+          '  --repository-url <url>     Optional. Repository link for site links',
+          '  --docs-url <url>           Optional. Documentation link for site links',
+          '  --website-url <url>        Optional. Project website/foundation link for site links',
+          '  --github-data-source-url <url> Optional. GitHub repository to import stats from',
+          '  --force                    Optional. Overwrite scaffold files if the presentation already exists',
           '',
           'Examples:',
           `  ${CLI_BIN_NAME} init`,
-          `  ${CLI_BIN_NAME} init /path/to/project --presentation-id 2026-apr --title "Community Update" --subtitle "April 2026" --from-date 2026-04-01 --to-date 2026-04-30`,
+          `  ${CLI_BIN_NAME} init /path/to/project --presentation-id 2026-apr --title "Community Update" --from-date 2026-04-01 --to-date 2026-04-30`,
         ].join('\n')
       case 'fetch':
         return [
@@ -473,6 +441,7 @@ export class CliCommandRunner {
           '',
           'Pull GitHub-derived metrics and write generated data for an existing presentation.',
           'Use this after init, once the presentation scaffold exists.',
+          'If no PAT is available, the CLI will continue best-effort and may be rate-limited.',
           '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
@@ -536,7 +505,7 @@ export class CliCommandRunner {
       `Usage: ${CLI_BIN_NAME} <command> [options]`,
       '',
       'Typical flow:',
-      '  1. init      Create a new presentation scaffold',
+      '  1. init      Create a new presentation scaffold with essentials-first prompts',
       '  2. fetch     Populate generated data for the presentation',
       '  3. validate  Confirm the content is still valid',
       '  4. serve     Build and review locally',
@@ -549,8 +518,8 @@ export class CliCommandRunner {
       `  ${CLI_BIN_NAME} <command> --help`,
       '',
       'Commands:',
-      '  init [project-root] [--project-root <path>] --presentation-id <id> --title <title> --subtitle <subtitle> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--force]',
-      '    Create a new presentation scaffold with starter presentation and generated YAML files. Run `init` with no flags for an interactive prompt.',
+      '  init [project-root] [--project-root <path>] --presentation-id <id> --title <title> [--subtitle <subtitle>] --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--summary <summary>] [--force]',
+      '    Create a new presentation scaffold with starter presentation and generated YAML files. Run `init` with no flags for an interactive essentials-first prompt.',
       '  fetch [project-root] [--project-root <path>] --presentation-id <id> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--no-previous-period] [--dry-run]',
       '    Pull GitHub-derived metrics and write generated data for an existing presentation.',
       '  validate [project-root] [--project-root <path>] [--strict]',

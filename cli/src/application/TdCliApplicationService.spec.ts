@@ -213,7 +213,7 @@ describe('TdCliApplicationService', () => {
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: generatedDataStore as never,
-      gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),
+      gitHubClientFactory: (_token?: string): GitHubClient => new StubGitHubClient(),
     })
 
     await expect(service.fetchPresentationData({
@@ -239,7 +239,7 @@ describe('TdCliApplicationService', () => {
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: generatedDataStore as never,
-      gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),
+      gitHubClientFactory: (_token?: string): GitHubClient => new StubGitHubClient(),
     })
 
     await expect(service.fetchPresentationData({
@@ -287,6 +287,10 @@ describe('TdCliApplicationService', () => {
       subtitle: 'Q1 2026',
       fromDate: '2026-01-01',
       toDate: '2026-03-31',
+      repositoryUrl: 'https://github.com/example/project',
+      docsUrl: 'https://example.com/docs',
+      websiteUrl: 'https://example.com',
+      githubDataSourceUrl: 'https://github.com/example/project',
     })).resolves.toMatchObject({
       presentationId: '2026-q1',
       createdPaths: [
@@ -297,6 +301,10 @@ describe('TdCliApplicationService', () => {
       ],
     })
 
+    expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('https://github.com/example/project')
+    expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('https://example.com/docs')
+    expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('https://example.com')
+    expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('data_sources:')
     expect(fileSystem.writes.get('/repo/content/presentations/2026-q1/presentation.yaml')).toContain('template: hero')
     expect(generatedDataStore.writes).toHaveLength(1)
     expect(presentationIndexStore.writes).toHaveLength(1)
@@ -397,7 +405,7 @@ describe('TdCliApplicationService', () => {
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
       generatedDataBuilder: new StubGeneratedDataBuilder() as never,
       generatedDataStore: new StubGeneratedDataStore() as never,
-      gitHubClientFactory: (_token: string): GitHubClient => new StubGitHubClient(),
+      gitHubClientFactory: (_token?: string): GitHubClient => new StubGitHubClient(),
       siteBuilder: siteBuilder as never,
       staticSiteServer: staticSiteServer as never,
       contentValidator: contentValidator as never,

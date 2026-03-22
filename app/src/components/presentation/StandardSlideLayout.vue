@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import { assetResolver } from '../../content/AssetResolver'
 import { contentRepository } from '../../content/ContentRepository'
 import { resolvePresentationChromeLabel } from '../../content/contentDefaults'
 
@@ -21,7 +22,7 @@ withDefaults(
 )
 
 const site = contentRepository.getSiteContent()
-const logoUrl = computed(() => site.presentation_logo?.url?.trim() || undefined)
+const logoUrl = computed(() => assetResolver.resolve(site.presentation_logo?.url))
 const logoAlt = computed(() => site.presentation_logo?.alt?.trim() || undefined)
 const markLabel = computed(() => resolvePresentationChromeLabel(site))
 </script>

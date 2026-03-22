@@ -95,7 +95,7 @@ export class GitHubApiError extends Error {
 }
 
 interface GitHubApiClientOptions {
-  token: string
+  token?: string
   transport?: GitHubTransport
   restBaseUrl?: string
   graphQlUrl?: string
@@ -108,7 +108,7 @@ export class GitHubApiClient implements GitHubClient {
   private readonly graphQlUrl: string
 
   public constructor(options: GitHubApiClientOptions) {
-    this.token = options.token
+    this.token = options.token ?? ''
     this.transport = options.transport ?? new FetchGitHubTransport()
     this.restBaseUrl = options.restBaseUrl ?? 'https://api.github.com'
     this.graphQlUrl = options.graphQlUrl ?? 'https://api.github.com/graphql'
@@ -314,9 +314,12 @@ export class GitHubApiClient implements GitHubClient {
   private createHeaders(includeJsonBody: boolean): Record<string, string> {
     const headers: Record<string, string> = {
       Accept: 'application/vnd.github+json',
-      Authorization: `Bearer ${this.token}`,
       'User-Agent': 'oss-slides-cli',
       'X-GitHub-Api-Version': '2022-11-28',
+    }
+
+    if (this.token.trim().length > 0) {
+      headers.Authorization = `Bearer ${this.token}`
     }
 
     if (includeJsonBody) {

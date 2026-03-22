@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
-import mascotUrl from '../../assets/mascot.png'
 import AccentDivider from '../ui/AccentDivider.vue'
 import FloatingMascot from '../ui/FloatingMascot.vue'
 import HeroDecor from '../ui/HeroDecor.vue'
 import ProjectBadgePill from '../ui/ProjectBadgePill.vue'
 import SiteFooterLinks from '../ui/SiteFooterLinks.vue'
+import { assetResolver } from '../../content/AssetResolver'
 import { resolveTitleSlideContent } from '../../content/contentDefaults'
 import { getProjectBadgeDisplay } from '../../content/projectBadge'
 
@@ -20,7 +20,8 @@ const props = defineProps<{
 
 const badge = computed(() => getProjectBadgeDisplay(props.site))
 const slideContent = computed(() => resolveTitleSlideContent(props.slide))
-const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
+const mascotUrl = computed(() => assetResolver.resolve(props.site.mascot?.url))
+const mascotAlt = computed(() => props.site.mascot?.alt?.trim() || undefined)
 </script>
 
 <template>
@@ -30,7 +31,7 @@ const mascotAlt = computed(() => props.site.mascot_alt?.trim() || undefined)
     <div class="content-wrap">
       <ProjectBadgePill v-if="badge" :badge="badge" class="title-badge" />
 
-      <div class="relative group">
+      <div v-if="mascotUrl" class="relative group">
         <FloatingMascot :src="mascotUrl" :alt="mascotAlt" size="clamp(9rem, 18vw, 12rem)" />
       </div>
 

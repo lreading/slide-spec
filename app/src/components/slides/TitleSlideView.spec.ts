@@ -62,7 +62,7 @@ describe('TitleSlideView', () => {
         presentation: record.presentation,
         site: {
           ...site,
-          mascot_alt: undefined,
+          mascot: undefined,
         },
         slide: {
           ...slide,
@@ -80,6 +80,6 @@ describe('TitleSlideView', () => {
     expect(wrapper.find('.hero-title')?.text()).toContain('Threat Dragon')
     expect(wrapper.find('.hero-subtitle').exists()).toBe(true)
     expect(wrapper.find('.hero-quote').exists()).toBe(false)
-    expect(wrapper.get('.floating-mascot__image').attributes('alt')).toBeUndefined()
+    expect(wrapper.find('.floating-mascot__image').exists()).toBe(false)
   })
 })
