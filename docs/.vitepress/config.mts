@@ -1,5 +1,7 @@
 import { defineConfig } from 'vitepress'
 
+const siteUrl = (process.env.DOCS_SITE_URL ?? 'https://slide-spec.dev').replace(/\/$/, '')
+
 export default defineConfig({
   title: 'slide-spec',
   description: 'Declarative presentation docs for YAML-driven slides, GitHub data, and reusable templates.',
@@ -10,9 +12,9 @@ export default defineConfig({
     ['meta', { property: 'og:title', content: 'slide-spec documentation' }],
     ['meta', { property: 'og:description', content: 'YAML-first static presentation documentation for slide-spec.' }],
     ['meta', { property: 'og:type', content: 'website' }],
-    ['meta', { property: 'og:url', content: 'https://slide-spec.dev/' }],
-    ['meta', { property: 'og:image', content: 'https://slide-spec.dev/screenshots/home-reference.png' }],
-    ['link', { rel: 'canonical', href: 'https://slide-spec.dev/' }],
+    ['meta', { property: 'og:url', content: `${siteUrl}/` }],
+    ['meta', { property: 'og:image', content: `${siteUrl}/screenshots/home-reference.png` }],
+    ['link', { rel: 'canonical', href: `${siteUrl}/` }],
   ],
   themeConfig: {
     nav: [

@@ -174,10 +174,9 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         await expect(page.getByText(mention.type, { exact: true }).first()).toBeVisible()
         await expect(page.getByText(mention.title)).toBeVisible()
         if (mention.url && mention.url_label) {
-          await expect(page.getByRole('link', { name: mention.url_label, exact: true }).first()).toHaveAttribute(
-            'href',
-            mention.url,
-          )
+          await expect(
+            page.locator(`a[href="${mention.url}"]`).filter({ has: page.getByText(mention.title) }).first(),
+          ).toBeVisible()
         }
       }
       break

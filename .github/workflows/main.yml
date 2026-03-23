@@ -64,7 +64,7 @@ jobs:
         working-directory: app
       - run: npm run typecheck && npx vite build --base /slides/
         working-directory: app
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@b7c566a0c67a39104ffcd49b0c4f4c483c215be3
         with:
           name: slides-dist
           path: app/dist

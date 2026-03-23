@@ -3,6 +3,10 @@ export interface DataSource {
   url: string
 }
 
+export interface SiteCanonicalConfig {
+  site_url?: string
+}
+
 export interface PresentationIndexEntry {
   id: string
   year?: number

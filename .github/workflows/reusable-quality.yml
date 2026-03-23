@@ -91,11 +91,17 @@ jobs:
           cache-dependency-path: docs/package-lock.json
       - run: npm ci
         working-directory: docs
-      - run: npm run build
+      - run: DOCS_SITE_URL=http://127.0.0.1:4174 npm run build
         working-directory: docs
+      - run: npx -y http-server@14.1.1 ./docs/.vitepress/dist -p 4174 >/tmp/slide-spec-docs.log 2>&1 &
+      - run: sleep 2
       - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
         with:
-          args: --verbose --no-progress --config .github/lychee.toml --root-dir "./docs/.vitepress/dist" "./README.md" "./docs/.vitepress/dist/**/*.html"
+          args: --verbose --no-progress --config .github/lychee.toml "./README.md"
+          fail: true
+      - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
+        with:
+          args: --verbose --no-progress --config .github/lychee.toml --base-url "http://127.0.0.1:4174/" "./docs/.vitepress/dist/**/*.html"
           fail: true
 
   trivy:
@@ -112,7 +118,7 @@ jobs:
             --format sarif \
             --output /repo/trivy-results.sarif \
             /repo
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@b7c566a0c67a39104ffcd49b0c4f4c483c215be3
         if: always()
         with:
           name: trivy-results
@@ -132,7 +138,7 @@ jobs:
             --json \
             --output /src/semgrep-results.json \
             /src
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@b7c566a0c67a39104ffcd49b0c4f4c483c215be3
         if: always()
         with:
           name: semgrep-results
@@ -152,7 +158,7 @@ jobs:
             --report-path /repo/gitleaks-results.sarif \
             --redact \
             --no-banner
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@b7c566a0c67a39104ffcd49b0c4f4c483c215be3
         if: always()
         with:
           name: gitleaks-results
@@ -167,7 +173,7 @@ jobs:
           path: .
           format: spdx-json
           output-file: sbom.spdx.json
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@b7c566a0c67a39104ffcd49b0c4f4c483c215be3
         with:
           name: sbom-spdx
           path: sbom.spdx.json
@@ -183,21 +189,24 @@ jobs:
           cache-dependency-path: app/package-lock.json
       - run: npm ci
         working-directory: app
-      - run: npm run build
+      - run: SLIDE_SPEC_SITE_URL=http://127.0.0.1:4173 npm run build
         working-directory: app
       - run: npx -y http-server@14.1.1 ./dist -p 4173 >/tmp/slide-spec-app.log 2>&1 &
         working-directory: app
+      - run: sleep 2
       - run: mkdir -p dast-report && chmod 777 dast-report
       - run: >
           docker run --rm --network host --user root
+          -v "${PWD}/.github:/zap/config:ro"
           -v "${PWD}/dast-report:/zap/wrk:rw"
           ghcr.io/zaproxy/zaproxy:stable
           zap-baseline.py
           -t http://127.0.0.1:4173
+          -c /zap/config/zap-baseline.conf
           -J zap-report.json
           -w zap-warnings.md
           -I
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@b7c566a0c67a39104ffcd49b0c4f4c483c215be3
         if: always()
         with:
           name: dast-report

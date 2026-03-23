@@ -1,7 +1,7 @@
 {
   "scripts": {
     "dev": "vitepress dev",
-    "build": "vitepress build",
+    "build": "node --import tsx scripts/generate-site-files.ts && vitepress build",
     "preview": "vitepress preview",
     "screenshots": "node --import tsx scripts/generate-doc-assets.ts"
   },

@@ -75,6 +75,17 @@ function assertDataSource(value: unknown, path: string): void {
   assert(hostname === 'github.com' || hostname === 'www.github.com', `${path}.url must point to github.com.`)
 }
 
+function assertOptionalUrlString(value: unknown, path: string): void {
+  assertOptionalString(value, path)
+  if (typeof value === 'string') {
+    try {
+      new URL(value)
+    } catch {
+      throw new Error(`${path} must be a valid URL.`)
+    }
+  }
+}
+
 function assertNavigationContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertOptionalString(value.brand_title, `${path}.brand_title`)
@@ -210,6 +221,7 @@ export class ContentValidator {
     assert(isRecord(document.site), 'site.yaml.site must be an object.')
     const site = document.site
     assertNonBlankString(site.title, 'site.yaml.site.title')
+    assertOptionalUrlString(site.site_url, 'site.yaml.site.site_url')
     if (site.data_sources !== undefined) {
       assert(Array.isArray(site.data_sources), 'site.yaml.site.data_sources must be an array.')
       ;(site.data_sources as unknown[]).forEach((source, index) => assertDataSource(source, `site.yaml.site.data_sources[${index}]`))

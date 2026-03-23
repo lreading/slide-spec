@@ -38,6 +38,37 @@ describe('ViteSiteBuilder', () => {
     const workspaceRoot = await mkdtemp(resolve(tmpdir(), 'oss-slides-builder-workspace-'))
     tempRoots.push(projectRoot, workspaceRoot)
     const viteCalls: string[] = []
+    await mkdir(resolve(projectRoot, 'content', 'presentations'), { recursive: true })
+    await writeFile(
+      resolve(projectRoot, 'content', 'site.yaml'),
+      `site:
+  title: Demo
+  home_intro: Intro
+  home_cta_label: Open
+  presentations_cta_label: Presentations
+  links:
+    repository:
+      label: Repo
+      url: https://example.com/repo
+    docs:
+      label: Docs
+      url: https://example.com/docs
+    owasp:
+      label: Project
+      url: https://example.com/project
+`,
+    )
+    await writeFile(
+      resolve(projectRoot, 'content', 'presentations', 'index.yaml'),
+      `presentations:
+  - id: 2026-q1
+    title: Demo
+    subtitle: Example
+    summary: Example
+    published: true
+    featured: true
+`,
+    )
 
     const builder = new ViteSiteBuilder(
       new StubRuntimeWorkspace(workspaceRoot) as never,
@@ -51,5 +82,9 @@ describe('ViteSiteBuilder', () => {
     expect(outputPath).toBe(resolve(projectRoot, 'dist'))
     expect(viteCalls).toEqual([resolve(workspaceRoot, 'app')])
     await expect(readFile(resolve(projectRoot, 'dist', 'index.html'), 'utf8')).resolves.toContain('built')
+    await expect(readFile(resolve(projectRoot, 'dist', 'robots.txt'), 'utf8')).resolves.toContain('Sitemap:')
+    await expect(readFile(resolve(projectRoot, 'dist', 'sitemap.xml'), 'utf8')).resolves.toContain(
+      '/presentations/2026-q1',
+    )
   })
 })

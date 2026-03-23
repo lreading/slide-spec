@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "vite",
     "dev:e2e": "vite --mode e2e",
-    "build": "npm run typecheck && vite build",
+    "build": "npm run typecheck && vite build && node --import tsx scripts/generate-site-files.ts",
     "preview": "vite preview",
-    "validate:content": "tsx scripts/validate-content.ts",
+    "validate:content": "node --import tsx scripts/validate-content.ts",
     "typecheck": "vue-tsc -b",
     "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.{ts,tsx,vue}\" \"e2e/**/*.ts\" vite.config.ts playwright.config.ts eslint.config.mjs",
     "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.{ts,tsx,vue}\" \"e2e/**/*.ts\" vite.config.ts playwright.config.ts eslint.config.mjs",
