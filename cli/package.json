@@ -19,7 +19,8 @@
     "spellcheck": "npx -y cspell@9.7.0 lint --no-progress \"../README.md\" \"../CONTRIBUTING.md\" \"../docs/**/*.md\" --gitignore --config ../.cspell.json",
     "test": "vitest run",
     "coverage": "vitest run --coverage --coverage.thresholds.perFile=true --coverage.thresholds.statements=80 --coverage.thresholds.branches=80 --coverage.thresholds.functions=80 --coverage.thresholds.lines=80",
-    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run spellcheck"
+    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run spellcheck",
+    "verify:ci": "npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.2.7",
