@@ -189,7 +189,7 @@ jobs:
     steps:
       # actions/checkout@v6.0.2
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
-      # anchore/sbom-action@v0.20.6.0.2
+      # anchore/sbom-action@v0.24.0
       - uses: anchore/sbom-action@e22c389904149dbc22b58101806040fa8d37a610
         with:
           path: .
