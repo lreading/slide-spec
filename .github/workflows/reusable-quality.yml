@@ -23,6 +23,8 @@ jobs:
           cache-dependency-path: app/package-lock.json
       - run: npm ci
         working-directory: app
+      - run: npx playwright install --with-deps chromium
+        working-directory: app
       - run: npm run validate:content
         working-directory: app
       - run: npm run verify
@@ -176,14 +178,22 @@ jobs:
         working-directory: app
       - run: npx -y http-server@14.1.1 ./dist -p 4173 >/tmp/slide-spec-app.log 2>&1 &
         working-directory: app
-      - run: docker run --rm --network host -v "${PWD}:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://127.0.0.1:4173 -J /zap/wrk/zap-report.json -w /zap/wrk/zap-warnings.md
+      - run: mkdir -p dast-report && chmod 777 dast-report
+      - run: >
+          docker run --rm --network host --user root
+          -v "${PWD}/dast-report:/zap/wrk:rw"
+          ghcr.io/zaproxy/zaproxy:stable
+          zap-baseline.py
+          -t http://127.0.0.1:4173
+          -J /zap/wrk/zap-report.json
+          -w /zap/wrk/zap-warnings.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: dast-report
           path: |
-            zap-report.json
-            zap-warnings.md
+            dast-report/zap-report.json
+            dast-report/zap-warnings.md
 
   dependency-review:
     if: inputs.run-dependency-review
