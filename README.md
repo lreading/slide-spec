@@ -61,6 +61,7 @@ For shared schema/validation helpers, see [shared/README.md](./shared/README.md)
 - `cd app && npm run visual`
 - `cd cli && npm run verify`
 - `cd cli && npm run coverage`
+- `cd cli && npm run semgrep`
 
 ## Content Model
 

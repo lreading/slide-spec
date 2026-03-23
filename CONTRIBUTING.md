@@ -18,6 +18,7 @@ For CLI work:
 
 - `cd cli && npm run verify`
 - `cd cli && npm run coverage`
+- `cd cli && npm run semgrep`
 
 For docs/legal work:
 
@@ -28,7 +29,7 @@ For docs/legal work:
 
 - Keep TypeScript-only code in the implementation packages.
 - Prefer small, reviewable commits.
-- Do not commit generated visual baselines.
+- Commit updated visual baselines when a visual change is intentional and reviewed.
 - Do not skip the automated accessibility audit for user-facing UI changes.
 - Do not skip failing tests unless the corresponding behavior was removed.
 - Keep documentation aligned with actual runtime behavior.

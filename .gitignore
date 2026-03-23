@@ -15,6 +15,7 @@ coverage/
 .vite/
 *.tsbuildinfo
 *.tgz
+semgrep-results.local.json
 app/dist/
 app/dist-ssr/
 app/coverage/
@@ -22,6 +23,7 @@ app/playwright-report/
 app/test-results/
 cli/runtime-template/
 cli/.runtime-workspaces/
+dast-report/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
 

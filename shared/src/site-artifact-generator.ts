@@ -52,12 +52,20 @@ export class SiteArtifactGenerator {
   }
 
   private escapeXml(value: string): string {
-    return value
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&apos;')
+    return value.replace(/[&<>"']/g, (character) => {
+      switch (character) {
+      case '&':
+        return '&amp;'
+      case '<':
+        return '&lt;'
+      case '>':
+        return '&gt;'
+      case '"':
+        return '&quot;'
+      default:
+        return '&apos;'
+      }
+    })
   }
 
   private async writeOutput(path: string, contents: string): Promise<void> {
