@@ -27,6 +27,7 @@
     "pytm",
     "sarif",
     "sbom",
+    "semgrep",
     "slide-spec",
     "Trivy",
     "vitepress",

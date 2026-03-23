@@ -19,11 +19,12 @@ For CLI work:
 - `cd cli && npm run verify`
 - `cd cli && npm run coverage`
 - `cd cli && npm run semgrep`
+- `cd cli && npm run spellcheck`
 
 For docs/legal work:
 
 - update the relevant README or plan file
-- run any package-level checks affected by the change
+- `cd docs && npm run verify`
 
 ## Working Rules
 

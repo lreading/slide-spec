@@ -3,7 +3,9 @@
     "dev": "vitepress dev",
     "build": "node --import tsx scripts/generate-site-files.ts && vitepress build",
     "preview": "vitepress preview",
-    "screenshots": "node --import tsx scripts/generate-doc-assets.ts"
+    "screenshots": "node --import tsx scripts/generate-doc-assets.ts",
+    "spellcheck": "npx -y cspell@9.7.0 lint \"README.md\" \"**/*.md\" --gitignore --config ../.cspell.json",
+    "verify": "npm run build && npm run spellcheck"
   },
   "devDependencies": {
     "playwright": "^1.55.0",
