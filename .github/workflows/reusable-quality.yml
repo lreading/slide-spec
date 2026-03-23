@@ -12,7 +12,93 @@ permissions:
   contents: read
 
 jobs:
-  app:
+  app-content:
+    name: App Content
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm run validate:content
+        working-directory: app
+
+  app-lint:
+    name: App Lint
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm run lint
+        working-directory: app
+
+  app-typecheck:
+    name: App Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm run typecheck
+        working-directory: app
+
+  app-build:
+    name: App Build
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm run build:site
+        working-directory: app
+
+  app-unit:
+    name: App Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm run coverage
+        working-directory: app
+
+  app-e2e:
+    name: App E2E
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v6.0.2
@@ -27,14 +113,49 @@ jobs:
         working-directory: app
       - run: npx playwright install --with-deps chromium
         working-directory: app
-      - run: npm run validate:content
-        working-directory: app
-      - run: npm run verify
-        working-directory: app
-      - run: npm run coverage
+      - run: npm run e2e
         working-directory: app
 
-  cli:
+  app-a11y:
+    name: App A11y
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npx playwright install --with-deps chromium
+        working-directory: app
+      - run: npm run a11y
+        working-directory: app
+
+  app-visual:
+    name: App Visual
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npx playwright install --with-deps chromium
+        working-directory: app
+      - run: npm run visual
+        working-directory: app
+
+  cli-lint:
+    name: CLI Lint
     runs-on: ubuntu-latest
     steps:
       # actions/checkout@v6.0.2
@@ -47,7 +168,56 @@ jobs:
           cache-dependency-path: cli/package-lock.json
       - run: npm ci
         working-directory: cli
-      - run: npm run verify
+      - run: npm run lint
+        working-directory: cli
+
+  cli-typecheck:
+    name: CLI Typecheck
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: cli/package-lock.json
+      - run: npm ci
+        working-directory: cli
+      - run: npm run typecheck
+        working-directory: cli
+
+  cli-build:
+    name: CLI Build
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: cli/package-lock.json
+      - run: npm ci
+        working-directory: cli
+      - run: npm run build
+        working-directory: cli
+
+  cli-unit:
+    name: CLI Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      # actions/checkout@v6.0.2
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      # actions/setup-node@v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: cli/package-lock.json
+      - run: npm ci
         working-directory: cli
       - run: npm run coverage
         working-directory: cli
