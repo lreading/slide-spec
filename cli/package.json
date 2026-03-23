@@ -19,7 +19,8 @@
     "spellcheck": "npx -y cspell@9.7.0 lint --no-progress \"../README.md\" \"../CONTRIBUTING.md\" \"../docs/**/*.md\" --gitignore --config ../.cspell.json",
     "test": "vitest run",
     "coverage": "vitest run --coverage --coverage.thresholds.perFile=true --coverage.thresholds.statements=80 --coverage.thresholds.branches=80 --coverage.thresholds.functions=80 --coverage.thresholds.lines=80",
-    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run spellcheck"
+    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run spellcheck",
+    "verify:ci": "npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {
     "@fontsource/poppins": "^5.2.7",
@@ -34,7 +35,7 @@
     "dotenv": "^17.2.3",
     "postcss": "^8.5.8",
     "tailwindcss": "^4.2.2",
-    "vite": "^8.0.0",
+    "vite": "^8.0.2",
     "vue": "^3.5.30",
     "vue-router": "^5.0.3",
     "yaml": "^2.8.3"
@@ -43,12 +44,12 @@
     "@eslint/js": "^10.0.1",
     "@types/node": "^24.12.0",
     "@vitest/coverage-v8": "^4.1.0",
-    "eslint": "^10.0.3",
+    "eslint": "^10.1.0",
     "globals": "^17.4.0",
     "tsx": "^4.20.6",
     "tsup": "^8.5.0",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.57.0",
+    "typescript-eslint": "^8.57.1",
     "vitest": "^4.1.0"
   }
 }
