@@ -1,17 +1,17 @@
 {
-  "name": "@oss-slides/cli",
+  "name": "@slide-spec/cli",
   "version": "0.0.0",
   "type": "module",
   "bin": {
-    "oss-slides": "./dist/index.js"
+    "slide-spec": "./dist/index.js"
   },
   "files": [
     "dist",
     "README.md"
   ],
   "scripts": {
-    "cli": "tsx src/index.ts",
-    "build": "tsx scripts/sync-runtime-template.ts --out runtime-template && tsup src/index.ts --format esm --dts --out-dir dist --clean && tsx scripts/sync-runtime-template.ts --out dist/runtime-template",
+    "cli": "node --import tsx src/index.ts",
+    "build": "node --import tsx scripts/sync-runtime-template.ts --out runtime-template && tsup src/index.ts --format esm --dts --out-dir dist --clean && node --import tsx scripts/sync-runtime-template.ts --out dist/runtime-template",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
     "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",

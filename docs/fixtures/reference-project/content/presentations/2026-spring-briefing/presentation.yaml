@@ -1,0 +1,172 @@
+presentation:
+  id: 2026-spring-briefing
+  year: 2026
+  title: Acorn Cloud Product Brief
+  subtitle: Spring 2026
+  roadmap:
+    agenda_label: Roadmap
+    deliverables_heading: Key deliverables
+    focus_areas_heading: Focus areas
+    footer_link_label: View roadmap on GitHub
+    sections:
+      completed:
+        label: Completed
+        summary: Platform work that shipped before the end of the reporting period.
+        items:
+          - Published a new starter kit for customer launch checklists.
+          - Added exportable PDF summaries for customer-facing review decks.
+          - Reworked the deployment checklist UI for operators.
+        themes:
+          - category: Operator UX
+            target: Make release review and launch readiness easier to audit.
+          - category: Exportability
+            target: Support polished handoff artifacts without manual cleanup.
+      in-progress:
+        label: In Progress
+        summary: Work that is underway and expected to continue into the next update.
+        items:
+          - Hardening permission-aware dashboards for large customer teams.
+          - Finalizing API examples and migration notes for rollout.
+          - Improving test coverage for shared rendering components.
+        themes:
+          - category: Access Control
+            target: Support larger teams with clearer role boundaries.
+          - category: Documentation
+            target: Reduce rollout friction for new customer projects.
+      planned:
+        label: Planned
+        summary: Near-term roadmap items already scoped for the next cycle.
+        items:
+          - Add environment-aware checklists for staging and production.
+          - Introduce richer audit exports for compliance reviews.
+          - Expand starter templates for finance and healthcare teams.
+        themes:
+          - category: Templates
+            target: Shorten setup time for common rollout patterns.
+          - category: Compliance
+            target: Improve audit readiness for regulated teams.
+      future:
+        label: Future
+        summary: Longer-term work that depends on the current architecture pass.
+        items:
+          - Build shared APIs for third-party integrations.
+          - Add review-mode comments directly to exported briefing decks.
+          - Support theme packs for organization-specific branding.
+        themes:
+          - category: Integrations
+            target: Make the system easier to embed into existing workflows.
+          - category: Theming
+            target: Support white-label deployments later without rewriting templates.
+  slides:
+    - template: hero
+      enabled: true
+      content:
+        title_primary: Acorn
+        title_accent: Cloud
+        subtitle_prefix: Product Brief
+        quote: Teams ship clearer launch updates when the layout is declarative.
+    - template: agenda
+      enabled: true
+      title: Agenda
+      subtitle: What this briefing covers
+      content: {}
+    - template: section-list-grid
+      enabled: true
+      title: What shipped
+      subtitle: The highest-signal changes from this reporting period
+      content:
+        sections:
+          - title: Launch workflow
+            bullets:
+              - Starter checklists now include task ownership and sign-off states.
+              - PDF exports now preserve section grouping for external reviews.
+              - Deployment notes are easier to scan on large screens.
+          - title: Documentation
+            bullets:
+              - New rollout docs cover shared templates and review-mode exports.
+              - Migration notes now map old checklist fields to the new schema.
+              - Internal examples now match the live generated data model.
+          - title: Quality
+            bullets:
+              - Shared rendering components now have broader test coverage.
+              - Example data fixtures were refreshed to match the current schema.
+              - Release checks now catch broken links before build output is published.
+    - template: timeline
+      enabled: true
+      title: Releases
+      subtitle: Two tagged updates landed during this cycle
+      content:
+        latest_badge_label: Latest
+        footer_link_label: Browse the release archive
+        featured_release_ids:
+          - starter-kit-v2
+          - export-layout-v1
+    - template: progress-timeline
+      enabled: true
+      title: "Roadmap: Completed"
+      subtitle: Delivered work
+      content:
+        stage: completed
+    - template: people
+      enabled: true
+      title: Contributor spotlight
+      subtitle: Three contributors whose work clearly shaped this cycle
+      content:
+        banner_prefix: Thanks to
+        contributors_link_label: contributors
+        banner_suffix: who handled product delivery, export polish, and rollout docs this season.
+        spotlight:
+          - login: ava-product
+            summary: Defined the starter-kit structure and coordinated the rollout checklist overhaul.
+          - login: mo-rendering
+            summary: Improved export polish, spacing, and rendering behavior for PDF output.
+          - login: ren-docs
+            summary: Reworked migration notes and operator docs so teams can adopt the new workflow quickly.
+    - template: metrics-and-links
+      enabled: true
+      title: Community activity
+      subtitle: Signals pulled from generated data and authored references
+      content:
+        section_heading: External signals
+        stats_heading: This period
+        trend_suffix: vs previous period
+        show_deltas: true
+        stat_keys:
+          - stars
+          - issues_closed
+          - prs_merged
+          - new_contributors
+        mentions:
+          - type: Case study
+            title: The customer rollout playbook now includes the new checklist workflow and export review cadence.
+            url_label: Read the guide
+            url: https://example.com/docs/rollout-playbook
+          - type: Community post
+            title: The release overview highlights how teams use templates to keep product briefings consistent.
+            url_label: Read the announcement
+            url: https://example.com/blog/spring-release
+    - template: action-cards
+      enabled: true
+      title: How to help
+      subtitle: Ways the wider team can support the next cycle
+      content:
+        footer_text: Contribution options stay lightweight on purpose.
+        cards:
+          - title: Review docs
+            description: Tighten rollout notes, migration steps, and operator checklists before the next update ships.
+            url_label: Open docs backlog
+            url: https://example.com/docs/backlog
+          - title: Test templates
+            description: Run a real project through the starter kit and record anything that feels unclear or repetitive.
+            url_label: Report template feedback
+            url: https://example.com/feedback/templates
+          - title: Improve exports
+            description: Review generated PDFs and suggest improvements to spacing, hierarchy, and readability.
+            url_label: Share export feedback
+            url: https://example.com/feedback/exports
+    - template: closing
+      enabled: true
+      content:
+        heading: Thank you
+        message: Keep the schema honest, keep the examples real, and the slides stay easy to trust.
+        quote: YAML in, static site out.

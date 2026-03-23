@@ -1,9 +1,11 @@
 import { TdCliApplicationService } from '../application/TdCliApplicationService'
 import { ReadlineCliPrompter } from './CliPrompter'
 import { InteractiveInitFlow } from './InteractiveInitFlow'
+import { LogSanitizer } from '../logging/LogSanitizer'
 
 import type { TdCliService } from '../application/TdCliService'
 import type { CliCommandName, CliPrompter } from './CliPrompter'
+import type { CliLogger } from '../logging/CliLogger.types'
 
 export interface CliOutput {
   info(message: string): void
@@ -19,17 +21,32 @@ interface ParsedCommandInput {
   positionals: string[]
 }
 
-const CLI_BIN_NAME = 'oss-slides'
+const CLI_BIN_NAME = 'slide-spec'
+const fetchProgressIntervalMs = 5000
+const largeRepositoryFetchNotice = 'Fetching GitHub-derived data. Large repositories can take up to about two minutes.'
+const fetchProgressMessage = 'Still fetching GitHub-derived data...'
 
 export class CliCommandRunner {
   private readonly interactiveInitFlow: InteractiveInitFlow
+  private readonly logger: CliLogger | undefined
+  private readonly sanitizer: LogSanitizer
 
   public constructor(
     private readonly service: TdCliService = new TdCliApplicationService(),
     private readonly output: CliOutput = console,
     private readonly prompter: CliPrompter = new ReadlineCliPrompter(),
+    logger?: CliLogger,
   ) {
-    this.interactiveInitFlow = new InteractiveInitFlow(this.service, this.output, this.prompter)
+    this.logger = logger
+    this.sanitizer = new LogSanitizer()
+    this.interactiveInitFlow = new InteractiveInitFlow(
+      this.service,
+      this.output,
+      this.prompter,
+      undefined,
+      undefined,
+      this.logger,
+    )
   }
 
   public async run(argv: string[]): Promise<number> {
@@ -38,12 +55,12 @@ export class CliCommandRunner {
         const command = await this.runInteractive()
 
         if (command === 'help') {
-          this.output.info(this.getHelpText())
+          this.info(this.getHelpText())
         }
 
         return 0
       } catch (error) {
-        this.output.error(error instanceof Error ? error.message : String(error))
+        this.error(error instanceof Error ? error.message : String(error))
         return 1
       }
     }
@@ -52,13 +69,13 @@ export class CliCommandRunner {
 
     if (command === 'help' || command === '--help' || command === '-h') {
       const topic = argv[1]
-      this.output.info(this.getHelpText(topic))
+      this.info(this.getHelpText(topic))
       return 0
     }
 
     try {
       if (this.hasHelpFlag(argv.slice(1))) {
-        this.output.info(this.getHelpText(command))
+        this.info(this.getHelpText(command))
         return 0
       }
 
@@ -86,25 +103,25 @@ export class CliCommandRunner {
         throw new Error(`Unknown command "${command}".`)
       }
     } catch (error) {
-      this.output.error(error instanceof Error ? error.message : String(error))
+      this.error(error instanceof Error ? error.message : String(error))
       return 1
     }
   }
 
   private async runInteractive(): Promise<CliCommandName> {
-    this.output.info('No command provided. Starting interactive mode.')
-    this.output.info(this.getCommandOverviewText())
-    this.output.info('Choose the command you want to run.')
+    this.info('No command provided. Starting interactive mode.')
+    this.info(this.getCommandOverviewText())
+    this.info('Choose the command you want to run.')
     const command = await this.prompter.promptCommand()
 
     switch (command) {
       case 'init': {
-        this.output.info(this.getHelpText('init'))
+        this.info(this.getHelpText('init'))
         await this.runInteractiveInit()
         break
       }
       case 'fetch': {
-        this.output.info(this.getHelpText('fetch'))
+        this.info(this.getHelpText('fetch'))
         const projectRoot = await this.promptOptional(
           'Target presentation project root. Leave blank to use the current working directory.',
           'Project root (optional)',
@@ -150,7 +167,7 @@ export class CliCommandRunner {
         break
       }
       case 'build': {
-        this.output.info(this.getHelpText('build'))
+        this.info(this.getHelpText('build'))
         const projectRoot = await this.promptOptional(
           'Target presentation project root. Leave blank to use the current working directory.',
           'Project root (optional)',
@@ -159,7 +176,7 @@ export class CliCommandRunner {
         break
       }
       case 'serve': {
-        this.output.info(this.getHelpText('serve'))
+        this.info(this.getHelpText('serve'))
         const projectRoot = await this.promptOptional(
           'Target presentation project root. Leave blank to use the current working directory.',
           'Project root (optional)',
@@ -184,11 +201,11 @@ export class CliCommandRunner {
           ...(port !== undefined ? { port } : {}),
           ...(open !== undefined ? { open } : {}),
         })
-        this.output.info(`Serving at ${result.url}`)
+        this.info(`Serving at ${result.url}`)
         break
       }
       case 'validate': {
-        this.output.info(this.getHelpText('validate'))
+        this.info(this.getHelpText('validate'))
         const projectRoot = await this.promptOptional(
           'Target presentation project root. Leave blank to use the current working directory.',
           'Project root (optional)',
@@ -202,7 +219,7 @@ export class CliCommandRunner {
           ...(projectRoot !== undefined ? { projectRoot } : {}),
           ...(strict !== undefined ? { strict } : {}),
         })
-        this.output.info(result.valid ? 'Content is valid' : 'Content validation failed')
+        this.info(result.valid ? 'Content is valid' : 'Content validation failed')
         break
       }
       case 'help':
@@ -230,20 +247,32 @@ export class CliCommandRunner {
       ...(summary !== undefined ? { summary } : {}),
       ...(force !== undefined ? { force } : {}),
     })
-    this.output.info(`Initialized ${result.presentationId}`)
+    this.info(`Initialized ${result.presentationId}`)
   }
 
   private async runInteractiveInit(): Promise<void> {
     await this.interactiveInitFlow.run()
   }
 
+  private info(message: string): void {
+    const sanitized = this.sanitizer.sanitize(message)
+    this.output.info(sanitized)
+    this.logger?.info(sanitized)
+  }
+
+  private error(message: string): void {
+    const sanitized = this.sanitizer.sanitize(message)
+    this.output.error(sanitized)
+    this.logger?.error(sanitized)
+  }
+
   private async promptRequired(helpText: string, label: string): Promise<string> {
-    this.output.info(helpText)
+    this.info(helpText)
     return this.prompter.promptRequired(label)
   }
 
   private async promptOptional(helpText: string, label: string): Promise<string | undefined> {
-    this.output.info(helpText)
+    this.info(helpText)
     return this.prompter.promptOptional(label)
   }
 
@@ -252,7 +281,7 @@ export class CliCommandRunner {
     label: string,
     defaultValue?: boolean,
   ): Promise<boolean | undefined> {
-    this.output.info(helpText)
+    this.info(helpText)
     return this.prompter.promptBoolean(label, defaultValue)
   }
 
@@ -261,7 +290,7 @@ export class CliCommandRunner {
     label: string,
     defaultValue?: number,
   ): Promise<number | undefined> {
-    this.output.info(helpText)
+    this.info(helpText)
     return this.prompter.promptNumber(label, defaultValue)
   }
 
@@ -274,31 +303,48 @@ export class CliCommandRunner {
     const toDate = this.readStringOption(parsed.options, 'to-date')
     const noPreviousPeriod = this.readBooleanOption(parsed.options, 'no-previous-period')
     const timings = this.readBooleanOption(parsed.options, 'timings')
-    const result = await this.service.fetchPresentationData({
-      ...(projectRoot !== undefined ? { projectRoot } : {}),
-      fromDate: required['from-date'],
-      ...(toDate !== undefined ? { toDate } : {}),
-      presentationId,
-      ...(noPreviousPeriod !== undefined ? { noPreviousPeriod } : {}),
-      ...(timings !== undefined ? { timings } : {}),
-      ...(write !== undefined ? { write } : {}),
-    })
+    this.info(largeRepositoryFetchNotice)
+    const result = await this.runWithFetchProgress(() =>
+      this.service.fetchPresentationData({
+        ...(projectRoot !== undefined ? { projectRoot } : {}),
+        fromDate: required['from-date'],
+        ...(toDate !== undefined ? { toDate } : {}),
+        presentationId,
+        ...(noPreviousPeriod !== undefined ? { noPreviousPeriod } : {}),
+        ...(timings !== undefined ? { timings } : {}),
+        ...(write !== undefined ? { write } : {}),
+      }))
     this.reportFetchResult(result)
   }
 
   private reportFetchResult(
     result: Awaited<ReturnType<TdCliService['fetchPresentationData']>>,
   ): void {
-    this.output.info(`Fetched ${result.presentationId}`)
+    this.info(`Fetched ${result.presentationId}`)
+    result.warnings.forEach((warning) => {
+      this.info(`Warning: ${warning}`)
+    })
 
     if (result.timings.length === 0) {
       return
     }
 
-    this.output.info('Fetch timings:')
+    this.info('Fetch timings:')
     result.timings.forEach((timing) => {
-      this.output.info(`  ${timing.name}: ${timing.duration_ms.toFixed(2)}ms`)
+      this.info(`  ${timing.name}: ${timing.duration_ms.toFixed(2)}ms`)
     })
+  }
+
+  private async runWithFetchProgress<T>(work: () => Promise<T>): Promise<T> {
+    const interval = setInterval(() => {
+      this.info(fetchProgressMessage)
+    }, fetchProgressIntervalMs)
+
+    try {
+      return await work()
+    } finally {
+      clearInterval(interval)
+    }
   }
 
   private async runBuild(projectRoot?: string): Promise<void> {
@@ -306,7 +352,7 @@ export class CliCommandRunner {
       ...(projectRoot !== undefined ? { projectRoot } : {}),
       mode: 'production',
     })
-    this.output.info(`Built site to ${result.outputPath}`)
+    this.info(`Built site to ${result.outputPath}`)
   }
 
   private async runServe(args: string[]): Promise<void> {
@@ -321,7 +367,7 @@ export class CliCommandRunner {
       ...(port !== undefined ? { port } : {}),
       ...(open !== undefined ? { open } : {}),
     })
-    this.output.info(`Serving at ${result.url}`)
+    this.info(`Serving at ${result.url}`)
   }
 
   private async runValidate(args: string[]): Promise<void> {
@@ -332,7 +378,7 @@ export class CliCommandRunner {
       ...(projectRoot !== undefined ? { projectRoot } : {}),
       ...(strict !== undefined ? { strict } : {}),
     })
-    this.output.info(result.valid ? 'Content is valid' : 'Content validation failed')
+    this.info(result.valid ? 'Content is valid' : 'Content validation failed')
   }
 
   private hasHelpFlag(args: string[]): boolean {
@@ -429,6 +475,8 @@ export class CliCommandRunner {
   }
 
   private getHelpText(topic?: string): string {
+    const globalOptions = this.getGlobalOptionsText()
+
     switch (topic) {
       case 'init':
         return [
@@ -439,20 +487,22 @@ export class CliCommandRunner {
           'Run `init` with no flags for an interactive essentials-first prompt flow.',
           'Interactive init collects essentials first, then offers GitHub import, links, and local server startup.',
           '',
+          globalOptions,
+          '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
           '  --project-root <path>   Optional. Named presentation project root',
-          '  --presentation-id <id>     Required. Unique presentation id used for content/presentations/<id>/',
-          '  --title <title>            Required. Presentation title shown in listings and the app',
-          '  --subtitle <subtitle>      Optional. Secondary label shown in listings and slide chrome',
-          '  --from-date <date>         Required. Period start date in YYYY-MM-DD format',
-          '  --to-date <date>           Optional. Period end date in YYYY-MM-DD format',
-          '  --summary <summary>        Optional. Listing summary text for the presentations page',
-          '  --repository-url <url>     Optional. Repository link for site links',
-          '  --docs-url <url>           Optional. Documentation link for site links',
-          '  --website-url <url>        Optional. Project website/foundation link for site links',
+          '  --presentation-id <id>        Required. Unique presentation id used for content/presentations/<id>/',
+          '  --title <title>               Required. Presentation title shown in listings and the app',
+          '  --subtitle <subtitle>         Optional. Secondary label shown in listings and slide chrome',
+          '  --from-date <date>            Required. Period start date in YYYY-MM-DD format',
+          '  --to-date <date>              Optional. Period end date in YYYY-MM-DD format',
+          '  --summary <summary>           Optional. Listing summary text for the presentations page',
+          '  --repository-url <url>        Optional. Repository link for site links',
+          '  --docs-url <url>              Optional. Documentation link for site links',
+          '  --website-url <url>           Optional. Project website/foundation link for site links',
           '  --github-data-source-url <url> Optional. GitHub repository to import stats from',
-          '  --force                    Optional. Overwrite scaffold files if the presentation already exists',
+          '  --force                       Optional. Overwrite scaffold files if the presentation already exists',
           '',
           'Examples:',
           `  ${CLI_BIN_NAME} init`,
@@ -465,16 +515,19 @@ export class CliCommandRunner {
           'Pull GitHub-derived metrics and write generated data for an existing presentation.',
           'Use this after init, once the presentation scaffold exists.',
           'If no PAT is available, the CLI will continue best-effort and may be rate-limited.',
+          'Large repositories can take up to about two minutes before the CLI falls back on unavailable snapshot metadata.',
+          '',
+          globalOptions,
           '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
           '  --project-root <path>   Optional. Named presentation project root',
-          '  --presentation-id <id>   Required. Target presentation id to update',
-          '  --from-date <date>       Required. Period start date in YYYY-MM-DD format',
-          '  --to-date <date>         Optional. Period end date in YYYY-MM-DD format. Defaults to today when omitted',
-          '  --no-previous-period     Optional. Skip previous-period comparison and force previous values to 0',
-          '  --timings                Optional. Print per-step fetch timings after the run completes',
-          '  --dry-run                Optional. Compute data without writing generated.yaml',
+          '  --presentation-id <id>    Required. Target presentation id to update',
+          '  --from-date <date>        Required. Period start date in YYYY-MM-DD format',
+          '  --to-date <date>          Optional. Period end date in YYYY-MM-DD format. Defaults to today when omitted',
+          '  --no-previous-period      Optional. Skip previous-period comparison and force previous values to 0',
+          '  --timings                 Optional. Print per-step fetch timings after the run completes',
+          '  --dry-run                 Optional. Compute data without writing generated.yaml',
           '',
           'Examples:',
           `  ${CLI_BIN_NAME} fetch /path/to/project --presentation-id 2026-q1 --from-date 2026-01-01 --to-date 2026-03-31`,
@@ -486,6 +539,8 @@ export class CliCommandRunner {
           '',
           'Build the packaged presentation app and write static output to dist/ in the target project.',
           '',
+          globalOptions,
+          '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
           '  --project-root <path>   Optional. Named presentation project root',
@@ -495,6 +550,8 @@ export class CliCommandRunner {
           `Usage: ${CLI_BIN_NAME} serve [project-root] [--project-root <path>] [--host <host>] [--port <port>] [--open]`,
           '',
           'Build the static site, then serve dist/ locally so you can review it in a browser.',
+          '',
+          globalOptions,
           '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
@@ -512,6 +569,8 @@ export class CliCommandRunner {
           `Usage: ${CLI_BIN_NAME} validate [project-root] [--project-root <path>] [--strict]`,
           '',
           'Validate authored and generated content against the current app schema.',
+          '',
+          globalOptions,
           '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
@@ -534,6 +593,8 @@ export class CliCommandRunner {
       '  3. validate  Confirm the content is still valid',
       '  4. serve     Build and review locally',
       '  5. build     Produce the static site output',
+      '',
+      this.getGlobalOptionsText(),
       '',
       this.getCommandOverviewText(),
       '',
@@ -564,6 +625,13 @@ export class CliCommandRunner {
       '  serve     Build dist/ and serve it locally for review.',
       '  build     Produce dist/ static site output.',
       '  help      Show usage and command details.',
+    ].join('\n')
+  }
+
+  private getGlobalOptionsText(): string {
+    return [
+      'Global options:',
+      '  --log-path <file>   Optional. Write sanitized CLI and GitHub logs to a file. Logging is off by default.',
     ].join('\n')
   }
 }

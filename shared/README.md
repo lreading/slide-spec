@@ -9,4 +9,7 @@ Current responsibilities:
 - template ids and template validation helpers
 - shared assertion helpers for validation
 
-This package should stay small and focused. If a change is only needed by one runtime, keep it in that runtime instead of moving it here.
+This package should stay small and focused.
+
+If a change is only needed by one runtime, keep it in that runtime instead of moving it here.
+If a schema or validation rule is shared by both runtimes, it belongs here.

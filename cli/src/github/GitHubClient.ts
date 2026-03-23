@@ -11,6 +11,7 @@ import type {
   GitHubTransport,
 } from './GitHubClient.types'
 import type { GitHubRepositoryRef } from '../config/Config.types'
+import type { CliLogger } from '../logging/CliLogger.types'
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -95,26 +96,40 @@ export class GitHubApiError extends Error {
   }
 }
 
+export class GitHubSnapshotTimeoutError extends Error {
+  public constructor(public readonly timeoutMs: number) {
+    super(`GitHub stargazer snapshot exceeded the ${timeoutMs}ms time budget.`)
+  }
+}
+
 interface GitHubApiClientOptions {
   token?: string
   transport?: GitHubTransport
   restBaseUrl?: string
   graphQlUrl?: string
+  logger?: CliLogger
 }
 
 const maxRestStargazerPages = 400
+
+interface StargazerDeadline {
+  deadline: number
+  timeoutMs: number
+}
 
 export class GitHubApiClient implements GitHubClient {
   private readonly token: string
   private readonly transport: GitHubTransport
   private readonly restBaseUrl: string
   private readonly graphQlUrl: string
+  private readonly logger: CliLogger | undefined
 
   public constructor(options: GitHubApiClientOptions) {
     this.token = options.token ?? ''
     this.transport = options.transport ?? new FetchGitHubTransport()
     this.restBaseUrl = options.restBaseUrl ?? 'https://api.github.com'
     this.graphQlUrl = options.graphQlUrl ?? 'https://api.github.com/graphql'
+    this.logger = options.logger
   }
 
   public async getRepositoryMetadata(repository: GitHubRepositoryRef): Promise<GitHubRepositoryMetadata> {
@@ -126,6 +141,8 @@ export class GitHubApiClient implements GitHubClient {
     if (!isRecord(payload)) {
       throw new Error('GitHub repository response must be an object.')
     }
+
+    this.logger?.githubSummary(`Loaded repository metadata for ${repository.owner}/${repository.repo}`)
 
     return {
       owner: repository.owner,
@@ -144,19 +161,27 @@ export class GitHubApiClient implements GitHubClient {
     at: string,
     options: GitHubStargazerSnapshotOptions = {},
   ): Promise<number> {
+    const deadline = this.createDeadline(options.timeoutMs)
+
     if (typeof options.currentTotal === 'number') {
       try {
-        return await this.getRestPagedStargazerCount(repository, at, options.currentTotal)
+        const count = await this.getRestPagedStargazerCount(repository, at, options.currentTotal, deadline)
+        this.logger?.githubSummary(`Loaded stargazer snapshot for ${repository.owner}/${repository.repo} at ${at}: ${count}`)
+        return count
       } catch {
         const direction = this.resolveStargazerDirection(at, options.repositoryCreatedAt)
 
         if (direction === 'DESC') {
-          return this.getDescendingStargazerCount(repository, at, options.currentTotal)
+          const count = await this.getDescendingStargazerCount(repository, at, options.currentTotal, deadline)
+          this.logger?.githubSummary(`Loaded descending stargazer snapshot for ${repository.owner}/${repository.repo} at ${at}: ${count}`)
+          return count
         }
       }
     }
 
-    return this.getAscendingStargazerCount(repository, at)
+    const count = await this.getAscendingStargazerCount(repository, at, deadline)
+    this.logger?.githubSummary(`Loaded ascending stargazer snapshot for ${repository.owner}/${repository.repo} at ${at}: ${count}`)
+    return count
   }
 
   public async getStargazerCountsAt(
@@ -184,9 +209,12 @@ export class GitHubApiClient implements GitHubClient {
       repository,
       [...new Set(atValues)].sort((left, right) => right.localeCompare(left)),
       options.currentTotal,
+      this.createDeadline(options.timeoutMs),
     )
 
-    return atValues.map((at) => countsByCutoff.get(at) ?? 0)
+    const counts = atValues.map((at) => countsByCutoff.get(at) ?? 0)
+    this.logger?.githubSummary(`Loaded stargazer snapshots for ${repository.owner}/${repository.repo}: ${counts.join(', ')}`)
+    return counts
   }
 
   public async hasMergedPullRequestByAuthorBefore(
@@ -202,7 +230,11 @@ export class GitHubApiClient implements GitHubClient {
     ])
 
     const pullRequests = await this.searchPullRequests(query, 1)
-    return pullRequests.length > 0
+    const hasMerged = pullRequests.length > 0
+    this.logger?.githubSummary(
+      `Merged pull request author check for ${repository.owner}/${repository.repo} before ${before}: ${hasMerged}`,
+    )
+    return hasMerged
   }
 
   public async listMergedPullRequestAuthorsBefore(
@@ -224,14 +256,21 @@ export class GitHubApiClient implements GitHubClient {
       }
     })
 
-    return [...authors].sort((left, right) => left.localeCompare(right))
+    const sortedAuthors = [...authors].sort((left, right) => left.localeCompare(right))
+    this.logger?.githubSummary(`Loaded ${sortedAuthors.length} merged PR authors for ${repository.owner}/${repository.repo}`)
+    return sortedAuthors
   }
 
-  private async getAscendingStargazerCount(repository: GitHubRepositoryRef, at: string): Promise<number> {
+  private async getAscendingStargazerCount(
+    repository: GitHubRepositoryRef,
+    at: string,
+    deadline?: StargazerDeadline,
+  ): Promise<number> {
     let afterCursor: string | null = null
     let count = 0
 
     while (true) {
+      this.throwIfDeadlineExceeded(deadline)
       const payload = await this.requestGraphQl(stargazerHistoryQuery, {
         after: afterCursor,
         direction: 'ASC',
@@ -264,11 +303,13 @@ export class GitHubApiClient implements GitHubClient {
     repository: GitHubRepositoryRef,
     at: string,
     currentTotal: number,
+    deadline?: StargazerDeadline,
   ): Promise<number> {
     let afterCursor: string | null = null
     let starsAfterCutoff = 0
 
     while (true) {
+      this.throwIfDeadlineExceeded(deadline)
       const payload = await this.requestGraphQl(stargazerHistoryQuery, {
         after: afterCursor,
         direction: 'DESC',
@@ -301,6 +342,7 @@ export class GitHubApiClient implements GitHubClient {
     repository: GitHubRepositoryRef,
     at: string,
     currentTotal: number,
+    deadline?: StargazerDeadline,
   ): Promise<number> {
     const pageSize = 100
     const totalPages = Math.ceil(currentTotal / pageSize)
@@ -318,6 +360,7 @@ export class GitHubApiClient implements GitHubClient {
     let exactCount = 0
 
     while (low <= high) {
+      this.throwIfDeadlineExceeded(deadline)
       const page = Math.floor((low + high) / 2)
       const stargazers = await this.fetchRestStargazerPage(repository, page, pageSize)
 
@@ -354,6 +397,7 @@ export class GitHubApiClient implements GitHubClient {
     repository: GitHubRepositoryRef,
     sortedCutoffs: string[],
     currentTotal: number,
+    deadline?: StargazerDeadline,
   ): Promise<Map<string, number>> {
     const results = new Map<string, number>()
     let afterCursor: string | null = null
@@ -361,6 +405,7 @@ export class GitHubApiClient implements GitHubClient {
     let cutoffIndex = 0
 
     while (cutoffIndex < sortedCutoffs.length) {
+      this.throwIfDeadlineExceeded(deadline)
       const payload = await this.requestGraphQl(stargazerHistoryQuery, {
         after: afterCursor,
         direction: 'DESC',
@@ -404,6 +449,23 @@ export class GitHubApiClient implements GitHubClient {
     return results
   }
 
+  private createDeadline(timeoutMs?: number): StargazerDeadline | undefined {
+    if (timeoutMs === undefined || timeoutMs <= 0) {
+      return undefined
+    }
+
+    return {
+      deadline: Date.now() + timeoutMs,
+      timeoutMs,
+    }
+  }
+
+  private throwIfDeadlineExceeded(deadline?: StargazerDeadline): void {
+    if (deadline !== undefined && Date.now() >= deadline.deadline) {
+      throw new GitHubSnapshotTimeoutError(deadline.timeoutMs)
+    }
+  }
+
   public async listReleases(repository: GitHubRepositoryRef): Promise<GitHubReleaseSummary[]> {
     const releases: GitHubReleaseSummary[] = []
     let page = 1
@@ -429,6 +491,7 @@ export class GitHubApiClient implements GitHubClient {
       page += 1
     }
 
+    this.logger?.githubSummary(`Loaded ${releases.length} releases for ${repository.owner}/${repository.repo}`)
     return releases
   }
 
@@ -442,7 +505,9 @@ export class GitHubApiClient implements GitHubClient {
       `merged:${dateRange.start}..${dateRange.end}`,
     ])
 
-    return this.searchPullRequests(query)
+    const pullRequests = await this.searchPullRequests(query)
+    this.logger?.githubSummary(`Loaded ${pullRequests.length} merged pull requests for ${repository.owner}/${repository.repo}`)
+    return pullRequests
   }
 
   public async listClosedIssues(
@@ -476,6 +541,7 @@ export class GitHubApiClient implements GitHubClient {
       afterCursor = search.pageInfo.endCursor
     }
 
+    this.logger?.githubSummary(`Loaded ${issues.length} closed issues for ${repository.owner}/${repository.repo}`)
     return issues
   }
 
@@ -513,12 +579,14 @@ export class GitHubApiClient implements GitHubClient {
     body?: string,
     accept = 'application/vnd.github+json',
   ): Promise<unknown> {
+    this.logger?.githubRequest(method, url)
     const response = await this.transport.send({
       ...(body ? { body } : {}),
       headers: this.createHeaders(method === 'POST', accept),
       method,
       url,
     })
+    this.logger?.githubResponse(method, url, response.status, response.statusText)
 
     if (!response.ok) {
       throw new GitHubApiError(response.status, response.statusText, url)
@@ -564,7 +632,7 @@ export class GitHubApiClient implements GitHubClient {
   private createHeaders(includeJsonBody: boolean, accept = 'application/vnd.github+json'): Record<string, string> {
     const headers: Record<string, string> = {
       Accept: accept,
-      'User-Agent': 'oss-slides-cli',
+      'User-Agent': 'slide-spec-cli',
       'X-GitHub-Api-Version': '2022-11-28',
     }
 

@@ -1,14 +1,25 @@
 # `validate`
 
-`validate` checks content and schema before you publish or fetch again.
+`validate` checks the project YAML against the live schema.
 
-## Behavior
-
-- Validates the project content files.
-- Surfaces missing required fields and malformed config.
-
-## Example
+## Usage
 
 ```bash
 npx @slide-spec/cli validate ./my-slides
 ```
+
+## What it checks
+
+- `site.yaml`
+- `presentations/index.yaml`
+- `presentation.yaml`
+- `generated.yaml`
+- cross-file consistency between index, presentation, and generated data
+- template-specific slide validation
+
+## When to run it
+
+- after every meaningful YAML edit
+- before `build`
+- before `serve`
+- after `fetch`

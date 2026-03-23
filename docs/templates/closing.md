@@ -1,6 +1,17 @@
 # Closing
 
-The closing template is the final slide. It thanks the audience and gives them a few places to go next.
+The `closing` template is the final slide.
+
+![Closing reference slide](/screenshots/template-closing-reference.png)
+
+## Visible regions
+
+1. Optional closing mascot from `site.mascot`
+2. Heading from `content.heading`
+3. Message from `content.message`
+4. Footer resource pills from `site.links.repository`, `site.links.docs`, and `site.links.owasp`
+5. Optional quote from `content.quote`
+6. Bottom-right mark from `site.presentation_chrome.mark_label`
 
 ## Example YAML
 
@@ -9,16 +20,25 @@ template: closing
 enabled: true
 content:
   heading: Thank you
-  message: See you in the next update.
-  quote: making threat modeling less threatening
+  message: Keep the schema honest, keep the examples real, and the slides stay easy to trust.
+  quote: YAML in, static site out.
 ```
 
-## Screenshot
+## Field reference
 
-![Closing slide](/screenshots/templates/closing-slide.png)
+| Field | Required | Type |
+| --- | --- | --- |
+| `content.heading` | yes | string |
+| `content.message` | yes | string |
+| `content.quote` | no | string |
 
-## Behavior
+## Also rendered from `site.yaml`
 
-- The heading and message are required.
-- The quote is optional.
-- Shared footer links come from `site.yaml`.
+- `site.links.repository`
+- `site.links.docs`
+- `site.links.owasp`
+- `site.presentation_chrome.mark_label`
+
+## Omitted behavior
+
+- If `quote` is omitted, the closing quote line is removed.

@@ -17,6 +17,9 @@ Environment:
 
 - copy `.env.example` to `<project-root>/.env`
 - set `GITHUB_PAT` if you want GitHub-backed fetches
+- the CLI can also write `GITHUB_PAT` for you during interactive `init`
+- PAT input is hidden when prompted
+- `--log-path <file>` writes sanitized CLI and GitHub logs to a file; logging is off by default
 
 Usage notes:
 
@@ -28,5 +31,6 @@ Usage notes:
 - `build` writes only `<project-root>/dist`.
 - `serve` builds first, then serves `<project-root>/dist`.
 - The CLI accepts an explicit project root so it can run against external projects, not just this repository.
+- `slide-spec <command> --help` prints contextual help for each subcommand.
 
 For the full command surface, prompt flow, and project-root expectations, keep this README alongside the command help output and the implementation plan in `agents/`.

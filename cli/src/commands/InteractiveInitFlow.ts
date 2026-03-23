@@ -1,23 +1,37 @@
+import { chmodSync } from 'node:fs'
 import { FileSystemPaths } from '../io/FileSystemPaths'
 import { NodeFileSystem } from '../io/FileSystem'
 import { GitHubRepositoryValidator } from '../github/GitHubRepositoryValidator'
+import { LogSanitizer } from '../logging/LogSanitizer'
 
 import type { CliOutput } from './CliCommandRunner'
 import type { CliPrompter } from './CliPrompter'
+import type { CliLogger } from '../logging/CliLogger.types'
 import type { FileSystem } from '../io/FileSystem'
 import type { TdCliService } from '../application/TdCliService'
 
 export class InteractiveInitFlow {
+  private readonly repositoryValidator: GitHubRepositoryValidator
+  private readonly logger: CliLogger | undefined
+  private readonly sanitizer: LogSanitizer
+
   public constructor(
     private readonly service: TdCliService,
     private readonly output: CliOutput,
     private readonly prompter: CliPrompter,
     private readonly fileSystem: FileSystem = new NodeFileSystem(),
-    private readonly repositoryValidator: GitHubRepositoryValidator = new GitHubRepositoryValidator(),
-  ) {}
+    repositoryValidator?: GitHubRepositoryValidator,
+    logger?: CliLogger,
+  ) {
+    this.repositoryValidator = repositoryValidator ?? new GitHubRepositoryValidator({
+      ...(logger ? { logger } : {}),
+    })
+    this.logger = logger
+    this.sanitizer = new LogSanitizer()
+  }
 
   public async run(): Promise<void> {
-    this.output.info('Interactive init creates a minimal scaffold first, then lets you fill in optional details.')
+    this.info('Interactive init creates a minimal scaffold first, then lets you fill in optional details.')
 
     const projectRoot = await this.promptOptional(
       'Target presentation project root. Leave blank to use the current working directory.',
@@ -48,7 +62,7 @@ export class InteractiveInitFlow {
       'Summary (optional)',
     )
 
-    this.output.info('Optional advanced setup: GitHub import, repository/docs links, and generated-data defaults.')
+    this.info('Optional advanced setup: GitHub import, repository/docs links, and generated-data defaults.')
     const wantsGitHubImport = await this.promptBoolean(
       'Import statistics from a GitHub repository?',
       'Import GitHub statistics',
@@ -68,14 +82,13 @@ export class InteractiveInitFlow {
       )
 
       if (wantsGitHubPat) {
-        const token = await this.promptRequired(
+        const token = await this.promptSecret(
           'Paste a GitHub PAT. It will be written to <project-root>/.env as GITHUB_PAT.',
-          'GitHub PAT',
         )
         await this.writeGitHubPat(projectRoot, token)
-        this.output.info('Wrote GitHub PAT to .env.')
+        this.info('Wrote GitHub PAT to .env.')
       } else {
-        this.output.info('Continuing without a GitHub PAT. GitHub-backed fetches will be best-effort and may be rate-limited. You can add GITHUB_PAT to <project-root>/.env later and rerun fetch.')
+        this.info('Continuing without a GitHub PAT. GitHub-backed fetches will be best-effort and may be rate-limited. You can add GITHUB_PAT to <project-root>/.env later and rerun fetch.')
       }
     }
 
@@ -112,7 +125,7 @@ export class InteractiveInitFlow {
       ...(githubDataSourceUrl !== undefined ? { githubDataSourceUrl } : {}),
     })
 
-    this.output.info(`Initialized ${result.presentationId}`)
+    this.info(`Initialized ${result.presentationId}`)
 
     const shouldServe = await this.promptBoolean(
       'Start the local server now so you can review what was created?',
@@ -125,7 +138,7 @@ export class InteractiveInitFlow {
         ...(projectRoot !== undefined ? { projectRoot } : {}),
         open: true,
       })
-      this.output.info(`Serving at ${serveResult.url}`)
+      this.info(`Serving at ${serveResult.url}`)
     }
   }
 
@@ -140,12 +153,12 @@ export class InteractiveInitFlow {
         const validation = await this.repositoryValidator.validate(repositoryUrl)
 
         if (!validation.verified && validation.warning) {
-          this.output.info(validation.warning)
+          this.info(validation.warning)
         }
 
         return validation.repository.url
       } catch (error) {
-        this.output.error(error instanceof Error ? error.message : String(error))
+        this.error(error instanceof Error ? error.message : String(error))
       }
     }
   }
@@ -159,6 +172,14 @@ export class InteractiveInitFlow {
     const nextContent = this.mergeEnvContent(existingContent, token)
 
     await this.fileSystem.writeTextFile(envPath, nextContent)
+
+    if (this.fileSystem instanceof NodeFileSystem) {
+      try {
+        chmodSync(envPath, 0o600)
+      } catch {
+        // Best effort only. Some environments do not support chmod.
+      }
+    }
   }
 
   private mergeEnvContent(existingContent: string, token: string): string {
@@ -169,13 +190,25 @@ export class InteractiveInitFlow {
     return ['GITHUB_PAT=' + token, ...lines, ''].join('\n')
   }
 
+  private info(message: string): void {
+    const sanitized = this.sanitizer.sanitize(message)
+    this.output.info(sanitized)
+    this.logger?.info(sanitized)
+  }
+
+  private error(message: string): void {
+    const sanitized = this.sanitizer.sanitize(message)
+    this.output.error(sanitized)
+    this.logger?.error(sanitized)
+  }
+
   private async promptRequired(helpText: string, label: string): Promise<string> {
-    this.output.info(helpText)
+    this.info(helpText)
     return this.prompter.promptRequired(label)
   }
 
   private async promptOptional(helpText: string, label: string): Promise<string | undefined> {
-    this.output.info(helpText)
+    this.info(helpText)
     return this.prompter.promptOptional(label)
   }
 
@@ -184,7 +217,12 @@ export class InteractiveInitFlow {
     label: string,
     defaultValue?: boolean,
   ): Promise<boolean | undefined> {
-    this.output.info(helpText)
+    this.info(helpText)
     return this.prompter.promptBoolean(label, defaultValue)
+  }
+
+  private async promptSecret(helpText: string): Promise<string> {
+    this.info(helpText)
+    return this.prompter.promptSecret('GitHub PAT')
   }
 }

@@ -1,0 +1,15 @@
+presentations:
+  - id: 2026-spring-briefing
+    year: 2026
+    title: Acorn Cloud Product Brief
+    subtitle: Spring 2026
+    summary: Reliability work, platform roadmap, and team highlights for the first half of spring.
+    published: true
+    featured: true
+  - id: 2025-winter-summary
+    year: 2025
+    title: Acorn Cloud Winter Summary
+    subtitle: Winter 2025
+    summary: Earlier update used for archive navigation examples in the docs.
+    published: true
+    featured: false

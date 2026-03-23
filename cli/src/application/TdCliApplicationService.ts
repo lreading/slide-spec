@@ -15,6 +15,7 @@ import { ProjectContentValidator } from '../validation/ProjectContentValidator'
 import { BrowserOpener } from '../runtime/BrowserOpener'
 import { StaticSiteServer } from '../runtime/StaticSiteServer'
 import { ViteSiteBuilder } from '../runtime/ViteSiteBuilder'
+import type { CliLogger } from '../logging/CliLogger.types'
 
 import type { TdCliService } from './TdCliService'
 import type {
@@ -50,6 +51,7 @@ interface TdCliApplicationServiceOptions {
   contentValidator?: ProjectContentValidator
   browserOpener?: BrowserOpener
   fileSystem?: FileSystem
+  logger?: CliLogger
 }
 
 export class TdCliApplicationService implements TdCliService {
@@ -70,6 +72,7 @@ export class TdCliApplicationService implements TdCliService {
   private readonly contentValidator: ProjectContentValidator
   private readonly browserOpener: BrowserOpener
   private readonly fileSystem: FileSystem
+  private readonly logger: CliLogger | undefined
 
   public constructor(options: TdCliApplicationServiceOptions = {}) {
     this.defaultProjectRoot = options.projectRoot ?? process.cwd()
@@ -83,8 +86,10 @@ export class TdCliApplicationService implements TdCliService {
     this.initPresentationBuilder = options.initPresentationBuilder ?? new InitPresentationBuilder()
     this.reportingPeriodResolver = options.reportingPeriodResolver ?? new ReportingPeriodResolver()
     this.yamlWriter = options.yamlWriter ?? new YamlWriter()
+    this.logger = options.logger
     this.gitHubClientFactory = options.gitHubClientFactory ?? ((token?: string) => new GitHubApiClient({
       ...(token !== undefined ? { token } : {}),
+      ...(this.logger !== undefined ? { logger: this.logger } : {}),
     }))
     this.siteBuilder = options.siteBuilder ?? new ViteSiteBuilder()
     this.staticSiteServer = options.staticSiteServer ?? new StaticSiteServer()

@@ -1,54 +1,63 @@
----
-layout: home
-hero:
-  name: slide-spec
-  text: Declarative presentations for YAML-driven updates
-  tagline: Build, fetch, and publish static slide decks with a repo-friendly workflow that stays easy for humans and machines to read.
-  actions:
-    - theme: brand
-      text: Quickstart
-      link: /quickstart
-    - theme: alt
-      text: Templates
-      link: /templates/
-features:
-  - title: Config-first
-    details: Presentation structure, chrome, and data sources live in YAML so updates stay reviewable in git.
-  - title: Template-driven
-    details: Slides render from reusable templates, which keeps future deck types easy to add and document.
-  - title: Git-aware
-    details: GitHub can be used as a source for releases, contributors, stars, and other generated data.
----
+# slide-spec
 
-## Why slide-spec
+Build static presentation sites from YAML.
 
-slide-spec is built for teams that want presentations to behave like source code: reviewable, reproducible, and easy to regenerate.
+slide-spec is for teams that want project updates, roadmap reviews, release summaries, and briefing decks to behave like source code:
 
-It fits a simple model:
+- content stays in reviewable YAML files
+- generated metrics stay separate from authored narrative
+- the CLI scaffolds, validates, builds, serves, and fetches data
+- the final output is a static site with no backend requirement
 
-1. Write configuration and slide content in YAML.
-2. Pull in data from GitHub when needed.
-3. Generate a static presentation that can ship anywhere a static site can.
+## Start here
 
-## What it gives you
+- New user: [Quickstart](/quickstart)
+- Need the file model: [Schema reference](/schema/)
+- Need a slide layout: [Templates](/templates/)
+- Need command details: [CLI reference](/cli/)
 
-<div class="hero-flow">
-<div class="hero-step">
-<strong>Static by default</strong>
-No backend, no runtime database, no deployment glue.
-</div>
-<div class="hero-step">
-<strong>Reusable templates</strong>
-Each slide uses a declared template, so the same shape can be reused across different projects.
-</div>
-<div class="hero-step">
-<strong>Human review stays central</strong>
-Generated data seeds the deck, but editorial content stays easy to edit.
-</div>
-</div>
+## What you get
 
-## A practical flow
+- A home page and archived presentation index
+- A slide renderer driven by templates and YAML content
+- Optional generated data from GitHub
+- A packaged CLI that can scaffold and build projects outside this repository
 
-Start with a minimal scaffold, fetch what can be gathered automatically, then review and polish the authored slide content before publishing.
+## How the pieces fit
 
-The docs in this site walk through the schema, the templates, the CLI, and the connector model in that order.
+1. `site.yaml` defines global branding, links, and page labels.
+2. `presentations/index.yaml` controls what appears in the archive.
+3. Each `presentation.yaml` defines slide order and authored content.
+4. Each `generated.yaml` holds machine-produced metrics and release data.
+5. `slide-spec build` turns the project into a static `dist/` directory.
+
+## Screens
+
+![Reference project home page](/screenshots/home-reference.png)
+
+![Reference project presentations index](/screenshots/presentations-reference.png)
+
+## Why this exists
+
+Most slide workflows break down as soon as people need review history, reproducible builds, or generated metrics. slide-spec keeps those concerns separate:
+
+- authored copy lives in YAML
+- generated data lives in YAML
+- templates stay reusable
+- the app runtime stays static
+
+## Included docs
+
+- [Quickstart](/quickstart): zero to working site
+- [Schema](/schema/): every current file and field
+- [Templates](/templates/): every current template and visible region
+- [Examples](/examples/): a tutorial example and a manual-data example
+- [Meta](/meta/): AI guidance, accessibility status, and supply-chain notes
+
+## Repository guidance
+
+Contribution policy lives in the repository, not the docs site:
+
+- [README](https://github.com/lreading/slide-spec#readme)
+- [CONTRIBUTING.md](https://github.com/lreading/slide-spec/blob/main/CONTRIBUTING.md)
+- [LICENSE](https://github.com/lreading/slide-spec/blob/main/LICENSE)

@@ -1,26 +1,55 @@
 # Timeline
 
-The timeline template is for release-oriented or milestone-oriented content.
+The `timeline` template renders release entries from `generated.yaml`.
+
+![Timeline reference slide](/screenshots/template-timeline-reference.png)
+
+## Visible regions
+
+1. Slide title and optional subtitle
+2. One release card per matching id in `content.featured_release_ids`
+3. Latest badge from `content.latest_badge_label` on the first rendered release
+4. Release version and publish date from `generated.releases[]`
+5. Release bullet list from `generated.releases[].summary_bullets`
+6. Footer link label from `content.footer_link_label`
+7. Empty-state title/message when no release cards match
 
 ## Example YAML
 
 ```yaml
 template: timeline
 enabled: true
+title: Releases
+subtitle: Two tagged updates landed during this cycle
 content:
   latest_badge_label: Latest
-  footer_link_label: View release history on GitHub
-  empty_state_title: No tagged releases in this period
-  empty_state_message: Release work happened, but no tagged release was published.
-  featured_release_ids: []
+  footer_link_label: Browse the release archive
+  featured_release_ids:
+    - starter-kit-v2
+    - export-layout-v1
 ```
 
-## Screenshot
+## Field reference
 
-![Timeline slide](/screenshots/templates/timeline-slide.png)
+| Field | Required | Type |
+| --- | --- | --- |
+| `title` | yes | string |
+| `subtitle` | no | string |
+| `content.latest_badge_label` | no | string |
+| `content.footer_link_label` | no | string |
+| `content.empty_state_title` | no | string |
+| `content.empty_state_message` | no | string |
+| `content.featured_release_ids` | yes | string[] |
 
-## Behavior
+## Also rendered from `generated.yaml`
 
-- Featured releases are resolved from generated release data.
-- If there are no releases, the empty state renders instead.
-- The footer link is optional and should be hidden when missing.
+- `generated.releases[].id`
+- `generated.releases[].version`
+- `generated.releases[].published_at`
+- `generated.releases[].url`
+- `generated.releases[].summary_bullets`
+
+## Omitted behavior
+
+- If `featured_release_ids` is empty, the empty-state title/message are used instead of release cards.
+- If `empty_state_title` and `empty_state_message` are omitted, the template still renders but has no authored empty-state copy.

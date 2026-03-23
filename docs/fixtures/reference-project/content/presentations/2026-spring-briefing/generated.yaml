@@ -1,0 +1,95 @@
+generated:
+  id: 2026-spring-briefing
+  period:
+    start: 2026-03-01
+    end: 2026-05-31
+  previous_presentation_id: 2025-winter-summary
+  stats:
+    stars:
+      label: GitHub Stars
+      current: 1840
+      previous: 1760
+      delta: 80
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    issues_closed:
+      label: Issues closed
+      current: 14
+      previous: 9
+      delta: 5
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    prs_merged:
+      label: PRs Merged
+      current: 18
+      previous: 11
+      delta: 7
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    new_contributors:
+      label: New contributors
+      current: 3
+      previous: 1
+      delta: 2
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+  releases:
+    - id: starter-kit-v2
+      version: Starter Kit v2
+      published_at: 2026-05-20
+      url: https://example.com/releases/starter-kit-v2
+      summary_bullets:
+        - Added launch ownership and sign-off states to the starter kit.
+        - Standardized how operators export and review rollout summaries.
+    - id: export-layout-v1
+      version: Export Layout v1
+      published_at: 2026-04-18
+      url: https://example.com/releases/export-layout-v1
+      summary_bullets:
+        - Improved PDF spacing for customer-facing review decks.
+        - Preserved section hierarchy in exported summaries.
+  contributors:
+    total: 5
+    authors:
+      - login: ava-product
+        name: Ava Product
+        avatar_url: https://avatars.githubusercontent.com/u/1?v=4
+        merged_prs: 7
+        first_time: false
+      - login: mo-rendering
+        name: Mo Rendering
+        avatar_url: https://avatars.githubusercontent.com/u/2?v=4
+        merged_prs: 4
+        first_time: false
+      - login: ren-docs
+        name: Ren Docs
+        avatar_url: https://avatars.githubusercontent.com/u/3?v=4
+        merged_prs: 3
+        first_time: true
+      - login: ivy-platform
+        name: Ivy Platform
+        avatar_url: https://avatars.githubusercontent.com/u/4?v=4
+        merged_prs: 2
+        first_time: true
+      - login: dan-checklists
+        name: Dan Checklists
+        avatar_url: https://avatars.githubusercontent.com/u/5?v=4
+        merged_prs: 2
+        first_time: true
+  merged_prs:
+    - number: 410
+      title: Add ownership states to starter kit
+      merged_at: 2026-03-08T10:30:00Z
+      author_login: ava-product
+    - number: 421
+      title: Preserve section hierarchy in exports
+      merged_at: 2026-03-17T15:10:00Z
+      author_login: mo-rendering
+    - number: 438
+      title: Rewrite rollout migration notes
+      merged_at: 2026-04-05T09:45:00Z
+      author_login: ren-docs

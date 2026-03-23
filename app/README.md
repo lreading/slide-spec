@@ -18,7 +18,8 @@ Commands:
 
 Notes:
 
-- `npm run visual` runs local Playwright screenshot baselines.
-- `npm run a11y` runs the automated Playwright + axe accessibility audit.
+- `npm run visual` runs local Playwright screenshot baselines and is a required gate for UI/UX changes.
+- `npm run a11y` runs the automated Playwright + axe accessibility audit and is a required gate for UI/UX changes.
 - Visual baseline files are stored locally and should not be committed.
 - `verify` is the standard local gate before changing app/UI behavior.
+- The app is static and expects authored/generated content from `content/`.

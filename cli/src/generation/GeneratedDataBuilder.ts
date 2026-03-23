@@ -31,6 +31,8 @@ interface StarSnapshotResult {
 }
 
 const largeRepositoryStarThreshold = 40000
+const largeRepositoryCombinedSnapshotTimeoutMs = 90000
+const largeRepositoryCurrentSnapshotTimeoutMs = 30000
 
 export class GeneratedDataBuilder {
   public constructor(
@@ -171,14 +173,13 @@ export class GeneratedDataBuilder {
           {
             currentTotal: repositoryMetadata.stars,
             repositoryCreatedAt: repositoryMetadata.createdAt,
+            timeoutMs: largeRepositoryCombinedSnapshotTimeoutMs,
           },
         )
-        const resolvedCurrent = current ?? 0
-        const resolvedPrevious = previous ?? 0
 
         return {
-          current: resolvedCurrent,
-          previous: resolvedPrevious,
+          current: current ?? repositoryMetadata.stars,
+          previous: previous ?? 0,
           metadata: {
             comparison_status: 'complete',
             warning_codes: [],
@@ -187,7 +188,9 @@ export class GeneratedDataBuilder {
         }
       } catch {
         warningCodes.push('combined_snapshot_fallback')
-        warnings.push('Combined historical star snapshots were unavailable; retrying individual snapshot lookups.')
+        warnings.push(
+          'Combined historical star snapshots exceeded the large-repository time budget; retrying current-period snapshot only.',
+        )
       }
     }
 
@@ -197,6 +200,9 @@ export class GeneratedDataBuilder {
       resolvedCurrent = await input.client.getStargazerCountAt(input.repository, currentCutoff, {
         currentTotal: repositoryMetadata.stars,
         repositoryCreatedAt: repositoryMetadata.createdAt,
+        ...(input.previousPeriod && repositoryMetadata.stars > largeRepositoryStarThreshold
+          ? { timeoutMs: largeRepositoryCurrentSnapshotTimeoutMs }
+          : {}),
       })
     } catch {
       warningCodes.push('current_snapshot_fallback')
@@ -212,6 +218,22 @@ export class GeneratedDataBuilder {
           warning_codes: ['comparison_disabled', ...warningCodes],
         },
         warnings,
+      }
+    }
+
+    if (repositoryMetadata.stars > largeRepositoryStarThreshold) {
+      warningCodes.push('previous_snapshot_unavailable_large_repo')
+      return {
+        current: resolvedCurrent,
+        previous: resolvedCurrent,
+        metadata: {
+          comparison_status: 'unavailable',
+          warning_codes: warningCodes,
+        },
+        warnings: [
+          ...warnings,
+          'Previous-period star comparison was unavailable after exhausting the large-repository time budget.',
+        ],
       }
     }
 

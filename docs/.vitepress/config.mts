@@ -5,6 +5,15 @@ export default defineConfig({
   description: 'Declarative presentation docs for YAML-driven slides, GitHub data, and reusable templates.',
   cleanUrls: true,
   lastUpdated: false,
+  head: [
+    ['meta', { name: 'theme-color', content: '#1e1e2e' }],
+    ['meta', { property: 'og:title', content: 'slide-spec documentation' }],
+    ['meta', { property: 'og:description', content: 'YAML-first static presentation documentation for slide-spec.' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:url', content: 'https://slide-spec.dev/' }],
+    ['meta', { property: 'og:image', content: 'https://slide-spec.dev/screenshots/home-reference.png' }],
+    ['link', { rel: 'canonical', href: 'https://slide-spec.dev/' }],
+  ],
   themeConfig: {
     nav: [
       { text: 'Home', link: '/' },
@@ -13,9 +22,8 @@ export default defineConfig({
       { text: 'Templates', link: '/templates/' },
       { text: 'CLI', link: '/cli/' },
       { text: 'Connectors', link: '/connectors/github' },
-      { text: 'Examples', link: '/examples/happy-path' },
+      { text: 'Examples', link: '/examples/' },
       { text: 'Meta', link: '/meta/' },
-      { text: 'Contributing', link: '/contributing' },
     ],
     sidebar: {
       '/schema/': [
@@ -69,7 +77,11 @@ export default defineConfig({
       '/examples/': [
         {
           text: 'Examples',
-          items: [{ text: 'Happy Path', link: '/examples/happy-path' }],
+          items: [
+            { text: 'Overview', link: '/examples/' },
+            { text: 'Tutorial Example', link: '/examples/tutorial-example' },
+            { text: 'Manual Data Example', link: '/examples/manual-data-example' },
+          ],
         },
       ],
       '/meta/': [

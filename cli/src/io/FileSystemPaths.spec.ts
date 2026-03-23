@@ -15,6 +15,6 @@ describe('FileSystemPaths', () => {
     expect(paths.getGeneratedPath('2026-q1')).toBe('/workspace/project/content/presentations/2026-q1/generated.yaml')
     expect(paths.getEnvPath()).toBe('/workspace/project/.env')
     expect(paths.getLegacyMonorepoEnvPath()).toBe('/workspace/project/cli/.env')
-    expect(paths.getCliWorkspaceRoot()).toBe('/workspace/project/.oss-slides')
+    expect(paths.getCliWorkspaceRoot()).toBe('/workspace/project/.slide-spec')
   })
 })

@@ -2,9 +2,12 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview"
+    "preview": "vitepress preview",
+    "screenshots": "node --import tsx scripts/generate-doc-assets.ts"
   },
   "devDependencies": {
+    "playwright": "^1.55.0",
+    "tsx": "^4.20.6",
     "vitepress": "^1.6.4"
   }
 }

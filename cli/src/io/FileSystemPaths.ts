@@ -44,6 +44,6 @@ export class FileSystemPaths {
   }
 
   public getCliWorkspaceRoot(): string {
-    return resolve(this.getProjectRoot(), '.oss-slides')
+    return resolve(this.getProjectRoot(), '.slide-spec')
   }
 }

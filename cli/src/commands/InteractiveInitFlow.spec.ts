@@ -59,9 +59,10 @@ function createPrompter(overrides: Partial<CliPrompter> = {}): CliPrompter {
   return {
     promptCommand: vi.fn(),
     promptRequired: vi.fn(),
+    promptSecret: vi.fn().mockResolvedValue('secret-token'),
     promptOptional: vi.fn().mockResolvedValue(undefined),
     promptBoolean: vi.fn().mockResolvedValue(false),
-    promptNumber: vi.fn(),
+    promptNumber: vi.fn().mockResolvedValue(undefined),
     ...overrides,
   }
 }
@@ -84,8 +85,8 @@ describe('InteractiveInitFlow', () => {
         .mockResolvedValueOnce('Demo Title')
         .mockResolvedValueOnce('2026-04-01')
         .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon')
-        .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon')
-        .mockResolvedValueOnce('secret-token'),
+        .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon'),
+      promptSecret: vi.fn().mockResolvedValueOnce('secret-token'),
       promptBoolean: vi.fn()
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(true)
@@ -134,6 +135,7 @@ describe('InteractiveInitFlow', () => {
     const envPath = new FileSystemPaths('/workspace/project').getEnvPath()
     expect(fileSystem.writes.get(envPath)).toContain('GITHUB_PAT=secret-token')
     expect(output.info).toHaveBeenCalledWith('Wrote GitHub PAT to .env.')
+    expect(prompter.promptSecret).toHaveBeenCalledWith('GitHub PAT')
   })
 
   it('continues best-effort when the user skips the GitHub PAT', async () => {
@@ -189,6 +191,7 @@ describe('InteractiveInitFlow', () => {
     expect(output.info).toHaveBeenCalledWith(
       'Continuing without a GitHub PAT. GitHub-backed fetches will be best-effort and may be rate-limited. You can add GITHUB_PAT to <project-root>/.env later and rerun fetch.',
     )
+    expect(prompter.promptSecret).not.toHaveBeenCalled()
   })
 
   it('merges existing env content, keeps the local server optional, and preserves other keys', async () => {
@@ -211,8 +214,8 @@ describe('InteractiveInitFlow', () => {
         .mockResolvedValueOnce('demo-id')
         .mockResolvedValueOnce('Demo Title')
         .mockResolvedValueOnce('2026-04-01')
-        .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon')
-        .mockResolvedValueOnce('new-token'),
+        .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon'),
+      promptSecret: vi.fn().mockResolvedValue('new-token'),
       promptBoolean: vi.fn()
         .mockResolvedValueOnce(true)
         .mockResolvedValueOnce(true)
@@ -240,6 +243,7 @@ describe('InteractiveInitFlow', () => {
     expect(service.serveSite).toHaveBeenCalledWith({
       open: true,
     })
+    expect(prompter.promptSecret).toHaveBeenCalledWith('GitHub PAT')
     expect(service.initPresentation).toHaveBeenCalledWith({
       presentationId: 'demo-id',
       title: 'Demo Title',

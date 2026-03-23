@@ -1,27 +1,23 @@
 # AI-Friendly Docs
 
-The docs site should be easy for both humans and machine readers to navigate.
+slide-spec aims to keep both the product and docs easy for agents to consume.
 
-## Current approach
+## Current machine-readable entrypoints
 
-The practical baseline is:
-- plain Markdown pages
-- stable URLs
-- clear headings
-- `robots.txt`
-- `llms.txt` as an additional discovery aid
+- `/llms.txt`
+- `/sitemap.xml`
+- stable page URLs for schema, templates, CLI, and examples
 
-## Why this approach
+## What makes these docs agent-friendly
 
-- `robots.txt` remains the standard crawler control file.
-- `llms.txt` is useful as a compact, human-written index for AI tooling.
-- The docs should not rely on client-only rendering for important content.
+- schema pages use explicit field names
+- template pages separate shared fields from template-specific fields
+- examples use real YAML, not pseudo-code
+- quickstart avoids hidden steps
 
-## Files used
+## What agents should not guess
 
-- `docs/public/robots.txt`
-- `docs/public/llms.txt`
-
-## Notes
-
-These files should help discovery, but they do not replace good structure, headings, and clean content.
+- required schema fields
+- omitted-field behavior
+- whether generated data is authored or fetched
+- whether a template reads data from `site.yaml`, `presentation.yaml`, or `generated.yaml`

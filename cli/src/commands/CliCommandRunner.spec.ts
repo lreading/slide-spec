@@ -55,6 +55,7 @@ function createPrompter(overrides: Partial<CliPrompter> = {}): CliPrompter {
   return {
     promptCommand: vi.fn().mockResolvedValue('help'),
     promptRequired: vi.fn(),
+    promptSecret: vi.fn().mockResolvedValue('secret-token'),
     promptOptional: vi.fn().mockResolvedValue(undefined),
     promptBoolean: vi.fn().mockResolvedValue(undefined),
     promptNumber: vi.fn().mockResolvedValue(undefined),
@@ -72,7 +73,7 @@ describe('CliCommandRunner', () => {
 
     await expect(runner.run([])).resolves.toBe(0)
     expect(output.info).toHaveBeenCalledWith('No command provided. Starting interactive mode.')
-    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: slide-spec'))
   })
 
   it('prints help for explicit help flags', async () => {
@@ -84,8 +85,9 @@ describe('CliCommandRunner', () => {
     await expect(runner.run(['help', 'fetch'])).resolves.toBe(0)
     await expect(runner.run(['init', '--help'])).resolves.toBe(0)
     expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Commands:'))
-    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides fetch'))
-    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides init'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: slide-spec fetch'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: slide-spec init'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Global options:'))
     expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Interactive init collects essentials first'))
   })
 
@@ -229,7 +231,7 @@ describe('CliCommandRunner', () => {
       write: false,
     })
     expect(output.info).toHaveBeenCalledWith('Fetched 2026-q1')
-    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides fetch'))
+    expect(output.info).toHaveBeenCalledWith(expect.stringContaining('Usage: slide-spec fetch'))
   })
 
   it('dispatches interactive validate path', async () => {
@@ -244,7 +246,7 @@ describe('CliCommandRunner', () => {
 
     await expect(validateRunner.run([])).resolves.toBe(0)
     expect(service.validateContent).toHaveBeenCalledWith({ projectRoot: '/workspace/project', strict: true })
-    expect(validateOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides validate'))
+    expect(validateOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: slide-spec validate'))
   })
 
   it('dispatches interactive build and serve paths', async () => {
@@ -261,7 +263,7 @@ describe('CliCommandRunner', () => {
 
     await expect(buildRunner.run([])).resolves.toBe(0)
     expect(service.buildSite).toHaveBeenCalledWith({ projectRoot: '/workspace/project', mode: 'production' })
-    expect(buildOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides build'))
+    expect(buildOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: slide-spec build'))
 
     const serveOutput = createOutput()
     const serveRunner = new CliCommandRunner(
@@ -284,7 +286,7 @@ describe('CliCommandRunner', () => {
       port: 4173,
       open: true,
     })
-    expect(serveOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: oss-slides serve'))
+    expect(serveOutput.info).toHaveBeenCalledWith(expect.stringContaining('Usage: slide-spec serve'))
   })
 
   it('returns a non-zero exit code when interactive mode fails', async () => {
@@ -406,6 +408,59 @@ describe('CliCommandRunner', () => {
     })
     expect(output.info).toHaveBeenCalledWith('Fetch timings:')
     expect(output.info).toHaveBeenCalledWith('  repository_metadata: 12.50ms')
+  })
+
+  it('prints fetch warnings and periodic progress updates for long-running fetches', async () => {
+    vi.useFakeTimers()
+    try {
+      const service = createService()
+      let resolveFetch: ((value: Awaited<ReturnType<TdCliService['fetchPresentationData']>>) => void) | undefined
+      vi.mocked(service.fetchPresentationData).mockImplementationOnce(() =>
+        new Promise((resolve) => {
+          resolveFetch = resolve
+        }))
+      const output = createOutput()
+      const runner = new CliCommandRunner(service, output)
+
+      const runPromise = runner.run([
+        'fetch',
+        '--presentation-id',
+        '2026-q1',
+        '--from-date',
+        '2026-01-01',
+      ])
+
+      await vi.advanceTimersByTimeAsync(5000)
+      resolveFetch?.({
+        presentationId: '2026-q1',
+        generatedPath: '/tmp/generated.yaml',
+        generated: {
+          id: '2026-q1',
+          period: {
+            start: '2026-01-01',
+            end: '2026-03-31',
+          },
+          stats: {},
+          releases: [],
+          contributors: {
+            total: 0,
+            authors: [],
+          },
+          merged_prs: [],
+        },
+        warnings: ['Previous-period star comparison was unavailable after exhausting the large-repository time budget.'],
+        timings: [],
+      })
+
+      await expect(runPromise).resolves.toBe(0)
+      expect(output.info).toHaveBeenCalledWith('Fetching GitHub-derived data. Large repositories can take up to about two minutes.')
+      expect(output.info).toHaveBeenCalledWith('Still fetching GitHub-derived data...')
+      expect(output.info).toHaveBeenCalledWith(
+        'Warning: Previous-period star comparison was unavailable after exhausting the large-repository time budget.',
+      )
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('dispatches build, serve, and validate', async () => {

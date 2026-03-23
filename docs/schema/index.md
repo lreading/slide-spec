@@ -1,21 +1,24 @@
-# Schema
+# Schema Reference
 
-slide-spec keeps authored content and generated content in separate YAML files so the data model stays reviewable.
+slide-spec uses four YAML documents:
 
-This section documents the live schema currently used by the app and CLI.
+- `content/site.yaml`
+- `content/presentations/index.yaml`
+- `content/presentations/<id>/presentation.yaml`
+- `content/presentations/<id>/generated.yaml`
 
-## Files
-
-- `site.yaml`
-- `presentations/index.yaml`
-- `presentation.yaml`
-- `generated.yaml`
+The app validates all four documents together.
 
 ## Reading order
 
-1. `site.yaml`
-2. `presentations/index.yaml`
-3. `presentation.yaml`
-4. `generated.yaml`
+1. [site.yaml](/schema/site)
+2. [presentations/index.yaml](/schema/presentations-index)
+3. [presentation.yaml](/schema/presentation)
+4. [generated.yaml](/schema/generated)
 
-The first two define project-level metadata and the presentation registry. The last two define the presentation itself and the generated data attached to it.
+## Important split
+
+- `presentation.yaml` is authored narrative and layout
+- `generated.yaml` is structured metric/release/contributor data
+
+That split is intentional. It keeps machine-produced data reviewable without mixing it into slide copy.

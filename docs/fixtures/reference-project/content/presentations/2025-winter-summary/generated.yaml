@@ -1,0 +1,52 @@
+generated:
+  id: 2025-winter-summary
+  period:
+    start: 2025-12-01
+    end: 2026-02-28
+  stats:
+    stars:
+      label: GitHub Stars
+      current: 1760
+      previous: 1705
+      delta: 55
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    issues_closed:
+      label: Issues closed
+      current: 9
+      previous: 6
+      delta: 3
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    prs_merged:
+      label: PRs Merged
+      current: 11
+      previous: 8
+      delta: 3
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    new_contributors:
+      label: New contributors
+      current: 1
+      previous: 1
+      delta: 0
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+  releases: []
+  contributors:
+    total: 2
+    authors:
+      - login: ava-product
+        name: Ava Product
+        avatar_url: https://avatars.githubusercontent.com/u/1?v=4
+        merged_prs: 7
+        first_time: false
+      - login: mo-rendering
+        name: Mo Rendering
+        avatar_url: https://avatars.githubusercontent.com/u/2?v=4
+        merged_prs: 4
+        first_time: false

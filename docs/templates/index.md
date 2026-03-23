@@ -1,8 +1,8 @@
 # Templates
 
-Each slide renders through a named template. That keeps slide structure reusable and makes the docs easier to follow.
+Templates define the visible slide layout. The slide envelope always lives in `presentation.yaml`; the `content` block changes by template.
 
-## Current templates
+Current templates:
 
 - `hero`
 - `agenda`
@@ -14,12 +14,9 @@ Each slide renders through a named template. That keeps slide structure reusable
 - `action-cards`
 - `closing`
 
-## How to read these pages
+Use the matching page for:
 
-Every template page shows:
-- what the template is for
-- a screenshot
-- a compact YAML example
-- how it behaves when fields are missing
-
-The examples below mirror the same shapes the live validator and renderer use today.
+- the `content` field reference
+- screenshot callouts
+- omitted behavior
+- notes about global `site.yaml` dependencies

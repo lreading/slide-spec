@@ -1,0 +1,69 @@
+site:
+  title: Acorn Cloud Updates
+  mascot:
+    url: content/assets/slide-spec-mascot.svg
+    alt: Slide Spec mascot
+  project_badge:
+    label: YAML-First Slides
+    fa_icon: fa-code
+    icon_position: before
+  presentation_logo:
+    url: content/assets/slide-spec-logo.svg
+    alt: Slide Spec logo
+  navigation:
+    brand_title: Acorn Cloud Updates
+    home_label: Home
+    presentations_label: Presentations
+    latest_presentation_label: Latest Presentation
+    toggle_label: Toggle navigation
+  attribution:
+    enabled: true
+    label: Powered by slide-spec
+    url: https://github.com/lreading/slide-spec
+  presentation_chrome:
+    mark_label: Acorn Cloud
+  presentation_toolbar:
+    navigation_label: Slide navigation
+    previous_slide_label: Previous slide
+    next_slide_label: Next slide
+    presentation_mode_label: Presentation mode
+    shortcut_help_title: Keyboard shortcuts
+    shortcut_help_body: Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.
+    shortcut_help_dismiss_label: Do not show again
+  home_hero:
+    title_primary: Acorn
+    title_accent: Cloud
+    subtitle: Product Briefings
+  home_intro: Team updates and product briefings, published from YAML with a static build.
+  home_cta_label: View latest presentation
+  presentations_cta_label: View all presentations
+  presentations_page:
+    title: All presentations
+    search_label: Search
+    search_placeholder: Search presentations...
+    year_label: Year
+    all_years_label: All years
+    open_presentation_label: Open presentation
+    empty_title: No matching presentations
+    empty_message: Try a different year or a broader search term.
+    previous_page_label: Previous
+    next_page_label: Next
+    page_label: Page
+    page_of_label: of
+    showing_label: Showing
+    total_label: total
+    presentation_singular_label: presentation
+    presentation_plural_label: presentations
+  links:
+    repository:
+      label: Product Repo
+      url: https://github.com/example/acorn-cloud
+      eyebrow: Source Code
+    docs:
+      label: User Docs
+      url: https://example.com/docs
+      eyebrow: Documentation
+    owasp:
+      label: Community Hub
+      url: https://example.com/community
+      eyebrow: Website

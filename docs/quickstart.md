@@ -1,55 +1,106 @@
 # Quickstart
 
-This path gets you from zero to a local static presentation as fast as possible.
+This is the shortest path from install to a working static site.
 
-## 1. Install the CLI
+It assumes:
 
-```bash
-npx @slide-spec/cli --help
-```
+- Node.js 22+
+- a writable working directory
+- optional GitHub token only if you plan to use `fetch`
 
-## 2. Initialize a project
+## 1. Create a project
 
 ```bash
 npx @slide-spec/cli init ./my-slides
 ```
 
-The interactive flow starts with the essentials:
-- project title
-- presentation id
-- from-date
-
-Then it offers advanced setup for optional branding, links, and GitHub import.
-
-## 3. Add GitHub data if needed
-
-If you want imported statistics, provide a GitHub repository URL and a GitHub PAT when prompted.
-
-The CLI will explain how to create the token and where it will be stored in `.env`.
-
-## 4. Fetch generated data
+If you prefer flags instead of the interactive flow:
 
 ```bash
-npx @slide-spec/cli fetch ./my-slides --from-date 2026-01-01 --to-date 2026-03-31
+npx @slide-spec/cli init ./my-slides \
+  --presentation-id 2026-spring-briefing \
+  --title "My Product Brief" \
+  --subtitle "Spring 2026" \
+  --from-date 2026-03-01
 ```
 
-## 5. Build and serve
+What this creates:
+
+- `content/site.yaml`
+- `content/presentations/index.yaml`
+- `content/presentations/<presentation-id>/presentation.yaml`
+- `content/presentations/<presentation-id>/generated.yaml`
+
+## 2. Edit the scaffolded files
+
+For the smallest useful project, edit:
+
+- `content/site.yaml`
+  - set the site title
+  - set footer links
+  - set branding assets if you have them
+- `content/presentations/index.yaml`
+  - set the listing title, subtitle, and summary
+- `content/presentations/<presentation-id>/presentation.yaml`
+  - author the slide content
+
+If you want a concrete walkthrough instead of a minimal checklist, use the [tutorial example](/examples/tutorial-example).
+
+## 3. Validate the project
+
+```bash
+npx @slide-spec/cli validate ./my-slides
+```
+
+Run this after every YAML edit until the structure is stable.
+
+## 4. Build the static site
 
 ```bash
 npx @slide-spec/cli build ./my-slides
+```
+
+This writes a static `dist/` directory inside the project root.
+
+## 5. Serve it locally
+
+```bash
 npx @slide-spec/cli serve ./my-slides
 ```
 
-`serve` builds first, then serves the static `dist/` output.
+`serve` builds first and then serves the generated output.
 
-## 6. Edit the authored files
+## 6. Optional: fetch GitHub-backed metrics
 
-The minimum files to review after init are:
-- `content/site.yaml`
-- `content/presentations/index.yaml`
-- `content/presentations/<id>/presentation.yaml`
-- `content/presentations/<id>/generated.yaml`
+If you want generated metrics, add a GitHub data source in `content/site.yaml`:
 
-## 7. Open the result
+```yaml
+site:
+  data_sources:
+    - type: github
+      url: https://github.com/OWNER/REPO
+```
 
-After serving starts, open the local URL shown in the terminal and review the slides in the browser.
+Then fetch into the current presentation:
+
+```bash
+npx @slide-spec/cli fetch ./my-slides \
+  --presentation-id 2026-spring-briefing \
+  --from-date 2026-03-01 \
+  --to-date 2026-05-31
+```
+
+GitHub token notes:
+
+- A token is strongly recommended.
+- The CLI can run without one, but you may hit rate limits or reduced coverage.
+- When a PAT is provided interactively, the CLI can create a local `.env` file for you.
+
+See [GitHub connector](/connectors/github) for the full fetch model.
+
+## Common next steps
+
+- Learn the file layout: [Schema reference](/schema/)
+- Pick a slide layout: [Templates](/templates/)
+- Follow a full walkthrough: [Tutorial example](/examples/tutorial-example)
+- See a manual-data project: [Manual data example](/examples/manual-data-example)

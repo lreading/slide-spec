@@ -1,2 +1,3 @@
 User-agent: *
 Allow: /
+Sitemap: https://slide-spec.dev/sitemap.xml

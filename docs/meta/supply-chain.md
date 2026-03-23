@@ -1,13 +1,11 @@
 # Supply Chain
 
-slide-spec should publish supply-chain information alongside the docs so users can find it without hunting through the repo.
+The project intends to publish supply-chain outputs alongside the repository and CI artifacts.
 
-## What to document
+Today, the important thing to know is that docs should point users at:
 
-- SBOM availability
-- where generated SBOM output lives
-- how release pipelines should surface supply-chain artifacts later
+- the repository release artifacts
+- generated SBOM output when it becomes part of CI
+- the README badges for current gate status
 
-## Current stance
-
-The docs should point readers to the project-level SBOM path or release artifact location once that exists.
+This page stays intentionally short until the GitHub Actions and release workflows are finalized.

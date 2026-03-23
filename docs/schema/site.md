@@ -1,54 +1,169 @@
 # `site.yaml`
 
-`site.yaml` defines global project settings, navigation labels, links, and source configuration.
-
-## Purpose
-
-This file controls content that applies across the whole site:
-- site title
-- nav labels
-- footer links
-- project badge/logo
-- data sources
-- presentation chrome labels
+`site.yaml` defines global branding, navigation labels, footer links, and shared page copy.
 
 ## Minimal example
 
 ```yaml
 site:
-  title: slide-spec
-  home_intro: Static presentations from YAML and GitHub data.
+  title: Acorn Cloud Updates
+  home_intro: Team updates and product briefings, published from YAML with a static build.
   home_cta_label: View latest presentation
   presentations_cta_label: View all presentations
   links:
     repository:
-      label: GitHub
-      url: https://github.com/lreading/slide-spec
+      label: Product Repo
+      url: https://github.com/example/acorn-cloud
+    docs:
+      label: User Docs
+      url: https://example.com/docs
+    owasp:
+      label: Community Hub
+      url: https://example.com/community
 ```
+
+## Complete example
+
+See the tracked reference file:
+
+- [`docs/fixtures/reference-project/content/site.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/site.yaml)
 
 ## Field reference
 
-| Field | Required | Notes |
+### Root
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `site.title` | yes | string | Site title used by the app shell and document title logic. |
+| `site.mascot` | no | object | Shared mascot image for home/title/closing surfaces. |
+| `site.data_sources` | no | array | External data sources. Only GitHub is supported today. |
+| `site.project_badge` | no | object | Small badge rendered near the hero/title identity. |
+| `site.presentation_logo` | no | object | Shared sidebar/logo image for presentation chrome. |
+| `site.navigation` | no | object | App nav labels. |
+| `site.attribution` | no | object | Footer attribution. Defaults to enabled if omitted by current app behavior. |
+| `site.presentation_chrome` | no | object | Shared slide chrome labels. |
+| `site.presentation_toolbar` | no | object | Presentation view control labels and shortcut help copy. |
+| `site.home_hero` | no | object | Home-page hero title parts. |
+| `site.home_intro` | yes | string | Home-page intro paragraph. |
+| `site.home_cta_label` | yes | string | Primary home CTA label. |
+| `site.presentations_cta_label` | yes | string | Secondary home CTA label. |
+| `site.presentations_page` | no | object | Archive/listing labels. |
+| `site.links` | yes | object | Shared footer/resource links. |
+
+### `site.mascot`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `url` | no | string | Local or remote image path. |
+| `alt` | no | string | Requires `url`. |
+
+### `site.data_sources[]`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `type` | yes | string | Must currently be `github`. |
+| `url` | yes | string | Must be a valid `github.com` URL. |
+
+### `site.project_badge`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `label` | no | string | Badge text. |
+| `fa_icon` | no | string | Font Awesome icon class token, such as `fa-code`. |
+| `icon_position` | no | string | `before` or `after`. |
+
+At least one of `label` or `fa_icon` must be present.
+
+### `site.presentation_logo`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `url` | no | string | Local or remote image path. |
+| `alt` | no | string | Requires `url`. |
+
+### `site.navigation`
+
+| Field | Required | Type |
 | --- | --- | --- |
-| `title` | yes | Site name shown in docs and app chrome. |
-| `mascot` | no | Optional mascot object with `url` and `alt` used on the home/title/closing views. |
-| `data_sources` | no | External data sources, currently GitHub only. |
-| `project_badge` | no | Optional brand badge shown on the home/title views. |
-| `presentation_logo` | no | Optional logo image for the shared slide chrome. |
-| `navigation` | no | Labels for the main app navigation. |
-| `app_footer` | no | Footer label and link for the app chrome. |
-| `attribution` | no | Product attribution footer control; defaults to enabled if omitted. |
-| `presentation_chrome` | no | Shared slide chrome mark label. |
-| `presentation_toolbar` | no | Labels for next/previous/presentation mode controls. |
-| `home_hero` | no | Title/subtitle text for the home hero. |
-| `home_intro` | yes | Short intro sentence on the home page. |
-| `home_cta_label` | yes | Primary home CTA label. |
-| `presentations_cta_label` | yes | Secondary home CTA label. |
-| `presentations_page` | no | Labels for the presentations listing page. |
-| `links` | yes | Shared external links used across the app. |
+| `brand_title` | no | string |
+| `home_label` | no | string |
+| `presentations_label` | no | string |
+| `latest_presentation_label` | no | string |
+| `toggle_label` | no | string |
+
+### `site.attribution`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `enabled` | no | boolean | Controls whether attribution is rendered. |
+| `label` | no | string | Must be paired with `url` when present. |
+| `url` | no | string | Must be paired with `label` when present. |
+
+### `site.presentation_chrome`
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `mark_label` | no | string |
+
+### `site.presentation_toolbar`
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `navigation_label` | no | string |
+| `previous_slide_label` | no | string |
+| `next_slide_label` | no | string |
+| `presentation_mode_label` | no | string |
+| `shortcut_help_title` | no | string |
+| `shortcut_help_body` | no | string |
+| `shortcut_help_dismiss_label` | no | string |
+
+### `site.home_hero`
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `title_primary` | no | string |
+| `title_accent` | no | string |
+| `subtitle` | no | string |
+
+### `site.presentations_page`
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `title` | no | string |
+| `search_label` | no | string |
+| `search_placeholder` | no | string |
+| `year_label` | no | string |
+| `all_years_label` | no | string |
+| `open_presentation_label` | no | string |
+| `empty_title` | no | string |
+| `empty_message` | no | string |
+| `previous_page_label` | no | string |
+| `next_page_label` | no | string |
+| `page_label` | no | string |
+| `page_of_label` | no | string |
+| `showing_label` | no | string |
+| `total_label` | no | string |
+| `presentation_singular_label` | no | string |
+| `presentation_plural_label` | no | string |
+
+### `site.links`
+
+Three keys are currently required by the live validator:
+
+- `repository`
+- `docs`
+- `owasp`
+
+Each link object uses the same shape:
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `label` | yes | string |
+| `url` | yes | string |
+| `eyebrow` | no | string |
 
 ## Omitted behavior
 
-- Missing optional fields are omitted from the UI.
-- Labels should come from config rather than hardcoded defaults where possible.
-- The `data_sources` block is optional, but GitHub fetches require it when using the CLI.
+- Optional blocks can be omitted entirely.
+- `alt` fields without matching `url` fields are invalid.
+- `site.links.repository`, `site.links.docs`, and `site.links.owasp` must all exist today.

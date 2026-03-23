@@ -1,36 +1,45 @@
 # `presentations/index.yaml`
 
-This file is the registry of available presentations.
+This file controls what appears on the presentations list page.
 
-## Purpose
-
-It tells the app and CLI which presentations exist, which one is featured, and where to find each presentation's authored and generated YAML.
-
-## Minimal example
+## Example
 
 ```yaml
 presentations:
-  - id: demo-2026-q1
-    title: Demo Presentation
-    subtitle: Q1 2026
-    presentation: presentations/demo-2026-q1/presentation.yaml
-    generated: presentations/demo-2026-q1/generated.yaml
+  - id: 2026-spring-briefing
+    year: 2026
+    title: Acorn Cloud Product Brief
+    subtitle: Spring 2026
+    summary: Reliability work, platform roadmap, and team highlights for the first half of spring.
+    published: true
+    featured: true
 ```
 
 ## Field reference
 
-| Field | Required | Notes |
+### Root
+
+| Field | Required | Type |
 | --- | --- | --- |
-| `id` | yes | Presentation slug used in routes and file paths. |
-| `year` | no | Helpful for filtering/sorting the listing page. |
-| `title` | yes | Presentation title shown in the UI. |
-| `subtitle` | yes | Short summary or time window label. |
-| `featured` | no | Whether the presentation should surface first in the listing. |
-| `published` | no | Optional publication status flag. |
-| `presentation` | yes | Path to the authored presentation YAML. |
-| `generated` | yes | Path to generated data YAML. |
+| `presentations` | yes | array |
 
-## Omitted behavior
+### `presentations[]`
 
-- The listing page can sort and filter without every optional field.
-- The featured presentation becomes the default home CTA target.
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `id` | yes | string | Must be unique across the file. |
+| `year` | no | number | Used by filtering and display. |
+| `title` | yes | string | List title and route identity checks. |
+| `subtitle` | yes | string | Secondary list label and route consistency checks. |
+| `summary` | yes | string | Summary shown in the list row. |
+| `published` | yes | boolean | Whether the presentation should be treated as published content. |
+| `featured` | yes | boolean | Used for "latest presentation" selection. |
+
+## Consistency rules
+
+The validator checks this file against each matching `presentation.yaml` and `generated.yaml`:
+
+- `id` must match
+- `title` must match
+- `subtitle` must match
+- `year` must match when both sides provide it

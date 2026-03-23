@@ -1,36 +1,47 @@
 # GitHub Connector
 
-The current connector reads GitHub repository data for generated slide content.
+GitHub is the only built-in data source today.
 
-## Configuration
+## Configure the source
 
-The repository source is declared in `site.yaml`:
+Add this to `content/site.yaml`:
 
 ```yaml
 site:
   data_sources:
     - type: github
-      url: https://github.com/OWASP/threat-dragon
+      url: https://github.com/OWNER/REPO
 ```
 
-## Authentication
+Rules enforced by the validator:
 
-- A GitHub PAT improves reliability and avoids rate-limiting.
-- The CLI asks for a PAT in interactive mode when GitHub import is enabled.
-- If you do not provide one, the CLI continues best-effort and may skip some data.
+- `data_sources` must be an array
+- only one GitHub source is supported for fetch
+- the URL must point to `github.com`
 
 ## What the connector fetches
 
 - repository metadata
 - releases
-- merged PRs
-- contributor data
-- issue closures
-- star snapshots
+- merged pull requests
+- closed issues
+- contributor history used for first-time contributor detection
+- star snapshots for the current and previous periods
 
-## What remains authored
+## What still stays authored
 
 - roadmap narrative
-- slide copy
-- curated mentions
-- final editorial wording
+- spotlight summaries
+- community mentions
+- CTA copy
+- template structure
+
+## Token guidance
+
+- A PAT is recommended.
+- The CLI can continue without one, but rate-limiting or reduced coverage is more likely.
+- When provided interactively, the CLI can write the local `.env` file for you.
+
+## Current limitation
+
+Very large repositories can still make historical star snapshots expensive because exact star history is costly to reconstruct. The CLI records warnings and metadata when those snapshot paths become partial or unavailable.

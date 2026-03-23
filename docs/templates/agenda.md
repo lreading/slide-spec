@@ -1,21 +1,38 @@
 # Agenda
 
-The agenda template summarizes the deck in order. It is intentionally derived from the enabled slide list so it stays aligned with the presentation.
+The `agenda` template renders a derived list of enabled slides.
+
+![Agenda reference slide](/screenshots/template-agenda-reference.png)
+
+## Visible regions
+
+1. Slide title from `slide.title`
+2. Optional subtitle from `slide.subtitle`
+3. Agenda items derived from the rest of the enabled slides
+4. Shared presentation chrome from `site.presentation_logo` and `site.presentation_chrome.mark_label`
 
 ## Example YAML
 
 ```yaml
 template: agenda
 enabled: true
+title: Agenda
+subtitle: What this briefing covers
 content: {}
 ```
 
-## Screenshot
+## Field reference
 
-![Agenda slide](/screenshots/templates/agenda-slide.png)
+`agenda` has no template-specific `content` fields.
 
-## Behavior
+Required slide envelope fields:
 
-- The visible agenda items are generated from the enabled slides.
-- This template does not need authored bullet content.
-- If a slide is disabled, it should not appear in the agenda.
+| Field | Required | Type |
+| --- | --- | --- |
+| `title` | yes | string |
+| `subtitle` | no | string |
+
+## Omitted behavior
+
+- If `subtitle` is omitted, the subtitle line is removed.
+- Disabled slides are not included in the generated agenda list.

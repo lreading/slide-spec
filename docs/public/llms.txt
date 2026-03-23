@@ -1,17 +1,49 @@
 # slide-spec
 
-Declarative presentations for YAML-driven slides, GitHub-backed data, and reusable templates.
+slide-spec is a YAML-first static presentation tool.
 
-## Start here
+## Primary entrypoints
 
 - /quickstart
 - /schema/
 - /templates/
 - /cli/
+- /examples/
 
-## What matters
+## Product model
 
-- YAML-first authoring
-- template-driven slides
-- GitHub data import
-- static output with no backend
+- `site.yaml` defines global branding, labels, and shared links.
+- `presentations/index.yaml` defines the published archive list.
+- `presentation.yaml` defines authored slide structure and template content.
+- `generated.yaml` defines structured metrics, releases, contributors, and merged pull requests.
+
+## Current templates
+
+- hero
+- agenda
+- section-list-grid
+- timeline
+- progress-timeline
+- people
+- metrics-and-links
+- action-cards
+- closing
+
+## High-value docs pages
+
+- /schema/site
+- /schema/presentations-index
+- /schema/presentation
+- /schema/generated
+- /templates/hero
+- /templates/timeline
+- /templates/metrics-and-links
+- /examples/tutorial-example
+- /connectors/github
+
+## Important constraints
+
+- The current schema is exact; required fields and omission rules are documented in the schema pages.
+- Generated data can be authored manually or fetched from GitHub.
+- GitHub is the only built-in data source today.
+- The docs examples are based on a validated reference fixture project.

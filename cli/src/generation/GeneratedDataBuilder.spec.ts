@@ -208,7 +208,7 @@ describe('GeneratedDataBuilder', () => {
     })
   })
 
-  it('uses a combined star snapshot lookup for larger repositories with comparisons', async () => {
+  it('uses combined star snapshot lookup for very large repositories when it completes in budget', async () => {
     class LargeRepositoryClient extends StubGitHubClient {
       public combinedCalls = 0
       public singleCalls = 0
@@ -223,7 +223,7 @@ describe('GeneratedDataBuilder', () => {
 
       public override async getStargazerCountAt(_repository: GitHubRepositoryRef, _at: string): Promise<number> {
         this.singleCalls += 1
-        return 0
+        return 44000
       }
 
       public override async getStargazerCountsAt(
@@ -248,6 +248,58 @@ describe('GeneratedDataBuilder', () => {
     expect(client.singleCalls).toBe(0)
     expect(result.generated.stats.stars?.current).toBe(44000)
     expect(result.generated.stats.stars?.previous).toBe(43000)
+    expect(result.generated.stats.stars?.delta).toBe(1000)
+    expect(result.generated.stats.stars?.metadata).toEqual({
+      comparison_status: 'complete',
+      warning_codes: [],
+    })
+  })
+
+  it('marks previous star comparisons unavailable when the large-repository combined lookup falls back', async () => {
+    class LargeRepositoryFallbackClient extends StubGitHubClient {
+      public combinedCalls = 0
+      public singleCalls = 0
+
+      public override async getRepositoryMetadata() {
+        const metadata = await super.getRepositoryMetadata()
+        return {
+          ...metadata,
+          stars: 45000,
+        }
+      }
+
+      public override async getStargazerCountAt(_repository: GitHubRepositoryRef, _at: string): Promise<number> {
+        this.singleCalls += 1
+        return 44000
+      }
+
+      public override async getStargazerCountsAt(): Promise<number[]> {
+        this.combinedCalls += 1
+        throw new Error('Timed out')
+      }
+    }
+
+    const client = new LargeRepositoryFallbackClient()
+    const result = await builder.build({
+      client,
+      presentationId: '2026-q1',
+      currentPeriod,
+      previousPeriod,
+      repository,
+    })
+
+    expect(client.combinedCalls).toBe(1)
+    expect(client.singleCalls).toBe(1)
+    expect(result.generated.stats.stars?.current).toBe(44000)
+    expect(result.generated.stats.stars?.previous).toBe(44000)
+    expect(result.generated.stats.stars?.delta).toBe(0)
+    expect(result.generated.stats.stars?.metadata).toEqual({
+      comparison_status: 'unavailable',
+      warning_codes: ['combined_snapshot_fallback', 'previous_snapshot_unavailable_large_repo'],
+    })
+    expect(result.warnings).toContain(
+      'Previous-period star comparison was unavailable after exhausting the large-repository time budget.',
+    )
   })
 
   it('filters out releases outside the current period and falls back to repository name when no bullets or release name exist', async () => {

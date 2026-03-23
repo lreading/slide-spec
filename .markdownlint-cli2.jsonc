@@ -1,0 +1,14 @@
+{
+  "config": {
+    "default": false,
+    "no-trailing-spaces": true,
+    "single-trailing-newline": true,
+    "no-hard-tabs": true
+  },
+  "globs": [
+    "README.md",
+    "CONTRIBUTING.md",
+    "docs/**/*.md",
+    "!docs/node_modules/**"
+  ]
+}

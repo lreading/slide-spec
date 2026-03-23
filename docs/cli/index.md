@@ -1,27 +1,38 @@
-# CLI
+# CLI Reference
 
-The CLI is the authoring and generation entry point for slide-spec projects.
+The CLI is the authoring and build interface for slide-spec projects.
+
+## Command order
+
+1. `init`
+2. edit YAML
+3. `validate`
+4. optional `fetch`
+5. `build`
+6. `serve`
 
 ## Commands
 
-| Command | Purpose |
-| --- | --- |
-| `init` | Scaffold a new project with minimal working config. |
-| `fetch` | Pull GitHub-backed generated data into `generated.yaml`. |
-| `build` | Build the static site into `dist/`. |
-| `serve` | Build first, then serve the static site locally. |
-| `validate` | Validate authored and generated content. |
+- [init](/cli/init)
+- [fetch](/cli/fetch)
+- [build](/cli/build)
+- [serve](/cli/serve)
+- [validate](/cli/validate)
 
-## Usage model
+## Project-root model
 
-The CLI operates on a project root. That root contains the content/config for the presentation project, not the CLI source itself.
+All commands operate on a target project root.
 
-## Common flags
+You can pass that root:
 
-- `--project-root <path>`: explicitly set the project root.
-- positional project-root: supported as a convenience for all commands.
-- `--help`: show command-specific help.
+- as a positional argument, for example `slide-spec validate ./my-slides`
+- or with `--project-root`
 
-## Packaging
+## Interactive mode
 
-The packaged CLI is intended to be run with `npx @slide-spec/cli` or as the installed `slide-spec` binary once published.
+- `slide-spec` with no arguments starts interactive mode
+- `slide-spec init` with no flags starts interactive init
+
+## Packaged runtime behavior
+
+The target project does not need a local `app/` source tree. The packaged CLI brings its own runtime for `build` and `serve`.

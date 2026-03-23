@@ -1,0 +1,42 @@
+{
+  "version": "0.2",
+  "language": "en",
+  "words": [
+    "API",
+    "André",
+    "CodeQL",
+    "Dependabot",
+    "Ferreira",
+    "GitHub",
+    "Ladybird",
+    "OpenSSF",
+    "Shiki",
+    "Playwright",
+    "Threagile",
+    "VitePress",
+    "WCAG",
+    "cspell",
+    "dast",
+    "frontmatter",
+    "lychee",
+    "llms",
+    "markdownlint",
+    "misconfig",
+    "octocat",
+    "pnpm",
+    "pytm",
+    "sarif",
+    "sbom",
+    "slide-spec",
+    "Trivy",
+    "vitepress",
+    "writeups",
+    "zaproxy"
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/coverage/**",
+    "backups/**"
+  ]
+}

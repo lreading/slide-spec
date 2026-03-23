@@ -1,32 +1,48 @@
 # Section List Grid
 
-This template is for grouped bullet content in a card grid.
+The `section-list-grid` template renders multiple titled bullet sections in a grid.
+
+![Section list grid reference slide](/screenshots/template-section-list-grid-reference.png)
 
 ## Example YAML
 
 ```yaml
 template: section-list-grid
 enabled: true
-title: What changed
-subtitle: Product, docs, and release engineering
+title: What shipped
+subtitle: The highest-signal changes from this reporting period
 content:
   sections:
-    - title: Product
+    - title: Launch workflow
       bullets:
-        - Reusable templates landed.
-        - Desktop fixes reduced friction.
-    - title: Docs
-      bullets:
-        - Schema docs were refreshed.
-        - CLI guidance was updated.
+        - Starter checklists now include task ownership and sign-off states.
+        - PDF exports now preserve section grouping for external reviews.
 ```
 
-## Screenshot
+## Field reference
 
-![Section list grid slide](/screenshots/templates/section-list-grid-slide.png)
+| Field | Required | Type |
+| --- | --- | --- |
+| `title` | yes | string |
+| `subtitle` | no | string |
+| `content.sections` | yes | array |
 
-## Behavior
+### `content.sections[]`
 
-- Each section title becomes a card title.
-- Bullets are rendered in a compact grid layout.
-- Empty sections should be omitted rather than padded with filler text.
+| Field | Required | Type |
+| --- | --- | --- |
+| `title` | yes | string |
+| `bullets` | yes | string[] |
+
+## Visible regions
+
+1. Slide title
+2. Optional slide subtitle
+3. One card per `content.sections[]`
+4. Section heading from `sections[].title`
+5. Bullet list from `sections[].bullets`
+
+## Omitted behavior
+
+- Empty sections are invalid because `bullets` must be an array.
+- The grid grows or shrinks with the number of sections provided.

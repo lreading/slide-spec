@@ -1,0 +1,18 @@
+presentation:
+  id: 2025-winter-summary
+  year: 2025
+  title: Acorn Cloud Winter Summary
+  subtitle: Winter 2025
+  slides:
+    - template: hero
+      enabled: true
+      content:
+        title_primary: Winter
+        title_accent: Summary
+        subtitle_prefix: Archive Example
+        quote: Earlier presentations still use the same template system.
+    - template: closing
+      enabled: true
+      content:
+        heading: Archive example
+        message: This smaller presentation exists to show that older entries render cleanly from the same schema.

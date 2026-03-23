@@ -1,30 +1,93 @@
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { resolve } from 'node:path'
+import { Writable } from 'node:stream'
 
 import { afterEach, describe, expect, it } from 'vitest'
 
 import { StaticSiteServer } from './StaticSiteServer'
 
+import type { IncomingMessage, Server, ServerResponse } from 'node:http'
+
 const tempRoots: string[] = []
 
-async function getFreePort(): Promise<number> {
-  const server = await import('node:net').then(({ createServer }) => createServer())
+class ResponseCapture extends Writable {
+  public statusCode = 200
+  public headers: Record<string, string> = {}
+  private readonly chunks: Buffer[] = []
 
-  return await new Promise<number>((resolvePort, reject) => {
-    server.once('error', reject)
-    server.listen(0, '127.0.0.1', () => {
-      const address = server.address()
-      server.close(() => {
-        if (!address || typeof address === 'string') {
-          reject(new Error('Failed to allocate port.'))
-          return
-        }
+  public override _write(chunk: Buffer | string, _encoding: BufferEncoding, callback: (error?: Error | null) => void): void {
+    this.chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+    callback()
+  }
 
-        resolvePort(address.port)
-      })
-    })
+  public writeHead(statusCode: number, headers: Record<string, string>): this {
+    this.statusCode = statusCode
+    this.headers = headers
+    return this
+  }
+
+  public override end(cb?: () => void): this
+  public override end(chunk: string | Buffer, cb?: () => void): this
+  public override end(chunk: string | Buffer, encoding: BufferEncoding, cb?: () => void): this
+  public override end(
+    chunkOrCallback?: string | Buffer | (() => void),
+    encodingOrCallback?: BufferEncoding | (() => void),
+    callback?: () => void,
+  ): this {
+    const chunk = typeof chunkOrCallback === 'function' ? undefined : chunkOrCallback
+    const resolvedCallback = typeof chunkOrCallback === 'function'
+      ? chunkOrCallback
+      : typeof encodingOrCallback === 'function'
+        ? encodingOrCallback
+        : callback
+
+    if (chunk !== undefined) {
+      this.chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+    }
+    resolvedCallback?.()
+    super.end()
+    return this
+  }
+
+  public getBody(): string {
+    return Buffer.concat(this.chunks).toString('utf8')
+  }
+}
+
+interface ServerHarness {
+  handler?: (request: IncomingMessage, response: ServerResponse) => Promise<void>
+}
+
+function createServerDouble(harness: ServerHarness): Server {
+  return {
+    once: () => undefined,
+    listen: (_port: number, _host: string, callback?: () => void) => {
+      callback?.()
+      return createServerDouble(harness)
+    },
+    close: (callback?: (error?: Error) => void) => {
+      callback?.()
+      return createServerDouble(harness)
+    },
+  } as unknown as Server
+}
+
+async function sendRequest(
+  handler: (request: IncomingMessage, response: ServerResponse) => Promise<void>,
+  url: string,
+): Promise<ResponseCapture> {
+  const response = new ResponseCapture()
+  await handler({ url } as IncomingMessage, response as unknown as ServerResponse)
+  await new Promise<void>((resolvePromise) => {
+    if (response.writableFinished) {
+      resolvePromise()
+      return
+    }
+
+    response.once('finish', () => resolvePromise())
   })
+  return response
 }
 
 describe('StaticSiteServer', () => {
@@ -33,25 +96,33 @@ describe('StaticSiteServer', () => {
   })
 
   it('serves static assets and falls back to index.html for routes', async () => {
-    const root = await mkdtemp(resolve(tmpdir(), 'oss-slides-static-'))
+    const root = await mkdtemp(resolve(tmpdir(), 'slide-spec-static-'))
     tempRoots.push(root)
     await writeFile(resolve(root, 'index.html'), '<html>home</html>')
     await writeFile(resolve(root, 'app.css'), 'body{}')
     await writeFile(resolve(root, 'blob.bin'), 'blob')
-    const port = await getFreePort()
-    const server = new StaticSiteServer()
 
-    await server.start(root, '127.0.0.1', port)
+    const harness: ServerHarness = {}
+    const server = new StaticSiteServer((listener) => {
+      harness.handler = listener
+      return createServerDouble(harness)
+    })
 
-    const homeResponse = await fetch(`http://127.0.0.1:${port}/`)
-    const assetResponse = await fetch(`http://127.0.0.1:${port}/app.css`)
-    const blobResponse = await fetch(`http://127.0.0.1:${port}/blob.bin?cache=1`)
-    const routeResponse = await fetch(`http://127.0.0.1:${port}/presentations/demo`)
+    await server.start(root, '127.0.0.1', 4173)
 
-    expect(await homeResponse.text()).toContain('home')
-    expect(await assetResponse.text()).toContain('body')
-    expect(await blobResponse.text()).toContain('blob')
-    expect(await routeResponse.text()).toContain('home')
+    const homeResponse = await sendRequest(harness.handler as NonNullable<ServerHarness['handler']>, '/')
+    const assetResponse = await sendRequest(harness.handler as NonNullable<ServerHarness['handler']>, '/app.css')
+    const blobResponse = await sendRequest(harness.handler as NonNullable<ServerHarness['handler']>, '/blob.bin?cache=1')
+    const routeResponse = await sendRequest(harness.handler as NonNullable<ServerHarness['handler']>, '/presentations/demo')
+
+    expect(homeResponse.getBody()).toContain('home')
+    expect(homeResponse.headers['Content-Type']).toBe('text/html; charset=utf-8')
+    expect(assetResponse.getBody()).toContain('body')
+    expect(assetResponse.headers['Content-Type']).toBe('text/css; charset=utf-8')
+    expect(blobResponse.getBody()).toContain('blob')
+    expect(blobResponse.headers['Content-Type']).toBe('application/octet-stream')
+    expect(routeResponse.getBody()).toContain('home')
+    expect(routeResponse.headers['Content-Type']).toBe('text/html; charset=utf-8')
 
     await server.close()
   })

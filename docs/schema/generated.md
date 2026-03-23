@@ -1,48 +1,108 @@
 # `generated.yaml`
 
-This file holds the data that the CLI derives from external sources.
+This file contains structured data for metrics, releases, contributors, and merged pull requests.
 
-## Purpose
+It can be authored manually or populated by the CLI.
 
-Generated data keeps extracted metrics separate from authored copy so the deck stays reviewable.
+## Example
 
-## Minimal example
+See the full reference file:
 
-```yaml
-generated:
-  id: demo-2026-q1
-  period:
-    start: 2026-01-01
-    end: 2026-03-31
-  previous_presentation_id: demo-2025-q4
-  stats:
-    stars:
-      current: 0
-      previous: 0
-      delta: 0
-      comparison_status: unavailable
-      warning_codes: []
-```
+- [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)
 
-## Field reference
+## Root fields
 
-| Field | Required | Notes |
+| Field | Required | Type |
 | --- | --- | --- |
-| `id` | yes | Matches the presentation id. |
-| `period` | yes | Current reporting period start/end. |
-| `previous_presentation_id` | no | Helpful for comparisons and lineage. |
-| `stats` | yes | Metric data keyed by metric id. |
-| `releases` | yes | Release candidates and release metadata. |
-| `merged_prs` | yes | Merged pull request data used by slides and summaries. |
-| `contributors` | yes | Contributor totals and lists. |
+| `generated.id` | yes | string |
+| `generated.period` | yes | object |
+| `generated.previous_presentation_id` | no | string |
+| `generated.stats` | yes | object |
+| `generated.releases` | yes | array |
+| `generated.contributors` | yes | object |
+| `generated.merged_prs` | no | array |
 
-## Metric metadata
+## `generated.period`
 
-Each metric includes:
-- `current`
-- `previous`
-- `delta`
-- `comparison_status`
-- `warning_codes`
+| Field | Required | Type |
+| --- | --- | --- |
+| `start` | yes | string |
+| `end` | yes | string |
 
-The UI uses authored content to decide whether to display a delta, while the metadata is available for review and debugging.
+## `generated.stats`
+
+`stats` is a record keyed by metric id. The current UI commonly uses keys like:
+
+- `stars`
+- `issues_closed`
+- `prs_merged`
+- `new_contributors`
+
+Each metric object uses the same shape:
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `label` | yes | string |
+| `current` | yes | number |
+| `previous` | yes | number |
+| `delta` | yes | number |
+| `metadata` | yes | object |
+
+### `generated.stats.<metric>`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `label` | yes | string | Human-facing label used by metric slides. |
+| `current` | yes | number | Current-period value. |
+| `previous` | yes | number | Previous-period value or fallback/unavailable placeholder. |
+| `delta` | yes | number | `current - previous`. |
+| `metadata` | yes | object | Comparison metadata used for audit/debugging. |
+
+### `generated.stats.<metric>.metadata`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `comparison_status` | yes | string | One of `complete`, `partial`, `skipped`, or `unavailable`. |
+| `warning_codes` | yes | string[] | Machine-readable warnings for the metric. |
+
+## `generated.releases[]`
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `id` | yes | string |
+| `version` | yes | string |
+| `published_at` | yes | string |
+| `url` | yes | string |
+| `summary_bullets` | yes | string[] |
+
+## `generated.contributors`
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `total` | yes | number |
+| `authors` | yes | array |
+
+### `generated.contributors.authors[]`
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `login` | yes | string |
+| `name` | yes | string |
+| `avatar_url` | yes | string |
+| `merged_prs` | yes | number |
+| `first_time` | yes | boolean |
+
+## `generated.merged_prs[]`
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `number` | yes | number |
+| `title` | yes | string |
+| `merged_at` | yes | string |
+| `author_login` | yes | string |
+
+## Notes
+
+- `generated.yaml` is not required to come from the GitHub connector.
+- The live validator only checks the shape, not the semantic truth of the values.
+- If you hand-author this file, keep labels and metric keys consistent with the slide content that consumes them.

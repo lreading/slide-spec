@@ -16,10 +16,12 @@ It is built around three ideas:
 - the app stays static so it can be deployed anywhere without a backend
 
 Start here:
-- docs: [docs/](./docs/)
+- docs site: [docs/](./docs/)
+- docs workflow: [docs/README.md](./docs/README.md)
 - quickstart: [docs/quickstart.md](./docs/quickstart.md)
 - app guide: [app/README.md](./app/README.md)
 - CLI guide: [cli/README.md](./cli/README.md)
+- shared types: [shared/README.md](./shared/README.md)
 
 ## Project Layout
 

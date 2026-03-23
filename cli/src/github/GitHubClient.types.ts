@@ -19,6 +19,7 @@ export interface GitHubRepositoryMetadata {
 export interface GitHubStargazerSnapshotOptions {
   currentTotal?: number
   repositoryCreatedAt?: string
+  timeoutMs?: number
 }
 
 export interface GitHubReleaseSummary {

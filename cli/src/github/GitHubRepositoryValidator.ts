@@ -1,6 +1,7 @@
 import { DataSourceResolver } from '../config/DataSourceResolver'
-
 import { GitHubApiClient, GitHubApiError } from './GitHubClient'
+
+import type { CliLogger } from '../logging/CliLogger.types'
 
 import type { GitHubRepositoryRef } from '../config/Config.types'
 
@@ -14,6 +15,7 @@ interface GitHubRepositoryValidatorOptions {
   token?: string
   repositoryClient?: GitHubApiClient
   dataSourceResolver?: DataSourceResolver
+  logger?: CliLogger
 }
 
 export class GitHubRepositoryValidator {
@@ -23,6 +25,7 @@ export class GitHubRepositoryValidator {
   public constructor(options: GitHubRepositoryValidatorOptions = {}) {
     this.repositoryClient = options.repositoryClient ?? new GitHubApiClient({
       ...(options.token !== undefined ? { token: options.token } : {}),
+      ...(options.logger !== undefined ? { logger: options.logger } : {}),
     })
     this.dataSourceResolver = options.dataSourceResolver ?? new DataSourceResolver()
   }

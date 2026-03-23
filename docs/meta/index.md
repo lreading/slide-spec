@@ -1,11 +1,8 @@
 # Meta
 
-This section covers the machine-facing and supply-chain-adjacent parts of the docs site.
+These pages cover the machine-readable and operational edges of the docs and product:
 
-## Topics
-
-- automated accessibility audit status
-- AI-friendly docs metadata
-- crawler metadata
-- SBOM availability
-- agent assistance guidance
+- [Accessibility](/meta/accessibility)
+- [AI-friendly docs](/meta/ai)
+- [Agent help](/meta/agent-assistance)
+- [Supply chain](/meta/supply-chain)

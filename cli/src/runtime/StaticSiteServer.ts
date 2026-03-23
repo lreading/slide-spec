@@ -1,6 +1,6 @@
 import { createReadStream } from 'node:fs'
 import { access, readFile } from 'node:fs/promises'
-import { createServer, type Server } from 'node:http'
+import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
 import { extname, join, normalize, resolve } from 'node:path'
 
 const mimeTypes: Record<string, string> = {
@@ -14,28 +14,19 @@ const mimeTypes: Record<string, string> = {
   '.woff2': 'font/woff2',
 }
 
+type CreateServerFactory = (
+  listener: (request: IncomingMessage, response: ServerResponse) => Promise<void>,
+) => Server
+
 export class StaticSiteServer {
   private server: Server | undefined
 
-  public async start(root: string, host: string, port: number): Promise<void> {
-    this.server = createServer(async (request, response) => {
-      const requestPath = request.url?.split('?')[0] ?? '/'
-      const filePath = this.resolveRequestPath(root, requestPath)
+  public constructor(
+    private readonly createServerFactory: CreateServerFactory = createServer,
+  ) {}
 
-      try {
-        await access(filePath)
-        response.writeHead(200, {
-          'Content-Type': mimeTypes[extname(filePath)] ?? 'application/octet-stream',
-        })
-        createReadStream(filePath).pipe(response)
-      } catch {
-        const indexPath = resolve(root, 'index.html')
-        response.writeHead(200, {
-          'Content-Type': 'text/html; charset=utf-8',
-        })
-        response.end(await readFile(indexPath, 'utf8'))
-      }
-    })
+  public async start(root: string, host: string, port: number): Promise<void> {
+    this.server = this.createServerFactory(this.createRequestHandler(root))
 
     await new Promise<void>((resolvePromise, reject) => {
       this.server?.once('error', reject)
@@ -61,5 +52,26 @@ export class StaticSiteServer {
     const normalizedPath = normalize(requestPath).replace(/^(\.\.[/\\])+/, '')
     const relativePath = normalizedPath === '/' ? 'index.html' : normalizedPath.replace(/^\//, '')
     return join(root, relativePath)
+  }
+
+  private createRequestHandler(root: string) {
+    return async (request: IncomingMessage, response: ServerResponse): Promise<void> => {
+      const requestPath = request.url?.split('?')[0] ?? '/'
+      const filePath = this.resolveRequestPath(root, requestPath)
+
+      try {
+        await access(filePath)
+        response.writeHead(200, {
+          'Content-Type': mimeTypes[extname(filePath)] ?? 'application/octet-stream',
+        })
+        createReadStream(filePath).pipe(response)
+      } catch {
+        const indexPath = resolve(root, 'index.html')
+        response.writeHead(200, {
+          'Content-Type': 'text/html; charset=utf-8',
+        })
+        response.end(await readFile(indexPath, 'utf8'))
+      }
+    }
   }
 }

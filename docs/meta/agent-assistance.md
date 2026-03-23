@@ -1,17 +1,26 @@
 # Agent Assistance
 
-slide-spec is intended to work well with agents, but the docs should keep humans in the review loop.
+Agents work best with slide-spec when the human reviewer keeps the source-of-truth files explicit.
 
-## Suggested structure for prompts
+## Good tasks for agents
 
-- identify the presentation goal
-- identify the data source
-- identify the reporting period
-- identify the template or slide type
-- request human review of the generated output
+- drafting `presentation.yaml`
+- filling `generated.yaml` from approved source data
+- checking schema validity
+- generating screenshots from a validated fixture project
 
-## What the docs should tell users
+## Tasks that still need human review
 
-- what the agent can do safely
-- what still needs human review
-- how to keep config and content aligned
+- roadmap priorities
+- release narrative
+- external links
+- spotlight summaries
+- any generated metrics that look surprising
+
+## Recommended workflow
+
+1. author or fetch data
+2. run `validate`
+3. run `build` or `serve`
+4. review the rendered output
+5. commit only after the rendered site looks correct
