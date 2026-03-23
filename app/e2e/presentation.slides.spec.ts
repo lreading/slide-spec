@@ -25,16 +25,22 @@ function formatFooterText(url: string): string {
   return `${parsed.host}${path}`
 }
 
+function formatHeroTitle(primary: string | undefined, accent: string | undefined): string {
+  return [primary, accent].filter(Boolean).join(' ')
+}
+
+function formatContributorsLinkLabel(total: number, label: string): string {
+  return `${total} ${label}`
+}
+
 async function assertSlideContent(page: Page, slide: PresentationSlide): Promise<void> {
   switch (slide.template) {
     case 'hero':
       await expect(page.getByRole('heading', { name: /owasp threat dragon/i })).toBeVisible()
       await expect(
         page.getByRole('heading', {
-          name: new RegExp(
-            `${slide.content.title_primary ?? ''}\\s+${slide.content.title_accent ?? ''}`,
-            'i',
-          ),
+          name: formatHeroTitle(slide.content.title_primary, slide.content.title_accent),
+          exact: true,
         }),
       ).toBeVisible()
       await expect(page.getByText(slide.content.subtitle_prefix ?? '')).toBeVisible()
@@ -143,7 +149,8 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       const contributorsLinkLabel = contributorSlide.content.contributors_link_label ?? 'contributors'
       await expect(
         page.getByRole('link', {
-          name: new RegExp(`${record.generated.contributors.total}\\s+${contributorsLinkLabel}`, 'i'),
+          name: formatContributorsLinkLabel(record.generated.contributors.total, contributorsLinkLabel),
+          exact: true,
         }),
       ).toHaveAttribute('href', `${site.links.repository.url}/graphs/contributors`)
       break
@@ -167,7 +174,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         await expect(page.getByText(mention.type, { exact: true }).first()).toBeVisible()
         await expect(page.getByText(mention.title)).toBeVisible()
         if (mention.url && mention.url_label) {
-          await expect(page.getByRole('link', { name: new RegExp(mention.url_label, 'i') }).first()).toHaveAttribute(
+          await expect(page.getByRole('link', { name: mention.url_label, exact: true }).first()).toHaveAttribute(
             'href',
             mention.url,
           )
