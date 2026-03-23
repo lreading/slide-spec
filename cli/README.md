@@ -1,6 +1,6 @@
-# slide-spec CLI
+# Slide Spec CLI
 
-This package is the standalone authoring CLI for slide-spec.
+This package is the standalone authoring CLI for Slide Spec.
 
 It manages project scaffolding, GitHub-backed data fetches, validation, and local build/serve flows against a target project root.
 
@@ -34,4 +34,4 @@ Usage notes:
 - The CLI accepts an explicit project root so it can run against external projects, not just this repository.
 - `slide-spec <command> --help` prints contextual help for each subcommand.
 
-For the full command surface, prompt flow, and project-root expectations, keep this README alongside the command help output and the implementation plan in `agents/`.
+For the full command surface, prompt flow, and project-root expectations, keep this README alongside the command help output.

@@ -1,0 +1,22 @@
+presentation:
+  id: readme-demo
+  year: 2025
+  title: Quarterly roadmap walkthrough
+  subtitle: Demo deck
+  slides:
+    - template: hero
+      enabled: true
+      content:
+        title_primary: Slide
+        title_accent: Spec
+        subtitle_prefix: README demo
+        quote: A few slides to show navigation and presentation mode.
+    - template: agenda
+      enabled: true
+      title: Agenda
+      content: {}
+    - template: closing
+      enabled: true
+      content:
+        heading: Thanks
+        message: This deck exists only for demos and recordings.

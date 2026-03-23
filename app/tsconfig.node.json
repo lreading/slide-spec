@@ -22,5 +22,12 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true
   },
-  "include": ["vite.config.ts", "playwright.config.ts", "e2e/**/*.ts"]
+  "include": [
+    "vite.config.ts",
+    "playwright.config.ts",
+    "playwright.visual.config.ts",
+    "playwright.demo.config.ts",
+    "playwright.readme-gif.config.ts",
+    "e2e/**/*.ts"
+  ]
 }

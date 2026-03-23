@@ -18,7 +18,7 @@ site:
     toggle_label: Toggle navigation
   attribution:
     enabled: true
-    label: Powered by slide-spec
+    label: Powered by Slide Spec
     url: https://github.com/lreading/slide-spec
   presentation_chrome:
     mark_label: Acorn Cloud

@@ -2,10 +2,26 @@ export const selectAssetModules = (
   source: string | undefined,
   liveModules: Record<string, unknown>,
   fixtureModules: Record<string, unknown>,
-): Record<string, unknown> => (source === 'fixtures' ? fixtureModules : liveModules)
+  demoModules: Record<string, unknown>,
+  docsReferenceModules: Record<string, unknown>,
+): Record<string, unknown> => {
+  if (source === 'fixtures') {
+    return fixtureModules
+  }
+  if (source === 'demo') {
+    return demoModules
+  }
+  if (source === 'docs-reference') {
+    return docsReferenceModules
+  }
+  return liveModules
+}
 
 export const normalizeAssetPath = (path: string): string =>
-  path.replace(/^(\.\.\/)+(e2e\/fixtures\/)?content\//, 'content/')
+  path
+    .replace(/^(\.\.\/)+e2e\/fixtures\/content-demo\/assets\//, 'content/assets/')
+    .replace(/^(\.\.\/)+docs\/fixtures\/reference-project\/content\//, 'content/')
+    .replace(/^(\.\.\/)+(e2e\/fixtures\/)?content\//, 'content/')
 
 const liveAssetModules = import.meta.glob('../../../content/assets/**/*.{png,jpg,jpeg,svg,webp,avif,gif,ico}', {
   eager: true,
@@ -15,7 +31,24 @@ const fixtureAssetModules = import.meta.glob('../../e2e/fixtures/content/assets/
   eager: true,
   import: 'default',
 })
-const assetModules = selectAssetModules(import.meta.env.VITE_CONTENT_SOURCE, liveAssetModules, fixtureAssetModules)
+const demoAssetModules = import.meta.glob('../../e2e/fixtures/content-demo/assets/**/*.{png,jpg,jpeg,svg,webp,avif,gif,ico}', {
+  eager: true,
+  import: 'default',
+})
+const docsReferenceAssetModules = import.meta.glob(
+  '../../../docs/fixtures/reference-project/content/assets/**/*.{png,jpg,jpeg,svg,webp,avif,gif,ico}',
+  {
+    eager: true,
+    import: 'default',
+  },
+)
+const assetModules = selectAssetModules(
+  import.meta.env.VITE_CONTENT_SOURCE,
+  liveAssetModules,
+  fixtureAssetModules,
+  demoAssetModules,
+  docsReferenceAssetModules,
+)
 
 const assetLookup = new Map<string, string>(
   Object.entries(assetModules).flatMap(([path, source]) => {

@@ -1,75 +1,79 @@
-# slide-spec
 
-[![Apache-2.0](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
-[![TypeScript](https://img.shields.io/badge/code-TypeScript-3178c6.svg)](https://www.typescriptlang.org/)
-[![Vue 3](https://img.shields.io/badge/ui-Vue%203-42b883.svg)](https://vuejs.org/)
-[![Vite](https://img.shields.io/badge/build-Vite-646cff.svg)](https://vite.dev/)
-[![Vitest](https://img.shields.io/badge/tests-Vitest-6e9f18.svg)](https://vitest.dev/)
-[![Playwright](https://img.shields.io/badge/e2e-Playwright-2ead33.svg)](https://playwright.dev/)
-[![Accessibility](https://img.shields.io/badge/accessibility-automated%20audit%20passing-2ea44f.svg)](./docs/meta/accessibility.md)
-[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12235/badge)](https://www.bestpractices.dev/projects/12235)
 
-slide-spec is a data-driven slide system for community updates, roadmap reviews, and other recurring presentation decks.
+# Slide Spec
 
-It is built around three ideas:
-- authored YAML is the source of truth
-- generated data comes from scripts and CLI fetches
-- the app stays static so it can be deployed anywhere without a backend
+### Create beautiful slides using data, not powerpoint
 
-Start here:
-- docs site: [docs/](./docs/)
-- docs workflow: [docs/README.md](./docs/README.md)
-- quickstart: [docs/quickstart.md](./docs/quickstart.md)
-- app guide: [app/README.md](./app/README.md)
-- CLI guide: [cli/README.md](./cli/README.md)
-- shared types: [shared/README.md](./shared/README.md)
 
-## Project Layout
 
-- `app/`: Vue 3 presentation app and local dev server
-- `cli/`: standalone authoring CLI for init, fetch, build, serve, and validate
-- `shared/`: shared types and validation used by both app and CLI
-- `content/`: authored presentation data and generated outputs
-- `docs/`: VitePress docs site
-- `agents/`: implementation plans and work tracking
+[Main branch CI](https://github.com/lreading/slide-spec/actions/workflows/main.yml)
+[Pull request CI](https://github.com/lreading/slide-spec/actions/workflows/pr.yml)
+[Quality gates](https://github.com/lreading/slide-spec/actions/workflows/reusable-quality.yml)
+[License](./LICENSE)
+[OpenSSF Best Practices](https://www.bestpractices.dev/projects/12235)
+
+Walkthrough: home, presentation list, sample deck, presentation mode, stepping through slides
+
+
+
+
+
+## Overview
+
+Slide Spec grew out of **open source community updates**: keep release notes and roadmaps as **structured data in the same repo** as the code, not in a separate slide deck nobody can review in a PR.
+
+- **Author in structured YAML** - slides and copy are data you can diff, lint, and feed from scripts or CI.
+- **Static site output** - Slide Spec generates a static site you can host anywhere: CDN, S3, GitHub Pages, and similar hosts.
+- **OSS first** - built for open source first, without proprietary file types or proprietary authoring software.
+- **GitOps presentations** - move decks into a GitOps-style workflow with validation baked in.
+
+
 
 ## Quickstart
 
-If you want to see the UI right away:
+Use the Slide Spec CLI to get started.
 
-1. `cd app`
-2. `npm install`
-3. `npm run dev`
+Requirements: Node.js 22+ and npm.
 
-If you want to work on the authoring flow:
+1. **Scaffold:** `npx @slide-spec/cli init ./my-deck` 
+2. **Edit YAML** under `my-deck/content/` (`site.yaml`, `presentations/index.yaml`, and each deck’s `presentation.yaml` / `generated.yaml`).
+3. **Validate YAML:** `npx @slide-spec/cli validate ./my-deck`
+4. **Preview locally:** `npx @slide-spec/cli serve ./my-deck`
+5. **Build:** `npx @slide-spec/cli build ./my-deck` (produces the static site for deployment)
 
-1. `cd cli`
-2. `npm install`
-3. `npm run verify`
-4. `npm run build`
+Optional: set a public deployment URL in `site.yaml` or pass `--deployment-url` to the `build` command if yous'd like a dynamically generated `sitemap.xml`.
 
-For the CLI usage and project-root workflow, see [cli/README.md](./cli/README.md).
-For the app commands and visual-regression gate, see [app/README.md](./app/README.md).
-For shared schema/validation helpers, see [shared/README.md](./shared/README.md).
 
-## Quality Gates
 
-- `cd app && npm run verify`
-- `cd app && npm run coverage`
-- `cd app && npm run e2e`
-- `cd app && npm run a11y`
-- `cd app && npm run visual`
-- `cd cli && npm run verify`
-- `cd cli && npm run coverage`
-- `cd cli && npm run semgrep`
-- `cd cli && npm run spellcheck`
-- `cd docs && npm run verify`
+## Local development
 
-## Content Model
+### Requirements
 
-- `content/site.yaml`: site-wide branding, links, and UX copy
-- `content/presentations/index.yaml`: presentation registry
-- `content/presentations/<id>/presentation.yaml`: authored slides and template content
-- `content/presentations/<id>/generated.yaml`: fetched/generated data
+- Node.js 24 
+- npm
+- Git
+- Playwright for app browser tests: `cd app && npx playwright install chromium`
+- Docker: required for Semgrep and other tooling aligned with CI
 
-The docs site under `docs/` is the long-form reference for schema, templates, connectors, and CLI usage.
+### Repository layout
+
+
+| Directory  | Purpose                                                   |
+| ---------- | --------------------------------------------------------- |
+| `app/`     | Presentation layer                                        |
+| `cli/`     | CLI used to scaffold, validate, build, and serve the site |
+| `docs/`    | Project documentation                                     |
+| `shared/`  | Shared types and YAML validation used by the app and CLI  |
+| `content/` | YAML for this repo’s own presentations!                   |
+| `scripts/` | Maintainer scripts                                        |
+
+
+Each package directory has its own README with details for local development. Please follow [CONTRIBUTING.md](./CONTRIBUTING.md) when opening a pull request.
+
+
+
+## Quality gates
+
+There are several layers of quality gates to guard against regressions and breaking changes. **These gates are required to pass before code is merged.**
+
+For local work, use `npm run verify` in each package you touch. GitHub Actions runs the same ideas automatically so the `main` branch stays stable and ready to release.

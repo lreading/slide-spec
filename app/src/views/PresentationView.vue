@@ -17,6 +17,7 @@ const shortcutHelpDismissed = ref(false)
 const site = contentRepository.getSiteContent()
 const toolbarContent = resolvePresentationToolbarContent(site)
 const shortcutStorageKey = 'slide-spec.shortcut-help.dismissed'
+const useUrlOnlyPresentation = import.meta.env.VITE_PRESENTATION_URL_MODE === 'true'
 const presentationId = computed(() => String(route.params.presentationId))
 const record = computed(() => contentRepository.getPresentation(presentationId.value))
 const slides = computed(() => record.value.presentation.slides.filter((slide) => slide.enabled))
@@ -26,7 +27,7 @@ const currentSlide = computed(() => slides.value[slideNumber.value - 1])
 const isPresentationMode = computed(() => route.query.mode === 'presentation')
 const isFullscreenAvailable = typeof document !== 'undefined' && Boolean(document.fullscreenEnabled)
 const isPresentationActive = computed(() =>
-  isFullscreenAvailable ? fullscreenActive.value : isPresentationMode.value,
+  useUrlOnlyPresentation ? isPresentationMode.value : (isFullscreenAvailable ? fullscreenActive.value : isPresentationMode.value),
 )
 const showShortcutHelp = computed(
   () =>
@@ -40,6 +41,11 @@ const onKeydown = (event: KeyboardEvent): void => {
   void handleKeydown(event)
 }
 const syncFullscreenState = (): void => {
+  if (useUrlOnlyPresentation) {
+    fullscreenActive.value = false
+    return
+  }
+
   fullscreenActive.value = Boolean(document.fullscreenElement)
 
   if (!fullscreenActive.value && isPresentationMode.value && isFullscreenAvailable) {
@@ -66,7 +72,7 @@ const updateRoute = async (nextSlide: number, mode = isPresentationMode.value): 
 }
 
 const enterPresentationMode = async (): Promise<void> => {
-  if (isFullscreenAvailable && !document.fullscreenElement) {
+  if (!useUrlOnlyPresentation && isFullscreenAvailable && !document.fullscreenElement) {
     await document.documentElement.requestFullscreen()
   }
 
@@ -74,7 +80,7 @@ const enterPresentationMode = async (): Promise<void> => {
 }
 
 const exitPresentationMode = async (): Promise<void> => {
-  if (document.fullscreenElement) {
+  if (!useUrlOnlyPresentation && document.fullscreenElement) {
     await document.exitFullscreen()
     return
   }

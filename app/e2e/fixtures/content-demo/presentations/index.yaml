@@ -1,0 +1,8 @@
+presentations:
+  - id: readme-demo
+    year: 2025
+    title: Quarterly roadmap walkthrough
+    subtitle: Demo deck
+    summary: Short fixture used for README and screen recordings.
+    published: true
+    featured: true

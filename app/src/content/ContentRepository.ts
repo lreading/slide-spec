@@ -12,7 +12,20 @@ export const selectContentFiles = (
   source: string | undefined,
   liveFiles: Record<string, unknown>,
   fixtureFiles: Record<string, unknown>,
-): Record<string, unknown> => (source === 'fixtures' ? fixtureFiles : liveFiles)
+  demoFiles: Record<string, unknown>,
+  docsReferenceFiles: Record<string, unknown>,
+): Record<string, unknown> => {
+  if (source === 'fixtures') {
+    return fixtureFiles
+  }
+  if (source === 'demo') {
+    return demoFiles
+  }
+  if (source === 'docs-reference') {
+    return docsReferenceFiles
+  }
+  return liveFiles
+}
 
 const liveContentFiles = import.meta.glob('../../../content/**/*.yaml', {
   eager: true,
@@ -24,9 +37,25 @@ const fixtureContentFiles = import.meta.glob('../../e2e/fixtures/content/**/*.ya
   import: 'default',
   query: '?raw',
 })
+const demoContentFiles = import.meta.glob('../../e2e/fixtures/content-demo/**/*.yaml', {
+  eager: true,
+  import: 'default',
+  query: '?raw',
+})
+const docsReferenceContentFiles = import.meta.glob('../../../docs/fixtures/reference-project/content/**/*.yaml', {
+  eager: true,
+  import: 'default',
+  query: '?raw',
+})
 const rawContentFiles = Object.fromEntries(
   Object.entries(
-    selectContentFiles(import.meta.env.VITE_CONTENT_SOURCE, liveContentFiles, fixtureContentFiles),
+    selectContentFiles(
+      import.meta.env.VITE_CONTENT_SOURCE,
+      liveContentFiles,
+      fixtureContentFiles,
+      demoContentFiles,
+      docsReferenceContentFiles,
+    ),
   ).map(([path, source]) => [path, String(source)]),
 )
 

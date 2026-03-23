@@ -21,7 +21,13 @@ export default defineConfig({
         lines: 80,
         statements: 80,
       },
-      exclude: ['src/main.ts', 'src/assets/**', 'e2e/fixtures/content/**'],
+      exclude: [
+        'src/main.ts',
+        'src/assets/**',
+        'e2e/fixtures/content/**',
+        'e2e/fixtures/content-demo/**',
+        '../docs/fixtures/reference-project/**',
+      ],
     },
   },
 })

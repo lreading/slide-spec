@@ -4,13 +4,27 @@ import { assetResolver, normalizeAssetPath, selectAssetModules } from './AssetRe
 
 describe('AssetResolver', () => {
   it('selects fixture asset modules only when fixture mode is enabled', () => {
-    expect(selectAssetModules(undefined, { live: true }, { fixture: true })).toEqual({ live: true })
-    expect(selectAssetModules('fixtures', { live: true }, { fixture: true })).toEqual({ fixture: true })
+    expect(selectAssetModules(undefined, { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+      live: true,
+    })
+    expect(selectAssetModules('fixtures', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+      fixture: true,
+    })
+    expect(selectAssetModules('demo', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+      demo: true,
+    })
+    expect(selectAssetModules('docs-reference', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+      docs: true,
+    })
   })
 
-  it('normalizes both live and fixture asset paths', () => {
+  it('normalizes live, fixture, and demo asset paths', () => {
     expect(normalizeAssetPath('../../../content/assets/logo.svg')).toBe('content/assets/logo.svg')
     expect(normalizeAssetPath('../../e2e/fixtures/content/assets/logo.svg')).toBe('content/assets/logo.svg')
+    expect(normalizeAssetPath('../../e2e/fixtures/content-demo/assets/logo.png')).toBe('content/assets/logo.png')
+    expect(normalizeAssetPath('../../../docs/fixtures/reference-project/content/assets/logo.svg')).toBe(
+      'content/assets/logo.svg',
+    )
   })
 
   it('resolves project asset paths to bundled asset URLs', () => {

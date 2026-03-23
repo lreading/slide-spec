@@ -100,8 +100,18 @@ generated:
 
 describe('ContentRepository', () => {
   it('selects fixture files only when fixture mode is enabled', () => {
-    expect(selectContentFiles(undefined, { live: true }, { fixture: true })).toEqual({ live: true })
-    expect(selectContentFiles('fixtures', { live: true }, { fixture: true })).toEqual({ fixture: true })
+    expect(selectContentFiles(undefined, { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+      live: true,
+    })
+    expect(selectContentFiles('fixtures', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+      fixture: true,
+    })
+    expect(selectContentFiles('demo', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+      demo: true,
+    })
+    expect(selectContentFiles('docs-reference', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+      docs: true,
+    })
   })
 
   it('loads the site content', () => {
