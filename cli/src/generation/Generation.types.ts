@@ -1,10 +1,12 @@
 import type {
+  FetchStepTiming,
   GeneratedPresentationData,
   ReportingPeriod,
 } from '../../../shared/src/content'
 
 export type {
   ContributorEntry,
+  FetchStepTiming,
   GeneratedPresentationData,
   MergedPullRequestEntry,
   MetricMetadata,
@@ -22,4 +24,5 @@ export interface ResolvedReportingPeriod {
 export interface GeneratedDataBuildResult {
   generated: GeneratedPresentationData
   warnings: string[]
+  timings: FetchStepTiming[]
 }

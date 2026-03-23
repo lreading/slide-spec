@@ -7,6 +7,7 @@ import type {
   GitHubRepositoryMetadata,
   GitHubRequest,
   GitHubResponse,
+  GitHubStargazerSnapshotOptions,
   GitHubTransport,
 } from './GitHubClient.types'
 import type { GitHubRepositoryRef } from '../config/Config.types'
@@ -101,6 +102,8 @@ interface GitHubApiClientOptions {
   graphQlUrl?: string
 }
 
+const maxRestStargazerPages = 400
+
 export class GitHubApiClient implements GitHubClient {
   private readonly token: string
   private readonly transport: GitHubTransport
@@ -130,18 +133,108 @@ export class GitHubApiClient implements GitHubClient {
       fullName: assertString(payload.full_name, 'full_name'),
       htmlUrl: assertString(payload.html_url, 'html_url'),
       defaultBranch: assertString(payload.default_branch, 'default_branch'),
+      createdAt: assertString(payload.created_at, 'created_at'),
       stars: assertNumber(payload.stargazers_count, 'stargazers_count'),
       openIssues: assertNumber(payload.open_issues_count, 'open_issues_count'),
     }
   }
 
-  public async getStargazerCountAt(repository: GitHubRepositoryRef, at: string): Promise<number> {
+  public async getStargazerCountAt(
+    repository: GitHubRepositoryRef,
+    at: string,
+    options: GitHubStargazerSnapshotOptions = {},
+  ): Promise<number> {
+    if (typeof options.currentTotal === 'number') {
+      try {
+        return await this.getRestPagedStargazerCount(repository, at, options.currentTotal)
+      } catch {
+        const direction = this.resolveStargazerDirection(at, options.repositoryCreatedAt)
+
+        if (direction === 'DESC') {
+          return this.getDescendingStargazerCount(repository, at, options.currentTotal)
+        }
+      }
+    }
+
+    return this.getAscendingStargazerCount(repository, at)
+  }
+
+  public async getStargazerCountsAt(
+    repository: GitHubRepositoryRef,
+    atValues: string[],
+    options: GitHubStargazerSnapshotOptions = {},
+  ): Promise<number[]> {
+    if (atValues.length === 0) {
+      return []
+    }
+
+    if (atValues.length === 1) {
+      return [
+        await this.getStargazerCountAt(repository, atValues[0] as string, options),
+      ]
+    }
+
+    if (typeof options.currentTotal !== 'number') {
+      return Promise.all(
+        atValues.map((at) => this.getStargazerCountAt(repository, at, options)),
+      )
+    }
+
+    const countsByCutoff = await this.getDescendingStargazerCounts(
+      repository,
+      [...new Set(atValues)].sort((left, right) => right.localeCompare(left)),
+      options.currentTotal,
+    )
+
+    return atValues.map((at) => countsByCutoff.get(at) ?? 0)
+  }
+
+  public async hasMergedPullRequestByAuthorBefore(
+    repository: GitHubRepositoryRef,
+    authorLogin: string,
+    before: string,
+  ): Promise<boolean> {
+    const query = toSearchQuery(repository, [
+      'is:pr',
+      'is:merged',
+      `author:${authorLogin}`,
+      `merged:<${before}`,
+    ])
+
+    const pullRequests = await this.searchPullRequests(query, 1)
+    return pullRequests.length > 0
+  }
+
+  public async listMergedPullRequestAuthorsBefore(
+    repository: GitHubRepositoryRef,
+    before: string,
+  ): Promise<string[]> {
+    const query = toSearchQuery(repository, [
+      'is:pr',
+      'is:merged',
+      `merged:<${before}`,
+    ])
+
+    const pullRequests = await this.searchPullRequests(query)
+    const authors = new Set<string>()
+
+    pullRequests.forEach((pullRequest) => {
+      if (pullRequest.authorLogin) {
+        authors.add(pullRequest.authorLogin)
+      }
+    })
+
+    return [...authors].sort((left, right) => left.localeCompare(right))
+  }
+
+  private async getAscendingStargazerCount(repository: GitHubRepositoryRef, at: string): Promise<number> {
     let afterCursor: string | null = null
     let count = 0
 
     while (true) {
       const payload = await this.requestGraphQl(stargazerHistoryQuery, {
         after: afterCursor,
+        direction: 'ASC',
         name: repository.repo,
         owner: repository.owner,
       })
@@ -165,6 +258,150 @@ export class GitHubApiClient implements GitHubClient {
     }
 
     return count
+  }
+
+  private async getDescendingStargazerCount(
+    repository: GitHubRepositoryRef,
+    at: string,
+    currentTotal: number,
+  ): Promise<number> {
+    let afterCursor: string | null = null
+    let starsAfterCutoff = 0
+
+    while (true) {
+      const payload = await this.requestGraphQl(stargazerHistoryQuery, {
+        after: afterCursor,
+        direction: 'DESC',
+        name: repository.repo,
+        owner: repository.owner,
+      })
+      const stargazerPage = this.getStargazerPayload(payload)
+
+      for (const edge of stargazerPage.edges) {
+        const starredAt = assertString(edge.starredAt, 'stargazer.starredAt')
+
+        if (starredAt <= at) {
+          return Math.max(currentTotal - starsAfterCutoff, 0)
+        }
+
+        starsAfterCutoff += 1
+      }
+
+      if (!stargazerPage.pageInfo.hasNextPage) {
+        break
+      }
+
+      afterCursor = stargazerPage.pageInfo.endCursor
+    }
+
+    return Math.max(currentTotal - starsAfterCutoff, 0)
+  }
+
+  private async getRestPagedStargazerCount(
+    repository: GitHubRepositoryRef,
+    at: string,
+    currentTotal: number,
+  ): Promise<number> {
+    const pageSize = 100
+    const totalPages = Math.ceil(currentTotal / pageSize)
+
+    if (currentTotal === 0 || totalPages === 0) {
+      return 0
+    }
+
+    if (totalPages > maxRestStargazerPages) {
+      throw new Error('GitHub stargazer REST pagination limit exceeded.')
+    }
+
+    let low = 1
+    let high = totalPages
+    let exactCount = 0
+
+    while (low <= high) {
+      const page = Math.floor((low + high) / 2)
+      const stargazers = await this.fetchRestStargazerPage(repository, page, pageSize)
+
+      if (stargazers.length === 0) {
+        high = page - 1
+        continue
+      }
+
+      const firstStarredAt = assertString(stargazers[0]?.starredAt, `stargazers[page=${page}][0].starredAt`)
+      const lastStarredAt = assertString(
+        stargazers[stargazers.length - 1]?.starredAt,
+        `stargazers[page=${page}][last].starredAt`,
+      )
+
+      if (at < firstStarredAt) {
+        high = page - 1
+        continue
+      }
+
+      if (at >= lastStarredAt) {
+        exactCount = page === totalPages ? currentTotal : page * pageSize
+        low = page + 1
+        continue
+      }
+
+      return ((page - 1) * pageSize)
+        + stargazers.filter((stargazer) => assertString(stargazer.starredAt, 'stargazer.starredAt') <= at).length
+    }
+
+    return exactCount
+  }
+
+  private async getDescendingStargazerCounts(
+    repository: GitHubRepositoryRef,
+    sortedCutoffs: string[],
+    currentTotal: number,
+  ): Promise<Map<string, number>> {
+    const results = new Map<string, number>()
+    let afterCursor: string | null = null
+    let starsAfterCutoff = 0
+    let cutoffIndex = 0
+
+    while (cutoffIndex < sortedCutoffs.length) {
+      const payload = await this.requestGraphQl(stargazerHistoryQuery, {
+        after: afterCursor,
+        direction: 'DESC',
+        name: repository.repo,
+        owner: repository.owner,
+      })
+      const stargazerPage = this.getStargazerPayload(payload)
+
+      for (const edge of stargazerPage.edges) {
+        const starredAt = assertString(edge.starredAt, 'stargazer.starredAt')
+
+        while (
+          cutoffIndex < sortedCutoffs.length
+          && starredAt <= (sortedCutoffs[cutoffIndex] as string)
+        ) {
+          results.set(
+            sortedCutoffs[cutoffIndex] as string,
+            Math.max(currentTotal - starsAfterCutoff, 0),
+          )
+          cutoffIndex += 1
+        }
+
+        starsAfterCutoff += 1
+      }
+
+      if (!stargazerPage.pageInfo.hasNextPage) {
+        break
+      }
+
+      afterCursor = stargazerPage.pageInfo.endCursor
+    }
+
+    while (cutoffIndex < sortedCutoffs.length) {
+      results.set(
+        sortedCutoffs[cutoffIndex] as string,
+        Math.max(currentTotal - starsAfterCutoff, 0),
+      )
+      cutoffIndex += 1
+    }
+
+    return results
   }
 
   public async listReleases(repository: GitHubRepositoryRef): Promise<GitHubReleaseSummary[]> {
@@ -208,28 +445,6 @@ export class GitHubApiClient implements GitHubClient {
     return this.searchPullRequests(query)
   }
 
-  public async listMergedPullRequestAuthorsBefore(
-    repository: GitHubRepositoryRef,
-    before: string,
-  ): Promise<string[]> {
-    const query = toSearchQuery(repository, [
-      'is:pr',
-      'is:merged',
-      `merged:<${before}`,
-    ])
-
-    const pullRequests = await this.searchPullRequests(query)
-    const authors = new Set<string>()
-
-    pullRequests.forEach((pullRequest) => {
-      if (pullRequest.authorLogin) {
-        authors.add(pullRequest.authorLogin)
-      }
-    })
-
-    return [...authors].sort((left, right) => left.localeCompare(right))
-  }
-
   public async listClosedIssues(
     repository: GitHubRepositoryRef,
     dateRange: GitHubDateRange,
@@ -264,22 +479,25 @@ export class GitHubApiClient implements GitHubClient {
     return issues
   }
 
-  private async searchPullRequests(query: string): Promise<GitHubPullRequestSummary[]> {
+  private async searchPullRequests(query: string, limit = Number.POSITIVE_INFINITY): Promise<GitHubPullRequestSummary[]> {
     const pullRequests: GitHubPullRequestSummary[] = []
     let afterCursor: string | null = null
 
-    while (true) {
+    while (pullRequests.length < limit) {
       const payload = await this.requestGraphQl(searchPullRequestsQuery, {
         after: afterCursor,
+        first: Math.min(100, limit - pullRequests.length),
         query,
       })
 
       const search = this.getSearchPayload(payload)
       search.nodes.forEach((node, index) => {
-        pullRequests.push(this.mapPullRequestNode(node, index))
+        if (pullRequests.length < limit) {
+          pullRequests.push(this.mapPullRequestNode(node, index))
+        }
       })
 
-      if (!search.pageInfo.hasNextPage) {
+      if (!search.pageInfo.hasNextPage || pullRequests.length >= limit) {
         break
       }
 
@@ -289,10 +507,15 @@ export class GitHubApiClient implements GitHubClient {
     return pullRequests
   }
 
-  private async requestJson(url: string, method: 'GET' | 'POST', body?: string): Promise<unknown> {
+  private async requestJson(
+    url: string,
+    method: 'GET' | 'POST',
+    body?: string,
+    accept = 'application/vnd.github+json',
+  ): Promise<unknown> {
     const response = await this.transport.send({
       ...(body ? { body } : {}),
-      headers: this.createHeaders(method === 'POST'),
+      headers: this.createHeaders(method === 'POST', accept),
       method,
       url,
     })
@@ -311,9 +534,36 @@ export class GitHubApiClient implements GitHubClient {
     }))
   }
 
-  private createHeaders(includeJsonBody: boolean): Record<string, string> {
+  private async fetchRestStargazerPage(
+    repository: GitHubRepositoryRef,
+    page: number,
+    pageSize: number,
+  ): Promise<Array<{ starredAt: unknown }>> {
+    const payload = await this.requestJson(
+      `${this.restBaseUrl}/repos/${repository.owner}/${repository.repo}/stargazers?per_page=${pageSize}&page=${page}`,
+      'GET',
+      undefined,
+      'application/vnd.github.star+json',
+    )
+
+    if (!Array.isArray(payload)) {
+      throw new Error('GitHub stargazers response must be an array.')
+    }
+
+    return payload.map((entry, index) => {
+      if (!isRecord(entry)) {
+        throw new Error(`GitHub stargazers[${index}] must be an object.`)
+      }
+
+      return {
+        starredAt: entry.starred_at,
+      }
+    })
+  }
+
+  private createHeaders(includeJsonBody: boolean, accept = 'application/vnd.github+json'): Record<string, string> {
     const headers: Record<string, string> = {
-      Accept: 'application/vnd.github+json',
+      Accept: accept,
       'User-Agent': 'oss-slides-cli',
       'X-GitHub-Api-Version': '2022-11-28',
     }
@@ -449,11 +699,38 @@ export class GitHubApiClient implements GitHubClient {
       url: assertString(node.url, `issue[${index}].url`),
     }
   }
+
+  private resolveStargazerDirection(
+    at: string,
+    repositoryCreatedAt: string | undefined,
+  ): 'ASC' | 'DESC' {
+    if (!repositoryCreatedAt) {
+      return 'ASC'
+    }
+
+    const cutoffTimestamp = Date.parse(at)
+    const createdTimestamp = Date.parse(repositoryCreatedAt)
+    const nowTimestamp = Date.now()
+
+    if (
+      !Number.isFinite(cutoffTimestamp)
+      || !Number.isFinite(createdTimestamp)
+      || cutoffTimestamp <= createdTimestamp
+      || cutoffTimestamp >= nowTimestamp
+    ) {
+      return 'ASC'
+    }
+
+    const historyBeforeCutoff = cutoffTimestamp - createdTimestamp
+    const historyAfterCutoff = nowTimestamp - cutoffTimestamp
+
+    return historyAfterCutoff < historyBeforeCutoff ? 'DESC' : 'ASC'
+  }
 }
 
 const searchPullRequestsQuery = `
-  query SearchMergedPullRequests($query: String!, $after: String) {
-    search(query: $query, type: ISSUE, first: 100, after: $after) {
+  query SearchMergedPullRequests($query: String!, $after: String, $first: Int!) {
+    search(query: $query, type: ISSUE, first: $first, after: $after) {
       nodes {
         ... on PullRequest {
           number
@@ -500,9 +777,9 @@ query SearchClosedIssues($query: String!, $after: String) {
 `
 
 const stargazerHistoryQuery = `
-query StargazerHistory($owner: String!, $name: String!, $after: String) {
+query StargazerHistory($owner: String!, $name: String!, $after: String, $direction: OrderDirection!) {
   repository(owner: $owner, name: $name) {
-    stargazers(first: 100, after: $after, orderBy: { field: STARRED_AT, direction: ASC }) {
+    stargazers(first: 100, after: $after, orderBy: { field: STARRED_AT, direction: $direction }) {
       edges {
         starredAt
       }

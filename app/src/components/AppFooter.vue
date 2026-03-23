@@ -61,7 +61,7 @@ const attributionText = computed(() => formatFooterUrl(attribution.value.url))
   display: flex;
   justify-content: flex-end;
   width: 100%;
-  padding: 0.4rem var(--page-gutter) 0.8rem;
+  padding: 0.4rem var(--page-gutter) 1.15rem;
 }
 
 .app-footer__content {

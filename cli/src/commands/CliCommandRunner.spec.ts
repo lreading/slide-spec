@@ -29,6 +29,7 @@ function createService(): TdCliService {
         merged_prs: [],
       },
       warnings: [],
+      timings: [],
     }),
     buildSite: vi.fn().mockResolvedValue({
       outputPath: '/repo/app/dist',
@@ -212,6 +213,7 @@ describe('CliCommandRunner', () => {
         .mockResolvedValueOnce('2026-01-01'),
       promptBoolean: vi.fn()
         .mockResolvedValueOnce(false)
+        .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(true),
     })
     const runner = new CliCommandRunner(service, output, prompter)
@@ -356,6 +358,54 @@ describe('CliCommandRunner', () => {
       noPreviousPeriod: true,
       write: false,
     })
+  })
+
+  it('prints fetch timings when requested', async () => {
+    const service = createService()
+    vi.mocked(service.fetchPresentationData).mockResolvedValueOnce({
+      presentationId: '2026-q1',
+      generatedPath: '/tmp/generated.yaml',
+      generated: {
+        id: '2026-q1',
+        period: {
+          start: '2026-01-01',
+          end: '2026-03-31',
+        },
+        stats: {},
+        releases: [],
+        contributors: {
+          total: 0,
+          authors: [],
+        },
+        merged_prs: [],
+      },
+      warnings: [],
+      timings: [
+        {
+          name: 'repository_metadata',
+          duration_ms: 12.5,
+        },
+      ],
+    })
+    const output = createOutput()
+    const runner = new CliCommandRunner(service, output)
+
+    await expect(runner.run([
+      'fetch',
+      '--presentation-id',
+      '2026-q1',
+      '--from-date',
+      '2026-01-01',
+      '--timings',
+    ])).resolves.toBe(0)
+
+    expect(service.fetchPresentationData).toHaveBeenCalledWith({
+      presentationId: '2026-q1',
+      fromDate: '2026-01-01',
+      timings: true,
+    })
+    expect(output.info).toHaveBeenCalledWith('Fetch timings:')
+    expect(output.info).toHaveBeenCalledWith('  repository_metadata: 12.50ms')
   })
 
   it('dispatches build, serve, and validate', async () => {

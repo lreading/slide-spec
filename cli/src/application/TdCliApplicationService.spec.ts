@@ -109,6 +109,12 @@ class StubGeneratedDataBuilder {
         merged_prs: [],
       },
       warnings: [],
+      timings: [
+        {
+          name: 'repository_metadata',
+          duration_ms: 12.5,
+        },
+      ],
     }
   }
 }
@@ -150,6 +156,12 @@ class StubGitHubClient implements GitHubClient {
     return Promise.reject(new Error('Not used in service-level test'))
   }
   public async getStargazerCountAt() {
+    return Promise.reject(new Error('Not used in service-level test'))
+  }
+  public async getStargazerCountsAt() {
+    return Promise.reject(new Error('Not used in service-level test'))
+  }
+  public async hasMergedPullRequestByAuthorBefore() {
     return Promise.reject(new Error('Not used in service-level test'))
   }
   public async listReleases() {
@@ -224,6 +236,7 @@ describe('TdCliApplicationService', () => {
       presentationId: '2026-q1',
       generatedPath: '/repo/content/presentations/2026-q1/generated.yaml',
       warnings: [],
+      timings: [],
     })
 
     expect(generatedDataStore.writes).toHaveLength(1)
@@ -253,9 +266,36 @@ describe('TdCliApplicationService', () => {
       warnings: [
         'Previous period comparison disabled; previous values defaulted to 0.',
       ],
+      timings: [],
     })
 
     expect(generatedDataStore.writes).toHaveLength(0)
+  })
+
+  it('includes fetch timings when explicitly requested', async () => {
+    const service = new TdCliApplicationService({
+      projectRoot: '/repo',
+      contentConfigLoader: new StubContentConfigLoader() as never,
+      envLoader: new StubEnvLoader() as never,
+      reportingPeriodResolver: new StubReportingPeriodResolver() as never,
+      generatedDataBuilder: new StubGeneratedDataBuilder() as never,
+      generatedDataStore: new StubGeneratedDataStore() as never,
+      gitHubClientFactory: (_token?: string): GitHubClient => new StubGitHubClient(),
+    })
+
+    await expect(service.fetchPresentationData({
+      presentationId: '2026-q1',
+      fromDate: '2026-01-01',
+      timings: true,
+      write: false,
+    })).resolves.toMatchObject({
+      timings: [
+        {
+          name: 'repository_metadata',
+          duration_ms: 12.5,
+        },
+      ],
+    })
   })
 
   it('initializes a new presentation scaffold and updates the index when the presentation id is new', async () => {

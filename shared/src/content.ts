@@ -18,6 +18,11 @@ export interface ReportingPeriod {
   end: string
 }
 
+export interface FetchStepTiming {
+  name: string
+  duration_ms: number
+}
+
 export type MetricComparisonStatus = 'complete' | 'partial' | 'skipped' | 'unavailable'
 
 export interface MetricMetadata {

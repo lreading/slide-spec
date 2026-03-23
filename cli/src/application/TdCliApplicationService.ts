@@ -178,6 +178,7 @@ export class TdCliApplicationService implements TdCliService {
       generatedPath,
       generated: buildResult.generated,
       warnings,
+      timings: input.timings ? buildResult.timings : [],
     }
   }
 

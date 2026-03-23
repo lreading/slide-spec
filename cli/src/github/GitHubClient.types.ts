@@ -11,8 +11,14 @@ export interface GitHubRepositoryMetadata {
   fullName: string
   htmlUrl: string
   defaultBranch: string
+  createdAt: string
   stars: number
   openIssues: number
+}
+
+export interface GitHubStargazerSnapshotOptions {
+  currentTotal?: number
+  repositoryCreatedAt?: string
 }
 
 export interface GitHubReleaseSummary {
@@ -45,12 +51,26 @@ export interface GitHubIssueSummary {
 
 export interface GitHubClient {
   getRepositoryMetadata(repository: GitHubRepositoryRef): Promise<GitHubRepositoryMetadata>
-  getStargazerCountAt(repository: GitHubRepositoryRef, at: string): Promise<number>
+  getStargazerCountAt(
+    repository: GitHubRepositoryRef,
+    at: string,
+    options?: GitHubStargazerSnapshotOptions,
+  ): Promise<number>
+  getStargazerCountsAt(
+    repository: GitHubRepositoryRef,
+    atValues: string[],
+    options?: GitHubStargazerSnapshotOptions,
+  ): Promise<number[]>
   listReleases(repository: GitHubRepositoryRef): Promise<GitHubReleaseSummary[]>
   listMergedPullRequests(
     repository: GitHubRepositoryRef,
     dateRange: GitHubDateRange,
   ): Promise<GitHubPullRequestSummary[]>
+  hasMergedPullRequestByAuthorBefore(
+    repository: GitHubRepositoryRef,
+    authorLogin: string,
+    before: string,
+  ): Promise<boolean>
   listMergedPullRequestAuthorsBefore(
     repository: GitHubRepositoryRef,
     before: string,

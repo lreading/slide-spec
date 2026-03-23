@@ -1,11 +1,12 @@
+import { AsyncBatchExecutor } from './AsyncBatchExecutor'
 import { ContributorAnalyzer } from './ContributorAnalyzer'
 import { DeltaCalculator } from './DeltaCalculator'
+import { FetchTimingCollector } from './FetchTimingCollector'
 
-import type { GeneratedDataBuildResult, ReleaseEntry } from './Generation.types'
+import type { GeneratedDataBuildResult, ReleaseEntry, ReportingPeriod } from './Generation.types'
 import type { MetricMetadata } from './Generation.types'
 import type { GitHubClient, GitHubReleaseSummary, GitHubRepositoryMetadata } from '../github/GitHubClient.types'
 import type { GitHubRepositoryRef } from '../config/Config.types'
-import type { ReportingPeriod } from './Generation.types'
 
 interface BuildGeneratedDataInput {
   client: GitHubClient
@@ -29,36 +30,76 @@ interface StarSnapshotResult {
   warnings: string[]
 }
 
+const largeRepositoryStarThreshold = 40000
+
 export class GeneratedDataBuilder {
   public constructor(
     private readonly deltaCalculator: DeltaCalculator = new DeltaCalculator(),
     private readonly contributorAnalyzer: ContributorAnalyzer = new ContributorAnalyzer(),
+    private readonly asyncBatchExecutor: AsyncBatchExecutor = new AsyncBatchExecutor(),
   ) {}
 
   public async build(input: BuildGeneratedDataInput): Promise<GeneratedDataBuildResult> {
-    const repositoryMetadata = await input.client.getRepositoryMetadata(input.repository)
-    const releases = await input.client.listReleases(input.repository)
-    const mergedPullRequests = await input.client.listMergedPullRequests(input.repository, input.currentPeriod)
-    const historicalAuthors = await input.client.listMergedPullRequestAuthorsBefore(
-      input.repository,
-      input.currentPeriod.start,
-    )
-    const closedIssues = await input.client.listClosedIssues(input.repository, input.currentPeriod)
+    const timingCollector = new FetchTimingCollector()
+    const repositoryMetadataPromise = timingCollector.measure('repository_metadata', () =>
+      input.client.getRepositoryMetadata(input.repository))
+    const releasesPromise = timingCollector.measure('releases', () =>
+      input.client.listReleases(input.repository))
+    const currentPullRequestsPromise = timingCollector.measure('current_merged_pull_requests', () =>
+      input.client.listMergedPullRequests(input.repository, input.currentPeriod))
+    const currentClosedIssuesPromise = timingCollector.measure('current_closed_issues', () =>
+      input.client.listClosedIssues(input.repository, input.currentPeriod))
+    const previousPullRequestsPromise = input.previousPeriod
+      ? timingCollector.measure('previous_merged_pull_requests', () =>
+        input.client.listMergedPullRequests(input.repository, input.previousPeriod as ReportingPeriod))
+      : Promise.resolve([])
+    const previousClosedIssuesPromise = input.previousPeriod
+      ? timingCollector.measure('previous_closed_issues', () =>
+        input.client.listClosedIssues(input.repository, input.previousPeriod as ReportingPeriod))
+      : Promise.resolve([])
 
-    const contributorAnalysis = this.contributorAnalyzer.analyze(mergedPullRequests, historicalAuthors)
-    const previousMergedPullRequests = input.previousPeriod
-      ? await input.client.listMergedPullRequests(input.repository, input.previousPeriod)
-      : []
-    const previousHistoricalAuthors = input.previousPeriod
-      ? await input.client.listMergedPullRequestAuthorsBefore(input.repository, input.previousPeriod.start)
-      : []
-    const previousClosedIssues = input.previousPeriod
-      ? await input.client.listClosedIssues(input.repository, input.previousPeriod)
-      : []
+    const repositoryMetadata = await repositoryMetadataPromise
+    const currentPullRequests = await currentPullRequestsPromise
+    const previousPullRequests = await previousPullRequestsPromise
+    const currentHistoricalAuthorsPromise = timingCollector.measure('current_contributor_history', () =>
+      this.resolveHistoricalAuthors(
+        input.client,
+        input.repository,
+        currentPullRequests,
+        input.currentPeriod.start,
+      ))
+    const previousHistoricalAuthorsPromise = input.previousPeriod
+      ? timingCollector.measure('previous_contributor_history', () =>
+        this.resolveHistoricalAuthors(
+          input.client,
+          input.repository,
+          previousPullRequests,
+          input.previousPeriod?.start as string,
+        ))
+      : Promise.resolve([])
+    const starSnapshotPromise = timingCollector.measure('star_snapshot', () =>
+      this.resolveStarSnapshot(input, repositoryMetadata))
+
+    const [
+      releases,
+      closedIssues,
+      previousClosedIssues,
+      historicalAuthors,
+      previousHistoricalAuthors,
+      starSnapshot,
+    ] = await Promise.all([
+      releasesPromise,
+      currentClosedIssuesPromise,
+      previousClosedIssuesPromise,
+      currentHistoricalAuthorsPromise,
+      previousHistoricalAuthorsPromise,
+      starSnapshotPromise,
+    ])
+
+    const contributorAnalysis = this.contributorAnalyzer.analyze(currentPullRequests, historicalAuthors)
     const previousContributorAnalysis = input.previousPeriod
-      ? this.contributorAnalyzer.analyze(previousMergedPullRequests, previousHistoricalAuthors)
+      ? this.contributorAnalyzer.analyze(previousPullRequests, previousHistoricalAuthors)
       : undefined
-    const starSnapshot = await this.resolveStarSnapshot(input, repositoryMetadata.stars)
 
     return {
       generated: {
@@ -82,8 +123,8 @@ export class GeneratedDataBuilder {
           ),
           prs_merged: this.deltaCalculator.createMetric(
             metricLabels.prs_merged,
-            mergedPullRequests.length,
-            previousMergedPullRequests.length,
+            currentPullRequests.length,
+            previousPullRequests.length,
             this.createComparisonMetadata(input.previousPeriod),
           ),
           new_contributors: this.deltaCalculator.createMetric(
@@ -98,7 +139,7 @@ export class GeneratedDataBuilder {
           total: contributorAnalysis.total,
           authors: contributorAnalysis.authors,
         },
-        merged_prs: mergedPullRequests
+        merged_prs: currentPullRequests
           .filter((pullRequest) => pullRequest.authorLogin)
           .sort((left, right) => left.mergedAt.localeCompare(right.mergedAt))
           .map((pullRequest) => ({
@@ -109,21 +150,54 @@ export class GeneratedDataBuilder {
           })),
       },
       warnings: starSnapshot.warnings,
+      timings: timingCollector.getTimings(),
     }
   }
 
   private async resolveStarSnapshot(
     input: BuildGeneratedDataInput,
-    currentStars: number,
+    repositoryMetadata: GitHubRepositoryMetadata,
   ): Promise<StarSnapshotResult> {
     const warnings: string[] = []
     const warningCodes: string[] = []
     const currentCutoff = this.toPeriodCutoff(input.currentPeriod.end)
 
-    let resolvedCurrent = currentStars
+    if (input.previousPeriod && repositoryMetadata.stars > largeRepositoryStarThreshold) {
+      try {
+        const previousCutoff = this.toPeriodCutoff(input.previousPeriod.end)
+        const [current, previous] = await input.client.getStargazerCountsAt(
+          input.repository,
+          [currentCutoff, previousCutoff],
+          {
+            currentTotal: repositoryMetadata.stars,
+            repositoryCreatedAt: repositoryMetadata.createdAt,
+          },
+        )
+        const resolvedCurrent = current ?? 0
+        const resolvedPrevious = previous ?? 0
+
+        return {
+          current: resolvedCurrent,
+          previous: resolvedPrevious,
+          metadata: {
+            comparison_status: 'complete',
+            warning_codes: [],
+          },
+          warnings,
+        }
+      } catch {
+        warningCodes.push('combined_snapshot_fallback')
+        warnings.push('Combined historical star snapshots were unavailable; retrying individual snapshot lookups.')
+      }
+    }
+
+    let resolvedCurrent = repositoryMetadata.stars
 
     try {
-      resolvedCurrent = await input.client.getStargazerCountAt(input.repository, currentCutoff)
+      resolvedCurrent = await input.client.getStargazerCountAt(input.repository, currentCutoff, {
+        currentTotal: repositoryMetadata.stars,
+        repositoryCreatedAt: repositoryMetadata.createdAt,
+      })
     } catch {
       warningCodes.push('current_snapshot_fallback')
       warnings.push('Historical star snapshot for the current period was unavailable; current stars use repository metadata.')
@@ -146,7 +220,10 @@ export class GeneratedDataBuilder {
     try {
       return {
         current: resolvedCurrent,
-        previous: await input.client.getStargazerCountAt(input.repository, previousCutoff),
+        previous: await input.client.getStargazerCountAt(input.repository, previousCutoff, {
+          currentTotal: repositoryMetadata.stars,
+          repositoryCreatedAt: repositoryMetadata.createdAt,
+        }),
         metadata: {
           comparison_status: warningCodes.length > 0 ? 'partial' : 'complete',
           warning_codes: warningCodes,
@@ -168,6 +245,28 @@ export class GeneratedDataBuilder {
         ],
       }
     }
+  }
+
+  private async resolveHistoricalAuthors(
+    client: GitHubClient,
+    repository: GitHubRepositoryRef,
+    pullRequests: Array<{ authorLogin?: string }>,
+    before: string,
+  ): Promise<string[]> {
+    const authorLogins = [...new Set(
+      pullRequests
+        .map((pullRequest) => pullRequest.authorLogin)
+        .filter((authorLogin): authorLogin is string => typeof authorLogin === 'string' && authorLogin.length > 0),
+    )].sort((left, right) => left.localeCompare(right))
+
+    const historicalStatuses = await this.asyncBatchExecutor.map(authorLogins, async (authorLogin) => ({
+      authorLogin,
+      hasHistory: await client.hasMergedPullRequestByAuthorBefore(repository, authorLogin, before),
+    }))
+
+    return historicalStatuses
+      .filter((entry) => entry.hasHistory)
+      .map((entry) => entry.authorLogin)
   }
 
   private toPeriodCutoff(end: string): string {

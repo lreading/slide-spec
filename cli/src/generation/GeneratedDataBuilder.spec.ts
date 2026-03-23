@@ -14,6 +14,7 @@ class StubGitHubClient implements GitHubClient {
       fullName: 'OWASP/threat-dragon',
       htmlUrl: 'https://github.com/OWASP/threat-dragon',
       defaultBranch: 'main',
+      createdAt: '2023-01-01T00:00:00Z',
       stars: 250,
       openIssues: 9,
     }
@@ -45,6 +46,28 @@ class StubGitHubClient implements GitHubClient {
 
   public async getStargazerCountAt(_repository: GitHubRepositoryRef, at: string): Promise<number> {
     return at.startsWith('2025-12-31') ? 200 : 250
+  }
+
+  public async getStargazerCountsAt(_repository: GitHubRepositoryRef, atValues: string[]): Promise<number[]> {
+    return Promise.all(
+      atValues.map((at) => this.getStargazerCountAt(_repository, at)),
+    )
+  }
+
+  public async hasMergedPullRequestByAuthorBefore(
+    _repository: GitHubRepositoryRef,
+    authorLogin: string,
+    before: string,
+  ): Promise<boolean> {
+    if (before === '2025-10-01') {
+      return authorLogin === 'octocat'
+    }
+
+    return authorLogin === 'octocat'
+  }
+
+  public async listMergedPullRequestAuthorsBefore(): Promise<string[]> {
+    return ['octocat']
   }
 
   public async listMergedPullRequests(_repository: GitHubRepositoryRef, dateRange: ReportingPeriod) {
@@ -80,10 +103,6 @@ class StubGitHubClient implements GitHubClient {
         url: 'https://github.com/OWASP/threat-dragon/pull/13',
       },
     ]
-  }
-
-  public async listMergedPullRequestAuthorsBefore() {
-    return ['octocat']
   }
 
   public async listClosedIssues(_repository: GitHubRepositoryRef, dateRange: ReportingPeriod) {
@@ -137,6 +156,7 @@ describe('GeneratedDataBuilder', () => {
     const generated = result.generated
 
     expect(result.warnings).toEqual([])
+    expect(result.timings).not.toEqual([])
     expect(generated.stats.stars?.delta).toBe(50)
     expect(generated.stats.stars?.previous).toBe(200)
     expect(generated.stats.stars?.metadata).toEqual({
@@ -186,6 +206,48 @@ describe('GeneratedDataBuilder', () => {
       comparison_status: 'skipped',
       warning_codes: ['comparison_disabled'],
     })
+  })
+
+  it('uses a combined star snapshot lookup for larger repositories with comparisons', async () => {
+    class LargeRepositoryClient extends StubGitHubClient {
+      public combinedCalls = 0
+      public singleCalls = 0
+
+      public override async getRepositoryMetadata() {
+        const metadata = await super.getRepositoryMetadata()
+        return {
+          ...metadata,
+          stars: 45000,
+        }
+      }
+
+      public override async getStargazerCountAt(_repository: GitHubRepositoryRef, _at: string): Promise<number> {
+        this.singleCalls += 1
+        return 0
+      }
+
+      public override async getStargazerCountsAt(
+        _repository: GitHubRepositoryRef,
+        _atValues: string[],
+      ): Promise<number[]> {
+        this.combinedCalls += 1
+        return [44000, 43000]
+      }
+    }
+
+    const client = new LargeRepositoryClient()
+    const result = await builder.build({
+      client,
+      presentationId: '2026-q1',
+      currentPeriod,
+      previousPeriod,
+      repository,
+    })
+
+    expect(client.combinedCalls).toBe(1)
+    expect(client.singleCalls).toBe(0)
+    expect(result.generated.stats.stars?.current).toBe(44000)
+    expect(result.generated.stats.stars?.previous).toBe(43000)
   })
 
   it('filters out releases outside the current period and falls back to repository name when no bullets or release name exist', async () => {

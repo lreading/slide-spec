@@ -8,6 +8,14 @@ async function preparePageForCapture(page: Parameters<typeof test>[0]['page']): 
   await page.evaluate(async () => {
     await document.fonts.ready
   })
+
+  const brokenImageSources = await page.locator('img').evaluateAll((images) =>
+    images
+      .filter((image) => image.complete && image.naturalWidth === 0)
+      .map((image) => image.getAttribute('src') ?? image.getAttribute('data-src') ?? '<missing-src>'),
+  )
+
+  expect(brokenImageSources, `Broken images found: ${brokenImageSources.join(', ')}`).toEqual([])
 }
 
 test.describe('visual regression', () => {

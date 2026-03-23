@@ -1,6 +1,4 @@
 # Review:
-- Footer link needs margin bottom.
-- Manually test visual regression testing, check images
 - Manually test interactive CLI
 - Check the Ladybird test
 - Check out documentation site
@@ -10,8 +8,33 @@
 - Review README
 - Review License
 
+
+# Docs Updates
+- The schemas are not fully documented.  The examples have fields that are not in the reference table.  For example, generated: stats is not fully documented. That is unacceptable. ALL fields, optional or otherwise, no matter how deep the field spec is, MUST be documented.
+- Update screenshots to not use cupcake - did we generate a logo for this project? If so, where is it?
+- Templates are NOT fully documented. Hero slide, for example... I want EVERY SINGLE PART OF THE SCREENSHOT DOCUMENTED.  There are a bunch of things that aren't, such as the links.  I don't care if that's in a different data file, it NEEDS to be documented. No guesswork for our users. Also, not all props are documented like issue number 1.
+- Example pages sucks.  Really not an example at all.  Let's also remove the "happy path" title. These should be legitimate examples.  Eventually, we can reference our own repo, and maybe Threat Dragon when I get to that after this is all published.  For now, make a contrived example.  Better yet, let's make a "tutorial" example where you walk the user through EACH STEP, skipping NOTHING, including exactly what to update in yaml files. You must validate this example by running a full cli e2e using the docs.
+- Get rid of contributing page from docs, let's just link to the repo instead.  I dislike multiple sources of truth.
+- Examples should include non-github examples too, brainstorm on that
+- This needs a complete plan.  Page by page. I want to define the intent of the page. You should also make it more complete, use less fluffy language, it should really read like a human wrote this.
+- When executing this plan, you must exercise the docs the same way a human would.  Leave NOTHING out, but make sure it'd make sense to a human.
+- Gotta work on the llms.txt as well: that looks wildly incomplete.  Should we include a complete schema in there so they have it in their context?
+- What about a sitemap?
+- How is the SEO positioning on this? Probably non-existent... gotta get that sorted too.
+
 # Next:
-- Make sure the CLI serve accepts an optional port as a flag
+- Problem with data file naming... "Generated" isn't always going to be true.  Maybe this should be "datasource.yaml" - there is no reason that people can't manually create one if they want. Just make sure the different schemas are documented.
+- Is GH PAT a hard requirement now for GH fetch? If so, make that clear in interactive mode
+- github PAT input should be hidden (password style input)
+- never log PAT or auth headers anywhere
+- Create an optional log path file.  Only log to file if specified, default is off
+  - Log should be standard logging for CLI, but also responses from GH. Again, NEVER log sensitive information
+  - Default is off, and no need to log results to the console. 
+- Conduct full security review
+- Make sure the CLI serve command accepts an optional port flag, and finds an unused port on its own.
+- README badges are going to need to be linked to GH actions so that they are dynamic and update if something is broken. These are fine as placeholders, but.... not long term
+- README needs work
+- Need a README per dir, and they should be more descriptive than they currently are
 - Verify help, make sure there's contextual help too and that it's still accurate
 - Is there any precedence for adding a man page for globally installed npm libs? (I don't think so, but maybe check)
 - Ensure cross-compatibility: no unix/linux/macOS/windows code.  Everything should "just work" regardless of operating system

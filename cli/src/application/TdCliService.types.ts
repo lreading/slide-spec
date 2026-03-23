@@ -1,4 +1,4 @@
-import type { GeneratedPresentationData } from '../generation/Generation.types'
+import type { FetchStepTiming, GeneratedPresentationData } from '../generation/Generation.types'
 
 export interface InitPresentationInput {
   projectRoot?: string
@@ -26,6 +26,7 @@ export interface FetchPresentationDataInput {
   toDate?: string
   presentationId: string
   noPreviousPeriod?: boolean
+  timings?: boolean
   write?: boolean
 }
 
@@ -35,6 +36,7 @@ export interface FetchPresentationDataResult {
   previousPresentationId?: string
   generated: GeneratedPresentationData
   warnings: string[]
+  timings: FetchStepTiming[]
 }
 
 export interface BuildSiteInput {

@@ -126,6 +126,11 @@ export class CliCommandRunner {
           'Disable previous-period comparison',
           false,
         )
+        const timings = await this.promptBoolean(
+          'Show per-step fetch timings after the run completes.',
+          'Show timings',
+          false,
+        )
         const dryRun = await this.promptBoolean(
           'Compute data without writing generated.yaml.',
           'Dry run',
@@ -138,9 +143,10 @@ export class CliCommandRunner {
           fromDate,
           ...(toDate !== undefined ? { toDate } : {}),
           ...(noPreviousPeriod !== undefined ? { noPreviousPeriod } : {}),
+          ...(timings ? { timings } : {}),
           ...(dryRun ? { write: false } : {}),
         })
-        this.output.info(`Fetched ${result.presentationId}`)
+        this.reportFetchResult(result)
         break
       }
       case 'build': {
@@ -267,15 +273,32 @@ export class CliCommandRunner {
     const write = this.readBooleanOption(parsed.options, 'dry-run') ? false : undefined
     const toDate = this.readStringOption(parsed.options, 'to-date')
     const noPreviousPeriod = this.readBooleanOption(parsed.options, 'no-previous-period')
+    const timings = this.readBooleanOption(parsed.options, 'timings')
     const result = await this.service.fetchPresentationData({
       ...(projectRoot !== undefined ? { projectRoot } : {}),
       fromDate: required['from-date'],
       ...(toDate !== undefined ? { toDate } : {}),
       presentationId,
       ...(noPreviousPeriod !== undefined ? { noPreviousPeriod } : {}),
+      ...(timings !== undefined ? { timings } : {}),
       ...(write !== undefined ? { write } : {}),
     })
+    this.reportFetchResult(result)
+  }
+
+  private reportFetchResult(
+    result: Awaited<ReturnType<TdCliService['fetchPresentationData']>>,
+  ): void {
     this.output.info(`Fetched ${result.presentationId}`)
+
+    if (result.timings.length === 0) {
+      return
+    }
+
+    this.output.info('Fetch timings:')
+    result.timings.forEach((timing) => {
+      this.output.info(`  ${timing.name}: ${timing.duration_ms.toFixed(2)}ms`)
+    })
   }
 
   private async runBuild(projectRoot?: string): Promise<void> {
@@ -437,7 +460,7 @@ export class CliCommandRunner {
         ].join('\n')
       case 'fetch':
         return [
-          `Usage: ${CLI_BIN_NAME} fetch [project-root] [--project-root <path>] --presentation-id <id> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--no-previous-period] [--dry-run]`,
+          `Usage: ${CLI_BIN_NAME} fetch [project-root] [--project-root <path>] --presentation-id <id> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--no-previous-period] [--timings] [--dry-run]`,
           '',
           'Pull GitHub-derived metrics and write generated data for an existing presentation.',
           'Use this after init, once the presentation scaffold exists.',
@@ -450,6 +473,7 @@ export class CliCommandRunner {
           '  --from-date <date>       Required. Period start date in YYYY-MM-DD format',
           '  --to-date <date>         Optional. Period end date in YYYY-MM-DD format. Defaults to today when omitted',
           '  --no-previous-period     Optional. Skip previous-period comparison and force previous values to 0',
+          '  --timings                Optional. Print per-step fetch timings after the run completes',
           '  --dry-run                Optional. Compute data without writing generated.yaml',
           '',
           'Examples:',

@@ -46,6 +46,7 @@ describe('GitHubApiClient', () => {
   it('loads repository metadata via REST with auth headers', async () => {
     const transport = new StubTransport([
       createJsonResponse({
+        created_at: '2023-01-01T00:00:00Z',
         default_branch: 'main',
         full_name: 'OWASP/threat-dragon',
         html_url: 'https://github.com/OWASP/threat-dragon',
@@ -65,6 +66,7 @@ describe('GitHubApiClient', () => {
       fullName: 'OWASP/threat-dragon',
       htmlUrl: 'https://github.com/OWASP/threat-dragon',
       defaultBranch: 'main',
+      createdAt: '2023-01-01T00:00:00Z',
       stars: 321,
       openIssues: 12,
     })
@@ -79,6 +81,7 @@ describe('GitHubApiClient', () => {
   it('omits auth headers when no token is provided', async () => {
     const transport = new StubTransport([
       createJsonResponse({
+        created_at: '2023-01-01T00:00:00Z',
         default_branch: 'main',
         full_name: 'OWASP/threat-dragon',
         html_url: 'https://github.com/OWASP/threat-dragon',
@@ -123,6 +126,186 @@ describe('GitHubApiClient', () => {
     await expect(
       client.getStargazerCountAt(repository, '2026-03-31T23:59:59Z'),
     ).resolves.toBe(2)
+  })
+
+  it('can count stargazers by binary-searching paged REST history when the current total is known', async () => {
+    const transport = new StubTransport([
+      createJsonResponse(Array.from({ length: 100 }, (_, index) => ({
+        starred_at: `2025-01-${String((index % 28) + 1).padStart(2, '0')}T00:00:00Z`,
+      }))),
+      createJsonResponse([
+        { starred_at: '2025-12-30T00:00:00Z' },
+        { starred_at: '2026-03-20T00:00:00Z' },
+        { starred_at: '2026-04-01T00:00:00Z' },
+      ]),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.getStargazerCountAt(repository, '2025-12-31T23:59:59Z', {
+        currentTotal: 103,
+        repositoryCreatedAt: '2023-01-01T00:00:00Z',
+      }),
+    ).resolves.toBe(101)
+
+    expect(transport.requests[0]?.url).toContain('/stargazers?per_page=100&page=1')
+    expect(transport.requests[1]?.url).toContain('/stargazers?per_page=100&page=2')
+    expect(transport.requests[0]?.headers.Accept).toBe('application/vnd.github.star+json')
+  })
+
+  it('returns zero stargazers without making requests when the current total is zero', async () => {
+    const transport = new StubTransport([])
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.getStargazerCountAt(repository, '2025-12-31T23:59:59Z', {
+        currentTotal: 0,
+        repositoryCreatedAt: '2023-01-01T00:00:00Z',
+      }),
+    ).resolves.toBe(0)
+
+    expect(transport.requests).toHaveLength(0)
+  })
+
+  it('returns the full current total when the cutoff is after the final REST stargazer page', async () => {
+    const transport = new StubTransport([
+      createJsonResponse(Array.from({ length: 100 }, (_, index) => ({
+        starred_at: `2025-01-${String((index % 28) + 1).padStart(2, '0')}T00:00:00Z`,
+      }))),
+      createJsonResponse([
+        { starred_at: '2025-12-28T00:00:00Z' },
+        { starred_at: '2025-12-29T00:00:00Z' },
+        { starred_at: '2025-12-30T00:00:00Z' },
+      ]),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.getStargazerCountAt(repository, '2025-12-31T23:59:59Z', {
+        currentTotal: 103,
+        repositoryCreatedAt: '2023-01-01T00:00:00Z',
+      }),
+    ).resolves.toBe(103)
+  })
+
+  it('returns the best known REST page count when a later binary-search page is empty', async () => {
+    const transport = new StubTransport([
+      createJsonResponse(Array.from({ length: 100 }, (_, index) => ({
+        starred_at: `2025-01-${String((index % 28) + 1).padStart(2, '0')}T00:00:00Z`,
+      }))),
+      createJsonResponse([]),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.getStargazerCountAt(repository, '2025-12-31T23:59:59Z', {
+        currentTotal: 150,
+        repositoryCreatedAt: '2023-01-01T00:00:00Z',
+      }),
+    ).resolves.toBe(100)
+  })
+
+  it('falls back to descending GraphQL stargazer history when REST lookup fails near the present', async () => {
+    const transport = new StubTransport([
+      createJsonResponse('not-an-array'),
+      createJsonResponse({
+        data: {
+          repository: {
+            stargazers: {
+              edges: [
+                { starredAt: '2026-04-01T00:00:00Z' },
+                { starredAt: '2026-03-20T00:00:00Z' },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      }),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.getStargazerCountAt(repository, '2026-03-01T00:00:00Z', {
+        currentTotal: 10,
+        repositoryCreatedAt: '2020-01-01T00:00:00Z',
+      }),
+    ).resolves.toBe(8)
+  })
+
+  it('falls back to ascending GraphQL stargazer history when REST lookup fails for earlier cutoffs', async () => {
+    const transport = new StubTransport([
+      createJsonResponse('not-an-array'),
+      createJsonResponse({
+        data: {
+          repository: {
+            stargazers: {
+              edges: [
+                { starredAt: '2025-12-01T00:00:00Z' },
+                { starredAt: '2026-01-15T00:00:00Z' },
+                { starredAt: '2026-04-01T00:00:00Z' },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      }),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.getStargazerCountAt(repository, '2026-03-31T23:59:59Z', {
+        currentTotal: 10,
+      }),
+    ).resolves.toBe(2)
+  })
+
+  it('can resolve multiple stargazer cutoffs in one descending GraphQL scan', async () => {
+    const transport = new StubTransport([
+      createJsonResponse({
+        data: {
+          repository: {
+            stargazers: {
+              edges: [
+                { starredAt: '2026-03-25T00:00:00Z' },
+                { starredAt: '2026-01-15T00:00:00Z' },
+                { starredAt: '2025-11-01T00:00:00Z' },
+              ],
+              pageInfo: {
+                hasNextPage: false,
+                endCursor: null,
+              },
+            },
+          },
+        },
+      }),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.getStargazerCountsAt(
+        repository,
+        ['2025-12-31T23:59:59Z', '2026-03-01T00:00:00Z'],
+        {
+          currentTotal: 10,
+          repositoryCreatedAt: '2020-01-01T00:00:00Z',
+        },
+      ),
+    ).resolves.toEqual([8, 9])
+
+    expect(transport.requests).toHaveLength(1)
+    expect(transport.requests[0]?.url).toBe('https://api.github.com/graphql')
   })
 
   it('paginates releases from the REST API', async () => {
@@ -284,6 +467,68 @@ describe('GitHubApiClient', () => {
     ).resolves.toEqual(['alice', 'octocat'])
   })
 
+  it('checks whether a specific author had merged pull requests before a cutoff', async () => {
+    const transport = new StubTransport([
+      createJsonResponse({
+        data: {
+          search: {
+            nodes: [
+              {
+                author: { login: 'octocat' },
+                mergedAt: '2025-12-30T12:00:00Z',
+                number: 10,
+                title: 'Docs',
+                url: 'https://github.com/OWASP/threat-dragon/pull/10',
+              },
+            ],
+            pageInfo: {
+              endCursor: null,
+              hasNextPage: false,
+            },
+          },
+        },
+      }),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.hasMergedPullRequestByAuthorBefore(repository, 'octocat', '2026-01-01'),
+    ).resolves.toBe(true)
+
+    const requestBody = JSON.parse(transport.requests[0]?.body ?? '{}') as {
+      variables?: {
+        first?: number
+        query?: string
+      }
+    }
+
+    expect(requestBody.variables?.first).toBe(1)
+    expect(requestBody.variables?.query).toContain('author:octocat')
+  })
+
+  it('returns false when an author has no merged pull requests before the cutoff', async () => {
+    const transport = new StubTransport([
+      createJsonResponse({
+        data: {
+          search: {
+            nodes: [],
+            pageInfo: {
+              endCursor: null,
+              hasNextPage: false,
+            },
+          },
+        },
+      }),
+    ])
+
+    const client = new GitHubApiClient({ token: 'secret-token', transport })
+
+    await expect(
+      client.hasMergedPullRequestByAuthorBefore(repository, 'nobody', '2026-01-01'),
+    ).resolves.toBe(false)
+  })
+
   it('loads closed issues in a date range through GraphQL', async () => {
     const transport = new StubTransport([
       createJsonResponse({
@@ -400,6 +645,74 @@ describe('GitHubApiClient', () => {
         ]),
       }).listReleases(repository),
     ).rejects.toThrow('GitHub releases response must be an array.')
+
+    await expect(
+      new GitHubApiClient({
+        token: 'secret-token',
+        transport: new StubTransport([
+          createJsonResponse({
+            data: {
+              repository: {
+                stargazers: {
+                  edges: [null],
+                  pageInfo: {
+                    endCursor: null,
+                    hasNextPage: false,
+                  },
+                },
+              },
+            },
+          }),
+        ]),
+      }).getStargazerCountAt(repository, '2026-03-31T23:59:59Z'),
+    ).rejects.toThrow('GitHub stargazer edge[0] must be an object.')
+
+    await expect(
+      new GitHubApiClient({
+        token: 'secret-token',
+        transport: new StubTransport([
+          createJsonResponse([
+            null,
+          ]),
+          createJsonResponse({
+            data: {
+              repository: {
+                stargazers: {
+                  edges: [
+                    { starredAt: '2026-04-01T00:00:00Z' },
+                    { starredAt: '2026-03-20T00:00:00Z' },
+                  ],
+                  pageInfo: {
+                    endCursor: null,
+                    hasNextPage: false,
+                  },
+                },
+              },
+            },
+          }),
+        ]),
+      }).getStargazerCountAt(repository, '2026-03-01T00:00:00Z', {
+        currentTotal: 1,
+        repositoryCreatedAt: '2020-01-01T00:00:00Z',
+      }),
+    ).resolves.toBe(0)
+
+    await expect(
+      new GitHubApiClient({
+        token: 'secret-token',
+        transport: new StubTransport([
+          createJsonResponse({
+            data: {
+              repository: {
+                stargazers: {
+                  pageInfo: {},
+                },
+              },
+            },
+          }),
+        ]),
+      }).getStargazerCountAt(repository, '2026-03-31T23:59:59Z'),
+    ).rejects.toThrow('GitHub GraphQL stargazer response must contain edges and pageInfo.')
 
     await expect(
       new GitHubApiClient({
