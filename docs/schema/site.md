@@ -34,19 +34,20 @@ See the tracked reference file:
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `site.title` | yes | string | Site title used by the app shell and document title logic. |
+| `site.title` | yes | non-blank string | Site title used by the app shell and document title logic. |
 | `site.mascot` | no | object | Shared mascot image for home/title/closing surfaces. |
 | `site.data_sources` | no | array | External data sources. Only GitHub is supported today. |
 | `site.project_badge` | no | object | Small badge rendered near the hero/title identity. |
 | `site.presentation_logo` | no | object | Shared sidebar/logo image for presentation chrome. |
 | `site.navigation` | no | object | App nav labels. |
-| `site.attribution` | no | object | Footer attribution. Defaults to enabled if omitted by current app behavior. |
+| `site.app_footer` | no | object | Repository link labels in the app footer. |
+| `site.attribution` | no | object | Optional block; see subtable. Entire object omitted: behavior not specified by validator. |
 | `site.presentation_chrome` | no | object | Shared slide chrome labels. |
 | `site.presentation_toolbar` | no | object | Presentation view control labels and shortcut help copy. |
 | `site.home_hero` | no | object | Home-page hero title parts. |
-| `site.home_intro` | yes | string | Home-page intro paragraph. |
-| `site.home_cta_label` | yes | string | Primary home CTA label. |
-| `site.presentations_cta_label` | yes | string | Secondary home CTA label. |
+| `site.home_intro` | yes | non-blank string | Home-page intro paragraph. |
+| `site.home_cta_label` | yes | non-blank string | Primary home CTA label. |
+| `site.presentations_cta_label` | yes | non-blank string | Secondary home CTA label. |
 | `site.presentations_page` | no | object | Archive/listing labels. |
 | `site.links` | yes | object | Shared footer/resource links. |
 
@@ -61,8 +62,8 @@ See the tracked reference file:
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | string | Must currently be `github`. |
-| `url` | yes | string | Must be a valid `github.com` URL. |
+| `type` | yes | non-blank string | Must be `github`. |
+| `url` | yes | non-blank string | Must parse as a URL whose host is `github.com` or `www.github.com`. |
 
 ### `site.project_badge`
 
@@ -70,7 +71,7 @@ See the tracked reference file:
 | --- | --- | --- | --- |
 | `label` | no | string | Badge text. |
 | `fa_icon` | no | string | Font Awesome icon class token, such as `fa-code`. |
-| `icon_position` | no | string | `before` or `after`. |
+| `icon_position` | no | string | If set, must be `before` or `after`. |
 
 At least one of `label` or `fa_icon` must be present.
 
@@ -91,13 +92,20 @@ At least one of `label` or `fa_icon` must be present.
 | `latest_presentation_label` | no | string |
 | `toggle_label` | no | string |
 
+### `site.app_footer`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `repository_label` | no | string | Set together with `repository_url`, or omit both. |
+| `repository_url` | no | string | Set together with `repository_label`, or omit both. |
+
 ### `site.attribution`
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `enabled` | no | boolean | Controls whether attribution is rendered. |
-| `label` | no | string | Must be paired with `url` when present. |
-| `url` | no | string | Must be paired with `label` when present. |
+| `enabled` | no | boolean | |
+| `label` | no | string | Must be paired with `url` when either is set. |
+| `url` | no | string | Must be paired with `label` when either is set. |
 
 ### `site.presentation_chrome`
 
@@ -158,12 +166,14 @@ Each link object uses the same shape:
 
 | Field | Required | Type |
 | --- | --- | --- |
-| `label` | yes | string |
-| `url` | yes | string |
+| `label` | yes | non-blank string |
+| `url` | yes | non-blank string |
 | `eyebrow` | no | string |
 
 ## Omitted behavior
 
 - Optional blocks can be omitted entirely.
-- `alt` fields without matching `url` fields are invalid.
-- `site.links.repository`, `site.links.docs`, and `site.links.owasp` must all exist today.
+- Optional string fields: if present, must be non-blank after trim.
+- `alt` without `url` is invalid on `site.mascot` and `site.presentation_logo`.
+- `site.app_footer`: set both `repository_label` and `repository_url`, or omit both.
+- `site.links.repository`, `site.links.docs`, and `site.links.owasp` must all exist.

@@ -1,24 +1,9 @@
-# Schema Reference
+# Schema reference
 
-slide-spec uses four YAML documents:
+A slide-spec project uses four YAML documents:
 
-- `content/site.yaml`
-- `content/presentations/index.yaml`
-- `content/presentations/<id>/presentation.yaml`
-- `content/presentations/<id>/generated.yaml`
+`content/site.yaml`, `content/presentations/index.yaml`, `content/presentations/<id>/presentation.yaml`, and `content/presentations/<id>/generated.yaml`. The app validates them together.
 
-The app validates all four documents together.
+Read them in this order: [site](/schema/site) → [presentations index](/schema/presentations-index) → [presentation](/schema/presentation) → [generated](/schema/generated).
 
-## Reading order
-
-1. [site.yaml](/schema/site)
-2. [presentations/index.yaml](/schema/presentations-index)
-3. [presentation.yaml](/schema/presentation)
-4. [generated.yaml](/schema/generated)
-
-## Important split
-
-- `presentation.yaml` is authored narrative and layout
-- `generated.yaml` is structured metric/release/contributor data
-
-That split is intentional. It keeps machine-produced data reviewable without mixing it into slide copy.
+`presentation.yaml` holds authored narrative and slide structure. `generated.yaml` holds machine-oriented metrics and release-style data so generated numbers stay out of slide copy. The [presentation](/schema/presentation) and [generated](/schema/generated) schema pages follow `ContentValidator` in `shared/src/content-validator.ts`, with slide `content` shapes from `shared/src/templates/validation.ts`.

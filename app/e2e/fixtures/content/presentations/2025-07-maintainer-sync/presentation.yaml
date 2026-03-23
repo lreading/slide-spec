@@ -14,7 +14,6 @@ presentation:
   - template: agenda
     enabled: true
     title: Agenda
-    content: {}
   - template: closing
     enabled: true
     content:

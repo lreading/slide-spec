@@ -1,10 +1,21 @@
 # Progress Timeline
 
-The `progress-timeline` template renders one roadmap stage against the full shared roadmap model.
+One slide focuses a single roadmap stage (`content.stage`). The strip shows all four stages; detail columns use `presentation.roadmap` for the active stage only.
 
 ![Progress timeline reference slide](/screenshots/template-progress-timeline-reference.png)
 
-## Example YAML
+## Screen
+
+| Region | Source |
+| --- | --- |
+| Title / subtitle | `slide.title`, `slide.subtitle` (subtitle falls back to active stage `summary` when omitted) |
+| Progress strip | All stages; labels/summaries from `presentation.roadmap.sections.<status>.label` and `.summary` |
+| Active stage | Matches `content.stage` |
+| Deliverables column | Heading from roadmap labels; list from `presentation.roadmap.sections.<stage>.items` |
+| Focus areas column | Heading from roadmap labels; rows from `presentation.roadmap.sections.<stage>.themes` (`category` / `target`) |
+| Footer link | Label from resolved roadmap `footer_link_label`; href `site.links.repository.url` |
+
+## Example
 
 ```yaml
 template: progress-timeline
@@ -23,33 +34,32 @@ content:
 | `subtitle` | no | string |
 | `content.stage` | yes | string |
 
-Allowed `content.stage` values:
+### `content.stage` values
 
-- `completed`
-- `in-progress`
-- `planned`
-- `future`
+| Value |
+| --- |
+| `completed` |
+| `in-progress` |
+| `planned` |
+| `future` |
 
-## Also rendered from `presentation.roadmap`
+## From `presentation.roadmap`
 
-- `agenda_label`
-- `deliverables_heading`
-- `focus_areas_heading`
-- `footer_link_label`
-- `sections.completed`
-- `sections.in-progress`
-- `sections.planned`
-- `sections.future`
+Data binds from `presentation.roadmap` when it exists. If `roadmap` is omitted, the slide still renders (title/subtitle), but timeline labels, detail cards, and the roadmap footer link are empty or hidden.
 
-## Visible regions
+| Path | Role |
+| --- | --- |
+| `agenda_label` | Copy resolved with defaults |
+| `deliverables_heading` | Deliverables column title |
+| `focus_areas_heading` | Focus areas column title |
+| `footer_link_label` | Footer CTA label |
+| `sections.completed` | Stage payload |
+| `sections.in-progress` | Stage payload |
+| `sections.planned` | Stage payload |
+| `sections.future` | Stage payload |
 
-1. Shared roadmap timeline with all four stages
-2. Active stage highlight from `content.stage`
-3. Stage summary from `presentation.roadmap.sections.<stage>.summary`
-4. Deliverables list from `items`
-5. Focus areas from `themes`
+Each `sections.<stage>` object: `label`, `summary`, `items` (string[]), `themes` ({ `category`, `target` }[]). Full rules: [presentation.yaml](/schema/presentation).
 
 ## Omitted behavior
 
-- The template requires `presentation.roadmap`.
-- Only one stage is active per slide.
+Exactly one stage matches `content.stage` for the “current” highlight. Stage copy, lists, and the roadmap footer link require `presentation.roadmap.sections` with the four stage keys defined.

@@ -1,63 +1,32 @@
-# slide-spec
+---
+layout: home
 
-Build static presentation sites from YAML.
+hero:
+  name: slide-spec
+  text: Presentation sites from YAML
+  tagline: Author slides in reviewable files, pull metrics when you want them, ship static HTML. No slide-deck app required.
+  image:
+    src: /screenshots/home-reference.png
+    alt: Example slide-spec home page with hero title and navigation
+  actions:
+    - theme: brand
+      text: Quickstart
+      link: /quickstart
+    - theme: alt
+      text: Schema reference
+      link: /schema/
 
-slide-spec is for teams that want project updates, roadmap reviews, release summaries, and briefing decks to behave like source code:
+features:
+  - title: Split by design
+    details: Slide copy lives in presentation.yaml. Numbers and release metadata live in generated.yaml so humans and automation do not fight over the same lines.
+  - title: Actually static
+    details: The CLI emits a dist directory you can host anywhere. No Node server in production unless you want one for previews.
+  - title: One toolpath
+    details: Init a tree, validate YAML, build, serve locally, and optionally fetch GitHub-backed data into generated.yaml—all from the same CLI.
+---
 
-- content stays in reviewable YAML files
-- generated metrics stay separate from authored narrative
-- the CLI scaffolds, validates, builds, serves, and fetches data
-- the final output is a static site with no backend requirement
+## Where to go next
 
-## Start here
+The [quickstart](/quickstart) gets you from `npx @slide-spec/cli init` to a served site. If you already have files open, the [schema](/schema/) pages describe every document, [templates](/templates/) map each slide layout, and the [CLI reference](/cli/) lists commands and flags without extra narration.
 
-- New user: [Quickstart](/quickstart)
-- Need the file model: [Schema reference](/schema/)
-- Need a slide layout: [Templates](/templates/)
-- Need command details: [CLI reference](/cli/)
-
-## What you get
-
-- A home page and archived presentation index
-- A slide renderer driven by templates and YAML content
-- Optional generated data from GitHub
-- A packaged CLI that can scaffold and build projects outside this repository
-
-## How the pieces fit
-
-1. `site.yaml` defines global branding, links, and page labels.
-2. `presentations/index.yaml` controls what appears in the archive.
-3. Each `presentation.yaml` defines slide order and authored content.
-4. Each `generated.yaml` holds machine-produced metrics and release data.
-5. `slide-spec build` turns the project into a static `dist/` directory.
-
-## Screens
-
-![Reference project home page](/screenshots/home-reference.png)
-
-![Reference project presentations index](/screenshots/presentations-reference.png)
-
-## Why this exists
-
-Most slide workflows break down as soon as people need review history, reproducible builds, or generated metrics. slide-spec keeps those concerns separate:
-
-- authored copy lives in YAML
-- generated data lives in YAML
-- templates stay reusable
-- the app runtime stays static
-
-## Included docs
-
-- [Quickstart](/quickstart): zero to working site
-- [Schema](/schema/): every current file and field
-- [Templates](/templates/): every current template and visible region
-- [Examples](/examples/): a tutorial example and a manual-data example
-- [Meta](/meta/): AI guidance, accessibility status, and supply-chain notes
-
-## Repository guidance
-
-Contribution policy lives in the repository, not the docs site:
-
-- [README](https://github.com/lreading/slide-spec#readme)
-- [CONTRIBUTING.md](https://github.com/lreading/slide-spec/blob/main/CONTRIBUTING.md)
-- [LICENSE](https://github.com/lreading/slide-spec/blob/main/LICENSE)
+Contribution policy and license live in the [GitHub repository](https://github.com/lreading/slide-spec) (`README`, `CONTRIBUTING.md`, `LICENSE`) so this site stays a single technical surface.

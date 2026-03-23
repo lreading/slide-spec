@@ -133,7 +133,6 @@ export class InitPresentationBuilder {
             template: 'agenda',
             enabled: true,
             title: 'Agenda',
-            content: {},
           },
           {
             template: 'section-list-grid',

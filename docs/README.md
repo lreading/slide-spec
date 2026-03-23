@@ -17,6 +17,13 @@ Local workflow:
 3. `npm run dev`
 4. `npm run build`
 
+Accessibility check (build + axe against `vitepress preview`):
+
+```bash
+npx playwright install chromium   # first time
+npm run a11y
+```
+
 Notes:
 
 - The docs site should stay markdown-first.

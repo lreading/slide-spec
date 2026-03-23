@@ -1,10 +1,20 @@
 # People
 
-The `people` template renders a contributor spotlight slide.
+Contributor spotlight: banner line plus cards for each `content.spotlight[]` entry, joined to `generated.contributors`.
 
 ![People reference slide](/screenshots/template-people-reference.png)
 
-## Example YAML
+## Screen
+
+| Region | Source |
+| --- | --- |
+| Title / subtitle | `slide.title`, `slide.subtitle` |
+| Banner | `content.banner_prefix`, linked `content.contributors_link_label`, `content.banner_suffix` |
+| Cards | One per `content.spotlight[]`; name/login from generated contributor match |
+| Summary | `content.spotlight[].summary` |
+| Profile link | Built from `content.spotlight[].login` and contributor metadata |
+
+## Example
 
 ```yaml
 template: people
@@ -38,19 +48,13 @@ content:
 | `login` | yes | string |
 | `summary` | yes | string |
 
-## Also rendered from `generated.yaml`
+## From `generated.yaml`
 
-- `generated.contributors.total`
-- `generated.contributors.authors[]`
-
-## Visible regions
-
-1. Banner prefix, contributors link, and suffix
-2. Contributor card title from generated contributor name/login
-3. Summary quote from `content.spotlight[].summary`
-4. Profile link built from the contributor login
+| Path | Role |
+| --- | --- |
+| `generated.contributors.total` | Used in banner / counts |
+| `generated.contributors.authors[]` | Resolved by `login` for card data |
 
 ## Omitted behavior
 
-- If banner fields are omitted, the banner disappears.
-- Spotlight entries only control which contributors are featured and what summary text is shown.
+Omitting `banner_prefix`, `contributors_link_label`, and `banner_suffix` removes the banner. Each `spotlight[].login` resolves through `generated.contributors.authors[]`; if absent, the card uses the login as the visible name.

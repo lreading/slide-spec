@@ -1,25 +1,11 @@
 # `validate`
 
-`validate` checks the project YAML against the live schema.
-
-## Usage
+`validate` checks all project YAML against the live schema and template rules.
 
 ```bash
 npx @slide-spec/cli validate ./my-slides
 ```
 
-## What it checks
+It loads `site.yaml`, `presentations/index.yaml`, each deck’s `presentation.yaml` and `generated.yaml`, checks cross-file consistency, and runs template-specific slide checks.
 
-- `site.yaml`
-- `presentations/index.yaml`
-- `presentation.yaml`
-- `generated.yaml`
-- cross-file consistency between index, presentation, and generated data
-- template-specific slide validation
-
-## When to run it
-
-- after every meaningful YAML edit
-- before `build`
-- before `serve`
-- after `fetch`
+Run it after substantive YAML edits, and before `build`, `serve`, or right after `fetch`.

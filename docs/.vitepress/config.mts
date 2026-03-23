@@ -1,6 +1,12 @@
 import { defineConfig } from 'vitepress'
 
 export default defineConfig({
+  markdown: {
+    theme: {
+      light: 'github-light-high-contrast',
+      dark: 'github-dark-high-contrast',
+    },
+  },
   title: 'slide-spec',
   description: 'Declarative presentation docs for YAML-driven slides, GitHub data, and reusable templates.',
   cleanUrls: true,

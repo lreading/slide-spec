@@ -1,43 +1,32 @@
 # Manual Data Example
 
-You do not need GitHub to use slide-spec.
+slide-spec does not require GitHub. The app reads `generated.yaml` as structured data—author it yourself when metrics come from spreadsheets, internal tools, or other systems.
 
-The current app treats `generated.yaml` as a structured data source, not as a file that must come from the CLI. That means you can create it yourself if your metrics come from somewhere else.
+Use this path for internal briefings, customer rollouts, repos outside GitHub, or any pipeline that exports numbers you map into the schema.
 
-Good fits for a manual-data project:
-
-- internal product briefings
-- customer rollout decks
-- projects hosted outside GitHub
-- teams that export stats from another system
-
-## Manual data workflow
+## Workflow
 
 1. Run `init`.
-2. Author `site.yaml`, `presentations/index.yaml`, and `presentation.yaml`.
-3. Write `generated.yaml` yourself.
-4. Run `validate`.
-5. Run `build` or `serve`.
+2. Edit `site.yaml`, `presentations/index.yaml`, and `presentation.yaml`.
+3. Write `generated.yaml` (by hand or from your own exporter).
+4. Run `validate`, then `build` or `serve`.
 
-## Example data sources that are not GitHub
+Typical non-GitHub inputs: CSV from analytics, issue counts from Jira or Linear, release notes from an internal process, contributor rollups from a spreadsheet or HR report.
 
-- CSV exports from analytics tools
-- issue counts from Jira or Linear
-- release notes from an internal release process
-- contributor summaries from a spreadsheet or people-ops report
+## Remote assets
 
-## Remote asset example
-
-Local assets are recommended, but remote URLs are supported. Example:
+Prefer local files under `content/assets/`. HTTPS URLs are allowed when you need a hosted logo or image:
 
 ```yaml
 site:
   presentation_logo:
-    url: https://raw.githubusercontent.com/lreading/slide-spec/main/app/public/slide-spec-mark.svg
-    alt: Slide Spec logo
+    url: https://cdn.example.com/brand/logo.svg
+    alt: Company logo
 ```
 
-## Manual metrics example
+## Manual `generated` snippet
+
+Metric ids under `stats` are yours (see [generated schema](/schema/generated)). This block matches the reference fixture shape—`issues_closed` fits Jira, Linear, or an internal tracker as easily as GitHub.
 
 ```yaml
 generated:
@@ -46,16 +35,16 @@ generated:
     start: 2026-03-01
     end: 2026-05-31
   stats:
-    stars:
-      label: GitHub Stars
-      current: 1840
-      previous: 1760
-      delta: 80
+    issues_closed:
+      label: Issues closed
+      current: 14
+      previous: 9
+      delta: 5
       metadata:
         comparison_status: complete
         warning_codes: []
 ```
 
-The full reference file is here:
+Full fixture for copy-paste and diffing:
 
 - [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)

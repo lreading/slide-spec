@@ -1,10 +1,6 @@
-# GitHub Connector
+# GitHub connector
 
-GitHub is the only built-in data source today.
-
-## Configure the source
-
-Add this to `content/site.yaml`:
+GitHub is the only first-party data source today. Add it under `site.data_sources` in `content/site.yaml`:
 
 ```yaml
 site:
@@ -13,35 +9,10 @@ site:
       url: https://github.com/OWNER/REPO
 ```
 
-Rules enforced by the validator:
+Validation rules: `data_sources` is an array, at most one GitHub entry is allowed for `fetch`, and the URL must be on `github.com`.
 
-- `data_sources` must be an array
-- only one GitHub source is supported for fetch
-- the URL must point to `github.com`
+`fetch` pulls repository metadata, releases, merged PRs and closed issues in the window you pass, contributor history (for first-time contributor detection), and star snapshots for the current and previous periods. It does not author roadmap copy, spotlights, community notes, CTAs, or slide structure.
 
-## What the connector fetches
+Use a PAT when you can. The CLI runs without one but hits rate limits and thinner coverage sooner; interactive flows can persist a token into `.env`.
 
-- repository metadata
-- releases
-- merged pull requests
-- closed issues
-- contributor history used for first-time contributor detection
-- star snapshots for the current and previous periods
-
-## What still stays authored
-
-- roadmap narrative
-- spotlight summaries
-- community mentions
-- CTA copy
-- template structure
-
-## Token guidance
-
-- A PAT is recommended.
-- The CLI can continue without one, but rate-limiting or reduced coverage is more likely.
-- When provided interactively, the CLI can write the local `.env` file for you.
-
-## Current limitation
-
-Very large repositories can still make historical star snapshots expensive because exact star history is costly to reconstruct. The CLI records warnings and metadata when those snapshot paths become partial or unavailable.
+Very large repos can make star history expensive; the CLI surfaces warnings when snapshots are partial.

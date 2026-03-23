@@ -1,20 +1,22 @@
 # Timeline
 
-The `timeline` template renders release entries from `generated.yaml`.
+Release cards for ids listed in `content.featured_release_ids`; body copy comes from `generated.yaml`.
 
 ![Timeline reference slide](/screenshots/template-timeline-reference.png)
 
-## Visible regions
+## Screen
 
-1. Slide title and optional subtitle
-2. One release card per matching id in `content.featured_release_ids`
-3. Latest badge from `content.latest_badge_label` on the first rendered release
-4. Release version and publish date from `generated.releases[]`
-5. Release bullet list from `generated.releases[].summary_bullets`
-6. Footer link label from `content.footer_link_label`
-7. Empty-state title/message when no release cards match
+| Region | Source |
+| --- | --- |
+| Title / subtitle | `slide.title`, `slide.subtitle` |
+| Release cards | One per id in `content.featured_release_ids` that exists in `generated.releases[]` |
+| “Latest” badge | `content.latest_badge_label` on first rendered card |
+| Version / date | `generated.releases[].version`, `generated.releases[].published_at` |
+| Summary bullets | `generated.releases[].summary_bullets` |
+| Footer link | Label from `content.footer_link_label`; href is `{site.links.repository.url}/releases` |
+| Empty state | `content.empty_state_title`, `content.empty_state_message` when no ids match |
 
-## Example YAML
+## Example
 
 ```yaml
 template: timeline
@@ -41,15 +43,16 @@ content:
 | `content.empty_state_message` | no | string |
 | `content.featured_release_ids` | yes | string[] |
 
-## Also rendered from `generated.yaml`
+## From `generated.yaml` (`generated.releases[]`)
 
-- `generated.releases[].id`
-- `generated.releases[].version`
-- `generated.releases[].published_at`
-- `generated.releases[].url`
-- `generated.releases[].summary_bullets`
+| Field | Role |
+| --- | --- |
+| `id` | Matched against `featured_release_ids` |
+| `version` | Shown on card |
+| `published_at` | Shown on card |
+| `url` | Card link target |
+| `summary_bullets` | Card bullet list |
 
 ## Omitted behavior
 
-- If `featured_release_ids` is empty, the empty-state title/message are used instead of release cards.
-- If `empty_state_title` and `empty_state_message` are omitted, the template still renders but has no authored empty-state copy.
+Empty `featured_release_ids` shows the empty-state copy. If both empty-state strings are omitted, the slide still renders without authored empty-state text.

@@ -1,8 +1,8 @@
 # `generated.yaml`
 
-This file contains structured data for metrics, releases, contributors, and merged pull requests.
+Structured data for metrics, releases, contributors, and optional merged PRs. It can be authored manually or filled by the CLI.
 
-It can be authored manually or populated by the CLI.
+Validation for this file is `ContentValidator.validateGeneratedDocument` in `shared/src/content-validator.ts`. The validator is **strict** on `id`, `period`, `stats` (every metric value), and the top-level shape of `contributors`, and **permissive** on the contents of `releases`, `contributors.authors`, and `merged_prs`: it only checks that those are arrays (and that `contributors.total` is a number). Element shapes for those arrays are defined in TypeScript (`shared/src/content.ts`) for the app but are **not** asserted by `ContentValidator`.
 
 ## Example
 
@@ -10,99 +10,107 @@ See the full reference file:
 
 - [`docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/generated.yaml)
 
-## Root fields
+## Document root
 
-| Field | Required | Type |
-| --- | --- | --- |
-| `generated.id` | yes | string |
-| `generated.period` | yes | object |
-| `generated.previous_presentation_id` | no | string |
-| `generated.stats` | yes | object |
-| `generated.releases` | yes | array |
-| `generated.contributors` | yes | object |
-| `generated.merged_prs` | no | array |
+| Path | Required | Type | Notes |
+| --- | --- | --- | --- |
+| (root) | yes | object | |
+| `generated` | yes | object | All fields below live under this key. |
+
+## `generated`
+
+| Path | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `generated.id` | yes | string | Non-blank. |
+| `generated.period` | yes | object | See below. |
+| `generated.previous_presentation_id` | no | string | Non-blank when present. |
+| `generated.stats` | yes | object | Record keyed by metric id; every value must satisfy the metric shape below. |
+| `generated.releases` | yes | array | Length and element shape are **not** validated beyond “is an array”. |
+| `generated.contributors` | yes | object | See below. |
+| `generated.merged_prs` | no | array | If present, must be an array; elements **not** validated. |
 
 ## `generated.period`
 
-| Field | Required | Type |
-| --- | --- | --- |
-| `start` | yes | string |
-| `end` | yes | string |
+| Path | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `start` | yes | string | Non-blank. |
+| `end` | yes | string | Non-blank. |
+
+Format of date strings is not validated.
 
 ## `generated.stats`
 
-`stats` is a record keyed by metric id. The current UI commonly uses keys like:
+`stats` is an object: each **key** is a metric id (any non-empty key string in YAML). Each **value** must be a metric object. The reference project uses ids such as `stars`, `issues_closed`, `prs_merged`, `new_contributors`; the validator does not restrict key names.
 
-- `stars`
-- `issues_closed`
-- `prs_merged`
-- `new_contributors`
+### Each `generated.stats.<metricId>` value
 
-Each metric object uses the same shape:
-
-| Field | Required | Type |
-| --- | --- | --- |
-| `label` | yes | string |
-| `current` | yes | number |
-| `previous` | yes | number |
-| `delta` | yes | number |
-| `metadata` | yes | object |
-
-### `generated.stats.<metric>`
-
-| Field | Required | Type | Notes |
+| Path | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `label` | yes | string | Human-facing label used by metric slides. |
-| `current` | yes | number | Current-period value. |
-| `previous` | yes | number | Previous-period value or fallback/unavailable placeholder. |
-| `delta` | yes | number | `current - previous`. |
-| `metadata` | yes | object | Comparison metadata used for audit/debugging. |
+| `label` | yes | string | Non-blank. |
+| `current` | yes | number | Finite number. |
+| `previous` | yes | number | Finite number. |
+| `delta` | yes | number | Finite number. |
+| `metadata` | yes | object | See below. |
 
-### `generated.stats.<metric>.metadata`
+### `generated.stats.<metricId>.metadata`
 
-| Field | Required | Type | Notes |
+| Path | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `comparison_status` | yes | string | One of `complete`, `partial`, `skipped`, or `unavailable`. |
-| `warning_codes` | yes | string[] | Machine-readable warnings for the metric. |
+| `comparison_status` | yes | string | Non-blank; must be one of `complete`, `partial`, `skipped`, `unavailable`. |
+| `warning_codes` | yes | string[] | Array; each entry a non-blank string. |
 
-## `generated.releases[]`
+## `generated.releases`
 
-| Field | Required | Type |
+| What is validated | Rule |
+| --- | --- |
+| `releases` | Must be an array. |
+
+There is no per-item validation in `ContentValidator`. For the shape the TypeScript types expect (`ReleaseEntry` in `shared/src/content.ts`), each entry is typically:
+
+| Field | In types | Notes |
 | --- | --- | --- |
-| `id` | yes | string |
-| `version` | yes | string |
-| `published_at` | yes | string |
-| `url` | yes | string |
-| `summary_bullets` | yes | string[] |
+| `id` | yes | Not enforced by validator. |
+| `version` | yes | Not enforced by validator. |
+| `published_at` | yes | Not enforced by validator. |
+| `url` | yes | Not enforced by validator. |
+| `summary_bullets` | yes | Not enforced by validator. |
 
 ## `generated.contributors`
 
-| Field | Required | Type |
+| Path | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `total` | yes | number | Finite number. |
+| `authors` | yes | array | Must be an array; **elements are not validated** by `ContentValidator`. |
+
+### `generated.contributors.authors[]` (typed contract only)
+
+`ContributorEntry` in `shared/src/content.ts` declares each author object with:
+
+| Field | In types | Notes |
 | --- | --- | --- |
-| `total` | yes | number |
-| `authors` | yes | array |
+| `login` | yes | Not enforced by validator. |
+| `name` | yes | Not enforced by validator. |
+| `avatar_url` | yes | Not enforced by validator. |
+| `merged_prs` | yes | Not enforced by validator. |
+| `first_time` | yes | Not enforced by validator. |
 
-### `generated.contributors.authors[]`
+## `generated.merged_prs`
 
-| Field | Required | Type |
+| What is validated | Rule |
+| --- | --- |
+| `merged_prs` | If the key is present, value must be an array. Elements are **not** validated. |
+
+`MergedPullRequestEntry` in `shared/src/content.ts` declares:
+
+| Field | In types | Notes |
 | --- | --- | --- |
-| `login` | yes | string |
-| `name` | yes | string |
-| `avatar_url` | yes | string |
-| `merged_prs` | yes | number |
-| `first_time` | yes | boolean |
-
-## `generated.merged_prs[]`
-
-| Field | Required | Type |
-| --- | --- | --- |
-| `number` | yes | number |
-| `title` | yes | string |
-| `merged_at` | yes | string |
-| `author_login` | yes | string |
+| `number` | yes | Not enforced by validator. |
+| `title` | yes | Not enforced by validator. |
+| `merged_at` | yes | Not enforced by validator. |
+| `author_login` | yes | Not enforced by validator. |
 
 ## Notes
 
-- `generated.yaml` is not required to come from the GitHub connector.
-- The live validator only checks the shape, not the semantic truth of the values.
-- If you hand-author this file, keep labels and metric keys consistent with the slide content that consumes them.
+- This file does not have to originate from the GitHub connector.
+- Cross-document checks (e.g. matching `generated.id` to the presentation and index) are handled separately (`validatePresentationRecordConsistency`), not by `validateGeneratedDocument` alone.
+- Hand-authored files should still keep metric keys and labels aligned with slides that consume them (e.g. `metrics-and-links` `stat_keys`), even where the validator does not enforce that link.

@@ -1,26 +1,9 @@
-# Agent Assistance
+# Agent assistance
 
-Agents work best with slide-spec when the human reviewer keeps the source-of-truth files explicit.
+Keep the YAML sources explicit so automated helpers do not have to guess.
 
-## Good tasks for agents
+Good fits: drafting `presentation.yaml`, filling `generated.yaml` from approved numbers, schema checks, regenerating screenshots from a validated fixture.
 
-- drafting `presentation.yaml`
-- filling `generated.yaml` from approved source data
-- checking schema validity
-- generating screenshots from a validated fixture project
+Still needs a human: roadmap calls, release story, external links, spotlights, any metric that looks off.
 
-## Tasks that still need human review
-
-- roadmap priorities
-- release narrative
-- external links
-- spotlight summaries
-- any generated metrics that look surprising
-
-## Recommended workflow
-
-1. author or fetch data
-2. run `validate`
-3. run `build` or `serve`
-4. review the rendered output
-5. commit only after the rendered site looks correct
+Workflow: author or `fetch` → `validate` → `build` or `serve` → review the rendered site → commit when it matches intent.

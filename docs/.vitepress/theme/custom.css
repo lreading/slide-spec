@@ -1,11 +1,24 @@
 :root {
-  --vp-c-brand-1: #ec4e2c;
-  --vp-c-brand-2: #d93f1f;
-  --vp-c-brand-3: #b7371c;
+  /* Meets WCAG 2.1 AA contrast for normal text on white and on default inline-code backgrounds. */
+  --vp-c-brand-1: #b8321a;
+  --vp-c-brand-2: #9c2a16;
+  --vp-c-brand-3: #832214;
+  /* Language label on fenced code blocks (default --vp-c-text-3 fails on code block chrome). */
+  --vp-code-lang-color: #4a4a4f;
+  --vp-home-hero-name-color: #111827;
+  --vp-home-hero-text-color: #374151;
+  --vp-home-hero-image-background-image: radial-gradient(
+    circle at top,
+    rgba(184, 50, 26, 0.24),
+    transparent 50%
+  );
+  --vp-home-hero-image-filter: blur(18px);
+}
+
+.dark {
+  --vp-code-lang-color: #b8bcc8;
   --vp-home-hero-name-color: #f5f7fb;
   --vp-home-hero-text-color: #d2d7e2;
-  --vp-home-hero-image-background-image: radial-gradient(circle at top, rgba(236, 78, 44, 0.22), transparent 50%);
-  --vp-home-hero-image-filter: blur(18px);
 }
 
 .VPHomeHero .image-src {

@@ -69,7 +69,6 @@ presentation:
       enabled: true
       title: Agenda
       subtitle: What this briefing covers
-      content: {}
     - template: section-list-grid
       enabled: true
       title: What shipped

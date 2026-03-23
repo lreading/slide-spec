@@ -3,11 +3,16 @@
     "dev": "vitepress dev",
     "build": "vitepress build",
     "preview": "vitepress preview",
-    "screenshots": "node --import tsx scripts/generate-doc-assets.ts"
+    "screenshots": "node --import tsx scripts/generate-doc-assets.ts",
+    "a11y": "npm run build && playwright test",
+    "a11y:install": "playwright install chromium"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.11.1",
+    "@playwright/test": "^1.58.2",
     "playwright": "^1.55.0",
     "tsx": "^4.20.6",
+    "typescript": "~5.9.3",
     "vitepress": "^1.6.4"
   }
 }

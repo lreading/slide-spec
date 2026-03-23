@@ -1,23 +1,9 @@
-# AI-Friendly Docs
+# AI-friendly docs
 
-slide-spec aims to keep both the product and docs easy for agents to consume.
+These docs are structured so tools and humans can follow them without guessing.
 
-## Current machine-readable entrypoints
+Entry points: [`/llms.txt`](/llms.txt), [`/sitemap.xml`](/sitemap.xml), and stable URLs under schema, templates, CLI, and examples.
 
-- `/llms.txt`
-- `/sitemap.xml`
-- stable page URLs for schema, templates, CLI, and examples
+Schema pages name fields explicitly. Template pages separate shared slide fields from template-specific `content`. Examples use copy-pasteable YAML. The quickstart does not skip install or validate steps.
 
-## What makes these docs agent-friendly
-
-- schema pages use explicit field names
-- template pages separate shared fields from template-specific fields
-- examples use real YAML, not pseudo-code
-- quickstart avoids hidden steps
-
-## What agents should not guess
-
-- required schema fields
-- omitted-field behavior
-- whether generated data is authored or fetched
-- whether a template reads data from `site.yaml`, `presentation.yaml`, or `generated.yaml`
+Do not infer: required fields, defaulting behavior for omitted keys, whether `generated.yaml` was hand-written or produced by `fetch`, or which file (`site.yaml`, `presentation.yaml`, or `generated.yaml`) a template reads for a given value.

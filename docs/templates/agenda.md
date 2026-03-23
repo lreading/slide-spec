@@ -1,38 +1,46 @@
 # Agenda
 
-The `agenda` template renders a derived list of enabled slides.
+Lists the remaining enabled slides in deck order. Rows are **derived** from other slides (titles or labels), not from hand-authored list items.
 
 ![Agenda reference slide](/screenshots/template-agenda-reference.png)
 
-## Visible regions
+## Screen
 
-1. Slide title from `slide.title`
-2. Optional subtitle from `slide.subtitle`
-3. Agenda items derived from the rest of the enabled slides
-4. Shared presentation chrome from `site.presentation_logo` and `site.presentation_chrome.mark_label`
+| Region | Source |
+| --- | --- |
+| Title | `slide.title` |
+| Subtitle | `slide.subtitle` |
+| Each row | Label for the next enabled slide (see below) |
+| Logo / mark | `site.presentation_logo`, `site.presentation_chrome.mark_label` |
 
-## Example YAML
+### How row labels are chosen
+
+For each later slide that is enabled (excluding `hero` and `agenda`), the card text is:
+
+- **`progress-timeline`:** only the first enabled `progress-timeline` slide contributes a row. The label is **`presentation.roadmap.agenda_label` only** (trimmed); the slide’s `title` is not used here. If the label is missing, that slide adds no row.
+- **Everything else:** `getSlideLabel` in `app/src/content/slideLabels.ts`—typically `slide.title`, or for `closing` without a title, `slide.content.heading`.
+
+So the only “configuration” for the agenda list is how you title your other slides (plus optional `presentation.roadmap.agenda_label` for the collapsed roadmap entry).
+
+## Example
 
 ```yaml
 template: agenda
 enabled: true
 title: Agenda
 subtitle: What this briefing covers
-content: {}
 ```
 
+No `content` block: the template does not read `slide.content` at all.
+
 ## Field reference
-
-`agenda` has no template-specific `content` fields.
-
-Required slide envelope fields:
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `title` | yes | string |
 | `subtitle` | no | string |
+| `content` | no | Omit entirely, or `{}` only. Any other keys are rejected. |
 
 ## Omitted behavior
 
-- If `subtitle` is omitted, the subtitle line is removed.
-- Disabled slides are not included in the generated agenda list.
+Without `subtitle`, that line is hidden. Disabled slides are excluded from the list.

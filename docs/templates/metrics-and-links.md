@@ -1,23 +1,21 @@
 # Metrics And Links
 
-The `metrics-and-links` template combines generated metrics with authored community or ecosystem references.
+Two columns: authored “mentions” cards and metric tiles driven by `content.stat_keys` and `generated.stats`.
 
 ![Metrics and links reference slide](/screenshots/template-metrics-and-links-reference.png)
 
-## Visible regions
+## Screen
 
-1. Slide title and optional subtitle
-2. Optional left-column section heading from `content.section_heading`
-3. One mention card per `content.mentions[]`
-4. Mention type label from `content.mentions[].type`
-5. Mention body from `content.mentions[].title`
-6. Optional mention link label from `content.mentions[].url_label`
-7. Optional right-column stats heading from `content.stats_heading`
-8. One metric card per key listed in `content.stat_keys`
-9. Metric value and label from `generated.stats.<metric>`
-10. Optional trend line from generated delta plus `content.trend_suffix`
+| Region | Source |
+| --- | --- |
+| Title / subtitle | `slide.title`, `slide.subtitle` |
+| Mentions column heading | `content.section_heading` |
+| Mention cards | `content.mentions[]`; type label `type`, body `title`, optional link `url_label` + `url` |
+| Stats column heading | `content.stats_heading` |
+| Metric tiles | One per key in `content.stat_keys`; values from `generated.stats.<key>` |
+| Trend text | Shown when `content.show_deltas` is true; copy uses delta from generated data plus `content.trend_suffix` |
 
-## Example YAML
+## Example
 
 ```yaml
 template: metrics-and-links
@@ -58,17 +56,15 @@ content:
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `type` | yes | string | Small label on the mention card. |
-| `title` | yes | string | Main card copy. |
-| `url_label` | no | string | Must be paired with `url` when present. |
-| `url` | no | string | Must be paired with `url_label` when present. |
+| `type` | yes | string | Card eyebrow / label |
+| `title` | yes | string | Main card text |
+| `url_label` | no | string | Pair with `url` |
+| `url` | no | string | Pair with `url_label` |
 
-## Also rendered from `generated.yaml`
+## From `generated.yaml`
 
-- metric keys named in `content.stat_keys`
-- each metric uses `label`, `current`, `previous`, `delta`, and `metadata`
+For each key in `content.stat_keys`, `generated.stats.<key>` supplies (at minimum) `label`, `current`, `previous`, `delta`, and `metadata` as produced by the generator.
 
 ## Omitted behavior
 
-- If `show_deltas` is `false`, trend lines are hidden.
-- Mention cards without `url` and `url_label` remain non-clickable.
+`show_deltas: false` hides trend lines. Mention rows without both `url` and `url_label` render as plain text cards.

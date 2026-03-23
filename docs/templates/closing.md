@@ -1,19 +1,21 @@
 # Closing
 
-The `closing` template is the final slide.
+Final slide: heading, message, optional quote, site links, optional mascot, presentation mark.
 
 ![Closing reference slide](/screenshots/template-closing-reference.png)
 
-## Visible regions
+## Screen
 
-1. Optional closing mascot from `site.mascot`
-2. Heading from `content.heading`
-3. Message from `content.message`
-4. Footer resource pills from `site.links.repository`, `site.links.docs`, and `site.links.owasp`
-5. Optional quote from `content.quote`
-6. Bottom-right mark from `site.presentation_chrome.mark_label`
+| Region | Source |
+| --- | --- |
+| Mascot | `site.mascot` (optional) |
+| Heading | `content.heading` |
+| Message | `content.message` |
+| Resource links | `site.links.repository`, `site.links.docs`, `site.links.owasp` |
+| Quote | `content.quote` |
+| Corner mark | `site.presentation_chrome.mark_label` |
 
-## Example YAML
+## Example
 
 ```yaml
 template: closing
@@ -32,13 +34,15 @@ content:
 | `content.message` | yes | string |
 | `content.quote` | no | string |
 
-## Also rendered from `site.yaml`
+## From `site.yaml`
 
-- `site.links.repository`
-- `site.links.docs`
-- `site.links.owasp`
-- `site.presentation_chrome.mark_label`
+| Path | Role |
+| --- | --- |
+| `site.links.repository` | Pill link |
+| `site.links.docs` | Pill link |
+| `site.links.owasp` | Pill link |
+| `site.presentation_chrome.mark_label` | Mark in chrome |
 
 ## Omitted behavior
 
-- If `quote` is omitted, the closing quote line is removed.
+Omitting `quote` removes the quote line.

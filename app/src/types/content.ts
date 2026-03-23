@@ -177,7 +177,10 @@ export interface ClosingSlideContent {
 
 export type TitleSlide = SlideBase<'hero', HeroSlideContent>
 
-export type AgendaSlide = SlideBase<'agenda', AgendaSlideContent>
+export type AgendaSlide = Omit<SlideBase<'agenda', AgendaSlideContent>, 'content'> & {
+  /** Omitted in YAML when unused; `{}` is still accepted for backward compatibility. */
+  content?: AgendaSlideContent
+}
 
 export type RecentUpdatesSlide = SlideBase<'section-list-grid', SectionListGridSlideContent>
 

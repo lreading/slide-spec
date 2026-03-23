@@ -1,19 +1,21 @@
 # Action Cards
 
-The `action-cards` template renders a grid of CTA cards with optional footer text.
+Grid of linked cards (`content.cards[]`) and optional `content.footer_text`.
 
 ![Action cards reference slide](/screenshots/template-action-cards-reference.png)
 
-## Visible regions
+## Screen
 
-1. Slide title and optional subtitle
-2. One surface card per `content.cards[]`
-3. Card title from `content.cards[].title`
-4. Card body from `content.cards[].description`
-5. Card action label from `content.cards[].url_label`
-6. Optional footer line from `content.footer_text`
+| Region | Source |
+| --- | --- |
+| Title / subtitle | `slide.title`, `slide.subtitle` |
+| Cards | `content.cards[]` |
+| Card title | `cards[].title` |
+| Card body | `cards[].description` |
+| Card CTA | `cards[].url_label` → `cards[].url` |
+| Footer line | `content.footer_text` |
 
-## Example YAML
+## Example
 
 ```yaml
 template: action-cards
@@ -49,4 +51,4 @@ content:
 
 ## Omitted behavior
 
-- If `footer_text` is omitted, the footer callout disappears.
+Omitting `footer_text` removes the footer strip.

@@ -50,7 +50,6 @@ const createValidPresentationDocument = () => ({
         template: 'agenda',
         enabled: true,
         title: 'Agenda',
-        content: {},
       },
       {
         template: 'section-list-grid',
@@ -330,12 +329,35 @@ describe('ContentValidator', () => {
         template: 'agenda',
         enabled: true,
         title: '   ',
-        content: {},
       },
     ]
 
     expect(() => validator.validatePresentationDocument(document)).toThrow(
       'presentation document.presentation.slides[0].title must not be blank.',
+    )
+  })
+
+  it('accepts agenda slides with no content key', () => {
+    const document = createValidPresentationDocument()
+    const agendaSlide = document.presentation.slides.find((s) => s.template === 'agenda')
+    expect(agendaSlide).toBeDefined()
+    expect(Object.prototype.hasOwnProperty.call(agendaSlide, 'content')).toBe(false)
+    expect(() => validator.validatePresentationDocument(document)).not.toThrow()
+  })
+
+  it('rejects agenda slides with non-empty content', () => {
+    const document = createValidPresentationDocument()
+    document.presentation.slides = [
+      {
+        template: 'agenda',
+        enabled: true,
+        title: 'Agenda',
+        content: { unused: true },
+      } as never,
+    ]
+
+    expect(() => validator.validatePresentationDocument(document)).toThrow(
+      'presentation document.presentation.slides[0].content must be omitted or an empty object for agenda slides.',
     )
   })
 

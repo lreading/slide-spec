@@ -79,8 +79,6 @@ presentation:
     - template: agenda
       enabled: true
       title: Agenda
-      subtitle: Overview of today's update
-      content: {}
     - template: section-list-grid
       enabled: true
       title: What Happened Since Last Update

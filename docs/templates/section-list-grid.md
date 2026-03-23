@@ -1,10 +1,20 @@
 # Section List Grid
 
-The `section-list-grid` template renders multiple titled bullet sections in a grid.
+Grid of titled sections; each section is a heading plus a bullet list.
 
 ![Section list grid reference slide](/screenshots/template-section-list-grid-reference.png)
 
-## Example YAML
+## Screen
+
+| Region | Source |
+| --- | --- |
+| Title | `slide.title` |
+| Subtitle | `slide.subtitle` |
+| Section cards | One per `content.sections[]` |
+| Card heading | `sections[].title` |
+| Bullets | `sections[].bullets` |
+
+## Example
 
 ```yaml
 template: section-list-grid
@@ -34,15 +44,6 @@ content:
 | `title` | yes | string |
 | `bullets` | yes | string[] |
 
-## Visible regions
-
-1. Slide title
-2. Optional slide subtitle
-3. One card per `content.sections[]`
-4. Section heading from `sections[].title`
-5. Bullet list from `sections[].bullets`
-
 ## Omitted behavior
 
-- Empty sections are invalid because `bullets` must be an array.
-- The grid grows or shrinks with the number of sections provided.
+Each `sections[]` entry must define `bullets` as an array; each element is a non-blank string. An empty `bullets` array validates. Layout scales with section count.

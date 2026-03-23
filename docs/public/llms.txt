@@ -1,49 +1,65 @@
 # slide-spec
 
-slide-spec is a YAML-first static presentation tool.
+slide-spec is a YAML-first static site and presentation tool: you edit YAML, validate, build to `dist/`, and optionally pull metrics from GitHub.
 
-## Primary entrypoints
+Site: https://slide-spec.dev/
 
-- /quickstart
-- /schema/
-- /templates/
-- /cli/
-- /examples/
+## Start here
 
-## Product model
+- https://slide-spec.dev/quickstart — install path, `init` → validate → build → serve; optional `fetch` with a token.
 
-- `site.yaml` defines global branding, labels, and shared links.
-- `presentations/index.yaml` defines the published archive list.
-- `presentation.yaml` defines authored slide structure and template content.
-- `generated.yaml` defines structured metrics, releases, contributors, and merged pull requests.
+## Schema (four documents, validated together)
 
-## Current templates
+Read in order: site → presentations index → presentation → generated. Field-level rules and required keys live on each page; do not guess shapes from examples alone.
 
-- hero
-- agenda
-- section-list-grid
-- timeline
-- progress-timeline
-- people
-- metrics-and-links
-- action-cards
-- closing
+- https://slide-spec.dev/schema/ — how the four files relate.
+- https://slide-spec.dev/schema/site — global branding, navigation copy, links, optional `data_sources`.
+- https://slide-spec.dev/schema/presentations-index — published presentation list and archive metadata.
+- https://slide-spec.dev/schema/presentation — slide list, template ids, authored content blocks.
+- https://slide-spec.dev/schema/generated — metrics, releases, contributors, merged PRs; may be hand-authored or produced by `fetch`.
 
-## High-value docs pages
+## Templates (slide layouts)
 
-- /schema/site
-- /schema/presentations-index
-- /schema/presentation
-- /schema/generated
-- /templates/hero
-- /templates/timeline
-- /templates/metrics-and-links
-- /examples/tutorial-example
-- /connectors/github
+- https://slide-spec.dev/templates/ — index of layouts and how they consume `presentation.yaml` / `generated.yaml`.
+- https://slide-spec.dev/templates/hero
+- https://slide-spec.dev/templates/agenda
+- https://slide-spec.dev/templates/section-list-grid
+- https://slide-spec.dev/templates/timeline
+- https://slide-spec.dev/templates/progress-timeline
+- https://slide-spec.dev/templates/people
+- https://slide-spec.dev/templates/metrics-and-links
+- https://slide-spec.dev/templates/action-cards
+- https://slide-spec.dev/templates/closing
 
-## Important constraints
+## CLI
 
-- The current schema is exact; required fields and omission rules are documented in the schema pages.
-- Generated data can be authored manually or fetched from GitHub.
-- GitHub is the only built-in data source today.
-- The docs examples are based on a validated reference fixture project.
+- https://slide-spec.dev/cli/ — overview.
+- https://slide-spec.dev/cli/init — scaffold a project.
+- https://slide-spec.dev/cli/validate — schema check.
+- https://slide-spec.dev/cli/build — static output.
+- https://slide-spec.dev/cli/serve — build then serve `dist/`.
+- https://slide-spec.dev/cli/fetch — populate `generated.yaml` from configured sources (GitHub today).
+
+## Examples
+
+- https://slide-spec.dev/examples/ — how examples relate to the repo fixture.
+- https://slide-spec.dev/examples/tutorial-example — end-to-end walkthrough aligned with `docs/fixtures/reference-project/`.
+- https://slide-spec.dev/examples/manual-data-example — no GitHub connector; you own `generated.yaml`.
+
+## Connectors
+
+- https://slide-spec.dev/connectors/github — GitHub-backed metrics and configuration for `fetch`.
+
+## Meta / policies
+
+- https://slide-spec.dev/meta/ — docs meta index.
+- https://slide-spec.dev/meta/accessibility
+- https://slide-spec.dev/meta/ai
+- https://slide-spec.dev/meta/supply-chain
+- https://slide-spec.dev/meta/agent-assistance
+
+## Facts for implementers
+
+- Validation is strict; match the schema pages for required fields and nesting.
+- GitHub is the only built-in `fetch` source today; manual `generated.yaml` is always valid if it matches the schema.
+- Published screenshots and the tutorial reference the same validated fixture under `docs/fixtures/reference-project/` in the slide-spec repository.

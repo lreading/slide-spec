@@ -1,22 +1,7 @@
 # Templates
 
-Templates define the visible slide layout. The slide envelope always lives in `presentation.yaml`; the `content` block changes by template.
+Templates define how a slide renders. Slide metadata and envelope fields stay in `presentation.yaml`; the `content` block shape depends on the template.
 
-Current templates:
+Identifiers: `hero`, `agenda`, `section-list-grid`, `timeline`, `progress-timeline`, `people`, `metrics-and-links`, `action-cards`, `closing`.
 
-- `hero`
-- `agenda`
-- `section-list-grid`
-- `timeline`
-- `progress-timeline`
-- `people`
-- `metrics-and-links`
-- `action-cards`
-- `closing`
-
-Use the matching page for:
-
-- the `content` field reference
-- screenshot callouts
-- omitted behavior
-- notes about global `site.yaml` dependencies
+Each template page lists `content` fields, calls out anything that reads from `site.yaml` or `generated.yaml`, and includes a screenshot reference.

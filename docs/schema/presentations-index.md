@@ -27,19 +27,19 @@ presentations:
 
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
-| `id` | yes | string | Must be unique across the file. |
-| `year` | no | number | Used by filtering and display. |
-| `title` | yes | string | List title and route identity checks. |
-| `subtitle` | yes | string | Secondary list label and route consistency checks. |
-| `summary` | yes | string | Summary shown in the list row. |
-| `published` | yes | boolean | Whether the presentation should be treated as published content. |
-| `featured` | yes | boolean | Used for "latest presentation" selection. |
+| `id` | yes | non-blank string | Unique across the file. |
+| `year` | no | number | If set, must be a finite number. |
+| `title` | yes | non-blank string | Must match the presentation document in consistency checks. |
+| `subtitle` | yes | non-blank string | Must match the presentation document in consistency checks. |
+| `summary` | yes | non-blank string | Shown in the list row. |
+| `published` | yes | boolean | |
+| `featured` | yes | boolean | |
 
 ## Consistency rules
 
-The validator checks this file against each matching `presentation.yaml` and `generated.yaml`:
+`validatePresentationRecordConsistency` compares each index entry to the matching presentation and generated documents:
 
-- `id` must match
-- `title` must match
-- `subtitle` must match
-- `year` must match when both sides provide it
+- `id` must match.
+- `title` must match.
+- `subtitle` must match.
+- `year` must match when both the index entry and the presentation define it.

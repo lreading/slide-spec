@@ -12,7 +12,6 @@ presentation:
     - template: agenda
       enabled: true
       title: Agenda
-      content: {}
     - template: section-list-grid
       enabled: true
       title: Minimal Updates

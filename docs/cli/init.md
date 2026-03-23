@@ -1,57 +1,31 @@
 # `init`
 
-`init` scaffolds a new project directory.
-
-## Usage
+`init` creates a new project tree under the directory you pass.
 
 ```bash
 npx @slide-spec/cli init ./my-slides
 ```
 
-## Required inputs
+You need a project root, presentation id, title, and `from-date`. Supply them with flags or through the interactive prompts.
 
-- project root
-- presentation id
-- title
-- from-date
-
-These can come from flags or the interactive prompt flow.
-
-## Common flags
+## Flags
 
 | Flag | Required | Notes |
 | --- | --- | --- |
-| positional `project-root` | yes | Target directory for the project. |
-| `--project-root` | no | Named alternative to the positional argument. |
-| `--presentation-id` | no in interactive mode, yes otherwise | Creates `content/presentations/<id>/`. |
-| `--title` | no in interactive mode, yes otherwise | Presentation title. |
-| `--subtitle` | no | Presentation subtitle. |
-| `--from-date` | no in interactive mode, yes otherwise | Start of the reporting period. |
-| `--to-date` | no | End of the reporting period. |
-| `--summary` | no | Presentation summary used in the archive list. |
+| positional `project-root` | yes | Target directory. |
+| `--project-root` | no | Named alternative to the positional path. |
+| `--presentation-id` | yes in non-interactive mode | Creates `content/presentations/<id>/`. |
+| `--title` | yes in non-interactive mode | Presentation title. |
+| `--subtitle` | no | Subtitle. |
+| `--from-date` | yes in non-interactive mode | Period start. |
+| `--to-date` | no | Period end. |
+| `--summary` | no | Archive list summary. |
 | `--force` | no | Overwrite existing scaffold files for the same project/presentation. |
 
-## Interactive flow
-
-Interactive init collects essentials first, then offers optional advanced setup:
-
-- site title and presentation title
-- presentation id
-- period start/end
-- summary
-- optional GitHub data source
-- optional PAT creation
-- optional advanced branding/link fields
+Interactive `init` walks through titles, ids, period, summary, optional GitHub source, optional PAT, and optional branding fields.
 
 ## Output
 
-`init` creates:
+`content/site.yaml`, `content/presentations/index.yaml`, `content/presentations/<presentation-id>/presentation.yaml`, and `content/presentations/<presentation-id>/generated.yaml`.
 
-- `content/site.yaml`
-- `content/presentations/index.yaml`
-- `content/presentations/<presentation-id>/presentation.yaml`
-- `content/presentations/<presentation-id>/generated.yaml`
-
-## Next step
-
-Run [validate](/cli/validate) before you build or serve.
+Then run [validate](/cli/validate) before `build` or `serve`.
