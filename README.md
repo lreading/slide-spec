@@ -7,6 +7,7 @@
 [![Vitest](https://img.shields.io/badge/tests-Vitest-6e9f18.svg)](https://vitest.dev/)
 [![Playwright](https://img.shields.io/badge/e2e-Playwright-2ead33.svg)](https://playwright.dev/)
 [![Accessibility](https://img.shields.io/badge/accessibility-automated%20audit%20passing-2ea44f.svg)](./docs/meta/accessibility.md)
+[![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12235/badge)](https://www.bestpractices.dev/projects/12235)
 
 slide-spec is a data-driven slide system for community updates, roadmap reviews, and other recurring presentation decks.
 
