@@ -22,3 +22,5 @@ npm run a11y
 ```
 
 Syntax highlighting uses Shiki themes `github-light-high-contrast` and `github-dark-high-contrast` so code blocks stay within common AA contrast expectations. Theme chrome still uses VitePress’s default `div` wrapper for the main column; the docs audit disables axe’s best-practice-only `landmark-one-main` and `region` rules for that reason.
+
+Screenshots in the main column use a lightbox on click (blurred backdrop, close control top-right, click outside the image or **Escape** to dismiss). The dialog receives focus when opened.

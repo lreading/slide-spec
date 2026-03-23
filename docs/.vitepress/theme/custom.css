@@ -54,3 +54,35 @@
   display: block;
   margin-bottom: 0.25rem;
 }
+
+/* Doc and home content images: open lightbox on click (see ImageLightbox.vue). */
+#VPContent .vp-doc img,
+#VPContent .VPHomeHero img.image-src {
+  cursor: zoom-in;
+}
+
+/* Template docs: full-bleed reference screenshots within the doc column. */
+.vp-doc .template-doc-shot {
+  position: relative;
+  left: 50%;
+  width: min(100vw - 2rem, 1280px);
+  max-width: none;
+  margin: 1.5rem 0 2.25rem;
+  padding: 0;
+  border: none;
+  transform: translateX(-50%);
+  box-sizing: border-box;
+}
+
+.vp-doc .template-doc-shot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  border: 1px solid var(--vp-c-divider);
+  box-shadow: 0 24px 56px rgba(15, 18, 28, 0.14);
+}
+
+.dark .vp-doc .template-doc-shot img {
+  box-shadow: 0 24px 56px rgba(0, 0, 0, 0.45);
+}

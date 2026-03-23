@@ -1,6 +1,6 @@
 # Quickstart
 
-From install to a served static site. You need Node.js 22+, a writable directory, and a GitHub token only if you will use `fetch`.
+From install to a served static site. You need **Node.js 24**, a writable directory, and a GitHub token only if you will use `fetch`.
 
 **1. Scaffold**
 

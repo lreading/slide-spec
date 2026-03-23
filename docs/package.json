@@ -1,4 +1,7 @@
 {
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
     "dev": "vitepress dev",
     "build": "node --import tsx scripts/generate-site-files.ts && vitepress build",

@@ -2,6 +2,8 @@
 
 The CLI is how you scaffold, validate, build, and preview slide-spec projects. It ships its own static runtime for `build` and `serve`, so the project does not need a copy of the web app source.
 
+**Requirements:** Node.js **24** or newer (see `engines` in the CLI package).
+
 Typical order: `init` → edit YAML → `validate` → optional `fetch` → `build` or `serve`.
 
 Commands: [init](/cli/init), [fetch](/cli/fetch), [build](/cli/build), [serve](/cli/serve), [validate](/cli/validate).
