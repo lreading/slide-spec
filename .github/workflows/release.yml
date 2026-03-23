@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    uses: ./.github/workflows/reusable-quality.yml
+    with:
+      run-dependency-review: false
+    secrets: inherit
+
+  publish-cli:
+    runs-on: ubuntu-latest
+    needs: quality
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: cli/package-lock.json
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+        working-directory: cli
+      - run: npm publish --provenance --access public
+        working-directory: cli
+
+  github-release:
+    runs-on: ubuntu-latest
+    needs: quality
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - run: mkdir -p release-artifacts && git archive --format=tar.gz --output=release-artifacts/source.tar.gz HEAD
+      - uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe
+        with:
+          generate_release_notes: true
+          files: release-artifacts/source.tar.gz

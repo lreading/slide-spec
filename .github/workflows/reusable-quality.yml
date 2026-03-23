@@ -1,0 +1,196 @@
+name: Reusable Quality
+
+on:
+  workflow_call:
+    inputs:
+      run-dependency-review:
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm run validate:content
+        working-directory: app
+      - run: npm run verify
+        working-directory: app
+      - run: npm run coverage
+        working-directory: app
+
+  cli:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: cli/package-lock.json
+      - run: npm ci
+        working-directory: cli
+      - run: npm run verify
+        working-directory: cli
+      - run: npm run coverage
+        working-directory: cli
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+      - run: npm ci
+        working-directory: docs
+      - run: npm run build
+        working-directory: docs
+
+  markdown:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+      - run: npx -y markdownlint-cli2@0.22.0 "README.md" "CONTRIBUTING.md" "docs/**/*.md" "!docs/node_modules/**"
+
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+      - run: npx -y cspell@9.7.0 lint --no-progress "README.md" "CONTRIBUTING.md" "docs/**/*.md" --gitignore --config .cspell.json
+
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411
+        with:
+          args: --verbose --no-progress --config .github/lychee.toml "./README.md" "./docs/**/*.md"
+          fail: true
+
+  trivy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - run: |
+          docker run --rm \
+            -v "${PWD}:/repo" \
+            aquasec/trivy:0.67.2 \
+            fs \
+            --severity HIGH,CRITICAL \
+            --scanners vuln,secret,misconfig \
+            --format sarif \
+            --output /repo/trivy-results.sarif \
+            /repo
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: trivy-results
+          path: trivy-results.sarif
+
+  semgrep:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - run: |
+          docker run --rm \
+            -v "${PWD}:/src" \
+            semgrep/semgrep:1.124.0 \
+            semgrep scan \
+            --config auto \
+            --error \
+            --json \
+            --output /src/semgrep-results.json \
+            /src
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: semgrep-results
+          path: semgrep-results.json
+
+  gitleaks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - run: |
+          docker run --rm \
+            -v "${PWD}:/repo" \
+            zricethezav/gitleaks:v8.28.0 \
+            detect \
+            --source /repo \
+            --report-format sarif \
+            --report-path /repo/gitleaks-results.sarif \
+            --redact \
+            --no-banner
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: gitleaks-results
+          path: gitleaks-results.sarif
+
+  sbom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: anchore/sbom-action@da167eac915b4e86f08b264dbdbc867b61be6f0c
+        with:
+          path: .
+          format: spdx-json
+          output-file: sbom.spdx.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: sbom-spdx
+          path: sbom.spdx.json
+
+  dast:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+      - run: npm ci
+        working-directory: app
+      - run: npm run build
+        working-directory: app
+      - run: npx -y http-server@14.1.1 ./dist -p 4173 >/tmp/slide-spec-app.log 2>&1 &
+        working-directory: app
+      - run: docker run --rm --network host -v "${PWD}:/zap/wrk:rw" ghcr.io/zaproxy/zaproxy:stable zap-baseline.py -t http://127.0.0.1:4173 -J /zap/wrk/zap-report.json -w /zap/wrk/zap-warnings.md
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: dast-report
+          path: |
+            zap-report.json
+            zap-warnings.md
+
+  dependency-review:
+    if: inputs.run-dependency-review
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd
+      - uses: actions/dependency-review-action@2031cfc080254a8a887f58cffee85186f0e49e48
