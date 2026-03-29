@@ -14,7 +14,7 @@
 <!-- TODO: replace placeholder URLs for demo and docs once deployed -->
 [Live Demo](https://TODO-demo-url) · [Docs](https://TODO-docs-url) · [Example YAML](content/)
 
-<video src="https://github.com/lreading/slide-spec/raw/main/assets/readme-demo.mp4" controls muted width="600"></video>
+https://github.com/user-attachments/assets/076d3140-4d1d-47a3-8f5b-5a1dd58f03c1
 
 </div>
 
