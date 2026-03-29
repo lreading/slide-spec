@@ -65,7 +65,7 @@ describe('InitPresentationBuilder', () => {
             label: 'Project documentation',
             url: 'https://example.com/docs',
           },
-          owasp: {
+          community: {
             label: 'Project website',
             url: 'https://example.com',
           },

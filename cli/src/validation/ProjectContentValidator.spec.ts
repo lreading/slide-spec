@@ -29,9 +29,9 @@ site:
     docs:
       label: Docs
       url: https://example.com/docs
-    owasp:
-      label: OWASP
-      url: https://owasp.org
+    community:
+      label: Community
+      url: https://example.com/community
 `)
   await writeFile(resolve(root, 'content', 'presentations', 'index.yaml'), `
 presentations:

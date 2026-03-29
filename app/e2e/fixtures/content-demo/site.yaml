@@ -63,7 +63,7 @@ site:
       label: Documentation
       url: https://github.com/lreading/slide-spec/tree/main/docs
       eyebrow: Docs
-    owasp:
+    community:
       label: Discussions
       url: https://github.com/lreading/slide-spec/discussions
       eyebrow: Community

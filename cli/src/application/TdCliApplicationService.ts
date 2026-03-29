@@ -158,6 +158,12 @@ export class TdCliApplicationService implements TdCliService {
 
   public async fetchPresentationData(input: FetchPresentationDataInput): Promise<FetchPresentationDataResult> {
     const paths = this.getPaths(input.projectRoot)
+    const generatedPath = paths.getGeneratedPath(input.presentationId)
+    if (!input.force && await this.fileSystem.fileExists(generatedPath)) {
+      throw new Error(
+        `generated.yaml already exists for "${input.presentationId}". Use --force to overwrite.`,
+      )
+    }
     const periods = this.reportingPeriodResolver.resolve(input.fromDate, input.toDate)
     const siteConfig = await this.contentConfigLoader.loadSiteConfig(paths)
     const repository = this.dataSourceResolver.resolveGitHubRepository(siteConfig)
@@ -170,9 +176,9 @@ export class TdCliApplicationService implements TdCliService {
       ...(input.noPreviousPeriod ? {} : { previousPeriod: periods.previous }),
       repository,
     })
-    const generatedPath = input.write === false
-      ? paths.getGeneratedPath(input.presentationId)
-      : await this.generatedDataStore.writeGeneratedData(paths, input.presentationId, buildResult.generated)
+    if (input.write !== false) {
+      await this.generatedDataStore.writeGeneratedData(paths, input.presentationId, buildResult.generated)
+    }
     const warnings = [
       ...buildResult.warnings,
       ...(input.noPreviousPeriod ? ['Previous period comparison disabled; previous values defaulted to 0.'] : []),

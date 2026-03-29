@@ -266,7 +266,7 @@ export class ContentValidator {
     assert(isRecord(site.links), 'site.yaml.site.links must be an object.')
     assertLink(site.links.repository, 'site.yaml.site.links.repository')
     assertLink(site.links.docs, 'site.yaml.site.links.docs')
-    assertLink(site.links.owasp, 'site.yaml.site.links.owasp')
+    assertLink(site.links.community, 'site.yaml.site.links.community')
   }
 
   public validatePresentationIndexDocument(document: unknown): asserts document is PresentationIndexDocument {

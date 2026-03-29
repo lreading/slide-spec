@@ -27,7 +27,7 @@ describe('TitleSlideView', () => {
     expect(links).toHaveLength(3)
     expect(links[0].attributes('href')).toBe(site.links.repository.url)
     expect(links[1].attributes('href')).toBe(site.links.docs.url)
-    expect(links[2].attributes('href')).toBe(site.links.owasp.url)
+    expect(links[2].attributes('href')).toBe(site.links.community.url)
     expect(wrapper.text()).toContain('OWASP Lab Project')
     expect(wrapper.find('.project-badge-pill .fa-flask').exists()).toBe(true)
     expect(wrapper.text()).toContain('github.com/OWASP/threat-dragon')

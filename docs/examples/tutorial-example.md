@@ -90,7 +90,7 @@ site:
       label: User Docs
       url: https://example.com/docs
       eyebrow: Documentation
-    owasp:
+    community:
       label: Community Hub
       url: https://example.com/community
       eyebrow: Website

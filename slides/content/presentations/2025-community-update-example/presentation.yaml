@@ -1,0 +1,166 @@
+presentation:
+  id: 2025-community-update-example
+  year: 2025
+  title: "Prism Community: Q1 2025"
+  subtitle: DevRel Update
+  roadmap:
+    agenda_label: Community Roadmap
+    deliverables_heading: Delivered
+    focus_areas_heading: Themes
+    footer_link_label: View community roadmap
+    sections:
+      completed:
+        label: Completed
+        summary: Community work delivered in Q1.
+        items:
+          - Launched 3 new learning paths on the developer portal
+          - Spoke at 4 conferences across 3 countries
+          - Shipped the community SDK with 15 code samples
+        themes:
+          - category: Education
+            target: Lower the barrier to entry for new developers.
+          - category: Reach
+            target: Grow awareness in new geographic markets.
+      in-progress:
+        label: In Progress
+        summary: Continuing into Q2.
+        items:
+          - Community mentorship program pilot with 20 pairs
+          - Video tutorial series for advanced workflows
+        themes:
+          - category: Mentorship
+            target: Help intermediate developers level up.
+          - category: Content
+            target: Diversify content formats beyond blog posts.
+      planned:
+        label: Planned
+        summary: Scoped for Q2.
+        items:
+          - Annual community survey
+          - Regional meetup program in 5 cities
+          - Community showcase at PrismConf 2025
+        themes:
+          - category: Feedback
+            target: Understand community needs at scale.
+          - category: Events
+            target: Build local community connections.
+      future:
+        label: Future
+        summary: Exploring for later in the year.
+        items:
+          - Ambassador program with tiered recognition
+          - Community-maintained plugin marketplace
+        themes:
+          - category: Recognition
+            target: Reward consistent community contributors.
+  slides:
+    - template: hero
+      enabled: true
+      content:
+        title_primary: Prism
+        title_accent: Community
+        subtitle_prefix: Q1 2025
+        quote: Communities grow when people teach what they learn.
+    - template: agenda
+      enabled: true
+      title: Agenda
+      subtitle: This quarter in the community
+    - template: section-list-grid
+      enabled: true
+      title: What happened
+      subtitle: Community highlights from Q1
+      content:
+        sections:
+          - title: Learning paths
+            bullets:
+              - Getting Started path reached 2400 completions
+              - Advanced Integrations launched with 8 modules
+              - Migration Guide path covers v2 to v3 upgrades
+          - title: Conference circuit
+            bullets:
+              - DevRelCon London - workshop on SDK design
+              - ReactConf Miami - talk on developer portals
+              - KubeCon Paris - booth and live demos
+              - JSNation Amsterdam - lightning talk on YAML-first tooling
+          - title: Community SDK
+            bullets:
+              - Published with 15 code samples in 4 languages
+              - TypeScript, Python, Go, and Ruby clients
+              - Interactive playground on the developer portal
+    - template: timeline
+      enabled: true
+      title: Content releases
+      subtitle: Published content from Q1
+      content:
+        latest_badge_label: New
+        footer_link_label: View all content
+        featured_release_ids:
+          - sdk-launch
+          - learning-paths
+    - template: progress-timeline
+      enabled: true
+      title: "Roadmap: Completed"
+      subtitle: Community initiatives delivered
+      content:
+        stage: completed
+    - template: people
+      enabled: true
+      title: Community champions
+      subtitle: Members who went above and beyond
+      content:
+        banner_prefix: Celebrating
+        contributors_link_label: community members
+        banner_suffix: who made an outsized impact this quarter.
+        spotlight:
+          - login: elena-tutorials
+            summary: Created the most-watched tutorial series on the platform with 18,000 views.
+          - login: omar-translations
+            summary: Led the effort to translate all getting-started guides into Spanish and Arabic.
+          - login: anya-meetups
+            summary: Organized 6 local meetups across Europe, bringing together 200+ developers.
+    - template: metrics-and-links
+      enabled: true
+      title: Community health
+      subtitle: Engagement signals from Q1
+      content:
+        section_heading: Highlights
+        stats_heading: This quarter
+        trend_suffix: vs Q4 2024
+        show_deltas: true
+        stat_keys:
+          - forum_members
+          - events_held
+          - content_published
+          - sdk_downloads
+        mentions:
+          - type: Testimonial
+            title: "Prism's docs are the gold standard. I've never onboarded to a tool this fast."
+          - type: Media
+            title: "DevRel Weekly featured our community SDK launch as a top-5 developer tool release."
+            url_label: Read the feature
+            url: https://devrelweekly.example.com/issue/142
+    - template: action-cards
+      enabled: true
+      title: Get involved
+      subtitle: Ways to participate in Q2
+      content:
+        footer_text: The best community contributions are the ones only you can make.
+        cards:
+          - title: Become a mentor
+            description: Join the mentorship pilot and help a newer developer grow their skills over 8 weeks.
+            url_label: Apply now
+            url: https://community.prism.example.com/mentorship
+          - title: Speak at a meetup
+            description: We are launching meetups in 5 cities. Submit a talk proposal or volunteer to host.
+            url_label: Meetup program
+            url: https://prism.example.com/events/meetups
+          - title: Write a tutorial
+            description: Share your expertise. Our content team will help with editing, graphics, and promotion.
+            url_label: Content guide
+            url: https://community.prism.example.com/contribute/content
+    - template: closing
+      enabled: true
+      content:
+        heading: Thank you
+        message: Every tutorial, meetup, and conversation makes Prism better for everyone.
+        quote: The community is the product.

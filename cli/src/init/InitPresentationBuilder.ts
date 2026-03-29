@@ -32,7 +32,7 @@ export interface SiteDocument {
         label: string
         url: string
       }
-      owasp: {
+      community: {
         label: string
         url: string
       }
@@ -71,7 +71,7 @@ export class InitPresentationBuilder {
         label: 'Project documentation',
         url: input.docsUrl ?? 'https://example.com/docs',
       },
-      owasp: {
+      community: {
         label: 'Project website',
         url: input.websiteUrl ?? 'https://example.com',
       },

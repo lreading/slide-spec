@@ -1,0 +1,22 @@
+presentations:
+  - id: 2026-launch
+    year: 2026
+    title: Slide Spec Project Update
+    subtitle: Launch · Spring 2026
+    summary: Project launch update — what shipped, the roadmap, and how to get involved.
+    published: true
+    featured: true
+  - id: 2025-community-update-example
+    year: 2025
+    title: "Prism Community: Q1 2025"
+    subtitle: DevRel Update
+    summary: Example community update presentation created with Slide Spec.
+    published: true
+    featured: false
+  - id: 2025-open-source-example
+    year: 2025
+    title: "Vortex CLI: Q1 2025"
+    subtitle: Open Source Update
+    summary: Example open-source project update presentation created with Slide Spec.
+    published: true
+    featured: false

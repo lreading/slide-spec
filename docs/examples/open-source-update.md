@@ -14,7 +14,7 @@ Vortex CLI is a fictional developer tool. The team publishes quarterly community
 
 ## Site configuration
 
-`site.yaml` sets up branding, navigation labels, and footer links. Note how `links.owasp` is repurposed as a Discord community link - the three required link keys are flexible in what they point to.
+`site.yaml` sets up branding, navigation labels, and footer links. The `links.community` key is used here as a Discord community link — the three required link keys are flexible in what they point to.
 
 ```yaml
 site:
@@ -42,7 +42,7 @@ site:
       label: Docs
       url: https://vortex-cli.example.com/docs
       eyebrow: Documentation
-    owasp:
+    community:
       label: Discord
       url: https://discord.example.com/vortex
       eyebrow: Community

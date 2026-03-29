@@ -204,7 +204,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(page.getByText(slide.content.message)).toBeVisible()
       await expect(page.getByText(site.links.repository.eyebrow ?? '')).toBeVisible()
       await expect(page.getByText(site.links.docs.eyebrow ?? '')).toBeVisible()
-      await expect(page.getByText(site.links.owasp.eyebrow ?? '')).toBeVisible()
+      await expect(page.getByText(site.links.community.eyebrow ?? '')).toBeVisible()
       await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
         'href',
         site.links.repository.url,
@@ -213,9 +213,9 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         'href',
         site.links.docs.url,
       )
-      await expect(page.getByRole('link', { name: site.links.owasp.label })).toHaveAttribute(
+      await expect(page.getByRole('link', { name: site.links.community.label })).toHaveAttribute(
         'href',
-        site.links.owasp.url,
+        site.links.community.url,
       )
       if (slide.content.quote) {
         await expect(page.getByText(`"${slide.content.quote}"`)).toBeVisible()

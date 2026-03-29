@@ -312,6 +312,7 @@ export class CliCommandRunner {
     const toDate = this.readStringOption(parsed.options, 'to-date')
     const noPreviousPeriod = this.readBooleanOption(parsed.options, 'no-previous-period')
     const timings = this.readBooleanOption(parsed.options, 'timings')
+    const force = this.readBooleanOption(parsed.options, 'force')
     this.info(largeRepositoryFetchNotice)
     const result = await this.runWithFetchProgress(() =>
       this.service.fetchPresentationData({
@@ -322,6 +323,7 @@ export class CliCommandRunner {
         ...(noPreviousPeriod !== undefined ? { noPreviousPeriod } : {}),
         ...(timings !== undefined ? { timings } : {}),
         ...(write !== undefined ? { write } : {}),
+        ...(force !== undefined ? { force } : {}),
       }))
     this.reportFetchResult(result)
   }
@@ -520,10 +522,11 @@ export class CliCommandRunner {
         ].join('\n')
       case 'fetch':
         return [
-          `Usage: ${CLI_BIN_NAME} fetch [project-root] [--project-root <path>] --presentation-id <id> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--no-previous-period] [--timings] [--dry-run]`,
+          `Usage: ${CLI_BIN_NAME} fetch [project-root] [--project-root <path>] --presentation-id <id> --from-date <YYYY-MM-DD> [--to-date <YYYY-MM-DD>] [--no-previous-period] [--timings] [--dry-run] [--force]`,
           '',
           'Pull GitHub-derived metrics and write generated data for an existing presentation.',
           'Use this after init, once the presentation scaffold exists.',
+          'If generated.yaml already exists, the command exits with an error. Use --force to overwrite.',
           'If no PAT is available, the CLI will continue best-effort and may be rate-limited.',
           'Large repositories can take up to about two minutes before the CLI falls back on unavailable snapshot metadata.',
           '',
@@ -538,10 +541,12 @@ export class CliCommandRunner {
           '  --no-previous-period      Optional. Skip previous-period comparison and force previous values to 0',
           '  --timings                 Optional. Print per-step fetch timings after the run completes',
           '  --dry-run                 Optional. Compute data without writing generated.yaml',
+          '  --force                   Optional. Overwrite generated.yaml if it already exists',
           '',
           'Examples:',
           `  ${CLI_BIN_NAME} fetch /path/to/project --presentation-id 2026-q1 --from-date 2026-01-01 --to-date 2026-03-31`,
           `  ${CLI_BIN_NAME} fetch --presentation-id 2026-mar --from-date 2026-03-01 --dry-run`,
+          `  ${CLI_BIN_NAME} fetch --presentation-id 2026-q1 --from-date 2026-01-01 --force`,
         ].join('\n')
       case 'build':
         return [

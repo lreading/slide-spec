@@ -3,7 +3,7 @@ import { computed } from 'vue'
 
 import type { SiteContent } from '../../types/content'
 
-const orderedKeys = ['repository', 'docs', 'owasp'] as const
+const orderedKeys = ['repository', 'docs', 'community'] as const
 
 type FooterLinkKey = (typeof orderedKeys)[number]
 
@@ -14,7 +14,7 @@ const props = defineProps<{
 const iconClassByKey: Record<FooterLinkKey, string> = {
   repository: 'fab fa-github',
   docs: 'fas fa-book',
-  owasp: 'fas fa-globe',
+  community: 'fas fa-globe',
 }
 
 const footerLinks = computed(() =>

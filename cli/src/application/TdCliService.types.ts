@@ -28,6 +28,7 @@ export interface FetchPresentationDataInput {
   noPreviousPeriod?: boolean
   timings?: boolean
   write?: boolean
+  force?: boolean
 }
 
 export interface FetchPresentationDataResult {

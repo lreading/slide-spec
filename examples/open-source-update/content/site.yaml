@@ -63,7 +63,7 @@ site:
       label: Docs
       url: https://vortex-cli.example.com/docs
       eyebrow: Documentation
-    owasp:
+    community:
       label: Discord
       url: https://discord.example.com/vortex
       eyebrow: Community

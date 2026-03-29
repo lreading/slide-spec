@@ -1,0 +1,37 @@
+site:
+  title: Slide Spec Updates
+  deployment_url: https://slide-spec.dev
+  sitemap_enabled: true
+  data_sources:
+    - type: github
+      url: https://github.com/lreading/slide-spec
+  attribution:
+    enabled: true
+    label: Built with slide-spec
+    url: https://github.com/lreading/slide-spec
+  home_hero:
+    title_primary: Slide
+    title_accent: Spec
+    subtitle: Project Updates
+  home_intro: Community updates for Slide Spec — a tool for writing beautiful, hostable presentations in YAML.
+  home_cta_label: View latest update
+  presentations_cta_label: View all updates
+  navigation:
+    brand_title: Slide Spec
+    home_label: Home
+    presentations_label: Updates
+    latest_presentation_label: Latest Update
+    toggle_label: Toggle navigation
+  links:
+    repository:
+      label: GitHub
+      url: https://github.com/lreading/slide-spec
+      eyebrow: Source Code
+    docs:
+      label: Documentation
+      url: https://docs.slide-spec.dev
+      eyebrow: Documentation
+    community:
+      label: OpenSSF Best Practices
+      url: https://www.bestpractices.dev/projects/10773
+      eyebrow: Security & Quality

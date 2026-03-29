@@ -23,9 +23,9 @@ site:
     docs:
       label: Docs
       url: https://example.com/docs
-    owasp:
-      label: OWASP
-      url: https://example.com/owasp
+    community:
+      label: Community
+      url: https://example.com/community
 `,
   '/virtual/presentations/index.yaml': `
 presentations:

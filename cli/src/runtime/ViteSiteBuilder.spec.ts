@@ -55,7 +55,7 @@ describe('ViteSiteBuilder', () => {
     docs:
       label: Docs
       url: https://example.com/docs
-    owasp:
+    community:
       label: Project
       url: https://example.com/project
 `,

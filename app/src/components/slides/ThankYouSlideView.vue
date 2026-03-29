@@ -66,10 +66,10 @@ const mascotAlt = computed(() => props.site.mascot?.alt?.trim() || undefined)
           :title="site.links.docs.label"
         />
         <ResourcePillLink
-          :href="site.links.owasp.url"
+          :href="site.links.community.url"
           icon="shield-alt"
-          :eyebrow="site.links.owasp.eyebrow"
-          :title="site.links.owasp.label"
+          :eyebrow="site.links.community.eyebrow"
+          :title="site.links.community.label"
         />
       </div>
     </div>
