@@ -14,7 +14,7 @@
 <!-- TODO: replace placeholder URLs for demo and docs once deployed -->
 [Live Demo](https://TODO-demo-url) · [Docs](https://TODO-docs-url) · [Example YAML](content/)
 
-![](assets/readme-demo.mp4)
+<video src="https://github.com/lreading/slide-spec/raw/main/assets/readme-demo.mp4" controls muted width="600"></video>
 
 </div>
 
@@ -31,23 +31,25 @@ Slide Spec turns structured YAML into a static slide deck you can host anywhere.
 
 ## ⚡ Quickstart
 
-Prereqs: Node 22+ and npm.
+Prereqs: Node 24+ and npm.
 
 ```sh
-npx @slide-spec/cli init ./my-deck
-npx @slide-spec/cli serve ./my-deck
+npx @slide-spec/cli init
+npx @slide-spec/cli serve
 ```
 
 Open the URL printed in your terminal. You should have a working deck in under two minutes.
 
-From there, edit the YAML under `my-deck/content/`, then validate and build:
+From there, edit the YAML under `content/`, then validate and build:
 
 ```sh
-npx @slide-spec/cli validate ./my-deck
-npx @slide-spec/cli build ./my-deck      # outputs to ./my-deck/dist
+npx @slide-spec/cli validate
+npx @slide-spec/cli build      # outputs to ./dist
 ```
 
 Pass `--deployment-url` to `build` for `sitemap.xml` generation.
+
+Every command accepts an optional directory as its first argument (e.g. `npx @slide-spec/cli serve ./my-deck`). When omitted, the current working directory is used.
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
