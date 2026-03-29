@@ -28,6 +28,7 @@
     "playwright.visual.config.ts",
     "playwright.demo.config.ts",
     "playwright.readme-gif.config.ts",
+    "playwright.readme-cli.config.ts",
     "e2e/**/*.ts"
   ]
 }

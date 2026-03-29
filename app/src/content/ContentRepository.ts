@@ -14,6 +14,7 @@ export const selectContentFiles = (
   fixtureFiles: Record<string, unknown>,
   demoFiles: Record<string, unknown>,
   docsReferenceFiles: Record<string, unknown>,
+  cliDemoFiles: Record<string, unknown>,
 ): Record<string, unknown> => {
   if (source === 'fixtures') {
     return fixtureFiles
@@ -23,6 +24,9 @@ export const selectContentFiles = (
   }
   if (source === 'docs-reference') {
     return docsReferenceFiles
+  }
+  if (source === 'cli-demo') {
+    return cliDemoFiles
   }
   return liveFiles
 }
@@ -47,6 +51,11 @@ const docsReferenceContentFiles = import.meta.glob('../../../docs/fixtures/refer
   import: 'default',
   query: '?raw',
 })
+const cliDemoContentFiles = import.meta.glob('../../e2e/fixtures/content-cli-demo/**/*.yaml', {
+  eager: true,
+  import: 'default',
+  query: '?raw',
+})
 const rawContentFiles = Object.fromEntries(
   Object.entries(
     selectContentFiles(
@@ -55,6 +64,7 @@ const rawContentFiles = Object.fromEntries(
       fixtureContentFiles,
       demoContentFiles,
       docsReferenceContentFiles,
+      cliDemoContentFiles,
     ),
   ).map(([path, source]) => [path, String(source)]),
 )

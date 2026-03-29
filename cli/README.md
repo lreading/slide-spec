@@ -1,37 +1,43 @@
 # Slide Spec CLI
 
-This package is the standalone authoring CLI for Slide Spec.
+Standalone CLI for Slide Spec, published to npm as `@slide-spec/cli`. It scaffolds projects, validates YAML, fetches GitHub data into generated content, builds static sites, and serves them locally.
 
-It manages project scaffolding, GitHub-backed data fetches, validation, and local build/serve flows against a target project root.
+## Getting started
 
-Commands:
+1. Node 24+ and npm. Semgrep also needs Docker.
+2. From this directory, `npm install`
+3. Copy `.env.example` to `.env` at the project root you target (monorepo root or a Slide Spec project).
+4. Set `GITHUB_PAT` in `.env` if you want GitHub-backed fetches (optional).
+5. `npm run cli -- help`
 
-- `npm run cli -- help`
-- `npm run cli -- init`
-- `npm run cli -- fetch`
-- `npm run cli -- build`
-- `npm run cli -- serve`
-- `npm run cli -- validate`
+## Commands
 
-Environment:
+| Command | Description |
+| --- | --- |
+| `npm run cli -- help` | List commands |
+| `npm run cli -- init <root>` | Scaffold a project (interactive) |
+| `npm run cli -- validate <root>` | Validate YAML |
+| `npm run cli -- fetch <root>` | Fetch GitHub data into `generated.yaml` |
+| `npm run cli -- build <root>` | Build static site to `<root>/dist` |
+| `npm run cli -- serve <root>` | Build and serve locally |
+| `npm run build` | Compile the CLI |
+| `npm run verify` | Standard local gate (lint + typecheck + tests) |
+| `npm run coverage` | Unit tests with coverage |
+| `npm run semgrep` | Semgrep security scan (Docker) |
+| `npm run spellcheck` | Spelling check |
 
-- copy `.env.example` to `<project-root>/.env`
-- set `GITHUB_PAT` if you want GitHub-backed fetches
-- the CLI can also write `GITHUB_PAT` for you during interactive `init`
-- PAT input is hidden when prompted
-- `--log-path <file>` writes sanitized CLI and GitHub logs to a file; logging is off by default
+Per-subcommand help: `npm run cli -- <command> --help`.
 
-Usage notes:
+## Quality gates
 
-- The CLI is interactive when run with no arguments.
-- `init` is interactive by default and starts with essentials first, then offers GitHub import, links, and local server startup.
-- `init` accepts optional `--subtitle`, `--summary`, GitHub repo URL, docs URL, website URL, and GitHub data source URL fields.
-- If you choose GitHub import interactively and paste a PAT, the CLI writes `<project-root>/.env` for you.
-- `fetch` supports explicit date ranges and best-effort mode when no GitHub token is provided.
-- `build` writes only `<project-root>/dist`.
-- `build --deployment-url <url>` also generates `sitemap.xml`; otherwise the build skips sitemap generation.
-- `serve` builds first, then serves `<project-root>/dist`.
-- The CLI accepts an explicit project root so it can run against external projects, not just this repository.
-- `slide-spec <command> --help` prints contextual help for each subcommand.
+`npm run verify` is the default. CI also runs `semgrep` and `spellcheck`.
 
-For the full command surface, prompt flow, and project-root expectations, keep this README alongside the command help output.
+## Notes
+
+- Uses `../shared` for content types and validation.
+- Run with no args for interactive mode.
+- `init` can write a masked `GITHUB_PAT` into `.env` for you.
+- `fetch` supports date ranges and best-effort mode without a token.
+- `build --deployment-url <url>` enables `sitemap.xml` generation.
+- Accepts an explicit project root, so it works against external projects too.
+- Tagged commits on `main` trigger `npm publish` in CI. This is the distributed package.

@@ -1,29 +1,36 @@
 # Slide Spec app
 
-This package is the Vue 3 + TypeScript presentation app for Slide Spec.
+Vue 3 + Vite + TypeScript renderer for Slide Spec. It loads YAML content and outputs a responsive slide deck as a static site. This is the visual layer of the monorepo.
 
-It renders authored slide content, reads generated data, and provides the responsive presentation experience used for local development and deployed static hosting.
+## Getting started
 
-Commands:
+1. Node 24+ and npm. Browser tests also need `npx playwright install chromium`.
+2. From this directory, `npm install`
+3. `npm run dev`
 
-- `npm install`
-- `npm run dev`
-- `npm run build`
-- `npm run verify`
-- `npm run coverage`
-- `npm run e2e`
-- `npm run a11y`
-- `npm run demo:record`
-- `npm run readme:gif`
-- `npm run visual`
-- `npm run validate:content`
+## Commands
 
-Notes:
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start local dev server |
+| `npm run build` | Production build |
+| `npm run verify` | Standard local gate (lint + typecheck + unit tests) |
+| `npm run coverage` | Unit tests with coverage |
+| `npm run e2e` | Playwright end-to-end tests |
+| `npm run a11y` | Playwright + axe accessibility audit |
+| `npm run visual` | Playwright screenshot baseline comparison |
+| `npm run validate:content` | Validate YAML content |
+| `npm run demo:record` | Record a Playwright walkthrough (`VITE_CONTENT_SOURCE=demo`) |
+| `npm run readme:video` | Rebuild the root README demo video (needs `ffmpeg`) |
 
-- `npm run visual` runs local Playwright screenshot baselines and is a required gate for UI/UX changes.
-- `npm run a11y` runs the automated Playwright + axe accessibility audit and is a required gate for UI/UX changes.
-- `npm run demo:record` drives a short Playwright walkthrough with `VITE_CONTENT_SOURCE=demo` (for local experiments).
-- `npm run readme:gif` rebuilds `../assets/readme-demo.gif` using the docs reference fixture (`VITE_CONTENT_SOURCE=docs-reference`); requires `ffmpeg` on your `PATH`.
-- Visual baseline files are stored locally and should not be committed.
-- `verify` is the standard local gate before changing app/UI behavior.
-- The app is static and expects authored/generated content from `content/`.
+## Quality gates
+
+`npm run verify` is the default before you push. For UI work, also run `npm run visual` and `npm run a11y`. All of these run in CI via GitHub Actions.
+
+## Notes
+
+- Uses `../shared` for content types and validation.
+- Visual baseline screenshots are local only and should not be committed.
+- The app reads YAML from `content/`, or from test fixtures via `VITE_CONTENT_SOURCE`.
+- `readme:video` uses the docs-reference fixture and needs `ffmpeg`.
+- Not published to npm. The CLI builds sites that this app renders.

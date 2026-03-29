@@ -20,6 +20,7 @@ export default tseslint.config(
       'playwright.visual.config.ts',
       'playwright.demo.config.ts',
       'playwright.readme-gif.config.ts',
+      'playwright.readme-cli.config.ts',
     ],
     extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     languageOptions: {
@@ -44,6 +45,7 @@ export default tseslint.config(
       'playwright.visual.config.ts',
       'playwright.demo.config.ts',
       'playwright.readme-gif.config.ts',
+      'playwright.readme-cli.config.ts',
     ],
     extends: [js.configs.recommended, ...tseslint.configs.recommendedTypeChecked],
     languageOptions: {

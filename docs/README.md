@@ -1,29 +1,29 @@
-# slide-spec docs
+# Slide Spec docs
 
-This directory is the VitePress docs site for slide-spec.
+VitePress site for Slide Spec covering schema reference, templates, CLI usage, and examples.
 
-Use it for:
+## Getting started
 
-- the public docs site
-- schema references
-- template references
-- CLI usage guides
-- examples that should be easy for humans and tooling to follow
-
-Local workflow:
-
-1. `cd docs`
-2. `npm install`
+1. Node 24+ and npm.
+2. From this directory, `npm install`
 3. `npm run dev`
-4. `npm run build`
-5. `npm run spellcheck`
 
-Validation:
+## Commands
 
-- `npm run verify`
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Local dev server |
+| `npm run build` | Production build |
+| `npm run spellcheck` | Spelling check |
+| `npm run verify` | Standard gate (build + spellcheck) |
 
-Notes:
+## Quality gates
 
-- The docs site should stay markdown-first.
-- Keep the docs organized so each page has a single clear purpose.
-- Prefer concise pages that link outward rather than repeating the same explanation everywhere.
+`npm run verify` before you push.
+
+## Notes
+
+- No runtime dependencies on other monorepo packages.
+- Keep each page focused on one topic.
+- Not published to npm. Deploy as a static site.
+- Versioned with the monorepo. Publish the built output however you prefer.

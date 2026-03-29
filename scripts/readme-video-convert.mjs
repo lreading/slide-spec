@@ -28,24 +28,27 @@ function findWebm(dir) {
 
 const webm = findWebm(artifactsDir)
 if (!webm) {
-  console.error(`No video.webm found under ${artifactsDir}. Run the Playwright readme GIF test first.`)
+  console.error(`No video.webm found under ${artifactsDir}. Run the Playwright readme recording first.`)
   process.exit(1)
 }
 
-const outGif = join(repoRoot, 'assets/readme-demo.gif')
+const outMp4 = join(repoRoot, 'assets/readme-demo.mp4')
 execFileSync(
   'ffmpeg',
   [
     '-y',
-    '-ss',
-    '0.6',
-    '-i',
-    webm,
-    '-vf',
-    'fps=8,scale=720:-1:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=112[p];[s1][p]paletteuse',
-    outGif,
+    '-ss', '4.0',
+    '-i', webm,
+    '-an',
+    '-c:v', 'libx264',
+    '-pix_fmt', 'yuv420p',
+    '-movflags', '+faststart',
+    '-preset', 'slow',
+    '-crf', '23',
+    '-vf', 'scale=1280:-2',
+    outMp4,
   ],
   { stdio: 'inherit' },
 )
 
-console.log(`Wrote ${outGif}`)
+console.log(`Wrote ${outMp4}`)

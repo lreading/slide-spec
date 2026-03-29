@@ -4,6 +4,7 @@ export const selectAssetModules = (
   fixtureModules: Record<string, unknown>,
   demoModules: Record<string, unknown>,
   docsReferenceModules: Record<string, unknown>,
+  cliDemoModules: Record<string, unknown>,
 ): Record<string, unknown> => {
   if (source === 'fixtures') {
     return fixtureModules
@@ -14,12 +15,16 @@ export const selectAssetModules = (
   if (source === 'docs-reference') {
     return docsReferenceModules
   }
+  if (source === 'cli-demo') {
+    return cliDemoModules
+  }
   return liveModules
 }
 
 export const normalizeAssetPath = (path: string): string =>
   path
     .replace(/^(\.\.\/)+e2e\/fixtures\/content-demo\/assets\//, 'content/assets/')
+    .replace(/^(\.\.\/)+e2e\/fixtures\/content-cli-demo\/assets\//, 'content/assets/')
     .replace(/^(\.\.\/)+docs\/fixtures\/reference-project\/content\//, 'content/')
     .replace(/^(\.\.\/)+(e2e\/fixtures\/)?content\//, 'content/')
 
@@ -42,12 +47,17 @@ const docsReferenceAssetModules = import.meta.glob(
     import: 'default',
   },
 )
+const cliDemoAssetModules = import.meta.glob('../../e2e/fixtures/content-cli-demo/assets/**/*.{png,jpg,jpeg,svg,webp,avif,gif,ico}', {
+  eager: true,
+  import: 'default',
+})
 const assetModules = selectAssetModules(
   import.meta.env.VITE_CONTENT_SOURCE,
   liveAssetModules,
   fixtureAssetModules,
   demoAssetModules,
   docsReferenceAssetModules,
+  cliDemoAssetModules,
 )
 
 const assetLookup = new Map<string, string>(

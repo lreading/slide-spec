@@ -1,0 +1,43 @@
+name: Feature Request
+description: Suggest a feature or improvement for Slide Spec
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What do you want and why?
+    validations:
+      required: true
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: Describe the problem this would solve or the workflow it would improve.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: How would you approach this? (Optional)
+    validations:
+      required: false
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any other approaches you've thought about. (Optional)
+    validations:
+      required: false
+  - type: checkboxes
+    id: affected-packages
+    attributes:
+      label: Affected packages
+      description: Which part(s) of the project does this relate to?
+      options:
+        - label: "app (presentation renderer)"
+        - label: "cli (@slide-spec/cli)"
+        - label: "docs (documentation site)"
+        - label: "shared (types and validation)"
+        - label: "Unsure"

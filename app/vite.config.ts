@@ -26,6 +26,7 @@ export default defineConfig({
         'src/assets/**',
         'e2e/fixtures/content/**',
         'e2e/fixtures/content-demo/**',
+        'e2e/fixtures/content-cli-demo/**',
         '../docs/fixtures/reference-project/**',
       ],
     },

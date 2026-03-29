@@ -1,0 +1,15 @@
+site:
+  title: Slide Spec
+  home_intro: Create and publish data-driven slide decks.
+  home_cta_label: View latest presentation
+  presentations_cta_label: All presentations
+  links:
+    repository:
+      label: Project repository
+      url: https://example.com/repository
+    docs:
+      label: Project documentation
+      url: https://example.com/docs
+    owasp:
+      label: Project website
+      url: https://example.com

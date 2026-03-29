@@ -4,7 +4,7 @@ const PORT = 4173
 
 export default defineConfig({
   testDir: './e2e',
-  testIgnore: ['**/demo-walkthrough.spec.ts', '**/readme-gif-walkthrough.spec.ts'],
+  testIgnore: ['**/demo-walkthrough.spec.ts', '**/readme-gif-walkthrough.spec.ts', '**/readme-cli-walkthrough.spec.ts'],
   fullyParallel: true,
   retries: 0,
   reporter: 'list',

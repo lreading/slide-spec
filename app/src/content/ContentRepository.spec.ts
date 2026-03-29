@@ -100,17 +100,20 @@ generated:
 
 describe('ContentRepository', () => {
   it('selects fixture files only when fixture mode is enabled', () => {
-    expect(selectContentFiles(undefined, { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+    expect(selectContentFiles(undefined, { live: true }, { fixture: true }, { demo: true }, { docs: true }, { cli: true })).toEqual({
       live: true,
     })
-    expect(selectContentFiles('fixtures', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+    expect(selectContentFiles('fixtures', { live: true }, { fixture: true }, { demo: true }, { docs: true }, { cli: true })).toEqual({
       fixture: true,
     })
-    expect(selectContentFiles('demo', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+    expect(selectContentFiles('demo', { live: true }, { fixture: true }, { demo: true }, { docs: true }, { cli: true })).toEqual({
       demo: true,
     })
-    expect(selectContentFiles('docs-reference', { live: true }, { fixture: true }, { demo: true }, { docs: true })).toEqual({
+    expect(selectContentFiles('docs-reference', { live: true }, { fixture: true }, { demo: true }, { docs: true }, { cli: true })).toEqual({
       docs: true,
+    })
+    expect(selectContentFiles('cli-demo', { live: true }, { fixture: true }, { demo: true }, { docs: true }, { cli: true })).toEqual({
+      cli: true,
     })
   })
 
