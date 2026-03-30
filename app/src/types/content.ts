@@ -149,6 +149,12 @@ export interface TimelineSlideContent {
 
 export interface ProgressTimelineSlideContent {
   stage: RoadmapStageStatus
+  deliverables_heading?: string
+  focus_areas_heading?: string
+  footer_link_label?: string
+  stages: Record<RoadmapStageStatus, RoadmapStageSummary>
+  items: string[]
+  themes: RoadmapTheme[]
 }
 
 export interface PeopleSlideContent {
@@ -215,7 +221,6 @@ export interface PresentationContent {
   year?: number
   title: string
   subtitle: string
-  roadmap?: RoadmapContent
   slides: PresentationSlide[]
 }
 
@@ -231,19 +236,9 @@ export interface RoadmapTheme {
   target: string
 }
 
-export interface RoadmapStageContent {
+export interface RoadmapStageSummary {
   label: string
   summary: string
-  items: string[]
-  themes: RoadmapTheme[]
-}
-
-export interface RoadmapContent {
-  agenda_label?: string
-  deliverables_heading?: string
-  focus_areas_heading?: string
-  footer_link_label?: string
-  sections: Record<RoadmapStageStatus, RoadmapStageContent>
 }
 
 export interface SpotlightEntry {

@@ -3,53 +3,6 @@ presentation:
   year: 2026
   title: "Vortex CLI: Q1 2026"
   subtitle: Community Update
-  roadmap:
-    agenda_label: Roadmap
-    deliverables_heading: Shipped
-    focus_areas_heading: Themes
-    footer_link_label: View full roadmap
-    sections:
-      completed:
-        label: Completed
-        summary: Shipped in Q1 2026.
-        items:
-          - Plugin system with local and registry-based resolution
-          - Structured error messages with fix suggestions
-          - Shell completion for bash, zsh, and fish
-        themes:
-          - category: Extensibility
-            target: Let users add functionality without forking.
-          - category: Developer Experience
-            target: Reduce time-to-fix for common errors.
-      in-progress:
-        label: In Progress
-        summary: Active work continuing into Q2.
-        items:
-          - Remote config support for team-shared settings
-          - Performance profiling for large monorepos
-        themes:
-          - category: Teams
-            target: Shared configuration across organizations.
-          - category: Performance
-            target: Sub-second startup on large workspaces.
-      planned:
-        label: Planned
-        summary: Scoped for Q2 2026.
-        items:
-          - Interactive upgrade wizard
-          - Telemetry opt-in with local preview
-        themes:
-          - category: Upgrades
-            target: Zero-friction major version migration.
-      future:
-        label: Future
-        summary: Under discussion.
-        items:
-          - LSP integration for editor support
-          - WebAssembly plugin runtime
-        themes:
-          - category: Editors
-            target: First-class IDE integration.
   slides:
     - template: hero
       enabled: true
@@ -99,6 +52,31 @@ presentation:
       subtitle: What we shipped
       content:
         stage: completed
+        deliverables_heading: Shipped
+        focus_areas_heading: Themes
+        footer_link_label: View full roadmap
+        stages:
+          completed:
+            label: Completed
+            summary: Shipped in Q1 2026.
+          in-progress:
+            label: In Progress
+            summary: Active work continuing into Q2.
+          planned:
+            label: Planned
+            summary: Scoped for Q2 2026.
+          future:
+            label: Future
+            summary: Under discussion.
+        items:
+          - Plugin system with local and registry-based resolution
+          - Structured error messages with fix suggestions
+          - Shell completion for bash, zsh, and fish
+        themes:
+          - category: Extensibility
+            target: Let users add functionality without forking.
+          - category: Developer Experience
+            target: Reduce time-to-fix for common errors.
     - template: people
       enabled: true
       title: Contributor spotlight
@@ -130,7 +108,7 @@ presentation:
           - new_contributors
         mentions:
           - type: Blog post
-            title: "How we built the Vortex plugin system"
+            title: How we built the Vortex plugin system
             url_label: Read on the blog
             url: https://vortex-cli.example.com/blog/plugin-system
           - type: Conference talk

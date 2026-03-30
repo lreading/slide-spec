@@ -10,34 +10,6 @@ const createValidPresentationDocument = () => ({
     year: 2026,
     title: 'Quarterly Community Update',
     subtitle: 'Q1 2026',
-    roadmap: {
-      sections: {
-        completed: {
-          label: 'Completed',
-          summary: 'Done',
-          items: ['One'],
-          themes: [{ category: 'Theme', target: 'Target' }],
-        },
-        'in-progress': {
-          label: 'In Progress',
-          summary: 'Doing',
-          items: ['Two'],
-          themes: [{ category: 'Theme', target: 'Target' }],
-        },
-        planned: {
-          label: 'Planned',
-          summary: 'Soon',
-          items: ['Three'],
-          themes: [{ category: 'Theme', target: 'Target' }],
-        },
-        future: {
-          label: 'Future',
-          summary: 'Later',
-          items: ['Four'],
-          themes: [{ category: 'Theme', target: 'Target' }],
-        },
-      },
-    },
     slides: [
       {
         template: 'hero',
@@ -80,6 +52,29 @@ const createValidPresentationDocument = () => ({
         title: 'Roadmap',
         content: {
           stage: 'completed',
+          deliverables_heading: 'Key deliverables',
+          focus_areas_heading: 'Focus areas',
+          footer_link_label: 'View full roadmap & milestones on GitHub',
+          stages: {
+            completed: {
+              label: 'Completed',
+              summary: 'Done',
+            },
+            'in-progress': {
+              label: 'In Progress',
+              summary: 'Doing',
+            },
+            planned: {
+              label: 'Planned',
+              summary: 'Soon',
+            },
+            future: {
+              label: 'Future',
+              summary: 'Later',
+            },
+          },
+          items: ['One'],
+          themes: [{ category: 'Theme', target: 'Target' }],
         },
       },
       {
@@ -161,9 +156,9 @@ describe('ContentValidator', () => {
               label: 'Docs',
               url: 'https://example.com/docs',
             },
-            owasp: {
-              label: 'OWASP',
-              url: 'https://example.com/owasp',
+            community: {
+              label: 'Community',
+              url: 'https://example.com/community',
             },
           },
         },
@@ -175,6 +170,8 @@ describe('ContentValidator', () => {
         presentations: [
           {
             id: '2026-q1',
+            presentation_path: 'presentations/2026-q1/presentation.yaml',
+            generated_path: 'presentations/2026-q1/generated.yaml',
             year: 2026,
             title: 'Quarterly Community Update',
             subtitle: 'Q1 2026',
@@ -251,9 +248,9 @@ describe('ContentValidator', () => {
               label: 'Docs',
               url: 'https://example.com/docs',
             },
-            owasp: {
-              label: 'OWASP',
-              url: 'https://example.com/owasp',
+            community: {
+              label: 'Community',
+              url: 'https://example.com/community',
             },
           },
         },
@@ -282,9 +279,9 @@ describe('ContentValidator', () => {
               label: 'Docs',
               url: 'https://example.com/docs',
             },
-            owasp: {
-              label: 'OWASP',
-              url: 'https://example.com/owasp',
+            community: {
+              label: 'Community',
+              url: 'https://example.com/community',
             },
           },
         },
@@ -308,9 +305,9 @@ describe('ContentValidator', () => {
               label: 'Docs',
               url: 'https://example.com/docs',
             },
-            owasp: {
-              label: 'OWASP',
-              url: 'https://example.com/owasp',
+            community: {
+              label: 'Community',
+              url: 'https://example.com/community',
             },
           },
         },
@@ -334,9 +331,9 @@ describe('ContentValidator', () => {
               label: 'Docs',
               url: 'https://example.com/docs',
             },
-            owasp: {
-              label: 'OWASP',
-              url: 'https://example.com/owasp',
+            community: {
+              label: 'Community',
+              url: 'https://example.com/community',
             },
           },
         },
@@ -364,9 +361,9 @@ describe('ContentValidator', () => {
               label: 'Docs',
               url: 'https://example.com/docs',
             },
-            owasp: {
-              label: 'OWASP',
-              url: 'https://example.com/owasp',
+            community: {
+              label: 'Community',
+              url: 'https://example.com/community',
             },
           },
         },
@@ -436,6 +433,8 @@ describe('ContentValidator', () => {
         presentations: [
           {
             id: '2026-q1',
+            presentation_path: 'presentations/2026-q1/presentation.yaml',
+            generated_path: 'presentations/2026-q1/generated.yaml',
             year: 2026,
             title: 'One',
             subtitle: 'Q1 2026',
@@ -445,6 +444,8 @@ describe('ContentValidator', () => {
           },
           {
             id: '2026-q1',
+            presentation_path: 'presentations/2026-q1/presentation.yaml',
+            generated_path: 'presentations/2026-q1/generated.yaml',
             year: 2026,
             title: 'Two',
             subtitle: 'Q2 2026',
@@ -455,6 +456,68 @@ describe('ContentValidator', () => {
         ],
       }),
     ).toThrow('presentations/index.yaml.presentations[1].id must be unique.')
+  })
+
+  it('rejects duplicate presentation paths in the index', () => {
+    expect(() =>
+      validator.validatePresentationIndexDocument({
+        presentations: [
+          {
+            id: '2026-q1',
+            presentation_path: 'presentations/shared/presentation.yaml',
+            generated_path: 'presentations/2026-q1/generated.yaml',
+            year: 2026,
+            title: 'One',
+            subtitle: 'Q1 2026',
+            summary: 'Summary',
+            published: true,
+            featured: false,
+          },
+          {
+            id: '2026-q2',
+            presentation_path: 'presentations/shared/presentation.yaml',
+            generated_path: 'presentations/2026-q2/generated.yaml',
+            year: 2026,
+            title: 'Two',
+            subtitle: 'Q2 2026',
+            summary: 'Summary',
+            published: true,
+            featured: true,
+          },
+        ],
+      }),
+    ).toThrow('presentations/index.yaml.presentations[1].presentation_path must be unique.')
+  })
+
+  it('rejects duplicate generated paths in the index', () => {
+    expect(() =>
+      validator.validatePresentationIndexDocument({
+        presentations: [
+          {
+            id: '2026-q1',
+            presentation_path: 'presentations/2026-q1/presentation.yaml',
+            generated_path: 'presentations/shared/generated.yaml',
+            year: 2026,
+            title: 'One',
+            subtitle: 'Q1 2026',
+            summary: 'Summary',
+            published: true,
+            featured: false,
+          },
+          {
+            id: '2026-q2',
+            presentation_path: 'presentations/2026-q2/presentation.yaml',
+            generated_path: 'presentations/shared/generated.yaml',
+            year: 2026,
+            title: 'Two',
+            subtitle: 'Q2 2026',
+            summary: 'Summary',
+            published: true,
+            featured: true,
+          },
+        ],
+      }),
+    ).toThrow('presentations/index.yaml.presentations[1].generated_path must be unique.')
   })
 
   it('rejects missing content blocks', () => {
@@ -544,6 +607,7 @@ describe('ContentValidator', () => {
           title: 'One',
           subtitle: 'Q1 2026',
           summary: 'Summary',
+          presentation_path: 'presentations/2026-q1/presentation.yaml',
           published: true,
           featured: true,
         },

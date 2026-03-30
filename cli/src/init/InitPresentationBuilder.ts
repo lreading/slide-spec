@@ -32,7 +32,7 @@ export interface SiteDocument {
         label: string
         url: string
       }
-      owasp: {
+      community: {
         label: string
         url: string
       }
@@ -71,7 +71,7 @@ export class InitPresentationBuilder {
         label: 'Project documentation',
         url: input.docsUrl ?? 'https://example.com/docs',
       },
-      owasp: {
+      community: {
         label: 'Project website',
         url: input.websiteUrl ?? 'https://example.com',
       },
@@ -109,6 +109,7 @@ export class InitPresentationBuilder {
       published: options.published,
       featured: options.featured,
       subtitle: input.subtitle ?? 'Replace with a subtitle before publishing.',
+      presentation_path: `presentations/${input.presentationId}/presentation.yaml`,
     }
   }
 
@@ -156,6 +157,26 @@ export class InitPresentationBuilder {
             title: 'Roadmap',
             content: {
               stage: 'completed',
+              stages: {
+                completed: {
+                  label: 'Completed',
+                  summary: 'Delivered work from this period.',
+                },
+                'in-progress': {
+                  label: 'In Progress',
+                  summary: 'Active work currently underway.',
+                },
+                planned: {
+                  label: 'Planned',
+                  summary: 'Scoped for the next cycle.',
+                },
+                future: {
+                  label: 'Future',
+                  summary: 'Longer-horizon work under consideration.',
+                },
+              },
+              items: [],
+              themes: [],
             },
           },
           {

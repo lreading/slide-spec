@@ -23,23 +23,25 @@ site:
     docs:
       label: Docs
       url: https://example.com/docs
-    owasp:
-      label: OWASP
-      url: https://example.com/owasp
+    community:
+      label: Community
+      url: https://example.com/community
 `,
   '/virtual/presentations/index.yaml': `
 presentations:
   - id: 2025-q4
+    presentation_path: presentations/2025-q4/presentation.yaml
+    generated_path: presentations/2025-q4/generated.yaml
     year: 2025
-    quarter: 4
     title: Q4
     subtitle: Q4 2025
     summary: Previous
     published: true
     featured: false
   - id: 2026-q1
+    presentation_path: presentations/2026-q1/presentation.yaml
+    generated_path: presentations/2026-q1/generated.yaml
     year: 2026
-    quarter: 1
     title: Q1
     subtitle: Q1 2026
     summary: Latest
@@ -50,7 +52,6 @@ presentations:
 presentation:
   id: 2026-q1
   year: 2026
-  quarter: 1
   title: Q1
   subtitle: Q1 2026
   slides:
@@ -75,7 +76,6 @@ generated:
 presentation:
   id: 2025-q4
   year: 2025
-  quarter: 4
   title: Q4
   subtitle: Q4 2025
   slides:
@@ -127,6 +127,10 @@ describe('ContentRepository', () => {
     const repository = new ContentRepository(files)
 
     expect(repository.listPresentations().map((entry) => entry.id)).toEqual(['2025-q4', '2026-q1'])
+    expect(repository.listPresentations()[0]).toMatchObject({
+      presentation_path: 'presentations/2025-q4/presentation.yaml',
+      generated_path: 'presentations/2025-q4/generated.yaml',
+    })
   })
 
   it('returns the merged presentation record for a quarter', () => {

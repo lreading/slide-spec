@@ -59,13 +59,22 @@ generated:
     })
     const store = new GeneratedDataStore(new YamlReader(fileSystem), new YamlWriter(fileSystem))
     const paths = new FileSystemPaths('/workspace/project')
+    const entry = {
+      id: '2025-q4',
+      generated_path: 'presentations/2025-q4/generated.yaml',
+    }
 
-    await expect(store.loadGeneratedData(paths, '2025-q4')).resolves.toMatchObject({
+    await expect(store.loadGeneratedData(paths, entry)).resolves.toMatchObject({
       id: '2025-q4',
     })
-    await expect(store.loadGeneratedData(paths, 'missing')).resolves.toBeUndefined()
+    await expect(store.loadGeneratedData(paths, {
+      id: 'missing',
+    })).resolves.toBeUndefined()
 
-    await expect(store.writeGeneratedData(paths, '2026-q1', {
+    await expect(store.writeGeneratedData(paths, {
+      id: '2026-q1',
+      generated_path: 'presentations/2026-q1/generated.yaml',
+    }, {
       id: '2026-q1',
       period: {
         start: '2026-01-01',

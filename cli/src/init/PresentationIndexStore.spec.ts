@@ -47,6 +47,8 @@ describe('PresentationIndexStore', () => {
       '/workspace/project/content/presentations/index.yaml': `
 presentations:
   - id: 2025-q4
+    presentation_path: presentations/2025-q4/presentation.yaml
+    generated_path: presentations/2025-q4/generated.yaml
     year: 2025
     title: Previous
     subtitle: Q4 2025
@@ -74,6 +76,8 @@ presentations:
         summary: 'Summary',
         published: false,
         featured: false,
+        presentation_path: 'presentations/2026-q1/presentation.yaml',
+        generated_path: 'presentations/2026-q1/generated.yaml',
       },
     ])
 
@@ -98,6 +102,8 @@ presentations:
         summary: 'Summary',
         published: false,
         featured: false,
+        presentation_path: 'presentations/2026-q1-b/presentation.yaml',
+        generated_path: 'presentations/2026-q1-b/generated.yaml',
       },
       {
         id: '2026-q1-a',
@@ -107,6 +113,8 @@ presentations:
         summary: 'Summary',
         published: false,
         featured: false,
+        presentation_path: 'presentations/2026-q1-a/presentation.yaml',
+        generated_path: 'presentations/2026-q1-a/generated.yaml',
       },
       {
         id: '2026-q2',
@@ -116,6 +124,8 @@ presentations:
         summary: 'Summary',
         published: false,
         featured: false,
+        presentation_path: 'presentations/2026-q2/presentation.yaml',
+        generated_path: 'presentations/2026-q2/generated.yaml',
       },
       {
         id: '2025-q4',
@@ -125,6 +135,8 @@ presentations:
         summary: 'Summary',
         published: false,
         featured: false,
+        presentation_path: 'presentations/2025-q4/presentation.yaml',
+        generated_path: 'presentations/2025-q4/generated.yaml',
       },
     ])
 
@@ -132,6 +144,33 @@ presentations:
     expect(content.indexOf('id: 2026-q1-b')).toBeLessThan(content.indexOf('id: 2026-q1-a'))
     expect(content.indexOf('id: 2026-q1-a')).toBeLessThan(content.indexOf('id: 2026-q2'))
     expect(content.indexOf('id: 2026-q2')).toBeLessThan(content.indexOf('id: 2025-q4'))
+  })
+
+  it('preserves explicit file paths when writing index entries', async () => {
+    const fileSystem = new MemoryFileSystem({})
+    const store = new PresentationIndexStore(
+      new PresentationIndexLoader(new YamlReader(fileSystem)),
+      new YamlWriter(fileSystem),
+    )
+    const paths = new FileSystemPaths('/workspace/project')
+
+    await store.write(paths, [
+      {
+        id: '2026-q1',
+        year: 2026,
+        title: 'Current',
+        subtitle: 'Q1 2026',
+        summary: 'Summary',
+        published: true,
+        featured: false,
+        presentation_path: 'presentations/2026-q1/presentation.yaml',
+        generated_path: 'presentations/2026-q1/generated.yaml',
+      },
+    ])
+
+    const content = fileSystem.files.get('/workspace/project/content/presentations/index.yaml') ?? ''
+    expect(content).toContain('presentation_path: presentations/2026-q1/presentation.yaml')
+    expect(content).toContain('generated_path: presentations/2026-q1/generated.yaml')
   })
 
   it('returns an empty list when the index file does not exist', async () => {

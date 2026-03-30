@@ -39,7 +39,7 @@ site:
       label: Product Wiki
       url: https://meridian.example.com/wiki
       eyebrow: Documentation
-    owasp:
+    community:
       label: Roadmap
       url: https://meridian.example.com/roadmap
       eyebrow: Planning

@@ -4,30 +4,33 @@ Defines the authored slide content and deck structure.
 
 For a complete example, see the [reference presentation.yaml](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml).
 
+Each slide owns its own `content` block. If two slides need the same copy or labels, repeat them on those slides rather than relying on shared presentation-level data.
+
 ## Top level
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
-| `presentation.id` | yes | string | Matches the directory name and index entry |
+| `presentation.id` | yes | string | Presentation identifier used by the catalog entry |
 | `presentation.title` | yes | string | Deck title |
 | `presentation.subtitle` | yes | string | Deck subtitle |
 | `presentation.year` | | number | Optional year |
-| `presentation.roadmap` | | object | Roadmap data for progress-timeline slides |
 | `presentation.slides` | yes | array | Ordered list of slides |
 
-## Roadmap
+## Progress timeline slide content
 
-When present, `roadmap` provides data for [progress-timeline](/templates/progress-timeline) slides and the agenda's roadmap row.
+The [progress-timeline](/templates/progress-timeline) template is self-contained. The slide owns its stage strip, active-stage detail, and footer labels.
 
 | Field | Required | Type |
 | --- | --- | --- |
-| `roadmap.agenda_label` | | string |
-| `roadmap.deliverables_heading` | | string |
-| `roadmap.focus_areas_heading` | | string |
-| `roadmap.footer_link_label` | | string |
-| `roadmap.sections` | yes | object |
+| `content.stage` | yes | string |
+| `content.deliverables_heading` | | string |
+| `content.focus_areas_heading` | | string |
+| `content.footer_link_label` | | string |
+| `content.stages` | yes | object |
+| `content.items` | yes | string[] |
+| `content.themes` | yes | array of `{ category, target }` |
 
-### `roadmap.sections`
+### `content.stages`
 
 Must contain exactly four keys:
 
@@ -38,16 +41,14 @@ Must contain exactly four keys:
 | `planned` | yes |
 | `future` | yes |
 
-Each section:
+Each stage strip entry:
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `label` | yes | string |
 | `summary` | yes | string |
-| `items` | yes | string[] |
-| `themes` | yes | array of `{ category, target }` |
 
-Each `themes[]` entry has `category` (string, required) and `target` (string, required).
+The active stage's `items` and `themes` live on the slide itself. Each `themes[]` entry has `category` (string, required) and `target` (string, required).
 
 ## Slides
 
@@ -109,6 +110,12 @@ Each `sections[]` entry: `{ title: string, bullets: string[] }`.
 | --- | --- | --- |
 | `title` | yes | |
 | `content.stage` | yes | `completed`, `in-progress`, `planned`, or `future` |
+| `content.deliverables_heading` | | |
+| `content.focus_areas_heading` | | |
+| `content.footer_link_label` | | |
+| `content.stages` | yes | Four stage strip entries |
+| `content.items` | yes | Active stage items |
+| `content.themes` | yes | Active stage themes |
 
 ### people
 

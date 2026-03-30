@@ -1,5 +1,7 @@
 presentations:
   - id: 2026-q1
+    presentation_path: presentations/2026-q1/presentation.yaml
+    generated_path: presentations/2026-q1/generated.yaml
     year: 2026
     title: OWASP Threat Dragon Community Update
     subtitle: Q1 2026
@@ -7,6 +9,8 @@ presentations:
     published: true
     featured: true
   - id: 2025-template-sparse
+    presentation_path: presentations/2025-template-sparse/presentation.yaml
+    generated_path: presentations/2025-template-sparse/generated.yaml
     year: 2025
     title: Threat Dragon Sparse Template Coverage
     subtitle: Sparse Coverage

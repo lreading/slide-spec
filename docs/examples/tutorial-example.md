@@ -90,7 +90,7 @@ site:
       label: User Docs
       url: https://example.com/docs
       eyebrow: Documentation
-    owasp:
+    community:
       label: Community Hub
       url: https://example.com/community
       eyebrow: Website
@@ -107,11 +107,13 @@ presentations:
     summary: Reliability work, platform roadmap, and team highlights for the first half of spring.
     published: true
     featured: true
+    presentation_path: presentations/2026-spring-briefing/presentation.yaml
+    generated_path: presentations/2026-spring-briefing/generated.yaml
 ```
 
 ## 5. Edit `presentation.yaml`
 
-Copy from the reference fixture. It includes one slide per template with full roadmap data:
+Copy from the reference fixture. It includes one slide per template with the full content each template expects, including the slimmer self-contained progress-timeline slide data:
 
 [`presentations/2026-spring-briefing/presentation.yaml`](https://github.com/lreading/slide-spec/blob/main/docs/fixtures/reference-project/content/presentations/2026-spring-briefing/presentation.yaml)
 

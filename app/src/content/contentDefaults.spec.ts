@@ -17,9 +17,14 @@ describe('contentDefaults', () => {
   const site = contentRepository.getSiteContent()
   const record = contentRepository.getPresentation('2026-q1')
   const titleSlide = record.presentation.slides.find((slide) => slide.template === 'hero')
+  const roadmapSlide = record.presentation.slides.find((slide) => slide.template === 'progress-timeline')
 
   if (!titleSlide || titleSlide.template !== 'hero') {
     throw new Error('Expected title slide in fixture data')
+  }
+
+  if (!roadmapSlide || roadmapSlide.template !== 'progress-timeline') {
+    throw new Error('Expected roadmap slide in fixture data')
   }
 
   it('normalizes configured site content', () => {
@@ -128,7 +133,7 @@ describe('contentDefaults', () => {
       titleAccent: 'Threat Dragon',
       subtitlePrefix: 'Community Update',
     })
-    expect(resolveRoadmapLabels(record.presentation)).toEqual({
+    expect(resolveRoadmapLabels(roadmapSlide.content)).toEqual({
       deliverables: 'Key deliverables',
       focusAreas: 'Focus areas',
       footerLink: 'View full roadmap & milestones on GitHub',
@@ -154,13 +159,10 @@ describe('contentDefaults', () => {
 
     expect(
       resolveRoadmapLabels({
-        ...record.presentation,
-        roadmap: {
-          ...record.presentation.roadmap!,
-          deliverables_heading: '   ',
-          focus_areas_heading: '   ',
-          footer_link_label: '   ',
-        },
+        ...roadmapSlide.content,
+        deliverables_heading: '   ',
+        focus_areas_heading: '   ',
+        footer_link_label: '   ',
       }),
     ).toEqual({
       deliverables: undefined,

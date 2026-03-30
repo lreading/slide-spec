@@ -40,6 +40,7 @@ describe('HomeView', () => {
         title: 'Fallback Quarterly Update',
         subtitle: 'Q3 2026',
         summary: 'Fallback summary',
+        presentation_path: 'presentations/2026-q3/presentation.yaml',
         published: true,
         featured: false,
       },

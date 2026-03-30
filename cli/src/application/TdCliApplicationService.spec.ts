@@ -53,8 +53,11 @@ class StubPresentationIndexStore {
 class StubGeneratedDataStore {
   public readonly writes: Array<{ presentationId: string; generated: GeneratedPresentationData }> = []
 
-  public async loadGeneratedData(_paths: unknown, presentationId: string): Promise<GeneratedPresentationData | undefined> {
-    if (presentationId !== '2025-q4') {
+  public async loadGeneratedData(
+    _paths: unknown,
+    entry: Pick<PresentationIndexEntry, 'id' | 'generated_path'>,
+  ): Promise<GeneratedPresentationData | undefined> {
+    if (entry.id !== '2025-q4') {
       return undefined
     }
 
@@ -76,15 +79,15 @@ class StubGeneratedDataStore {
 
   public async writeGeneratedData(
     _paths: unknown,
-    presentationId: string,
+    entry: Pick<PresentationIndexEntry, 'id' | 'generated_path'>,
     generated: GeneratedPresentationData,
   ): Promise<string> {
     this.writes.push({
-      presentationId,
+      presentationId: entry.id,
       generated,
     })
 
-    return `/repo/content/presentations/${presentationId}/generated.yaml`
+    return `/repo/content/presentations/${entry.id}/generated.yaml`
   }
 }
 
@@ -251,8 +254,22 @@ describe('TdCliApplicationService', () => {
 
   it('fetches generated data with previous-period comparison and writes output by default', async () => {
     const generatedDataStore = new StubGeneratedDataStore()
+    const presentationIndexStore = new StubPresentationIndexStore([
+      {
+        id: '2026-q1',
+        year: 2026,
+        title: 'Quarterly Community Update',
+        subtitle: 'Q1 2026',
+        summary: 'Summary',
+        published: true,
+        featured: false,
+        presentation_path: 'presentations/2026-q1/presentation.yaml',
+        generated_path: 'presentations/2026-q1/generated.yaml',
+      },
+    ])
     const service = new TdCliApplicationService({
       projectRoot: '/repo',
+      presentationIndexStore: presentationIndexStore as never,
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
@@ -278,8 +295,22 @@ describe('TdCliApplicationService', () => {
 
   it('returns the target path without writing and can skip previous-period comparison', async () => {
     const generatedDataStore = new StubGeneratedDataStore()
+    const presentationIndexStore = new StubPresentationIndexStore([
+      {
+        id: '2026-q1',
+        year: 2026,
+        title: 'Quarterly Community Update',
+        subtitle: 'Q1 2026',
+        summary: 'Summary',
+        published: true,
+        featured: false,
+        presentation_path: 'presentations/2026-q1/presentation.yaml',
+        generated_path: 'presentations/2026-q1/generated.yaml',
+      },
+    ])
     const service = new TdCliApplicationService({
       projectRoot: '/repo',
+      presentationIndexStore: presentationIndexStore as never,
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
@@ -306,8 +337,22 @@ describe('TdCliApplicationService', () => {
   })
 
   it('includes fetch timings when explicitly requested', async () => {
+    const presentationIndexStore = new StubPresentationIndexStore([
+      {
+        id: '2026-q1',
+        year: 2026,
+        title: 'Quarterly Community Update',
+        subtitle: 'Q1 2026',
+        summary: 'Summary',
+        published: true,
+        featured: false,
+        presentation_path: 'presentations/2026-q1/presentation.yaml',
+        generated_path: 'presentations/2026-q1/generated.yaml',
+      },
+    ])
     const service = new TdCliApplicationService({
       projectRoot: '/repo',
+      presentationIndexStore: presentationIndexStore as never,
       contentConfigLoader: new StubContentConfigLoader() as never,
       envLoader: new StubEnvLoader() as never,
       reportingPeriodResolver: new StubReportingPeriodResolver() as never,
@@ -343,6 +388,8 @@ describe('TdCliApplicationService', () => {
         summary: 'Summary',
         published: true,
         featured: false,
+        presentation_path: 'presentations/2025-q4/presentation.yaml',
+        generated_path: 'presentations/2025-q4/generated.yaml',
       },
     ])
     const service = new TdCliApplicationService({
@@ -426,6 +473,8 @@ describe('TdCliApplicationService', () => {
         summary: 'Summary',
         published: true,
         featured: true,
+        presentation_path: 'presentations/2026-q1/presentation.yaml',
+        generated_path: 'presentations/2026-q1/generated.yaml',
       },
     ])
     const service = new TdCliApplicationService({

@@ -1,0 +1,82 @@
+generated:
+  id: 2025-open-source-example
+  period:
+    start: 2025-01-01
+    end: 2025-03-31
+  stats:
+    stars:
+      label: GitHub Stars
+      current: 4280
+      previous: 3910
+      delta: 370
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    issues_closed:
+      label: Issues closed
+      current: 47
+      previous: 31
+      delta: 16
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    prs_merged:
+      label: PRs merged
+      current: 38
+      previous: 24
+      delta: 14
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    new_contributors:
+      label: New contributors
+      current: 8
+      previous: 5
+      delta: 3
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+  releases:
+    - id: v3-2-0
+      version: v3.2.0
+      published_at: "2025-03-15"
+      url: https://github.com/example/vortex-cli/releases/tag/v3.2.0
+      summary_bullets:
+        - Plugin system with local and registry-based resolution
+        - Shell completion generators for bash, zsh, and fish
+    - id: v3-1-0
+      version: v3.1.0
+      published_at: "2025-02-01"
+      url: https://github.com/example/vortex-cli/releases/tag/v3.1.0
+      summary_bullets:
+        - Structured error messages with codes and fix suggestions
+        - Machine-readable JSON output for CI environments
+  contributors:
+    total: 12
+    authors:
+      - login: sarah-plugins
+        name: Sarah Chen
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=sarah
+        merged_prs: 11
+        first_time: false
+      - login: kai-errors
+        name: Kai Nakamura
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=kai
+        merged_prs: 8
+        first_time: false
+      - login: mina-shells
+        name: Mina Johansson
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=mina
+        merged_prs: 6
+        first_time: true
+      - login: alex-docs
+        name: Alex Rivera
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=alex
+        merged_prs: 4
+        first_time: true
+      - login: sam-tests
+        name: Sam Okafor
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=sam
+        merged_prs: 3
+        first_time: false
+  merged_prs: []

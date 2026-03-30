@@ -1,5 +1,7 @@
 presentations:
   - id: 2026-q1-review
+    presentation_path: presentations/2026-q1-review/presentation.yaml
+    generated_path: presentations/2026-q1-review/generated.yaml
     year: 2026
     title: "Meridian Q1 2026 Review"
     subtitle: Product Team

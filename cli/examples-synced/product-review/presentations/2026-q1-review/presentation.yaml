@@ -1,58 +1,8 @@
 presentation:
   id: 2026-q1-review
   year: 2026
-  title: "Meridian Q1 2026 Review"
+  title: Meridian Q1 2026 Review
   subtitle: Product Team
-  roadmap:
-    agenda_label: Product Roadmap
-    deliverables_heading: Delivered
-    focus_areas_heading: Strategic themes
-    footer_link_label: View full roadmap
-    sections:
-      completed:
-        label: Shipped
-        summary: Delivered in Q1 2026.
-        items:
-          - Workspace redesign with customizable layouts
-          - API v3 with breaking change migration tool
-          - Self-serve onboarding flow for teams under 50
-        themes:
-          - category: User Experience
-            target: Reduce time-to-value for new workspace setups.
-          - category: Platform
-            target: Modernize the API for partner integrations.
-      in-progress:
-        label: In Progress
-        summary: Carrying into Q2.
-        items:
-          - Advanced permissions for enterprise customers
-          - Real-time collaboration on project timelines
-        themes:
-          - category: Enterprise
-            target: Support complex org structures and compliance needs.
-          - category: Collaboration
-            target: Reduce context-switching between tools.
-      planned:
-        label: Planned
-        summary: Scoped for Q2 2026.
-        items:
-          - Custom field types for project metadata
-          - Automated status reports for stakeholders
-          - Jira and Linear two-way sync
-        themes:
-          - category: Flexibility
-            target: Let teams model their workflows without workarounds.
-          - category: Integrations
-            target: Meet teams where they already work.
-      future:
-        label: Future
-        summary: Under exploration.
-        items:
-          - AI-assisted project scoping
-          - Portfolio-level dashboards for executives
-        themes:
-          - category: Intelligence
-            target: Surface insights without manual report building.
   slides:
     - template: hero
       enabled: true
@@ -103,6 +53,31 @@ presentation:
       subtitle: Q1 deliverables
       content:
         stage: completed
+        deliverables_heading: Delivered
+        focus_areas_heading: Strategic themes
+        footer_link_label: View full roadmap
+        stages:
+          completed:
+            label: Shipped
+            summary: Delivered in Q1 2026.
+          in-progress:
+            label: In Progress
+            summary: Carrying into Q2.
+          planned:
+            label: Planned
+            summary: Scoped for Q2 2026.
+          future:
+            label: Future
+            summary: Under exploration.
+        items:
+          - Workspace redesign with customizable layouts
+          - API v3 with breaking change migration tool
+          - Self-serve onboarding flow for teams under 50
+        themes:
+          - category: User Experience
+            target: Reduce time-to-value for new workspace setups.
+          - category: Platform
+            target: Modernize the API for partner integrations.
     - template: people
       enabled: true
       title: Team spotlight
@@ -136,7 +111,7 @@ presentation:
           - type: Customer feedback
             title: Enterprise customers rated the workspace redesign 4.6/5 in the post-launch survey.
           - type: Analyst report
-            title: "Meridian named a Strong Performer in the 2026 project management wave."
+            title: Meridian named a Strong Performer in the 2026 project management wave.
             url_label: Read the report
             url: https://meridian.example.com/analyst-report
     - template: action-cards

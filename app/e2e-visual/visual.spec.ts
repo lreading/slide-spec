@@ -7,6 +7,25 @@ async function preparePageForCapture(page: Parameters<typeof test>[0]['page']): 
   await page.waitForLoadState('networkidle')
   await page.evaluate(async () => {
     await document.fonts.ready
+    const images = Array.from(document.images)
+    await Promise.all(
+      images.map(async (image) => {
+        if (!image.complete) {
+          await new Promise<void>((resolve) => {
+            image.addEventListener('load', () => resolve(), { once: true })
+            image.addEventListener('error', () => resolve(), { once: true })
+          })
+        }
+
+        if (typeof image.decode === 'function') {
+          try {
+            await image.decode()
+          } catch {
+            // A decode failure is handled by the broken-image assertion below.
+          }
+        }
+      }),
+    )
   })
 
   const brokenImageSources = await page.locator('img').evaluateAll((images) =>

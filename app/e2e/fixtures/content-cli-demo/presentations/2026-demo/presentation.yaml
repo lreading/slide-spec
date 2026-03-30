@@ -27,6 +27,27 @@ presentation:
       title: Roadmap
       content:
         stage: completed
+        sections:
+          completed:
+            label: Completed
+            summary: Default roadmap fixture content.
+            items: []
+            themes: []
+          in-progress:
+            label: In Progress
+            summary: Default roadmap fixture content.
+            items: []
+            themes: []
+          planned:
+            label: Planned
+            summary: Default roadmap fixture content.
+            items: []
+            themes: []
+          future:
+            label: Future
+            summary: Default roadmap fixture content.
+            items: []
+            themes: []
     - template: people
       enabled: true
       title: Contributors

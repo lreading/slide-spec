@@ -3,56 +3,6 @@ presentation:
   year: 2026
   title: "Security Posture: Q1 2026"
   subtitle: Sentinel Corp
-  roadmap:
-    agenda_label: Security Roadmap
-    deliverables_heading: Completed initiatives
-    focus_areas_heading: Focus areas
-    footer_link_label: View security roadmap
-    sections:
-      completed:
-        label: Completed
-        summary: Closed in Q1 2026.
-        items:
-          - Migrated all services to automated dependency scanning
-          - Completed annual penetration test with zero critical findings
-          - Rolled out hardware security keys for all engineering staff
-        themes:
-          - category: Supply Chain
-            target: Eliminate unscanned dependencies from production.
-          - category: Authentication
-            target: Phishing-resistant credentials for all engineers.
-      in-progress:
-        label: In Progress
-        summary: Carrying into Q2.
-        items:
-          - SOC 2 Type II audit evidence collection
-          - Runtime application self-protection (RASP) pilot
-        themes:
-          - category: Compliance
-            target: Achieve SOC 2 Type II certification by Q3.
-          - category: Runtime Defense
-            target: Detect and block exploitation attempts in real time.
-      planned:
-        label: Planned
-        summary: Scoped for Q2.
-        items:
-          - Secrets rotation automation for all production services
-          - Bug bounty program launch
-          - SBOM generation for all release artifacts
-        themes:
-          - category: Secrets Management
-            target: Eliminate long-lived credentials from production.
-          - category: Community
-            target: Leverage external researchers for vulnerability discovery.
-      future:
-        label: Future
-        summary: Under evaluation.
-        items:
-          - Zero-trust network segmentation
-          - AI-assisted code review for security patterns
-        themes:
-          - category: Network
-            target: Limit lateral movement in the event of a breach.
   slides:
     - template: hero
       enabled: true
@@ -102,6 +52,31 @@ presentation:
       subtitle: Q1 security initiatives
       content:
         stage: completed
+        deliverables_heading: Completed initiatives
+        focus_areas_heading: Focus areas
+        footer_link_label: View security roadmap
+        stages:
+          completed:
+            label: Completed
+            summary: Closed in Q1 2026.
+          in-progress:
+            label: In Progress
+            summary: Carrying into Q2.
+          planned:
+            label: Planned
+            summary: Scoped for Q2.
+          future:
+            label: Future
+            summary: Under evaluation.
+        items:
+          - Migrated all services to automated dependency scanning
+          - Completed annual penetration test with zero critical findings
+          - Rolled out hardware security keys for all engineering staff
+        themes:
+          - category: Supply Chain
+            target: Eliminate unscanned dependencies from production.
+          - category: Authentication
+            target: Phishing-resistant credentials for all engineers.
     - template: people
       enabled: true
       title: Security team
@@ -133,9 +108,9 @@ presentation:
           - audit_findings
         mentions:
           - type: Audit
-            title: "SOC 2 Type II readiness assessment scored 94% control coverage."
+            title: SOC 2 Type II readiness assessment scored 94% control coverage.
           - type: Certification
-            title: "ISO 27001 certification renewed for another year."
+            title: ISO 27001 certification renewed for another year.
             url_label: View certificate
             url: https://sentinel.example.com/compliance/iso27001
     - template: action-cards

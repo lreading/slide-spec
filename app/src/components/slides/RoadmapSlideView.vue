@@ -25,7 +25,7 @@ const props = defineProps<{
 }>()
 
 const stageOrder: RoadmapStageStatus[] = ['completed', 'in-progress', 'planned', 'future']
-const sections = computed(() => props.presentation.roadmap?.sections)
+const stages = computed(() => props.slide.content.stages)
 const activeStageIndex = computed(() => stageOrder.indexOf(props.slide.content.stage))
 const timelineStages = computed(() =>
   stageOrder.map((status, index) => {
@@ -39,14 +39,13 @@ const timelineStages = computed(() =>
 
     return {
       status,
-      section: sections.value?.[status],
-      isActive: status === props.slide.content.stage,
+      stage: stages.value?.[status],
       progressState,
     }
   }),
 )
-const activeStage = computed(() => sections.value?.[props.slide.content.stage])
-const roadmapLabels = computed(() => resolveRoadmapLabels(props.presentation))
+const activeStage = computed(() => stages.value?.[props.slide.content.stage])
+const roadmapLabels = computed(() => resolveRoadmapLabels(props.slide.content))
 </script>
 
 <template>
@@ -62,8 +61,8 @@ const roadmapLabels = computed(() => resolveRoadmapLabels(props.presentation))
       <ProgressTimeline
         :items="timelineStages.map((entry) => ({
           key: entry.status,
-          title: entry.section?.label ?? '',
-          summary: entry.section?.summary ?? '',
+          title: entry.stage?.label ?? '',
+          summary: entry.stage?.summary ?? '',
           state: entry.progressState,
         }))"
       />
@@ -72,13 +71,13 @@ const roadmapLabels = computed(() => resolveRoadmapLabels(props.presentation))
         <section class="detail-card detail-card--primary">
           <p v-if="activeStage?.label" class="card-eyebrow">{{ activeStage.label }}</p>
           <h2 v-if="roadmapLabels.deliverables" class="card-title">{{ roadmapLabels.deliverables }}</h2>
-          <ContentList :items="activeStage?.items ?? []" marker="icon" icon="chevron-right" class="detail-list" />
+          <ContentList :items="slide.content.items" marker="icon" icon="chevron-right" class="detail-list" />
         </section>
 
         <section class="detail-card detail-card--secondary">
           <SectionHeading v-if="roadmapLabels.focusAreas" icon="bullseye" :title="roadmapLabels.focusAreas" />
           <KeyValueRows
-            :rows="(activeStage?.themes ?? []).map((theme) => ({ key: theme.category, value: theme.target }))"
+            :rows="slide.content.themes.map((theme) => ({ key: theme.category, value: theme.target }))"
             class="themes-grid"
           />
         </section>

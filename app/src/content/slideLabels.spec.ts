@@ -6,16 +6,16 @@ import { getSlideLabel } from './slideLabels'
 describe('getSlideLabel', () => {
   const record = contentRepository.getPresentation('2026-q1')
 
-  it('uses authored titles for roadmap slides when present', () => {
+  it('uses authored titles for progress-timeline slides when present', () => {
     const roadmapSlides = record.presentation.slides.filter(
       (slide) => slide.template === 'progress-timeline',
     )
 
     expect(roadmapSlides).toHaveLength(4)
-    expect(getSlideLabel(roadmapSlides[0], record.presentation)).toBe('Roadmap: Completed')
-    expect(getSlideLabel(roadmapSlides[1], record.presentation)).toBe('Roadmap: In Progress')
-    expect(getSlideLabel(roadmapSlides[2], record.presentation)).toBe('Roadmap: Planned')
-    expect(getSlideLabel(roadmapSlides[3], record.presentation)).toBe('Roadmap: Future')
+    expect(getSlideLabel(roadmapSlides[0])).toBe('Roadmap: Completed')
+    expect(getSlideLabel(roadmapSlides[1])).toBe('Roadmap: In Progress')
+    expect(getSlideLabel(roadmapSlides[2])).toBe('Roadmap: Planned')
+    expect(getSlideLabel(roadmapSlides[3])).toBe('Roadmap: Future')
   })
 
   it('uses authored titles for non-roadmap slides when present', () => {
@@ -25,10 +25,10 @@ describe('getSlideLabel', () => {
       throw new Error('Expected releases slide in fixture data')
     }
 
-    expect(getSlideLabel(releasesSlide, record.presentation)).toBe('Releases')
+    expect(getSlideLabel(releasesSlide)).toBe('Releases')
   })
 
-  it('uses the shared roadmap agenda label when a roadmap slide title is missing', () => {
+  it('returns undefined when a progress-timeline slide does not provide a title', () => {
     const roadmapSlide = record.presentation.slides.find(
       (slide) => slide.template === 'progress-timeline',
     )
@@ -43,11 +43,8 @@ describe('getSlideLabel', () => {
           ...roadmapSlide,
           title: undefined,
         },
-        {
-          ...record.presentation,
-        },
       ),
-    ).toBe('Roadmap')
+    ).toBeUndefined()
   })
 
   it('returns undefined when a non-roadmap slide does not provide a title', () => {
@@ -63,7 +60,6 @@ describe('getSlideLabel', () => {
           ...releasesSlide,
           title: undefined,
         },
-        record.presentation,
       ),
     ).toBeUndefined()
   })
@@ -75,29 +71,7 @@ describe('getSlideLabel', () => {
       throw new Error('Expected thank-you slide in fixture data')
     }
 
-    expect(getSlideLabel(thankYouSlide, record.presentation)).toBe(thankYouSlide.content.heading)
+    expect(getSlideLabel(thankYouSlide)).toBe(thankYouSlide.content.heading)
   })
 
-  it('returns undefined when roadmap title and shared agenda label are both missing', () => {
-    const roadmapSlide = record.presentation.slides.find(
-      (slide) => slide.template === 'progress-timeline',
-    )
-
-    if (!roadmapSlide || roadmapSlide.template !== 'progress-timeline') {
-      throw new Error('Expected roadmap slide in fixture data')
-    }
-
-    expect(
-      getSlideLabel(
-        {
-          ...roadmapSlide,
-          title: undefined,
-        },
-        {
-          ...record.presentation,
-          roadmap: undefined,
-        },
-      ),
-    ).toBeUndefined()
-  })
 })

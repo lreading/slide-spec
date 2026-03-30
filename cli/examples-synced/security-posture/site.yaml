@@ -56,7 +56,7 @@ site:
       label: Security Policies
       url: https://sentinel.example.com/policies
       eyebrow: Documentation
-    owasp:
+    community:
       label: OWASP Top 10
       url: https://owasp.org/www-project-top-ten/
       eyebrow: Reference

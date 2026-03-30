@@ -14,6 +14,8 @@ export interface PresentationIndexEntry {
   title: string
   subtitle: string
   summary: string
+  presentation_path: string
+  generated_path?: string
   published: boolean
   featured: boolean
 }

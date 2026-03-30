@@ -29,7 +29,7 @@ The subtitle line combines `subtitle_prefix` and `presentation.subtitle`. If `su
 | Quote | `content.quote` |
 | Mascot | `site.mascot` |
 | Badge | `site.project_badge` |
-| Footer links | `site.links.repository`, `site.links.docs`, `site.links.owasp` |
+| Footer links | `site.links.repository`, `site.links.docs`, `site.links.community` |
 
 ## Fields
 

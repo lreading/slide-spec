@@ -48,3 +48,14 @@ export function assertStringArray(value: unknown, path: string): asserts value i
   const entries = value as unknown[]
   entries.forEach((entry, index) => assertNonBlankString(entry, `${path}[${index}]`))
 }
+
+export function assertNoUnexpectedKeys(
+  value: Record<string, unknown>,
+  allowedKeys: readonly string[],
+  path: string,
+): void {
+  const allowed = new Set(allowedKeys)
+  Object.keys(value).forEach((key) => {
+    assert(allowed.has(key), `${path}.${key} is not allowed.`)
+  })
+}

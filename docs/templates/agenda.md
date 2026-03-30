@@ -20,7 +20,7 @@ Auto-generated table of contents. Each row comes from a later enabled slide in t
 Row labels come from each subsequent enabled slide's `title`. Two exceptions:
 
 - **Closing** slides use `content.heading` when `title` is omitted
-- The first **progress-timeline** slide uses `presentation.roadmap.agenda_label` instead of its `title`
+- The agenda never reads other slides' stage detail; if a **progress-timeline** slide needs a custom row label, put it in that slide's `title`
 
 ## Fields
 

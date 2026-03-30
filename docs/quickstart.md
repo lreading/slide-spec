@@ -10,16 +10,18 @@ npx @slide-spec/cli init
 
 The interactive prompts walk you through project setup: name, title, dates, and optional connector configuration.
 
-This creates a `content/` directory with:
+This creates a common `content/` layout with:
 
 - `site.yaml` - global branding, navigation, links
-- `presentations/index.yaml` - presentation registry
+- `presentations/index.yaml` - presentation registry with explicit file paths
 - `presentations/<id>/presentation.yaml` - slides and content
 - `presentations/<id>/generated.yaml` - generated data (metrics, releases, contributors)
 
+The scaffold uses a conventional folder layout, but the registry points to presentation files explicitly.
+
 ## 2. Edit your content
 
-Start with `site.yaml` (branding and links), then `presentations/index.yaml` (listing metadata), then the `presentation.yaml` for your deck.
+Start with `site.yaml` (branding and links), then `presentations/index.yaml` (listing metadata and file paths), then the `presentation.yaml` for your deck.
 
 See the [concepts](/concepts) page for an overview of how these files work together, or the [schema reference](/schema/) for every field.
 

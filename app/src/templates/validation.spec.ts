@@ -1,29 +1,240 @@
 import { describe, expect, it } from 'vitest'
 
-import { contentRepository } from '../content/ContentRepository'
 import { getSlideTemplateDefinition } from './registry'
 import type { SlideTemplateId } from './templateIds'
 
-describe('template validation', () => {
-  const record = contentRepository.getPresentation('2026-q1')
-  const sparseRecord = contentRepository.getPresentation('2025-template-sparse')
+const validRoadmapStages = {
+  completed: {
+    label: 'Completed',
+    summary: 'Done',
+  },
+  'in-progress': {
+    label: 'In Progress',
+    summary: 'Doing',
+  },
+  planned: {
+    label: 'Planned',
+    summary: 'Soon',
+  },
+  future: {
+    label: 'Future',
+    summary: 'Later',
+  },
+} as const
 
-  it('accepts every current authored slide through its template validator', () => {
-    record.presentation.slides.forEach((slide, index) => {
-      const definition = getSlideTemplateDefinition(slide.template)
+const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
+  hero: {
+    template: 'hero',
+    enabled: true,
+    content: {
+      title_primary: 'Threat Dragon',
+    },
+  },
+  agenda: {
+    template: 'agenda',
+    enabled: true,
+    title: 'Agenda',
+  },
+  'section-list-grid': {
+    template: 'section-list-grid',
+    enabled: true,
+    title: 'Updates',
+    content: {
+      sections: [
+        {
+          title: 'Section',
+          bullets: ['Bullet'],
+        },
+      ],
+    },
+  },
+  timeline: {
+    template: 'timeline',
+    enabled: true,
+    title: 'Releases',
+    content: {
+      featured_release_ids: ['v1.0.0'],
+      latest_badge_label: 'Latest',
+      footer_link_label: 'View all releases on GitHub',
+    },
+  },
+  'progress-timeline': {
+    template: 'progress-timeline',
+    enabled: true,
+    title: 'Roadmap',
+    content: {
+      stage: 'completed',
+      deliverables_heading: 'Key deliverables',
+      focus_areas_heading: 'Focus areas',
+      footer_link_label: 'View roadmap',
+      stages: validRoadmapStages,
+      items: ['One'],
+      themes: [{ category: 'Theme', target: 'Target' }],
+    },
+  },
+  people: {
+    template: 'people',
+    enabled: true,
+    title: 'Contributor spotlight',
+    content: {
+      spotlight: [
+        {
+          login: 'octocat',
+          summary: 'Summary',
+        },
+      ],
+    },
+  },
+  'metrics-and-links': {
+    template: 'metrics-and-links',
+    enabled: true,
+    title: 'Community highlights',
+    content: {
+      stat_keys: ['stars'],
+      mentions: [
+        {
+          type: 'Blog post',
+          title: 'Community article',
+        },
+      ],
+    },
+  },
+  'action-cards': {
+    template: 'action-cards',
+    enabled: true,
+    title: 'How to contribute',
+    content: {
+      cards: [
+        {
+          title: 'Report bugs',
+          description: 'Open an issue',
+          url_label: 'Issues',
+          url: 'https://github.com/OWASP/threat-dragon/issues',
+        },
+      ],
+    },
+  },
+  closing: {
+    template: 'closing',
+    enabled: true,
+    content: {
+      heading: 'Thank you',
+      message: 'See you next quarter.',
+    },
+  },
+}
+
+const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
+  hero: {
+    template: 'hero',
+    enabled: true,
+    content: {
+      title_accent: 'Threat Dragon',
+    },
+  },
+  agenda: {
+    template: 'agenda',
+    enabled: true,
+    title: 'Agenda',
+  },
+  'section-list-grid': {
+    template: 'section-list-grid',
+    enabled: true,
+    title: 'Updates',
+    content: {
+      sections: [
+        {
+          title: 'Section',
+          bullets: ['Bullet'],
+        },
+      ],
+    },
+  },
+  timeline: {
+    template: 'timeline',
+    enabled: true,
+    title: 'Releases',
+    content: {
+      featured_release_ids: ['v1.0.0'],
+    },
+  },
+  'progress-timeline': {
+    template: 'progress-timeline',
+    enabled: true,
+    title: 'Roadmap',
+    content: {
+      stage: 'completed',
+      stages: validRoadmapStages,
+      items: [],
+      themes: [],
+    },
+  },
+  people: {
+    template: 'people',
+    enabled: true,
+    title: 'People',
+    content: {
+      spotlight: [
+        {
+          login: 'octocat',
+          summary: 'Summary',
+        },
+      ],
+    },
+  },
+  'metrics-and-links': {
+    template: 'metrics-and-links',
+    enabled: true,
+    title: 'Metrics',
+    content: {
+      stat_keys: ['stars'],
+      mentions: [],
+    },
+  },
+  'action-cards': {
+    template: 'action-cards',
+    enabled: true,
+    title: 'Contribute',
+    content: {
+      cards: [
+        {
+          title: 'Submit code',
+          description: 'Open a PR',
+          url_label: 'Contribute',
+          url: 'https://github.com/OWASP/threat-dragon/pulls',
+        },
+      ],
+    },
+  },
+  closing: {
+    template: 'closing',
+    enabled: true,
+    content: {
+      heading: 'Thank you',
+      message: 'See you next quarter.',
+    },
+  },
+}
+
+describe('template validation', () => {
+  it('accepts representative authored slides through their template validators', () => {
+    ;(Object.keys(validSlides) as SlideTemplateId[]).forEach((templateId, index) => {
+      const definition = getSlideTemplateDefinition(templateId)
+      const slide = validSlides[templateId]
 
       expect(() =>
-        definition.validate(slide as unknown as Record<string, unknown>, `slides[${index}]`),
+        definition.validate(slide, `slides[${index}]`),
       ).not.toThrow()
     })
   })
 
-  it('accepts sparse authored slides through their template validators', () => {
-    sparseRecord.presentation.slides.forEach((slide, index) => {
-      const definition = getSlideTemplateDefinition(slide.template)
+  it('accepts sparse representative slides through their template validators', () => {
+    ;(Object.keys(sparseSlides) as SlideTemplateId[]).forEach((templateId, index) => {
+      const definition = getSlideTemplateDefinition(templateId)
+      const slide = sparseSlides[templateId]
 
       expect(() =>
-        definition.validate(slide as unknown as Record<string, unknown>, `sparseSlides[${index}]`),
+        definition.validate(slide, `sparseSlides[${index}]`),
       ).not.toThrow()
     })
   })

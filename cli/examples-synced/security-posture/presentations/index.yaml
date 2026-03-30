@@ -1,5 +1,7 @@
 presentations:
   - id: 2026-q1-posture
+    presentation_path: presentations/2026-q1-posture/presentation.yaml
+    generated_path: presentations/2026-q1-posture/generated.yaml
     year: 2026
     title: "Security Posture: Q1 2026"
     subtitle: Sentinel Corp

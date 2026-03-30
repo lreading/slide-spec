@@ -4,6 +4,7 @@ import { validateTemplateSlide } from './templates/validation'
 import {
   assert,
   assertBoolean,
+  assertNoUnexpectedKeys,
   assertNonBlankString,
   assertNumber,
   assertOptionalNumber,
@@ -178,34 +179,9 @@ function assertMetricValue(value: unknown, path: string): asserts value is Metri
   assertStringArray(value.metadata.warning_codes, `${path}.metadata.warning_codes`)
 }
 
-function assertRoadmapStageContent(value: unknown, path: string): void {
-  assert(isRecord(value), `${path} must be an object.`)
-  assertNonBlankString(value.label, `${path}.label`)
-  assertNonBlankString(value.summary, `${path}.summary`)
-  assertStringArray(value.items, `${path}.items`)
-  assert(Array.isArray(value.themes), `${path}.themes must be an array.`)
-  ;(value.themes as unknown[]).forEach((theme, index) => {
-    assert(isRecord(theme), `${path}.themes[${index}] must be an object.`)
-    assertNonBlankString(theme.category, `${path}.themes[${index}].category`)
-    assertNonBlankString(theme.target, `${path}.themes[${index}].target`)
-  })
-}
-
-function assertRoadmapContent(value: unknown, path: string): void {
-  assert(isRecord(value), `${path} must be an object.`)
-  assertOptionalString(value.agenda_label, `${path}.agenda_label`)
-  assertOptionalString(value.deliverables_heading, `${path}.deliverables_heading`)
-  assertOptionalString(value.focus_areas_heading, `${path}.focus_areas_heading`)
-  assertOptionalString(value.footer_link_label, `${path}.footer_link_label`)
-  assert(isRecord(value.sections), `${path}.sections must be an object.`)
-  assertRoadmapStageContent(value.sections.completed, `${path}.sections.completed`)
-  assertRoadmapStageContent(value.sections['in-progress'], `${path}.sections.in-progress`)
-  assertRoadmapStageContent(value.sections.planned, `${path}.sections.planned`)
-  assertRoadmapStageContent(value.sections.future, `${path}.sections.future`)
-}
-
 function validateSlide(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['template', 'enabled', 'title', 'subtitle', 'content'], path)
   assertNonBlankString(value.template, `${path}.template`)
   assert(isSlideTemplateId(value.template), `${path}.template must be a supported template id.`)
   assertBoolean(value.enabled, `${path}.enabled`)
@@ -266,23 +242,36 @@ export class ContentValidator {
     assert(isRecord(site.links), 'site.yaml.site.links must be an object.')
     assertLink(site.links.repository, 'site.yaml.site.links.repository')
     assertLink(site.links.docs, 'site.yaml.site.links.docs')
-    assertLink(site.links.owasp, 'site.yaml.site.links.owasp')
+    assertLink(site.links.community, 'site.yaml.site.links.community')
   }
 
   public validatePresentationIndexDocument(document: unknown): asserts document is PresentationIndexDocument {
     assert(isRecord(document), 'presentations/index.yaml must be an object.')
     assert(Array.isArray(document.presentations), 'presentations/index.yaml.presentations must be an array.')
     const ids = new Set<string>()
+    const presentationPaths = new Set<string>()
+    const generatedPaths = new Set<string>()
     ;(document.presentations as unknown[]).forEach((entry, index) => {
       const path = `presentations/index.yaml.presentations[${index}]`
       assert(isRecord(entry), `${path} must be an object.`)
       assertNonBlankString(entry.id, `${path}.id`)
-      assert(!ids.has(entry.id), `${path}.id must be unique.`)
-      ids.add(entry.id)
+      const id = entry.id
+      assert(!ids.has(id), `${path}.id must be unique.`)
+      ids.add(id)
       assertOptionalNumber(entry.year, `${path}.year`)
       assertNonBlankString(entry.title, `${path}.title`)
       assertNonBlankString(entry.subtitle, `${path}.subtitle`)
       assertNonBlankString(entry.summary, `${path}.summary`)
+      assertNonBlankString(entry.presentation_path, `${path}.presentation_path`)
+      const presentationPath = entry.presentation_path
+      assert(!presentationPaths.has(presentationPath), `${path}.presentation_path must be unique.`)
+      presentationPaths.add(presentationPath)
+      assertOptionalString(entry.generated_path, `${path}.generated_path`)
+      const effectiveGeneratedPath = typeof entry.generated_path === 'string'
+        ? entry.generated_path
+        : `presentations/${id}/generated.yaml`
+      assert(!generatedPaths.has(effectiveGeneratedPath), `${path}.generated_path must be unique.`)
+      generatedPaths.add(effectiveGeneratedPath)
       assertBoolean(entry.published, `${path}.published`)
       assertBoolean(entry.featured, `${path}.featured`)
     })
@@ -292,11 +281,11 @@ export class ContentValidator {
     assert(isRecord(document), 'presentation document must be an object.')
     assert(isRecord(document.presentation), 'presentation document.presentation must be an object.')
     const presentation = document.presentation
+    assertNoUnexpectedKeys(presentation, ['id', 'year', 'title', 'subtitle', 'slides'], 'presentation document.presentation')
     assertNonBlankString(presentation.id, 'presentation document.presentation.id')
     assertOptionalNumber(presentation.year, 'presentation document.presentation.year')
     assertNonBlankString(presentation.title, 'presentation document.presentation.title')
     assertNonBlankString(presentation.subtitle, 'presentation document.presentation.subtitle')
-    if (presentation.roadmap !== undefined) assertRoadmapContent(presentation.roadmap, 'presentation document.presentation.roadmap')
     assert(Array.isArray(presentation.slides), 'presentation document.presentation.slides must be an array.')
     ;(presentation.slides as unknown[]).forEach((slide, index) => validateSlide(slide, `presentation document.presentation.slides[${index}]`))
   }
@@ -330,19 +319,5 @@ export class ContentValidator {
       indexEntry.id === generated.id,
       `Presentation id mismatch between index "${indexEntry.id}" and generated "${generated.id}".`,
     )
-    assert(
-      indexEntry.title === presentation.title,
-      `Presentation title mismatch between index "${indexEntry.title}" and presentation "${String(presentation.title)}".`,
-    )
-    assert(
-      indexEntry.subtitle === presentation.subtitle,
-      `Presentation subtitle mismatch between index "${indexEntry.subtitle}" and presentation "${String(presentation.subtitle)}".`,
-    )
-    if (indexEntry.year !== undefined && presentation.year !== undefined) {
-      assert(
-        indexEntry.year === presentation.year,
-        `Presentation year mismatch between index "${indexEntry.year}" and presentation "${String(presentation.year)}".`,
-      )
-    }
   }
 }

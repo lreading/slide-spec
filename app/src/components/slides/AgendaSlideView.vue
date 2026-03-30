@@ -14,24 +14,12 @@ const props = defineProps<{
   slideTotal: number
 }>()
 
-const agendaItems = computed(() => {
-  let roadmapIncluded = false
-
-  return props.presentation.slides
+const agendaItems = computed(() =>
+  props.presentation.slides
     .filter((entry) => entry.enabled && entry.template !== 'hero' && entry.template !== 'agenda')
-    .flatMap((entry) => {
-      if (entry.template === 'progress-timeline') {
-        if (roadmapIncluded) {
-          return []
-        }
-
-        roadmapIncluded = true
-        return [props.presentation.roadmap?.agenda_label?.trim()].filter(Boolean)
-      }
-
-      return [getSlideLabel(entry, props.presentation)].filter(Boolean)
-    })
-})
+    .map((entry) => getSlideLabel(entry))
+    .filter(Boolean) as string[],
+)
 </script>
 
 <template>

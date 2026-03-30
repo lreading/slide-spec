@@ -2,72 +2,6 @@ presentation:
   id: 2026-q1
   title: OWASP Threat Dragon Community Update
   subtitle: Q1 2026
-  roadmap:
-    agenda_label: Roadmap
-    deliverables_heading: Key deliverables
-    focus_areas_heading: Focus areas
-    footer_link_label: View full roadmap & milestones on GitHub
-    sections:
-      completed:
-        label: Completed
-        summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
-        items:
-          - Reusable threat-model templates landed for Web and GitHub-backed workflows.
-          - Threat Dragon's schema was updated to version 1.0.2 as part of TM-BOM alignment.
-          - Cornucopia MobileApp deck support was added to the EoP Games integration.
-          - Desktop and repository fixes landed for exports, save flows, GitLab opening, and template visibility.
-        themes:
-          - category: Enterprise Readiness
-            target: Templates and deployment-oriented fixes continue to move Threat Dragon toward broader organizational use.
-          - category: Interoperability
-            target: TM-BOM and EoP/Cornucopia work improved compatibility with adjacent threat-modeling workflows.
-          - category: Desktop Quality
-            target: Export and save fixes reduced friction in day-to-day desktop modeling.
-      in-progress:
-        label: In Progress
-        summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation, and release readiness.
-        items:
-          - Desktop unit test coverage and desktop end-to-end coverage both landed in March.
-          - Documentation cleanup continued with dependency updates, template-doc fixes, and contributor guidance changes.
-          - Workflow and dependency maintenance continued across GitHub Actions and container/build assets.
-          - The public strategic roadmap opened on March 8 to align future work under shared strategic pillars.
-        themes:
-          - category: Tech Debt & Maintainability
-            target: Testing coverage, dependency hygiene, and infrastructure cleanup remain active themes.
-          - category: Community & Trust
-            target: Contributor guidance and documentation are being tightened as the project grows.
-          - category: Release Engineering
-            target: Release-readiness work continued even without a tagged GitHub release in the window.
-      planned:
-        label: Planned
-        summary: The published roadmap shifts next-step planning toward enterprise readiness, better UX, and automation-friendly workflows.
-        items:
-          - OIDC support, structured audit logging, and threat-model templates remain part of the enterprise-readiness backlog.
-          - Threat catalogs, OpenAPI documentation, and restored CLI tooling are called out as future deliverables.
-          - UX work includes diagramming ergonomics, WCAG accessibility baselines, and a UI style guide.
-          - Integration hooks, import/export improvements, and CI/CD workflows are listed under interoperability.
-        themes:
-          - category: Enterprise Readiness
-            target: Support organizational adoption without abandoning Git-based workflows.
-          - category: UX & Accessibility
-            target: Improve approachability, consistency, and accessibility across the product.
-          - category: Automation & Integration
-            target: Make Threat Dragon easier to connect to external workflows and tooling.
-      future:
-        label: Future
-        summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
-        items:
-          - Version 3.x is expected to move toward a threat-model-centric format instead of editor-specific graph data.
-          - TM-BOM is the likely direction for the future model schema.
-          - The OWASP project page explicitly calls out interoperability with pytm, Threagile, and Open Threat Model.
-          - The long-horizon roadmap also aims for OWASP Production maturity.
-        themes:
-          - category: TM-BOM / File Format
-            target: Center the model around reusable threat-model data and interchange.
-          - category: Ecosystem Interop
-            target: Reduce friction between Threat Dragon and other open-source threat-model tools.
-          - category: Project Maturity
-            target: Continue the path from OWASP Lab toward Production-level maturity.
   slides:
     - template: hero
       enabled: true
@@ -85,27 +19,27 @@ presentation:
       subtitle: Product, documentation, and contributor progress from January through March
       content:
         sections:
-        - title: Templates, schema, and interoperability
-          bullets:
-            - Reusable threat-model templates landed for Web and GitHub-backed workflows.
-            - Threat model schema advanced to version 1.0.2 in support of TM-BOM alignment.
-            - Cornucopia MobileApp deck support was added to the EoP Games integration.
-            - GitLab model-opening issues were fixed for affected repository workflows.
-            - Desktop template-management UI was corrected to match current feature support.
-        - title: Quality, docs, and release engineering
-          bullets:
-            - Template documentation rendering issues were fixed in the version 2.6.1 stream.
-            - Documentation dependencies and links were refreshed across the docs set.
-            - Dependency cleanup and Dockerfile refactoring reduced maintenance and security friction.
-            - GitHub workflow actions were updated to current versions.
-            - Contribution guidance now explicitly requires manual testing before submission.
-        - title: Desktop quality and contributor growth
-          bullets:
-            - SVG and PNG export issues were fixed so output no longer depends on zoom or selection state.
-            - A desktop Save/Save As bug that could lose diagram changes was fixed.
-            - Desktop unit-test coverage and desktop end-to-end coverage both increased in March.
-            - Brazilian Portuguese localization was updated by a first-time contributor.
-            - The period added 4 first-time contributors and 27 merged pull requests.
+          - title: Templates, schema, and interoperability
+            bullets:
+              - Reusable threat-model templates landed for Web and GitHub-backed workflows.
+              - Threat model schema advanced to version 1.0.2 in support of TM-BOM alignment.
+              - Cornucopia MobileApp deck support was added to the EoP Games integration.
+              - GitLab model-opening issues were fixed for affected repository workflows.
+              - Desktop template-management UI was corrected to match current feature support.
+          - title: Quality, docs, and release engineering
+            bullets:
+              - Template documentation rendering issues were fixed in the version 2.6.1 stream.
+              - Documentation dependencies and links were refreshed across the docs set.
+              - Dependency cleanup and Dockerfile refactoring reduced maintenance and security friction.
+              - GitHub workflow actions were updated to current versions.
+              - Contribution guidance now explicitly requires manual testing before submission.
+          - title: Desktop quality and contributor growth
+            bullets:
+              - SVG and PNG export issues were fixed so output no longer depends on zoom or selection state.
+              - A desktop Save/Save As bug that could lose diagram changes was fixed.
+              - Desktop unit-test coverage and desktop end-to-end coverage both increased in March.
+              - Brazilian Portuguese localization was updated by a first-time contributor.
+              - The period added 4 first-time contributors and 27 merged pull requests.
     - template: timeline
       enabled: true
       title: Releases
@@ -114,28 +48,151 @@ presentation:
         latest_badge_label: Latest
         footer_link_label: View release history on GitHub
         empty_state_title: No tagged releases in this period
-        empty_state_message: Q1 work focused on reusable templates, desktop quality, documentation, and release engineering improvements rather than a packaged release.
+        empty_state_message: Q1 work focused on reusable templates, desktop quality, documentation, and release engineering
+          improvements rather than a packaged release.
         featured_release_ids: []
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Completed"
       content:
         stage: completed
+        deliverables_heading: Key deliverables
+        focus_areas_heading: Focus areas
+        footer_link_label: View full roadmap & milestones on GitHub
+        stages:
+          completed:
+            label: Completed
+            summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
+          in-progress:
+            label: In Progress
+            summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation,
+              and release readiness.
+          planned:
+            label: Planned
+            summary: The published roadmap shifts next-step planning toward enterprise readiness, better UX, and automation-friendly
+              workflows.
+          future:
+            label: Future
+            summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
+        items:
+          - Reusable threat-model templates landed for Web and GitHub-backed workflows.
+          - Threat Dragon's schema was updated to version 1.0.2 as part of TM-BOM alignment.
+          - Cornucopia MobileApp deck support was added to the EoP Games integration.
+          - Desktop and repository fixes landed for exports, save flows, GitLab opening, and template visibility.
+        themes:
+          - category: Enterprise Readiness
+            target: Templates and deployment-oriented fixes continue to move Threat Dragon toward broader organizational use.
+          - category: Interoperability
+            target: TM-BOM and EoP/Cornucopia work improved compatibility with adjacent threat-modeling workflows.
+          - category: Desktop Quality
+            target: Export and save fixes reduced friction in day-to-day desktop modeling.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: In Progress"
       content:
         stage: in-progress
+        deliverables_heading: Key deliverables
+        focus_areas_heading: Focus areas
+        footer_link_label: View full roadmap & milestones on GitHub
+        stages:
+          completed:
+            label: Completed
+            summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
+          in-progress:
+            label: In Progress
+            summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation,
+              and release readiness.
+          planned:
+            label: Planned
+            summary: The published roadmap shifts next-step planning toward enterprise readiness, better UX, and automation-friendly
+              workflows.
+          future:
+            label: Future
+            summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
+        items:
+          - Desktop unit test coverage and desktop end-to-end coverage both landed in March.
+          - Documentation cleanup continued with dependency updates, template-doc fixes, and contributor guidance
+            changes.
+          - Workflow and dependency maintenance continued across GitHub Actions and container/build assets.
+          - The public strategic roadmap opened on March 8 to align future work under shared strategic pillars.
+        themes:
+          - category: Tech Debt & Maintainability
+            target: Testing coverage, dependency hygiene, and infrastructure cleanup remain active themes.
+          - category: Community & Trust
+            target: Contributor guidance and documentation are being tightened as the project grows.
+          - category: Release Engineering
+            target: Release-readiness work continued even without a tagged GitHub release in the window.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Planned"
       content:
         stage: planned
+        deliverables_heading: Key deliverables
+        focus_areas_heading: Focus areas
+        footer_link_label: View full roadmap & milestones on GitHub
+        stages:
+          completed:
+            label: Completed
+            summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
+          in-progress:
+            label: In Progress
+            summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation,
+              and release readiness.
+          planned:
+            label: Planned
+            summary: The published roadmap shifts next-step planning toward enterprise readiness, better UX, and automation-friendly
+              workflows.
+          future:
+            label: Future
+            summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
+        items:
+          - OIDC support, structured audit logging, and threat-model templates remain part of the enterprise-readiness
+            backlog.
+          - Threat catalogs, OpenAPI documentation, and restored CLI tooling are called out as future deliverables.
+          - UX work includes diagramming ergonomics, WCAG accessibility baselines, and a UI style guide.
+          - Integration hooks, import/export improvements, and CI/CD workflows are listed under interoperability.
+        themes:
+          - category: Enterprise Readiness
+            target: Support organizational adoption without abandoning Git-based workflows.
+          - category: UX & Accessibility
+            target: Improve approachability, consistency, and accessibility across the product.
+          - category: Automation & Integration
+            target: Make Threat Dragon easier to connect to external workflows and tooling.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Future"
       content:
         stage: future
+        deliverables_heading: Key deliverables
+        focus_areas_heading: Focus areas
+        footer_link_label: View full roadmap & milestones on GitHub
+        stages:
+          completed:
+            label: Completed
+            summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
+          in-progress:
+            label: In Progress
+            summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation,
+              and release readiness.
+          planned:
+            label: Planned
+            summary: The published roadmap shifts next-step planning toward enterprise readiness, better UX, and automation-friendly
+              workflows.
+          future:
+            label: Future
+            summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
+        items:
+          - Version 3.x is expected to move toward a threat-model-centric format instead of editor-specific graph data.
+          - TM-BOM is the likely direction for the future model schema.
+          - The OWASP project page explicitly calls out interoperability with pytm, Threagile, and Open Threat Model.
+          - The long-horizon roadmap also aims for OWASP Production maturity.
+        themes:
+          - category: TM-BOM / File Format
+            target: Center the model around reusable threat-model data and interchange.
+          - category: Ecosystem Interop
+            target: Reduce friction between Threat Dragon and other open-source threat-model tools.
+          - category: Project Maturity
+            target: Continue the path from OWASP Lab toward Production-level maturity.
     - template: people
       enabled: true
       title: Contributor Spotlight
@@ -146,11 +203,14 @@ presentation:
         banner_suffix: who shipped code, docs, tests, translations, and roadmap work during Q1 2026.
         spotlight:
           - login: Ajith-Penmatsa-GGL
-            summary: Delivered reusable threat-model templates for Web and GitHub-backed workflows, then followed through with fixes for desktop visibility, GitLab opening, links, and template documentation.
+            summary: Delivered reusable threat-model templates for Web and GitHub-backed workflows, then followed through with fixes
+              for desktop visibility, GitLab opening, links, and template documentation.
           - login: sn3ha-dev278
-            summary: Tightened core desktop reliability by fixing SVG and PNG export behavior and addressing a Save/Save As path that could lose diagram changes.
+            summary: Tightened core desktop reliability by fixing SVG and PNG export behavior and addressing a Save/Save As path
+              that could lose diagram changes.
           - login: Mahaboobunnisa123
-            summary: Expanded the EoP Games integration by adding the Cornucopia MobileApp deck, extending the project's interoperability story.
+            summary: Expanded the EoP Games integration by adding the Cornucopia MobileApp deck, extending the project's
+              interoperability story.
     - template: metrics-and-links
       enabled: true
       title: Community Highlights
@@ -166,15 +226,18 @@ presentation:
           - new_contributors
         mentions:
           - type: Public roadmap
-            title: Threat Dragon's public strategic roadmap opened in March 2026 with pillars for maintainability, enterprise readiness, UX/accessibility, interoperability, and community trust.
+            title: Threat Dragon's public strategic roadmap opened in March 2026 with pillars for maintainability, enterprise
+              readiness, UX/accessibility, interoperability, and community trust.
             url_label: Join the GitHub discussion
             url: https://github.com/OWASP/threat-dragon/discussions/1480
           - type: OWASP initiative
-            title: The OWASP project page now highlights reusable threat-model templates and EoP Games integration as named initiatives from the community.
+            title: The OWASP project page now highlights reusable threat-model templates and EoP Games integration as named
+              initiatives from the community.
             url_label: View the OWASP project page
             url: https://owasp.org/www-project-threat-dragon/
           - type: Documentation
-            title: The version 2 documentation continues to cover configuration, schema, testing, and TM-BOM background for current users and contributors.
+            title: The version 2 documentation continues to cover configuration, schema, testing, and TM-BOM background for current
+              users and contributors.
             url_label: Browse the docs
             url: https://www.threatdragon.com/docs
     - template: action-cards
@@ -185,19 +248,23 @@ presentation:
         footer_text: Open Source and Community Driven
         cards:
           - title: Report Bugs
-            description: File a reproducible issue with environment details, screenshots, and any model or stack context that helps maintainers confirm the problem.
+            description: File a reproducible issue with environment details, screenshots, and any model or stack context that helps
+              maintainers confirm the problem.
             url_label: Submit an issue
             url: https://github.com/OWASP/threat-dragon/issues
           - title: Submit Code
-            description: Pick up a tracked issue, fork the repository, and submit a pull request that includes the manual testing now required in the contribution guide.
+            description: Pick up a tracked issue, fork the repository, and submit a pull request that includes the manual testing
+              now required in the contribution guide.
             url_label: Read CONTRIBUTING.md
             url: https://github.com/OWASP/threat-dragon/blob/main/CONTRIBUTING.md
           - title: Improve Docs
-            description: Improve installation docs, schema guidance, deployment notes, or contributor documentation so users can adopt Threat Dragon more easily.
+            description: Improve installation docs, schema guidance, deployment notes, or contributor documentation so users can
+              adopt Threat Dragon more easily.
             url_label: Edit docs on GitHub
             url: https://github.com/OWASP/threat-dragon
           - title: Spread the Word
-            description: Join the roadmap discussion, share your usage patterns, star the repository, or help connect Threat Dragon to adjacent open-source workflows.
+            description: Join the roadmap discussion, share your usage patterns, star the repository, or help connect Threat Dragon
+              to adjacent open-source workflows.
             url_label: Share & Star
             url: https://github.com/OWASP/threat-dragon
     - template: closing

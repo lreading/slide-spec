@@ -97,7 +97,7 @@ const showBanner = computed(
 
     <CalloutBanner v-if="showBanner" class="thank-you-banner" variant="dashed" align="center">
       <p class="thank-you-text">
-        <FontAwesomeIcon icon="heart" class="text-[#e8341c] mr-2" />
+        <FontAwesomeIcon icon="heart" class="thank-you-icon" />
         <template v-if="bannerContent.prefix">{{ bannerContent.prefix }} </template>
         <a
           v-if="bannerContent.linkLabel"
@@ -108,7 +108,7 @@ const showBanner = computed(
         >
           <strong>{{ generated.contributors.total }} {{ bannerContent.linkLabel }}</strong>
         </a>
-        <template v-if="bannerContent.suffix"> {{ bannerContent.suffix }}</template>
+        <template v-if="bannerContent.suffix">{{ ` ${bannerContent.suffix}` }}</template>
       </p>
     </CalloutBanner>
   </StandardSlideLayout>
@@ -192,10 +192,20 @@ const showBanner = computed(
 }
 
 .thank-you-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  column-gap: 0.35rem;
   color: #d0d0e8;
   font-size: 16px;
   font-weight: 400;
   margin: 0;
+}
+
+.thank-you-icon {
+  color: #e8341c;
+  margin-right: 0.2rem;
 }
 
 .thank-you-banner {

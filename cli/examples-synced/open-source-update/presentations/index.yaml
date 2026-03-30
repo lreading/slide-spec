@@ -1,5 +1,7 @@
 presentations:
   - id: 2026-q1-update
+    presentation_path: presentations/2026-q1-update/presentation.yaml
+    generated_path: presentations/2026-q1-update/generated.yaml
     year: 2026
     title: "Vortex CLI: Q1 2026"
     subtitle: Community Update

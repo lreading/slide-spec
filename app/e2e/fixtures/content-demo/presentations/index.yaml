@@ -1,5 +1,7 @@
 presentations:
   - id: readme-demo
+    presentation_path: presentations/readme-demo/presentation.yaml
+    generated_path: presentations/readme-demo/generated.yaml
     year: 2025
     title: Quarterly roadmap walkthrough
     subtitle: Demo deck

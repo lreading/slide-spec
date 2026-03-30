@@ -1,5 +1,6 @@
 import {
   assert,
+  assertNoUnexpectedKeys,
   assertNonBlankString,
   assertOptionalBoolean,
   assertOptionalString,
@@ -9,6 +10,27 @@ import {
 import type { SlideTemplateId } from './templateIds'
 
 const roadmapStageStatuses = new Set(['completed', 'in-progress', 'planned', 'future'])
+const roadmapStageKeys = ['completed', 'in-progress', 'planned', 'future'] as const
+
+function assertRoadmapStageContent(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNonBlankString(value.label, `${path}.label`)
+  assertNonBlankString(value.summary, `${path}.summary`)
+}
+
+function assertRoadmapTheme(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNonBlankString(value.category, `${path}.category`)
+  assertNonBlankString(value.target, `${path}.target`)
+}
+
+function assertRoadmapThemes(value: unknown, path: string): void {
+  assert(Array.isArray(value), `${path} must be an array.`)
+  ;(value as unknown[]).forEach((theme, index) => {
+    assert(isRecord(theme), `${path}[${index}] must be an object.`)
+    assertRoadmapTheme(theme, `${path}[${index}]`)
+  })
+}
 
 type SlideRecord = Record<string, unknown>
 
@@ -36,6 +58,7 @@ function assertContributionCard(value: unknown, path: string): void {
 
 const heroValidator: SlideTemplateValidator = (slide, path) => {
   const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(content, ['title_primary', 'title_accent', 'subtitle_prefix', 'quote'], `${path}.content`)
   assertOptionalString(content.title_primary, `${path}.content.title_primary`)
   assertOptionalString(content.title_accent, `${path}.content.title_accent`)
   assertOptionalString(content.subtitle_prefix, `${path}.content.subtitle_prefix`)
@@ -53,6 +76,7 @@ const agendaValidator: SlideTemplateValidator = (slide, path) => {
 const sectionListGridValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(content, ['sections'], `${path}.content`)
   assert(Array.isArray(content.sections), `${path}.content.sections must be an array.`)
   ;(content.sections as unknown[]).forEach((section, index) =>
     assertContentSection(section, `${path}.content.sections[${index}]`))
@@ -61,6 +85,11 @@ const sectionListGridValidator: SlideTemplateValidator = (slide, path) => {
 const timelineValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(
+    content,
+    ['latest_badge_label', 'footer_link_label', 'empty_state_title', 'empty_state_message', 'featured_release_ids'],
+    `${path}.content`,
+  )
   assertOptionalString(content.latest_badge_label, `${path}.content.latest_badge_label`)
   assertOptionalString(content.footer_link_label, `${path}.content.footer_link_label`)
   assertOptionalString(content.empty_state_title, `${path}.content.empty_state_title`)
@@ -71,16 +100,38 @@ const timelineValidator: SlideTemplateValidator = (slide, path) => {
 const progressTimelineValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(
+    content,
+    ['stage', 'deliverables_heading', 'focus_areas_heading', 'footer_link_label', 'stages', 'items', 'themes'],
+    `${path}.content`,
+  )
   assertNonBlankString(content.stage, `${path}.content.stage`)
   assert(
     roadmapStageStatuses.has(content.stage),
     `${path}.content.stage must be one of completed, in-progress, planned, or future.`,
   )
+  assertOptionalString(content.deliverables_heading, `${path}.content.deliverables_heading`)
+  assertOptionalString(content.focus_areas_heading, `${path}.content.focus_areas_heading`)
+  assertOptionalString(content.footer_link_label, `${path}.content.footer_link_label`)
+  assert(isRecord(content.stages), `${path}.content.stages must be an object.`)
+  for (const key of roadmapStageKeys) {
+    assertRoadmapStageContent(
+      (content.stages as Record<string, unknown>)[key],
+      `${path}.content.stages.${key}`,
+    )
+  }
+  assertStringArray(content.items, `${path}.content.items`)
+  assertRoadmapThemes(content.themes, `${path}.content.themes`)
 }
 
 const peopleValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(
+    content,
+    ['banner_prefix', 'contributors_link_label', 'banner_suffix', 'spotlight'],
+    `${path}.content`,
+  )
   assertOptionalString(content.banner_prefix, `${path}.content.banner_prefix`)
   assertOptionalString(content.contributors_link_label, `${path}.content.contributors_link_label`)
   assertOptionalString(content.banner_suffix, `${path}.content.banner_suffix`)
@@ -92,6 +143,11 @@ const peopleValidator: SlideTemplateValidator = (slide, path) => {
 const metricsAndLinksValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(
+    content,
+    ['section_heading', 'stats_heading', 'show_deltas', 'trend_suffix', 'stat_keys', 'mentions'],
+    `${path}.content`,
+  )
   assertOptionalString(content.section_heading, `${path}.content.section_heading`)
   assertOptionalString(content.stats_heading, `${path}.content.stats_heading`)
   assertOptionalBoolean(content.show_deltas, `${path}.content.show_deltas`)
@@ -116,6 +172,7 @@ const metricsAndLinksValidator: SlideTemplateValidator = (slide, path) => {
 const actionCardsValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(content, ['footer_text', 'cards'], `${path}.content`)
   assertOptionalString(content.footer_text, `${path}.content.footer_text`)
   assert(Array.isArray(content.cards), `${path}.content.cards must be an array.`)
   ;(content.cards as unknown[]).forEach((card, index) =>
@@ -124,6 +181,7 @@ const actionCardsValidator: SlideTemplateValidator = (slide, path) => {
 
 const closingValidator: SlideTemplateValidator = (slide, path) => {
   const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(content, ['heading', 'message', 'quote'], `${path}.content`)
   assertNonBlankString(content.heading, `${path}.content.heading`)
   assertNonBlankString(content.message, `${path}.content.message`)
   assertOptionalString(content.quote, `${path}.content.quote`)

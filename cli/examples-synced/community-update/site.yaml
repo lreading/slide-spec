@@ -63,7 +63,7 @@ site:
       label: Community Hub
       url: https://community.prism.example.com
       eyebrow: Forum
-    owasp:
+    community:
       label: Events
       url: https://prism.example.com/events
       eyebrow: Calendar

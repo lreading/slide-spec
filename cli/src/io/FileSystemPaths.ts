@@ -1,5 +1,7 @@
 import { resolve } from 'node:path'
 
+import type { PresentationIndexEntry } from '../../../shared/src/content'
+
 export class FileSystemPaths {
   public constructor(private readonly projectRoot: string) {}
 
@@ -33,6 +35,18 @@ export class FileSystemPaths {
 
   public getPresentationPath(presentationId: string): string {
     return resolve(this.getProjectRoot(), 'content', 'presentations', presentationId, 'presentation.yaml')
+  }
+
+  public resolveContentPath(relativePath: string): string {
+    return resolve(this.getContentRoot(), relativePath)
+  }
+
+  public resolvePresentationPath(entry: Pick<PresentationIndexEntry, 'presentation_path'>): string {
+    return this.resolveContentPath(entry.presentation_path)
+  }
+
+  public resolveGeneratedPath(entry: Pick<PresentationIndexEntry, 'id' | 'generated_path'>): string {
+    return this.resolveContentPath(entry.generated_path ?? `presentations/${entry.id}/generated.yaml`)
   }
 
   public getEnvPath(): string {

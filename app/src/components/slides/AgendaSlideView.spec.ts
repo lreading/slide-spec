@@ -12,7 +12,7 @@ describe('AgendaSlideView', () => {
     throw new Error('Expected agenda slide in fixture data')
   }
 
-  it('collapses multiple roadmap slides into a single agenda entry', () => {
+  it('lists each roadmap slide as a separate agenda entry', () => {
     const wrapper = mount(AgendaSlideView, {
       props: {
         presentation: record.presentation,
@@ -24,9 +24,17 @@ describe('AgendaSlideView', () => {
 
     const agendaItems = wrapper.findAll('.card-text').map((node) => node.text())
 
-    expect(agendaItems).toContain('Roadmap')
-    expect(agendaItems.filter((item) => item === 'Roadmap')).toHaveLength(1)
-    expect(agendaItems).not.toContain('Roadmap: Completed')
-    expect(agendaItems).toContain('Thank you')
+    expect(agendaItems).toEqual([
+      'What Happened Since Last Update',
+      'Releases',
+      'Roadmap: Completed',
+      'Roadmap: In Progress',
+      'Roadmap: Planned',
+      'Roadmap: Future',
+      'Contributor Spotlight',
+      'Community Highlights',
+      'How to Contribute',
+      'Thank you',
+    ])
   })
 })

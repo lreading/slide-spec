@@ -66,7 +66,7 @@ site:
       label: Threat Dragon Docs
       url: https://www.threatdragon.com/docs
       eyebrow: Documentation
-    owasp:
+    community:
       label: OWASP Project
       url: https://owasp.org/www-project-threat-dragon/
       eyebrow: Foundation

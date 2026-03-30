@@ -1,0 +1,72 @@
+generated:
+  id: 2025-community-update-example
+  period:
+    start: 2025-01-01
+    end: 2025-03-31
+  stats:
+    forum_members:
+      label: Forum members
+      current: 8420
+      previous: 6800
+      delta: 1620
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    events_held:
+      label: Events held
+      current: 11
+      previous: 6
+      delta: 5
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    content_published:
+      label: Content pieces published
+      current: 28
+      previous: 19
+      delta: 9
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+    sdk_downloads:
+      label: SDK downloads
+      current: 14500
+      previous: 0
+      delta: 14500
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+  releases:
+    - id: sdk-launch
+      version: Community SDK v1.0
+      published_at: "2025-03-01"
+      url: https://prism.example.com/sdk
+      summary_bullets:
+        - Published with clients for TypeScript, Python, Go, and Ruby
+        - Interactive playground on the developer portal
+    - id: learning-paths
+      version: Learning Paths v2
+      published_at: "2025-01-15"
+      url: https://prism.example.com/learn
+      summary_bullets:
+        - 3 new learning paths including Advanced Integrations
+        - Progress tracking and completion certificates
+  contributors:
+    total: 34
+    authors:
+      - login: elena-tutorials
+        name: Elena Vasquez
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=elena
+        merged_prs: 0
+        first_time: false
+      - login: omar-translations
+        name: Omar Hassan
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=omar
+        merged_prs: 4
+        first_time: true
+      - login: anya-meetups
+        name: Anya Kowalski
+        avatar_url: https://api.dicebear.com/9.x/avataaars/svg?seed=anya
+        merged_prs: 0
+        first_time: false
+  merged_prs: []

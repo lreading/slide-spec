@@ -1,6 +1,7 @@
 import { YamlReader } from '../io/YamlReader'
 import { YamlWriter } from '../io/YamlWriter'
 
+import type { PresentationIndexEntry } from '../../../shared/src/content'
 import type { FileSystemPaths } from '../io/FileSystemPaths'
 import type { GeneratedPresentationData } from './Generation.types'
 
@@ -16,13 +17,15 @@ export class GeneratedDataStore {
 
   public async loadGeneratedData(
     paths: FileSystemPaths,
-    presentationId: string,
+    entry: Pick<PresentationIndexEntry, 'id' | 'generated_path'>,
   ): Promise<GeneratedPresentationData | undefined> {
+    const generatedPath = paths.resolveGeneratedPath(entry)
+
     try {
-      const document = await this.yamlReader.readDocument(paths.getGeneratedPath(presentationId))
+      const document = await this.yamlReader.readDocument(generatedPath)
 
       if (!isRecord(document) || !isRecord(document.generated)) {
-        throw new Error(`content/presentations/${presentationId}/generated.yaml must contain a generated object.`)
+        throw new Error(`${generatedPath} must contain a generated object.`)
       }
 
       return document.generated as unknown as GeneratedPresentationData
@@ -41,10 +44,10 @@ export class GeneratedDataStore {
 
   public async writeGeneratedData(
     paths: FileSystemPaths,
-    presentationId: string,
+    entry: Pick<PresentationIndexEntry, 'id' | 'generated_path'>,
     generated: GeneratedPresentationData,
   ): Promise<string> {
-    const generatedPath = paths.getGeneratedPath(presentationId)
+    const generatedPath = paths.resolveGeneratedPath(entry)
     await this.yamlWriter.writeDocument(generatedPath, {
       generated,
     })

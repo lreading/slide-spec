@@ -24,7 +24,7 @@ Final slide with heading, message, optional quote, resource links, and optional 
 | Heading | `content.heading` (rendered with a trailing `!`) |
 | Message | `content.message` |
 | Quote | `content.quote` |
-| Resource pills | `site.links.repository`, `site.links.docs`, `site.links.owasp` |
+| Resource pills | `site.links.repository`, `site.links.docs`, `site.links.community` |
 | Mascot | `site.mascot` (hidden if not configured) |
 
 ## Fields

@@ -1,5 +1,7 @@
 presentations:
   - id: 2026-demo
+    presentation_path: presentations/2026-demo/presentation.yaml
+    generated_path: presentations/2026-demo/generated.yaml
     title: Slide Spec Demo
     summary: Replace with a summary before publishing.
     published: true

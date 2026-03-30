@@ -25,6 +25,7 @@ describe('InitPresentationBuilder', () => {
       title: 'Quarterly Community Update',
       subtitle: 'Replace with a subtitle before publishing.',
       summary: 'Replace with a summary before publishing.',
+      presentation_path: 'presentations/2026-q1/presentation.yaml',
       published: true,
       featured: true,
     })
@@ -65,7 +66,7 @@ describe('InitPresentationBuilder', () => {
             label: 'Project documentation',
             url: 'https://example.com/docs',
           },
-          owasp: {
+          community: {
             label: 'Project website',
             url: 'https://example.com',
           },

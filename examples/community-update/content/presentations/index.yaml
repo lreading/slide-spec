@@ -1,5 +1,7 @@
 presentations:
   - id: 2026-q1-community
+    presentation_path: presentations/2026-q1-community/presentation.yaml
+    generated_path: presentations/2026-q1-community/generated.yaml
     year: 2026
     title: "Prism Community: Q1 2026"
     subtitle: DevRel Update

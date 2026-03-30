@@ -74,7 +74,7 @@ test('paginates through the archive and opens a title link from page two', async
     .click()
 
   await expect(page).toHaveURL(/\/presentations\/2025-04-community-office-hours/)
-  await expect(page.getByText('April 2025')).toBeVisible()
+  await expect(page.getByText('Example presentation')).toBeVisible()
 })
 
 test('paginates to the second page and opens the expected presentation from the title link', async ({ page }) => {
@@ -99,5 +99,5 @@ test('paginates to the second page and opens the expected presentation from the 
     .click()
 
   await expect(page).toHaveURL(/\/presentations\/2025-04-community-office-hours/)
-  await expect(page.getByText('April 2025')).toBeVisible()
+  await expect(page.getByText('Example presentation')).toBeVisible()
 })

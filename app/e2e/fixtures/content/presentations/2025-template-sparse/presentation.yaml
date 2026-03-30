@@ -1,7 +1,6 @@
 presentation:
   id: 2025-template-sparse
   year: 2025
-  quarter: 3
   title: Threat Dragon Sparse Template Coverage
   subtitle: Sparse Coverage
   slides:
@@ -27,6 +26,24 @@ presentation:
       title: Roadmap
       content:
         stage: completed
+        stages:
+          completed:
+            label: Completed
+            summary: Done
+          in-progress:
+            label: In Progress
+            summary: Doing
+          planned:
+            label: Planned
+            summary: Soon
+          future:
+            label: Future
+            summary: Later
+        items:
+          - One
+        themes:
+          - category: Theme
+            target: Target
     - template: people
       enabled: true
       title: Contributors

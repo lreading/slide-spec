@@ -48,10 +48,13 @@ export class FixtureRepository {
       throw new Error(`Unknown fixture presentation "${id}".`)
     }
 
+    const presentationPath = index.presentation_path
+    const generatedPath = index.generated_path ?? `presentations/${id}/generated.yaml`
+
     return {
       index,
-      presentation: this.readDocument<PresentationDocument>(`presentations/${id}/presentation.yaml`).presentation,
-      generated: this.readDocument<GeneratedDocument>(`presentations/${id}/generated.yaml`).generated,
+      presentation: this.readDocument<PresentationDocument>(presentationPath).presentation,
+      generated: this.readDocument<GeneratedDocument>(generatedPath).generated,
     }
   }
 

@@ -8,7 +8,7 @@ Templates are pre-built layouts for slides. Each slide in a presentation require
 | [`agenda`](/templates/agenda) | Auto-generated table of contents |
 | [`section-list-grid`](/templates/section-list-grid) | Grid of titled bullet sections |
 | [`timeline`](/templates/timeline) | Release cards from generated data |
-| [`progress-timeline`](/templates/progress-timeline) | Roadmap stage detail |
+| [`progress-timeline`](/templates/progress-timeline) | Self-contained stage detail |
 | [`people`](/templates/people) | Contributor spotlights |
 | [`metrics-and-links`](/templates/metrics-and-links) | Metric tiles and authored mentions |
 | [`action-cards`](/templates/action-cards) | CTA card grid |

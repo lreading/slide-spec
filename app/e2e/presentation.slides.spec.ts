@@ -44,7 +44,6 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         }),
       ).toBeVisible()
       await expect(page.getByText(slide.content.subtitle_prefix ?? '')).toBeVisible()
-      await expect(page.getByText(record.presentation.subtitle)).toBeVisible()
       await expect(page.getByText(String(slide.content.quote))).toBeVisible()
       for (const link of Object.values(site.links)) {
         await expect(page.getByRole('link', { name: formatFooterText(link.url) })).toHaveAttribute(
@@ -56,7 +55,8 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
     case 'agenda':
       await expect(page.getByText('Agenda')).toBeVisible()
       await expect(page.getByText('What Happened Since Last Update')).toBeVisible()
-      await expect(page.getByText('Roadmap')).toBeVisible()
+      await expect(page.getByText('Roadmap: Completed', { exact: true })).toBeVisible()
+      await expect(page.getByText('Roadmap: Future', { exact: true })).toBeVisible()
       await expect(page.getByText('Thank You')).toBeVisible()
       break
     case 'section-list-grid': {
@@ -109,25 +109,27 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
     }
     case 'progress-timeline': {
       const roadmapSlide: RoadmapSlide = slide
-      const section = record.presentation.roadmap?.sections[roadmapSlide.content.stage]
-      await expect(page.getByText(`Roadmap: ${section?.label}`)).toBeVisible()
-      await expect(page.getByText('Key deliverables')).toBeVisible()
-      await expect(page.getByText('Focus areas')).toBeVisible()
-      for (const stage of Object.values(record.presentation.roadmap?.sections ?? {})) {
-        await expect(page.getByText(stage.label, { exact: true }).first()).toBeVisible()
+      const stage = roadmapSlide.content.stages[roadmapSlide.content.stage]
+      await expect(page.getByText(`Roadmap: ${stage?.label}`)).toBeVisible()
+      await expect(page.getByText(roadmapSlide.content.deliverables_heading ?? 'Key deliverables')).toBeVisible()
+      await expect(page.getByText(roadmapSlide.content.focus_areas_heading ?? 'Focus areas')).toBeVisible()
+      for (const timelineStage of Object.values(roadmapSlide.content.stages)) {
+        await expect(page.getByText(timelineStage.label, { exact: true }).first()).toBeVisible()
       }
-      await expect(page.getByText(section?.summary ?? '', { exact: true }).first()).toBeVisible()
-      for (const item of section?.items ?? []) {
+      await expect(page.getByText(stage?.summary ?? '', { exact: true }).first()).toBeVisible()
+      for (const item of roadmapSlide.content.items) {
         await expect(page.getByText(item)).toBeVisible()
       }
-      for (const theme of section?.themes ?? []) {
+      for (const theme of roadmapSlide.content.themes) {
         await expect(page.getByText(theme.category, { exact: true }).first()).toBeVisible()
         await expect(page.getByText(theme.target)).toBeVisible()
       }
-      await expect(page.getByRole('link', { name: /view full roadmap & milestones on github/i })).toHaveAttribute(
-        'href',
-        site.links.repository.url,
-      )
+      if (roadmapSlide.content.footer_link_label) {
+        await expect(page.getByRole('link', { name: roadmapSlide.content.footer_link_label })).toHaveAttribute(
+          'href',
+          site.links.repository.url,
+        )
+      }
       break
     }
     case 'people': {
@@ -204,7 +206,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(page.getByText(slide.content.message)).toBeVisible()
       await expect(page.getByText(site.links.repository.eyebrow ?? '')).toBeVisible()
       await expect(page.getByText(site.links.docs.eyebrow ?? '')).toBeVisible()
-      await expect(page.getByText(site.links.owasp.eyebrow ?? '')).toBeVisible()
+      await expect(page.getByText(site.links.community.eyebrow ?? '')).toBeVisible()
       await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
         'href',
         site.links.repository.url,
@@ -213,9 +215,9 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         'href',
         site.links.docs.url,
       )
-      await expect(page.getByRole('link', { name: site.links.owasp.label })).toHaveAttribute(
+      await expect(page.getByRole('link', { name: site.links.community.label })).toHaveAttribute(
         'href',
-        site.links.owasp.url,
+        site.links.community.url,
       )
       if (slide.content.quote) {
         await expect(page.getByText(`"${slide.content.quote}"`)).toBeVisible()

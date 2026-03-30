@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import SiteFooterLinks from './SiteFooterLinks.vue'
 
 describe('SiteFooterLinks', () => {
-  it('renders configured repository, docs, and owasp links in order', () => {
+  it('renders configured repository, docs, and community links in order', () => {
     const wrapper = mount(SiteFooterLinks, {
       props: {
         site: {
@@ -17,8 +17,8 @@ describe('SiteFooterLinks', () => {
               label: 'Docs',
               url: 'https://www.threatdragon.com/docs',
             },
-            owasp: {
-              label: 'OWASP',
+            community: {
+              label: 'Community',
               url: 'https://owasp.org/www-project-threat-dragon/',
             },
           },

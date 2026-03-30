@@ -17,7 +17,7 @@ site:
     docs:
       label: Documentation
       url: https://example.com/docs
-    owasp:
+    community:
       label: Community
       url: https://example.com/community
 ```
@@ -59,7 +59,7 @@ Three link keys are required:
 | --- | --- |
 | `repository` | yes |
 | `docs` | yes |
-| `owasp` | yes |
+| `community` | yes |
 
 Each link object:
 

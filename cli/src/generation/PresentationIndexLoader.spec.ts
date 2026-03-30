@@ -41,6 +41,8 @@ describe('PresentationIndexLoader', () => {
       '/workspace/project/content/presentations/index.yaml': `
 presentations:
   - id: 2026-q1
+    presentation_path: presentations/2026-q1/presentation.yaml
+    generated_path: presentations/2026-q1/generated.yaml
     year: 2026
     title: Title
     subtitle: Q1 2026
@@ -84,6 +86,8 @@ presentations:
         '/workspace/project/content/presentations/index.yaml': `
 presentations:
   - id: 2026-q1
+    presentation_path: presentations/2026-q1/presentation.yaml
+    generated_path: presentations/2026-q1/generated.yaml
     year: nope
     title: Title
     subtitle: Q1 2026
@@ -99,6 +103,8 @@ presentations:
         '/workspace/project/content/presentations/index.yaml': `
 presentations:
   - id: " "
+    presentation_path: presentations/2026-q1/presentation.yaml
+    generated_path: presentations/2026-q1/generated.yaml
     year: 2026
     title: Title
     subtitle: Q1 2026
@@ -114,6 +120,8 @@ presentations:
         '/workspace/project/content/presentations/index.yaml': `
 presentations:
   - id: 2026-q1
+    presentation_path: presentations/2026-q1/presentation.yaml
+    generated_path: presentations/2026-q1/generated.yaml
     year: 2026
     title: Title
     subtitle: Q1 2026
@@ -124,4 +132,5 @@ presentations:
       }))).loadPresentations(paths),
     ).rejects.toThrow('presentations[0].featured must be a boolean.')
   })
+
 })

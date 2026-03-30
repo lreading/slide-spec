@@ -10,7 +10,7 @@ describe('RoadmapSlideView', () => {
     (slide) => slide.template === 'progress-timeline',
   )
 
-  it('renders the active roadmap stage from shared deck roadmap data', () => {
+  it('renders the active roadmap stage from slide-local roadmap data', () => {
     const slide = roadmapSlides[1]
 
     if (!slide || slide.template !== 'progress-timeline') {
@@ -34,7 +34,7 @@ describe('RoadmapSlideView', () => {
     expect(wrapper.findAll('.progress-timeline__item--current')).toHaveLength(1)
   })
 
-  it('renders without fallback copy when roadmap data is unavailable', () => {
+  it('hides the footer link when the slide omits its own footer label', () => {
     const slide = roadmapSlides[0]
 
     if (!slide || slide.template !== 'progress-timeline') {
@@ -43,21 +43,73 @@ describe('RoadmapSlideView', () => {
 
     const wrapper = mount(RoadmapSlideView, {
       props: {
-        presentation: {
-          ...record.presentation,
-          roadmap: undefined,
-        },
+        presentation: record.presentation,
         site: contentRepository.getSiteContent(),
-        slide,
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            footer_link_label: undefined,
+          },
+        },
         slideNumber: 4,
         slideTotal: 12,
       },
     })
 
     expect(wrapper.text()).toContain('Roadmap: Completed')
-    expect(wrapper.text()).not.toContain('Roadmap details are not available.')
+    expect(wrapper.find('.card-eyebrow').exists()).toBe(true)
+    expect(wrapper.find('.card-title').exists()).toBe(true)
+    expect(wrapper.find('.footer-link').exists()).toBe(false)
+  })
+
+  it('omits optional roadmap headings and stage eyebrow when slide-local labels are blank', () => {
+    const slide = roadmapSlides[2]
+
+    if (!slide || slide.template !== 'progress-timeline') {
+      throw new Error('Expected roadmap slide in fixture data')
+    }
+
+    const wrapper = mount(RoadmapSlideView, {
+      props: {
+        presentation: record.presentation,
+        site: contentRepository.getSiteContent(),
+        slide: {
+          ...slide,
+          title: undefined,
+          subtitle: undefined,
+          content: {
+            ...slide.content,
+            deliverables_heading: undefined,
+            focus_areas_heading: undefined,
+            footer_link_label: undefined,
+            stages: {
+              ...slide.content.stages,
+              planned: {
+                ...slide.content.stages.planned,
+                label: '',
+                summary: '',
+              },
+            },
+          },
+        },
+        slideNumber: 6,
+        slideTotal: 12,
+      },
+    })
+
     expect(wrapper.find('.card-eyebrow').exists()).toBe(false)
     expect(wrapper.find('.card-title').exists()).toBe(false)
+    expect(wrapper.find('.section-heading').exists()).toBe(false)
     expect(wrapper.find('.footer-link').exists()).toBe(false)
+    expect(wrapper.find('.standard-slide-layout__subtitle').exists()).toBe(false)
+
+    const timelineItems = wrapper.findAll('.progress-timeline__item')
+    expect(timelineItems).toHaveLength(4)
+    expect(timelineItems[0]?.classes()).toContain('progress-timeline__item--viewed')
+    expect(timelineItems[1]?.classes()).toContain('progress-timeline__item--viewed')
+    expect(timelineItems[2]?.classes()).toContain('progress-timeline__item--current')
+    expect(timelineItems[2]?.text()).not.toContain('Roadmap: Planned')
+    expect(timelineItems[3]?.classes()).toContain('progress-timeline__item--upcoming')
   })
 })

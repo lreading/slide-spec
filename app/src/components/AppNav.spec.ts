@@ -70,6 +70,7 @@ describe('AppNav', () => {
         title: 'Q2 Deck',
         subtitle: 'Q2 2026',
         summary: 'Fallback deck',
+        presentation_path: 'presentations/2026-q2/presentation.yaml',
         published: true,
         featured: false,
       },

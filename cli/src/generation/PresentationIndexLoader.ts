@@ -68,6 +68,10 @@ export class PresentationIndexLoader {
       title: assertString(entry.title, `presentations[${index}].title`),
       subtitle: assertString(entry.subtitle, `presentations[${index}].subtitle`),
       summary: assertString(entry.summary, `presentations[${index}].summary`),
+      presentation_path: assertString(entry.presentation_path, `presentations[${index}].presentation_path`),
+      ...(entry.generated_path !== undefined
+        ? { generated_path: assertString(entry.generated_path, `presentations[${index}].generated_path`) }
+        : {}),
       published: assertBoolean(entry.published, `presentations[${index}].published`),
       featured: assertBoolean(entry.featured, `presentations[${index}].featured`),
     }

@@ -3,7 +3,7 @@ import type {
   AttributionContent,
   HomeHeroContent,
   NavigationContent,
-  PresentationContent,
+  ProgressTimelineSlideContent,
   PresentationToolbarContent,
   PresentationsPageContent,
   SiteContent,
@@ -118,9 +118,9 @@ export const resolveTitleSlideContent = (
 })
 
 export const resolveRoadmapLabels = (
-  presentation: PresentationContent,
+  content: ProgressTimelineSlideContent,
 ): RoadmapResolvedLabels => ({
-  deliverables: trimOrUndefined(presentation.roadmap?.deliverables_heading),
-  focusAreas: trimOrUndefined(presentation.roadmap?.focus_areas_heading),
-  footerLink: trimOrUndefined(presentation.roadmap?.footer_link_label),
+  deliverables: trimOrUndefined(content.deliverables_heading),
+  focusAreas: trimOrUndefined(content.focus_areas_heading),
+  footerLink: trimOrUndefined(content.footer_link_label),
 })

@@ -1,0 +1,162 @@
+presentation:
+  id: 2026-launch
+  year: 2026
+  title: Slide Spec Project Update
+  subtitle: Pre-Launch - Spring 2026
+  slides:
+    - template: hero
+      enabled: true
+      content:
+        title_primary: Slide
+        title_accent: Spec
+        subtitle_prefix: "Pre-Launch: Spring 2026"
+        quote: Presentations should be as easy to version as code.
+    - template: agenda
+      enabled: true
+      title: Agenda
+      subtitle: What we shipped and where we're headed
+    - template: section-list-grid
+      enabled: true
+      title: What shipped
+      subtitle: Core capabilities in the launch build
+      content:
+        sections:
+          - title: Nine slide templates
+            bullets:
+              - Hero, agenda, and section-list-grid for structure
+              - Timeline and progress-timeline for releases and roadmaps
+              - People for contributor spotlights
+              - Metrics-and-links for community health data
+              - Action-cards for calls to action
+              - Closing slide for every deck
+          - title: Full CLI
+            bullets:
+              - "init: scaffold a new project from scratch"
+              - "validate: check YAML against the schema"
+              - "fetch: pull GitHub stats into generated.yaml"
+              - "build: compile to a static site"
+              - "serve: local dev server with live reload"
+          - title: Infrastructure, Security & Quality
+            bullets:
+              - 80% unit test coverage thresholds
+              - Playwright E2E, accessibility (axe), and visual regression suites
+              - Semgrep, Trivy, Gitleaks, and OWASP ZAP scanning in CI
+              - OpenSSF Best Practices badge from day one
+    - template: timeline
+      enabled: true
+      title: Releases
+      subtitle: No releases yet — first tag coming soon
+      content:
+        featured_release_ids: []
+        empty_state_title: Pre-release
+        empty_state_message: Working toward an alpha. Watch the repo for the first release.
+        footer_link_label: View releases
+    - template: progress-timeline
+      enabled: true
+      title: "Roadmap: Completed"
+      subtitle: Everything delivered in the launch sprint
+      content:
+        stage: completed
+        deliverables_heading: Delivered
+        focus_areas_heading: Themes
+        footer_link_label: View full roadmap
+        stages:
+          completed:
+            label: Completed
+            summary: Everything shipped in the launch sprint.
+          in-progress:
+            label: In Progress
+            summary: Active work toward first stable release.
+          planned:
+            label: Planned
+            summary: Near-term improvements after v1.0.0.
+          future:
+            label: Future
+            summary: Longer-horizon ideas being explored.
+        items:
+          - 9 slide templates (hero through closing)
+          - CLI with init, validate, fetch, build, serve
+          - Vue 3 app renderer with Vite
+          - Unit, E2E, a11y, and visual regression tests
+          - CI/CD with Semgrep, Trivy, and Gitleaks scanning
+          - OpenSSF Best Practices badge achieved
+          - VitePress documentation site
+        themes:
+          - category: Functionality
+            target: All table-stakes features for a usable v0.
+          - category: Quality
+            target: Ship with meaningful test coverage from day one.
+    - template: progress-timeline
+      enabled: true
+      title: "Roadmap: In Progress"
+      subtitle: Active work right now
+      content:
+        stage: in-progress
+        deliverables_heading: In Progress
+        focus_areas_heading: Themes
+        footer_link_label: View full roadmap
+        stages:
+          completed:
+            label: Completed
+            summary: Everything shipped in the launch sprint.
+          in-progress:
+            label: In Progress
+            summary: Active work toward first stable release.
+          planned:
+            label: Planned
+            summary: Near-term improvements after v1.0.0.
+          future:
+            label: Future
+            summary: Longer-horizon ideas being explored.
+        items:
+          - First stable release (v1.0.0)
+          - slide-spec.dev homepage (this site)
+          - docs.slide-spec.dev documentation site
+          - Usability & user acceptance testing
+        themes:
+          - category: Stability
+            target: Remove alpha-stage rough edges before the first real users.
+          - category: Visibility
+            target: Give the project a home on the web.
+    - template: metrics-and-links
+      enabled: true
+      title: Project health
+      subtitle: Numbers from the launch sprint
+      content:
+        section_heading: Highlights
+        stats_heading: Since inception
+        show_deltas: false
+        stat_keys:
+          - stars
+          - prs_merged
+          - commits
+        mentions:
+          - type: Badge
+            title: OpenSSF Best Practices — passing status achieved on day one of the project.
+            url_label: View badge
+            url: https://www.bestpractices.dev/projects/10773
+    - template: action-cards
+      enabled: true
+      title: Get involved
+      subtitle: How to use and contribute
+      content:
+        footer_text: The best contributions are the ones only you can make.
+        cards:
+          - title: Try the project!
+            description: Install with npm (soon) and scaffold your first presentation in under 5 minutes.
+            url_label: Quickstart
+            url: https://docs.slide-spec.dev/guide/quickstart
+          - title: Read the docs
+            description: Full schema reference, CLI command reference, and example walkthroughs.
+            url_label: Documentation
+            url: https://docs.slide-spec.dev
+          - title: Contribute
+            description: Bug reports, feature requests, and pull requests are welcome. Read the contributing guide to get started.
+            url_label: Contributing guide
+            url: https://github.com/lreading/slide-spec/blob/main/CONTRIBUTING.md
+    - template: closing
+      enabled: true
+      content:
+        heading: Thank you
+        message: Slide Spec is early, opinionated, and improving fast. Your feedback shapes what comes next.
+        quote: Presentations should be as easy to version as code.

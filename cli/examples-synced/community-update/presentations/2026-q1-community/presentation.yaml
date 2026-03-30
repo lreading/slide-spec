@@ -3,56 +3,6 @@ presentation:
   year: 2026
   title: "Prism Community: Q1 2026"
   subtitle: DevRel Update
-  roadmap:
-    agenda_label: Community Roadmap
-    deliverables_heading: Delivered
-    focus_areas_heading: Themes
-    footer_link_label: View community roadmap
-    sections:
-      completed:
-        label: Completed
-        summary: Community work delivered in Q1.
-        items:
-          - Launched 3 new learning paths on the developer portal
-          - Spoke at 4 conferences across 3 countries
-          - Shipped the community SDK with 15 code samples
-        themes:
-          - category: Education
-            target: Lower the barrier to entry for new developers.
-          - category: Reach
-            target: Grow awareness in new geographic markets.
-      in-progress:
-        label: In Progress
-        summary: Continuing into Q2.
-        items:
-          - Community mentorship program pilot with 20 pairs
-          - Video tutorial series for advanced workflows
-        themes:
-          - category: Mentorship
-            target: Help intermediate developers level up.
-          - category: Content
-            target: Diversify content formats beyond blog posts.
-      planned:
-        label: Planned
-        summary: Scoped for Q2.
-        items:
-          - Annual community survey
-          - Regional meetup program in 5 cities
-          - Community showcase at PrismConf 2026
-        themes:
-          - category: Feedback
-            target: Understand community needs at scale.
-          - category: Events
-            target: Build local community connections.
-      future:
-        label: Future
-        summary: Exploring for later in the year.
-        items:
-          - Ambassador program with tiered recognition
-          - Community-maintained plugin marketplace
-        themes:
-          - category: Recognition
-            target: Reward consistent community contributors.
   slides:
     - template: hero
       enabled: true
@@ -103,6 +53,31 @@ presentation:
       subtitle: Community initiatives delivered
       content:
         stage: completed
+        deliverables_heading: Delivered
+        focus_areas_heading: Themes
+        footer_link_label: View community roadmap
+        stages:
+          completed:
+            label: Completed
+            summary: Community work delivered in Q1.
+          in-progress:
+            label: In Progress
+            summary: Continuing into Q2.
+          planned:
+            label: Planned
+            summary: Scoped for Q2.
+          future:
+            label: Future
+            summary: Exploring for later in the year.
+        items:
+          - Launched 3 new learning paths on the developer portal
+          - Spoke at 4 conferences across 3 countries
+          - Shipped the community SDK with 15 code samples
+        themes:
+          - category: Education
+            target: Lower the barrier to entry for new developers.
+          - category: Reach
+            target: Grow awareness in new geographic markets.
     - template: people
       enabled: true
       title: Community champions
@@ -134,9 +109,9 @@ presentation:
           - sdk_downloads
         mentions:
           - type: Testimonial
-            title: "Prism's docs are the gold standard. I've never onboarded to a tool this fast."
+            title: Prism's docs are the gold standard. I've never onboarded to a tool this fast.
           - type: Media
-            title: "DevRel Weekly featured our community SDK launch as a top-5 developer tool release."
+            title: DevRel Weekly featured our community SDK launch as a top-5 developer tool release.
             url_label: Read the feature
             url: https://devrelweekly.example.com/issue/142
     - template: action-cards

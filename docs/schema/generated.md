@@ -99,6 +99,6 @@ Optional. If present, must be an array. Expected shape per entry:
 
 ## Notes
 
-- The `id` in `generated.yaml` must match the presentation's `id` in both `presentation.yaml` and `index.yaml`
+- The `id` in `generated.yaml` must match the presentation's `id`
 - Keep metric keys aligned with `stat_keys` in any [metrics-and-links](/templates/metrics-and-links) slide that references them
 - This file does not have to come from a connector - hand-author it with data from any source

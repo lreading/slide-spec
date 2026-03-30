@@ -4,7 +4,7 @@ Slide Spec turns YAML files into a static presentation website. This page explai
 
 ## Content directory
 
-Every Slide Spec project has a `content/` directory at its root. This is where all your YAML files live. The CLI reads from this directory, and the build process uses it to generate your site. The structure looks like this:
+Every Slide Spec project has a `content/` directory at its root. This is where all your YAML files live. The CLI reads from this directory, and the build process uses it to generate your site. One common structure looks like this:
 
 ```
 content/
@@ -25,13 +25,13 @@ content/
 
 ## Presentations
 
-A presentation is a single slide deck. Each presentation gets its own directory under `content/presentations/` and consists of two files: `presentation.yaml` (what you write) and `generated.yaml` (data from a connector or manual entry).
+A presentation is a single slide deck. Each presentation has a catalog entry in `content/presentations/index.yaml` and explicit file paths to the authored deck and generated data.
 
-All presentations are registered in `content/presentations/index.yaml`, which controls what appears on the presentations list page. The index tracks each presentation's title, subtitle, summary, and whether it's published or featured.
+The index controls what appears on the presentations list page. It tracks each presentation's title, subtitle, summary, file paths, and whether it's published or featured. The file paths are the source of truth; the folder layout is just one way to organize them.
 
 ## The presentation/generated split
 
-This is the most important design decision in Slide Spec. Your authored content (slide titles, copy, roadmap, spotlights) lives in `presentation.yaml`. Data-driven content (metrics, releases, contributors) lives in `generated.yaml`. This separation means you can re-fetch updated numbers from a connector without touching your slides, and your slide copy is never overwritten by automation.
+This is the most important design decision in Slide Spec. Your authored content lives in `presentation.yaml` as the slides themselves, with each slide carrying its own `content` block. That includes slide titles, copy, and any progress-timeline stage details. If two slides need the same text, repeat it explicitly. Data-driven content (metrics, releases, contributors) lives in `generated.yaml`. This separation means you can re-fetch updated numbers from a connector without touching your slides, and your slide copy is never overwritten by automation.
 
 ## Templates
 
@@ -47,4 +47,4 @@ Connectors are data sources that populate `generated.yaml` automatically. Config
 
 ## Validation
 
-The CLI includes a `validate` command that checks all your YAML against the schema. It catches missing required fields, type mismatches, cross-file inconsistencies (like a presentation id not matching between `index.yaml` and `presentation.yaml`), and template-specific content requirements. Run it after editing and before building. See [validate](/cli/validate) for details.
+The CLI includes a `validate` command that checks all your YAML against the schema. It catches missing required fields, type mismatches, bad file paths, and template-specific content requirements. Run it after editing and before building. See [validate](/cli/validate) for details.

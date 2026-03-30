@@ -45,8 +45,7 @@ const mascotAlt = computed(() => props.site.mascot?.alt?.trim() || undefined)
           v-if="slideContent.titlePrimary || slideContent.titleAccent || slideContent.subtitlePrefix"
         />
         <h2 v-if="slideContent.subtitlePrefix" class="hero-subtitle">
-          {{ slideContent.subtitlePrefix }} —
-          <span class="hero-subtitle-strong">{{ presentation.subtitle }}</span>
+          {{ slideContent.subtitlePrefix }}
         </h2>
         <p v-if="slide.content.quote" class="hero-quote">"{{ slide.content.quote }}"</p>
       </div>

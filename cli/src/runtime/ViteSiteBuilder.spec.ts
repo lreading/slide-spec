@@ -55,7 +55,7 @@ describe('ViteSiteBuilder', () => {
     docs:
       label: Docs
       url: https://example.com/docs
-    owasp:
+    community:
       label: Project
       url: https://example.com/project
 `,
@@ -64,6 +64,7 @@ describe('ViteSiteBuilder', () => {
       resolve(projectRoot, 'content', 'presentations', 'index.yaml'),
       `presentations:
   - id: 2026-q1
+    presentation_path: presentations/2026-q1/presentation.yaml
     title: Demo
     subtitle: Example
     summary: Example

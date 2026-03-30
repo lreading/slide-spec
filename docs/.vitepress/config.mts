@@ -109,6 +109,7 @@ export default defineConfig({
             { text: 'AI-Friendly Docs', link: '/meta/ai' },
             { text: 'Supply Chain', link: '/meta/supply-chain' },
             { text: 'Agent Assistance', link: '/meta/agent-assistance' },
+            { text: 'Cloudflare Pages', link: '/meta/cloudflare-pages' },
           ],
         },
       ],

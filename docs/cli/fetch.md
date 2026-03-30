@@ -20,10 +20,13 @@ npx @slide-spec/cli fetch \
 | `--no-previous-period` | | Skip previous-period comparison |
 | `--timings` | | Print timing for each fetch step |
 | `--dry-run` | | Preview without writing `generated.yaml` |
+| `--force` | | Overwrite `generated.yaml` if it already exists |
 
 ## What it writes
 
-`fetch` overwrites `content/presentations/<id>/generated.yaml` with data from the configured connector: metrics, releases, contributors, and related details.
+`fetch` writes `content/presentations/<id>/generated.yaml` with data from the configured connector: metrics, releases, contributors, and related details.
+
+If `generated.yaml` already exists, `fetch` exits with an error to prevent accidental overwrites. Pass `--force` to overwrite it.
 
 It does not touch slide titles, roadmap content, spotlights, or CTAs.
 

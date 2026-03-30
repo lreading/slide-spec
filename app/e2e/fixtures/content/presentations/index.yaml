@@ -1,5 +1,7 @@
 presentations:
 - id: 2026-q1
+  presentation_path: presentations/2026-q1/presentation.yaml
+  generated_path: presentations/2026-q1/generated.yaml
   year: 2026
   title: OWASP Threat Dragon Community Update
   subtitle: Q1 2026
@@ -7,6 +9,8 @@ presentations:
   published: true
   featured: true
 - id: 2025-template-sparse
+  presentation_path: presentations/2025-template-sparse/presentation.yaml
+  generated_path: presentations/2025-template-sparse/generated.yaml
   year: 2025
   title: Threat Dragon Sparse Template Coverage
   subtitle: Sparse Coverage
@@ -14,6 +18,8 @@ presentations:
   published: true
   featured: false
 - id: 2026-01-weekly-briefing
+  presentation_path: presentations/2026-01-weekly-briefing/presentation.yaml
+  generated_path: presentations/2026-01-weekly-briefing/generated.yaml
   year: 2026
   title: Weekly Browser Briefing
   subtitle: January 2026
@@ -21,6 +27,8 @@ presentations:
   published: true
   featured: false
 - id: 2026-02-weekly-briefing
+  presentation_path: presentations/2026-02-weekly-briefing/presentation.yaml
+  generated_path: presentations/2026-02-weekly-briefing/generated.yaml
   year: 2026
   title: Weekly Browser Briefing
   subtitle: February 2026
@@ -28,6 +36,8 @@ presentations:
   published: true
   featured: false
 - id: 2026-03-weekly-briefing
+  presentation_path: presentations/2026-03-weekly-briefing/presentation.yaml
+  generated_path: presentations/2026-03-weekly-briefing/generated.yaml
   year: 2026
   title: Weekly Browser Briefing
   subtitle: March 2026
@@ -35,6 +45,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-12-release-review
+  presentation_path: presentations/2025-12-release-review/presentation.yaml
+  generated_path: presentations/2025-12-release-review/generated.yaml
   year: 2025
   title: Release Review
   subtitle: December 2025
@@ -42,6 +54,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-11-community-roundup
+  presentation_path: presentations/2025-11-community-roundup/presentation.yaml
+  generated_path: presentations/2025-11-community-roundup/generated.yaml
   year: 2025
   title: Community Roundup
   subtitle: November 2025
@@ -49,6 +63,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-10-interoperability-notes
+  presentation_path: presentations/2025-10-interoperability-notes/presentation.yaml
+  generated_path: presentations/2025-10-interoperability-notes/generated.yaml
   year: 2025
   title: Interoperability Notes
   subtitle: October 2025
@@ -56,6 +72,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-09-platform-update
+  presentation_path: presentations/2025-09-platform-update/presentation.yaml
+  generated_path: presentations/2025-09-platform-update/generated.yaml
   year: 2025
   title: Platform Update
   subtitle: September 2025
@@ -63,6 +81,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-08-design-review
+  presentation_path: presentations/2025-08-design-review/presentation.yaml
+  generated_path: presentations/2025-08-design-review/generated.yaml
   year: 2025
   title: Design Review
   subtitle: August 2025
@@ -70,6 +90,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-07-maintainer-sync
+  presentation_path: presentations/2025-07-maintainer-sync/presentation.yaml
+  generated_path: presentations/2025-07-maintainer-sync/generated.yaml
   year: 2025
   title: Maintainer Sync
   subtitle: July 2025
@@ -77,6 +99,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-06-roadmap-deep-dive
+  presentation_path: presentations/2025-06-roadmap-deep-dive/presentation.yaml
+  generated_path: presentations/2025-06-roadmap-deep-dive/generated.yaml
   year: 2025
   title: Roadmap Deep Dive
   subtitle: June 2025
@@ -84,6 +108,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-05-release-recap
+  presentation_path: presentations/2025-05-release-recap/presentation.yaml
+  generated_path: presentations/2025-05-release-recap/generated.yaml
   year: 2025
   title: Release Recap
   subtitle: May 2025
@@ -91,6 +117,8 @@ presentations:
   published: true
   featured: false
 - id: 2025-04-community-office-hours
+  presentation_path: presentations/2025-04-community-office-hours/presentation.yaml
+  generated_path: presentations/2025-04-community-office-hours/generated.yaml
   year: 2025
   title: Community Office Hours
   subtitle: April 2025

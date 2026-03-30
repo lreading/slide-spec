@@ -36,7 +36,7 @@ async function assertSparseSlide(page: Page, slideNumber: number): Promise<void>
     case 'progress-timeline':
       await expect(page.getByRole('heading', { name: 'Roadmap' })).toBeVisible()
       await expect(page.locator('.progress-timeline__item')).toHaveCount(4)
-      await expect(page.locator('.card-eyebrow')).toHaveCount(0)
+      await expect(page.locator('.card-eyebrow')).toHaveCount(1)
       await expect(page.locator('.card-title')).toHaveCount(0)
       await expect(page.locator('.footer-link')).toHaveCount(0)
       break

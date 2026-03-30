@@ -1,4 +1,4 @@
-import { readdir, readFile } from 'node:fs/promises'
+import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import { parse } from 'yaml'
@@ -18,9 +18,10 @@ class ContentValidationRunner {
     this.validator.validatePresentationIndexDocument(indexDocument)
 
     for (const entry of indexDocument.presentations) {
-      const presentationRoot = resolve(this.contentRoot, 'presentations', entry.id)
-      const presentationDocument = await this.readYaml(resolve(presentationRoot, 'presentation.yaml'))
-      const generatedDocument = await this.readYaml(resolve(presentationRoot, 'generated.yaml'))
+      const presentationDocument = await this.readYaml(resolve(this.contentRoot, entry.presentation_path))
+      const generatedDocument = await this.readYaml(
+        resolve(this.contentRoot, entry.generated_path ?? `presentations/${entry.id}/generated.yaml`),
+      )
 
       this.validator.validatePresentationDocument(presentationDocument)
       this.validator.validateGeneratedDocument(generatedDocument)
@@ -30,25 +31,6 @@ class ContentValidationRunner {
         generatedDocument.generated,
       )
     }
-
-    const presentationDirectories = await this.listPresentationDirectories()
-    const indexedIds = new Set(indexDocument.presentations.map((entry) => entry.id))
-    presentationDirectories.forEach((directory) => {
-      if (!indexedIds.has(directory)) {
-        throw new Error(`Presentation directory "${directory}" is missing from content/presentations/index.yaml.`)
-      }
-    })
-  }
-
-  private async listPresentationDirectories(): Promise<string[]> {
-    const entries = await readdir(resolve(this.contentRoot, 'presentations'), {
-      withFileTypes: true,
-    })
-
-    return entries
-      .filter((entry) => entry.isDirectory())
-      .map((entry) => entry.name)
-      .sort((left, right) => left.localeCompare(right))
   }
 
   private async readYaml(path: string): Promise<unknown> {
