@@ -168,7 +168,7 @@ describe('PresentationsView', () => {
     expect(labels).toEqual(['Previous', '1', '2', '…', '517', 'Next'])
   })
 
-  it('omits configurable chrome when presentations-page labels are missing', () => {
+  it('falls back to default chrome when presentations-page labels are missing', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
       home_intro: 'Intro',
@@ -215,8 +215,10 @@ describe('PresentationsView', () => {
       },
     })
 
-    expect(wrapper.find('.presentations-eyebrow').exists()).toBe(false)
-    expect(wrapper.find('.presentations-field__label').exists()).toBe(false)
-    expect(wrapper.find('.presentations-link').text()).toBe('')
+    expect(wrapper.find('.presentations-eyebrow').text()).toBe('All presentations')
+    expect(wrapper.findAll('.presentations-field__label').map((node) => node.text())).toEqual(['Search', 'Year'])
+    expect(wrapper.find('.presentations-input').attributes('placeholder')).toBe('Search presentations...')
+    expect(wrapper.find('.presentations-select option').text()).toBe('All years')
+    expect(wrapper.find('.presentations-link').text()).toBe('Open presentation')
   })
 })

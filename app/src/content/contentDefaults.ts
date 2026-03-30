@@ -52,6 +52,24 @@ export const resolveAppFooterContent = (
 
 const DEFAULT_ATTRIBUTION_LABEL = 'Powered by slide-spec'
 const DEFAULT_ATTRIBUTION_URL = 'https://github.com/lreading/slide-spec'
+const DEFAULT_PRESENTATIONS_PAGE_CONTENT: Required<PresentationsPageContent> = {
+  title: 'All presentations',
+  search_label: 'Search',
+  search_placeholder: 'Search presentations...',
+  year_label: 'Year',
+  all_years_label: 'All years',
+  open_presentation_label: 'Open presentation',
+  empty_title: 'No matching presentations',
+  empty_message: 'Try a different year or a broader search term.',
+  previous_page_label: 'Previous',
+  next_page_label: 'Next',
+  page_label: 'Page',
+  page_of_label: 'of',
+  showing_label: 'Showing',
+  total_label: 'total',
+  presentation_singular_label: 'presentation',
+  presentation_plural_label: 'presentations',
+}
 
 export const resolveAttributionContent = (
   site: SiteContent,
@@ -83,22 +101,27 @@ export const resolvePresentationToolbarContent = (
 export const resolvePresentationsPageContent = (
   site: SiteContent,
 ): PresentationsPageContent => ({
-  title: trimOrUndefined(site.presentations_page?.title),
-  search_label: trimOrUndefined(site.presentations_page?.search_label),
-  search_placeholder: trimOrUndefined(site.presentations_page?.search_placeholder),
-  year_label: trimOrUndefined(site.presentations_page?.year_label),
-  all_years_label: trimOrUndefined(site.presentations_page?.all_years_label),
-  open_presentation_label: trimOrUndefined(site.presentations_page?.open_presentation_label),
-  empty_title: trimOrUndefined(site.presentations_page?.empty_title),
-  empty_message: trimOrUndefined(site.presentations_page?.empty_message),
-  previous_page_label: trimOrUndefined(site.presentations_page?.previous_page_label),
-  next_page_label: trimOrUndefined(site.presentations_page?.next_page_label),
-  page_label: trimOrUndefined(site.presentations_page?.page_label),
-  page_of_label: trimOrUndefined(site.presentations_page?.page_of_label),
-  showing_label: trimOrUndefined(site.presentations_page?.showing_label),
-  total_label: trimOrUndefined(site.presentations_page?.total_label),
-  presentation_singular_label: trimOrUndefined(site.presentations_page?.presentation_singular_label),
-  presentation_plural_label: trimOrUndefined(site.presentations_page?.presentation_plural_label),
+  title: trimOrUndefined(site.presentations_page?.title) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.title,
+  search_label: trimOrUndefined(site.presentations_page?.search_label) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.search_label,
+  search_placeholder: trimOrUndefined(site.presentations_page?.search_placeholder)
+    ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.search_placeholder,
+  year_label: trimOrUndefined(site.presentations_page?.year_label) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.year_label,
+  all_years_label: trimOrUndefined(site.presentations_page?.all_years_label) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.all_years_label,
+  open_presentation_label: trimOrUndefined(site.presentations_page?.open_presentation_label)
+    ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.open_presentation_label,
+  empty_title: trimOrUndefined(site.presentations_page?.empty_title) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.empty_title,
+  empty_message: trimOrUndefined(site.presentations_page?.empty_message) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.empty_message,
+  previous_page_label: trimOrUndefined(site.presentations_page?.previous_page_label)
+    ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.previous_page_label,
+  next_page_label: trimOrUndefined(site.presentations_page?.next_page_label) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.next_page_label,
+  page_label: trimOrUndefined(site.presentations_page?.page_label) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.page_label,
+  page_of_label: trimOrUndefined(site.presentations_page?.page_of_label) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.page_of_label,
+  showing_label: trimOrUndefined(site.presentations_page?.showing_label) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.showing_label,
+  total_label: trimOrUndefined(site.presentations_page?.total_label) ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.total_label,
+  presentation_singular_label: trimOrUndefined(site.presentations_page?.presentation_singular_label)
+    ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.presentation_singular_label,
+  presentation_plural_label: trimOrUndefined(site.presentations_page?.presentation_plural_label)
+    ?? DEFAULT_PRESENTATIONS_PAGE_CONTENT.presentation_plural_label,
 })
 
 export const resolveHomeHeroContent = (

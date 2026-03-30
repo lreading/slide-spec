@@ -1,5 +1,5 @@
 site:
-  title: Slide Spec Updates
+  title: Slide Spec
   deployment_url: https://www.slide-spec.dev
   sitemap_enabled: true
   mascot:
@@ -18,26 +18,26 @@ site:
   home_hero:
     title_primary: Slide
     title_accent: Spec
-    subtitle: Project Updates
-  home_intro: Community updates for Slide Spec — a tool for writing beautiful, hostable presentations in YAML.
-  home_cta_label: View latest update
-  presentations_cta_label: View all updates
+    subtitle: Create beautiful slides from YAML
+  home_intro: Slide Spec turns structured YAML into static slide decks you can host anywhere. Keep presentations in the same repo as your code, review them in PRs, and skip proprietary authoring tools.
+  home_cta_label: See Slide Spec in action
+  presentations_cta_label: Browse the showcase
   navigation:
     brand_title: Slide Spec
     home_label: Home
-    presentations_label: Updates
-    latest_presentation_label: Latest Update
+    presentations_label: Showcase
+    latest_presentation_label: Featured deck
     toggle_label: Toggle navigation
   links:
     repository:
       label: GitHub
       url: https://github.com/lreading/slide-spec
-      eyebrow: Source Code
+      eyebrow: Open Source
     docs:
       label: Documentation
       url: https://docs.slide-spec.dev
-      eyebrow: Documentation
+      eyebrow: Get Started
     community:
       label: OpenSSF Best Practices
       url: https://www.bestpractices.dev/projects/10773
-      eyebrow: Security & Quality
+      eyebrow: Security and quality

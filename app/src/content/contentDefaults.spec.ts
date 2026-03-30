@@ -63,7 +63,7 @@ describe('contentDefaults', () => {
     expect(resolvePresentationChromeLabel(site)).toBe('Threat Dragon')
   })
 
-  it('returns undefined for blank optional site content instead of using defaults', () => {
+  it('falls back to presentations-page defaults when page copy is blank', () => {
     const blankSite = {
       ...site,
       navigation: {
@@ -122,7 +122,24 @@ describe('contentDefaults', () => {
       url: 'https://github.com/lreading/slide-spec',
     })
     expect(resolvePresentationToolbarContent(blankSite).presentation_mode_label).toBeUndefined()
-    expect(resolvePresentationsPageContent(blankSite).title).toBeUndefined()
+    expect(resolvePresentationsPageContent(blankSite)).toEqual({
+      title: 'All presentations',
+      search_label: 'Search',
+      search_placeholder: 'Search presentations...',
+      year_label: 'Year',
+      all_years_label: 'All years',
+      open_presentation_label: 'Open presentation',
+      empty_title: 'No matching presentations',
+      empty_message: 'Try a different year or a broader search term.',
+      previous_page_label: 'Previous',
+      next_page_label: 'Next',
+      page_label: 'Page',
+      page_of_label: 'of',
+      showing_label: 'Showing',
+      total_label: 'total',
+      presentation_singular_label: 'presentation',
+      presentation_plural_label: 'presentations',
+    })
     expect(resolveHomeHeroContent(blankSite).title_primary).toBeUndefined()
     expect(resolvePresentationChromeLabel(blankSite)).toBeUndefined()
   })
