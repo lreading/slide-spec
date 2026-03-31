@@ -35,7 +35,7 @@ npx @slide-spec/cli init
 npx @slide-spec/cli serve
 ```
 
-Open the URL printed in your terminal. You should have a working deck in under two minutes.
+Open the URL printed in your terminal. If `5173` is busy, `serve` picks another free port. You should have a working deck in under two minutes.
 
 From there, edit the YAML under `content/`, then validate and build:
 

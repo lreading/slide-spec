@@ -635,7 +635,7 @@ export class CliCommandRunner {
           '  [project-root]          Optional. Positional presentation project root',
           '  --project-root <path>   Optional. Named presentation project root',
           '  --host <host>            Optional. Host interface to bind to. Defaults to 127.0.0.1',
-          '  --port <port>            Optional. Port to serve on. Defaults to 5173',
+          '  --port <port>            Optional. Port to serve on. Defaults to 5173; if omitted and busy, another free port is used',
           '  --open                   Optional. Open the browser automatically',
           '',
           'Examples:',

@@ -59,6 +59,9 @@ interface TdCliApplicationServiceOptions {
 }
 
 export class TdCliApplicationService implements TdCliService {
+  private static readonly defaultServeHost = '127.0.0.1'
+  private static readonly defaultServePort = 5173
+
   private readonly defaultProjectRoot: string
   private readonly contentConfigLoader: ContentConfigLoader
   private readonly dataSourceResolver: DataSourceResolver
@@ -262,10 +265,23 @@ export class TdCliApplicationService implements TdCliService {
 
   public async serveSite(input: ServeSiteInput): Promise<ServeSiteResult> {
     const paths = this.getPaths(input.projectRoot)
-    const host = input.host ?? '127.0.0.1'
-    const port = input.port ?? 5173
+    const host = input.host ?? TdCliApplicationService.defaultServeHost
+    const preferredPort = input.port ?? TdCliApplicationService.defaultServePort
+    await this.contentValidator.validate(paths)
     await this.siteBuilder.build(paths)
-    await this.staticSiteServer.start(paths.getDistPath(), host, port)
+
+    let port: number
+
+    try {
+      port = await this.staticSiteServer.start(paths.getDistPath(), host, preferredPort)
+    } catch (error) {
+      if (input.port !== undefined || !this.isAddressInUseError(error)) {
+        throw error
+      }
+
+      port = await this.staticSiteServer.start(paths.getDistPath(), host, 0)
+    }
+
     const url = `http://${host}:${port}/`
 
     if (input.open) {
@@ -289,5 +305,9 @@ export class TdCliApplicationService implements TdCliService {
 
   private getPaths(projectRoot?: string): FileSystemPaths {
     return new FileSystemPaths(projectRoot ?? this.defaultProjectRoot)
+  }
+
+  private isAddressInUseError(error: unknown): error is NodeJS.ErrnoException {
+    return error instanceof Error && 'code' in error && error.code === 'EADDRINUSE'
   }
 }

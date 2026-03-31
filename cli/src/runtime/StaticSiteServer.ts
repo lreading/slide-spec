@@ -1,6 +1,7 @@
 import { createReadStream } from 'node:fs'
 import { access, readFile } from 'node:fs/promises'
 import { createServer, type IncomingMessage, type Server, type ServerResponse } from 'node:http'
+import type { AddressInfo } from 'node:net'
 import { extname, join, normalize, resolve } from 'node:path'
 
 const mimeTypes: Record<string, string> = {
@@ -25,13 +26,15 @@ export class StaticSiteServer {
     private readonly createServerFactory: CreateServerFactory = createServer,
   ) {}
 
-  public async start(root: string, host: string, port: number): Promise<void> {
+  public async start(root: string, host: string, port: number): Promise<number> {
     this.server = this.createServerFactory(this.createRequestHandler(root))
 
     await new Promise<void>((resolvePromise, reject) => {
       this.server?.once('error', reject)
       this.server?.listen(port, host, () => resolvePromise())
     })
+
+    return this.getBoundPort()
   }
 
   public async close(): Promise<void> {
@@ -52,6 +55,16 @@ export class StaticSiteServer {
     const normalizedPath = normalize(requestPath).replace(/^(\.\.[/\\])+/, '')
     const relativePath = normalizedPath === '/' ? 'index.html' : normalizedPath.replace(/^\//, '')
     return join(root, relativePath)
+  }
+
+  private getBoundPort(): number {
+    const address = this.server?.address()
+
+    if (!address || typeof address === 'string') {
+      throw new Error('Static site server did not expose a TCP address.')
+    }
+
+    return (address as AddressInfo).port
   }
 
   private createRequestHandler(root: string) {

@@ -1,4 +1,5 @@
 import { mkdtemp, rm, writeFile } from 'node:fs/promises'
+import type { AddressInfo } from 'node:net'
 import { tmpdir } from 'node:os'
 import { resolve } from 'node:path'
 import { Writable } from 'node:stream'
@@ -57,6 +58,7 @@ class ResponseCapture extends Writable {
 
 interface ServerHarness {
   handler?: (request: IncomingMessage, response: ServerResponse) => Promise<void>
+  address?: AddressInfo
 }
 
 function createServerDouble(harness: ServerHarness): Server {
@@ -70,6 +72,7 @@ function createServerDouble(harness: ServerHarness): Server {
       callback?.()
       return createServerDouble(harness)
     },
+    address: () => harness.address ?? null,
   } as unknown as Server
 }
 
@@ -105,10 +108,15 @@ describe('StaticSiteServer', () => {
     const harness: ServerHarness = {}
     const server = new StaticSiteServer((listener) => {
       harness.handler = listener
+      harness.address = {
+        address: '127.0.0.1',
+        family: 'IPv4',
+        port: 4173,
+      }
       return createServerDouble(harness)
     })
 
-    await server.start(root, '127.0.0.1', 4173)
+    await expect(server.start(root, '127.0.0.1', 4173)).resolves.toBe(4173)
 
     const homeResponse = await sendRequest(harness.handler as NonNullable<ServerHarness['handler']>, '/')
     const assetResponse = await sendRequest(harness.handler as NonNullable<ServerHarness['handler']>, '/app.css')
