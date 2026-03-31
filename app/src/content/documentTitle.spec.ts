@@ -1,11 +1,13 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import { ref } from 'vue'
 import type { Router } from 'vue-router'
 
-import { contentRepository } from './ContentRepository'
+import { contentRepository, rawContentFiles } from './ContentRepository'
 import { installDocumentTitleSync, resolveDocumentTitle } from './documentTitle'
 
 describe('resolveDocumentTitle', () => {
   afterEach(() => {
+    contentRepository.replaceFiles(rawContentFiles)
     vi.restoreAllMocks()
   })
 
@@ -64,6 +66,46 @@ describe('resolveDocumentTitle', () => {
 
     expect(afterEach).toHaveBeenCalledOnce()
     expect(document.title).toBe('All presentations | Threat Dragon Quarterly Updates')
+  })
+
+  it('updates document.title when live content changes and the router has a current route', async () => {
+    const router = {
+      afterEach: vi.fn(),
+      currentRoute: ref({
+        name: 'home',
+        params: {},
+      }),
+    }
+
+    installDocumentTitleSync(router as unknown as Router)
+
+    const sitePath = Object.keys(rawContentFiles).find((path) => path.endsWith('site.yaml'))
+    expect(sitePath).toBeDefined()
+
+    contentRepository.replaceFiles({
+      ...rawContentFiles,
+      [sitePath as string]: `
+site:
+  title: Updated Threat Dragon Title
+  home_intro: Intro
+  home_cta_label: Latest
+  presentations_cta_label: Presentations
+  links:
+    repository:
+      label: Repository
+      url: https://example.com/repository
+    docs:
+      label: Docs
+      url: https://example.com/docs
+    community:
+      label: Community
+      url: https://example.com/community
+`,
+    })
+
+    await Promise.resolve()
+
+    expect(document.title).toBe('Updated Threat Dragon Title')
   })
 
   it('falls back to the default presentations title when the presentations-page title is not configured', () => {

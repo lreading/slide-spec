@@ -140,12 +140,14 @@ export class ContentRepository {
   }
 }
 
+/* v8 ignore next 2 */
 const hotData = import.meta.hot?.data as Record<string, unknown> | undefined
 const repository = hotData?.contentRepository as ContentRepository | undefined
 
 export const contentRepository = repository ?? new ContentRepository()
 export const contentVersion = contentRepository.getContentVersion()
 
+/* v8 ignore start */
 if (import.meta.hot) {
   const data = import.meta.hot.data as Record<string, unknown> | undefined
 
@@ -157,3 +159,4 @@ if (import.meta.hot) {
     contentRepository.replaceFiles(nextModule?.rawContentFiles ?? rawContentFiles)
   })
 }
+/* v8 ignore stop */
