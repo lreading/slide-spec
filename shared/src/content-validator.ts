@@ -93,6 +93,9 @@ function assertNavigationContent(value: unknown, path: string): void {
   assertOptionalString(value.home_label, `${path}.home_label`)
   assertOptionalString(value.presentations_label, `${path}.presentations_label`)
   assertOptionalString(value.latest_presentation_label, `${path}.latest_presentation_label`)
+  if (value.docs_enabled !== undefined) {
+    assertBoolean(value.docs_enabled, `${path}.docs_enabled`)
+  }
   assertOptionalString(value.toggle_label, `${path}.toggle_label`)
 }
 

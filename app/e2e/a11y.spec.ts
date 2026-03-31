@@ -33,18 +33,23 @@ test('has no automated accessibility violations in presentation mode', async ({ 
 test('supports keyboard focus on the main home-page navigation path', async ({ page }) => {
   await page.goto('/')
 
-  await page.keyboard.press('Tab')
-  await expect(page.getByRole('link', { name: 'Threat Dragon Updates' })).toBeFocused()
+  const focusedLinks: Array<{ text: string; href: string | null }> = []
 
-  await page.keyboard.press('Tab')
-  await expect(page.getByRole('link', { name: 'Home', exact: true })).toBeFocused()
+  for (let index = 0; index < 6; index += 1) {
+    await page.keyboard.press('Tab')
+    const focused = page.locator(':focus')
+    focusedLinks.push({
+      text: (await focused.textContent())?.trim() ?? '',
+      href: await focused.getAttribute('href'),
+    })
+  }
 
-  await page.keyboard.press('Tab')
-  await expect(page.getByRole('link', { name: 'Presentations', exact: true })).toBeFocused()
-
-  await page.keyboard.press('Tab')
-  await expect(page.getByRole('link', { name: 'Latest Presentation', exact: true })).toBeFocused()
-
-  await page.keyboard.press('Tab')
-  await expect(page.getByRole('link', { name: 'View latest presentation' })).toBeFocused()
+  expect(focusedLinks).toEqual([
+    { text: 'Threat Dragon Updates', href: '/' },
+    { text: 'Home', href: '/' },
+    { text: 'Presentations', href: '/presentations' },
+    { text: 'Latest Presentation', href: '/presentations/2026-q1' },
+    { text: 'Threat Dragon Docs', href: 'https://www.threatdragon.com/docs' },
+    { text: 'View latest presentation', href: '/presentations/2026-q1' },
+  ])
 })

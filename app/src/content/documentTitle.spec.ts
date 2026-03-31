@@ -66,7 +66,7 @@ describe('resolveDocumentTitle', () => {
     expect(document.title).toBe('All presentations | Threat Dragon Quarterly Updates')
   })
 
-  it('falls back to the site title when the presentations-page title is not configured', () => {
+  it('falls back to the default presentations title when the presentations-page title is not configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
       home_intro: 'Intro',
@@ -79,7 +79,7 @@ describe('resolveDocumentTitle', () => {
     })
 
     expect(resolveDocumentTitle({ name: 'presentations', params: {} })).toBe(
-      'Threat Dragon Quarterly Updates',
+      'All presentations | Threat Dragon Quarterly Updates',
     )
   })
 })

@@ -12,6 +12,7 @@ const mobileOpen = ref(false)
 
 const featuredPresentation = computed(() => presentations.find((entry) => entry.featured) ?? presentations[0])
 const navigationContent = computed(() => resolveNavigationContent(site))
+const docsLink = computed(() => site.links.docs)
 const presentationRoute = computed(() =>
   route.name === 'presentation' && typeof route.params.presentationId === 'string'
     ? { name: 'presentation' as const, params: { presentationId: route.params.presentationId } }
@@ -74,6 +75,15 @@ watch(
         >
           {{ navigationContent.latest_presentation_label }}
         </RouterLink>
+        <a
+          v-if="navigationContent.docs_enabled && docsLink"
+          :href="docsLink.url"
+          class="app-nav__link"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {{ docsLink.label }}
+        </a>
       </nav>
     </div>
   </header>

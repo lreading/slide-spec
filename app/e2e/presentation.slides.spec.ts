@@ -211,7 +211,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         'href',
         site.links.repository.url,
       )
-      await expect(page.getByRole('link', { name: site.links.docs.label })).toHaveAttribute(
+      await expect(page.locator(`a[href="${site.links.docs.url}"]`).filter({ hasText: site.links.docs.label }).last()).toHaveAttribute(
         'href',
         site.links.docs.url,
       )
