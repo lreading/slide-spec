@@ -27,6 +27,7 @@ site:
     home_label: Home
     presentations_label: Showcase
     latest_presentation_label: Featured deck
+    docs_enabled: true
     toggle_label: Toggle navigation
   links:
     repository:

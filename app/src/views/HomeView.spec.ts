@@ -29,6 +29,7 @@ describe('HomeView', () => {
     expect(wrapper.find('.project-badge-pill .fa-flask').exists()).toBe(true)
     expect(text).toContain('View latest presentation')
     expect(text).toContain('View all presentations')
+    expect(text).toContain('Threat Dragon Docs')
     expect(text).toContain('github.com/OWASP/threat-dragon')
   })
 
@@ -54,10 +55,13 @@ describe('HomeView', () => {
       },
     })
 
-    expect(wrapper.findAllComponents(RouterLinkStub)[0].props('to')).toEqual({
+    const links = wrapper.findAllComponents(RouterLinkStub)
+
+    expect(links[0].props('to')).toEqual({
       name: 'presentation',
       params: { presentationId: '2026-q3' },
     })
+    expect(wrapper.get('a[href="https://www.threatdragon.com/docs"]').text()).toBe('Threat Dragon Docs')
   })
 
   it('omits home hero headings when hero config is missing', () => {
@@ -102,6 +106,7 @@ describe('HomeView', () => {
 
     expect(links).toHaveLength(1)
     expect(links[0].props('to')).toEqual({ name: 'presentations' })
+    expect(wrapper.get('a[href="https://www.threatdragon.com/docs"]').text()).toBe('Threat Dragon Docs')
   })
 
   it('renders accent-only hero content and omits optional intro and mascot', () => {

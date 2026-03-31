@@ -168,6 +168,35 @@ describe('PresentationsView', () => {
     expect(labels).toEqual(['Previous', '1', '2', '…', '517', 'Next'])
   })
 
+  it('supports direct page-number navigation and returning with the previous button', async () => {
+    vi.spyOn(contentRepository, 'listPresentations').mockReturnValue(
+      Array.from({ length: 13 }, (_, index) => ({
+        id: `2026-w${index + 1}`,
+        year: 2026,
+        title: `Weekly Update ${index + 1}`,
+        subtitle: `Week ${index + 1}`,
+        summary: 'Archive pagination test',
+        presentation_path: `presentations/2026-w${index + 1}/presentation.yaml`,
+        published: true,
+        featured: false,
+      })),
+    )
+
+    const wrapper = mount(PresentationsView, {
+      global: {
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    await wrapper.get('.presentations-page-button:nth-last-child(2)').trigger('click')
+    expect(normalizeText(wrapper.text())).toContain('Page 2 of 2 · Showing 13-13')
+
+    await wrapper.get('.presentations-page-button:first-child').trigger('click')
+    expect(normalizeText(wrapper.text())).toContain('Page 1 of 2 · Showing 1-12')
+  })
+
   it('falls back to default chrome when presentations-page labels are missing', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Updates',
