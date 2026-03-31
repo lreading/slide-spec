@@ -174,4 +174,34 @@ generated:
 
     expect(() => repository.listPresentations()).toThrow('Missing content file "presentations/index.yaml".')
   })
+
+  it('can replace content files and increment the content version', () => {
+    const repository = new ContentRepository(files)
+
+    expect(repository.getContentVersion().value).toBe(0)
+
+    repository.replaceFiles({
+      ...files,
+      '/virtual/site.yaml': `
+site:
+  title: Updated Site
+  home_intro: Intro
+  home_cta_label: Open
+  presentations_cta_label: Presentations
+  links:
+    repository:
+      label: Repository
+      url: https://example.com/repository
+    docs:
+      label: Docs
+      url: https://example.com/docs
+    community:
+      label: Community
+      url: https://example.com/community
+`,
+    })
+
+    expect(repository.getContentVersion().value).toBe(1)
+    expect(repository.getSiteContent().title).toBe('Updated Site')
+  })
 })

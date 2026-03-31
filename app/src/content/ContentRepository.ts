@@ -1,3 +1,4 @@
+import { readonly, shallowRef } from 'vue'
 import { parse } from 'yaml'
 
 import { ContentValidator } from './ContentValidator'
@@ -69,13 +70,16 @@ const rawContentFiles = Object.fromEntries(
   ).map(([path, source]) => [path, String(source)]),
 )
 
+export { rawContentFiles }
+
 export class ContentRepository {
-  private readonly files: Record<string, string>
+  private readonly files = shallowRef<Record<string, string>>({})
   private readonly validator: ContentValidator
+  private readonly version = shallowRef(0)
 
   public constructor(files: Record<string, string> = rawContentFiles) {
-    this.files = files
     this.validator = new ContentValidator()
+    this.files.value = files
   }
 
   public getSiteContent(): SiteContent {
@@ -116,8 +120,17 @@ export class ContentRepository {
     }
   }
 
+  public replaceFiles(files: Record<string, string>): void {
+    this.files.value = files
+    this.version.value += 1
+  }
+
+  public getContentVersion() {
+    return readonly(this.version)
+  }
+
   private readDocument(suffix: string): unknown {
-    const entry = Object.entries(this.files).find(([path]) => path.endsWith(suffix))
+    const entry = Object.entries(this.files.value).find(([path]) => path.endsWith(suffix))
 
     if (!entry) {
       throw new Error(`Missing content file "${suffix}".`)
@@ -127,4 +140,23 @@ export class ContentRepository {
   }
 }
 
-export const contentRepository = new ContentRepository()
+/* v8 ignore next 2 */
+const hotData = import.meta.hot?.data as Record<string, unknown> | undefined
+const repository = hotData?.contentRepository as ContentRepository | undefined
+
+export const contentRepository = repository ?? new ContentRepository()
+export const contentVersion = contentRepository.getContentVersion()
+
+/* v8 ignore start */
+if (import.meta.hot) {
+  const data = import.meta.hot.data as Record<string, unknown> | undefined
+
+  if (data) {
+    data.contentRepository = contentRepository
+  }
+
+  import.meta.hot.accept((nextModule) => {
+    contentRepository.replaceFiles(nextModule?.rawContentFiles ?? rawContentFiles)
+  })
+}
+/* v8 ignore stop */

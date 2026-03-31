@@ -1,4 +1,4 @@
-import { cp, mkdir, rm } from 'node:fs/promises'
+import { cp, mkdir, rm, symlink } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import { CliPackagePaths } from './CliPackagePaths'
@@ -11,10 +11,14 @@ export interface PreparedRuntimeWorkspace {
   cleanup(): Promise<void>
 }
 
+interface PrepareWorkspaceOptions {
+  liveContent?: boolean
+}
+
 export class RuntimeWorkspace {
   public constructor(private readonly packagePaths: CliPackagePaths = new CliPackagePaths()) {}
 
-  public async prepare(paths: FileSystemPaths): Promise<PreparedRuntimeWorkspace> {
+  public async prepare(paths: FileSystemPaths, options: PrepareWorkspaceOptions = {}): Promise<PreparedRuntimeWorkspace> {
     const workspaceRoot = resolve(
       this.packagePaths.getWorkspaceBaseRoot(),
       `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`,
@@ -25,7 +29,11 @@ export class RuntimeWorkspace {
     await mkdir(workspaceRoot, { recursive: true })
     await cp(resolve(templateRoot, 'app'), resolve(workspaceRoot, 'app'), { recursive: true })
     await cp(resolve(templateRoot, 'shared'), resolve(workspaceRoot, 'shared'), { recursive: true })
-    await cp(paths.getContentRoot(), resolve(workspaceRoot, 'content'), { recursive: true })
+    if (options.liveContent) {
+      await symlink(paths.getContentRoot(), resolve(workspaceRoot, 'content'), 'junction')
+    } else {
+      await cp(paths.getContentRoot(), resolve(workspaceRoot, 'content'), { recursive: true })
+    }
 
     return {
       root: workspaceRoot,

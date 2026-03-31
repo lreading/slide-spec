@@ -223,7 +223,7 @@ class StubSiteBuilder {
   }
 }
 
-class StubStaticSiteServer {
+class StubViteSiteDevServer {
   public readonly starts: Array<{ root: string; host: string; port: number }> = []
   public readonly startResults: number[]
   public readonly startErrors: Error[]
@@ -233,8 +233,12 @@ class StubStaticSiteServer {
     this.startErrors = [...(options.startErrors ?? [])]
   }
 
-  public async start(root: string, host: string, port: number): Promise<number> {
-    this.starts.push({ root, host, port })
+  public async start(
+    paths: { getProjectRoot(): string },
+    host: string,
+    port: number,
+  ): Promise<number> {
+    this.starts.push({ root: paths.getProjectRoot(), host, port })
 
     const nextError = this.startErrors.shift()
 
@@ -587,7 +591,7 @@ describe('TdCliApplicationService', () => {
 
   it('builds to dist, serves built assets, and validates content directly', async () => {
     const siteBuilder = new StubSiteBuilder()
-    const staticSiteServer = new StubStaticSiteServer()
+    const devSiteServer = new StubViteSiteDevServer()
     const contentValidator = new StubContentValidator()
     const browserOpener = new StubBrowserOpener()
     const service = new TdCliApplicationService({
@@ -599,7 +603,7 @@ describe('TdCliApplicationService', () => {
       generatedDataStore: new StubGeneratedDataStore() as never,
       gitHubClientFactory: (_token?: string): GitHubClient => new StubGitHubClient(),
       siteBuilder: siteBuilder as never,
-      staticSiteServer: staticSiteServer as never,
+      devSiteServer: devSiteServer as never,
       contentValidator: contentValidator as never,
       browserOpener: browserOpener as never,
     })
@@ -621,11 +625,10 @@ describe('TdCliApplicationService', () => {
 
     expect(siteBuilder.builds).toEqual([
       '/repo',
-      '/repo',
     ])
-    expect(staticSiteServer.starts).toEqual([
+    expect(devSiteServer.starts).toEqual([
       {
-        root: '/repo/dist',
+        root: '/repo',
         host: '0.0.0.0',
         port: 4173,
       },
@@ -638,16 +641,14 @@ describe('TdCliApplicationService', () => {
   })
 
   it('falls back to an available port when the default serve port is busy', async () => {
-    const siteBuilder = new StubSiteBuilder()
     const contentValidator = new StubContentValidator()
-    const staticSiteServer = new StubStaticSiteServer({
+    const devSiteServer = new StubViteSiteDevServer({
       startErrors: [Object.assign(new Error('Port already in use'), { code: 'EADDRINUSE' })],
       startResults: [58123],
     })
     const service = new TdCliApplicationService({
       projectRoot: '/repo',
-      siteBuilder: siteBuilder as never,
-      staticSiteServer: staticSiteServer as never,
+      devSiteServer: devSiteServer as never,
       contentValidator: contentValidator as never,
     })
 
@@ -655,16 +656,15 @@ describe('TdCliApplicationService', () => {
       url: 'http://127.0.0.1:58123/',
     })
 
-    expect(siteBuilder.builds).toEqual(['/repo'])
     expect(contentValidator.validates).toEqual(['/repo'])
-    expect(staticSiteServer.starts).toEqual([
+    expect(devSiteServer.starts).toEqual([
       {
-        root: '/repo/dist',
+        root: '/repo',
         host: '127.0.0.1',
         port: 5173,
       },
       {
-        root: '/repo/dist',
+        root: '/repo',
         host: '127.0.0.1',
         port: 0,
       },
@@ -672,26 +672,23 @@ describe('TdCliApplicationService', () => {
   })
 
   it('does not retry when an explicit serve port is busy', async () => {
-    const siteBuilder = new StubSiteBuilder()
     const contentValidator = new StubContentValidator()
     const busyPortError = Object.assign(new Error('Port already in use'), { code: 'EADDRINUSE' })
-    const staticSiteServer = new StubStaticSiteServer({
+    const devSiteServer = new StubViteSiteDevServer({
       startErrors: [busyPortError],
     })
     const service = new TdCliApplicationService({
       projectRoot: '/repo',
-      siteBuilder: siteBuilder as never,
-      staticSiteServer: staticSiteServer as never,
+      devSiteServer: devSiteServer as never,
       contentValidator: contentValidator as never,
     })
 
     await expect(service.serveSite({ port: 4173 })).rejects.toBe(busyPortError)
 
-    expect(siteBuilder.builds).toEqual(['/repo'])
     expect(contentValidator.validates).toEqual(['/repo'])
-    expect(staticSiteServer.starts).toEqual([
+    expect(devSiteServer.starts).toEqual([
       {
-        root: '/repo/dist',
+        root: '/repo',
         host: '127.0.0.1',
         port: 4173,
       },
@@ -699,13 +696,11 @@ describe('TdCliApplicationService', () => {
   })
 
   it('validates content before serving', async () => {
-    const siteBuilder = new StubSiteBuilder()
-    const staticSiteServer = new StubStaticSiteServer()
+    const devSiteServer = new StubViteSiteDevServer()
     const contentValidator = new StubContentValidator()
     const service = new TdCliApplicationService({
       projectRoot: '/repo',
-      siteBuilder: siteBuilder as never,
-      staticSiteServer: staticSiteServer as never,
+      devSiteServer: devSiteServer as never,
       contentValidator: contentValidator as never,
     })
 
@@ -714,10 +709,9 @@ describe('TdCliApplicationService', () => {
     })
 
     expect(contentValidator.validates).toEqual(['/repo'])
-    expect(siteBuilder.builds).toEqual(['/repo'])
-    expect(staticSiteServer.starts).toEqual([
+    expect(devSiteServer.starts).toEqual([
       {
-        root: '/repo/dist',
+        root: '/repo',
         host: '127.0.0.1',
         port: 5173,
       },

@@ -42,4 +42,24 @@ describe('RuntimeWorkspace', () => {
     await prepared.cleanup()
     await expect(readFile(resolve(prepared.root, 'content', 'site.yaml'), 'utf8')).rejects.toThrow()
   })
+
+  it('can link the project content for live serve workflows', async () => {
+    const cliRoot = await createRoot('oss-slides-cli-live-')
+    const projectRoot = await createRoot('oss-slides-project-live-')
+    await mkdir(resolve(cliRoot, 'runtime-template', 'app'), { recursive: true })
+    await mkdir(resolve(cliRoot, 'runtime-template', 'shared', 'src'), { recursive: true })
+    await writeFile(resolve(cliRoot, 'runtime-template', 'app', 'index.html'), '<html></html>')
+    await writeFile(resolve(cliRoot, 'runtime-template', 'shared', 'src', 'content.ts'), 'export {}')
+    await mkdir(resolve(projectRoot, 'content'), { recursive: true })
+    await writeFile(resolve(projectRoot, 'content', 'site.yaml'), 'site:\n  title: Before\n')
+
+    const workspace = new RuntimeWorkspace(new CliPackagePaths(cliRoot))
+    const prepared = await workspace.prepare(new FileSystemPaths(projectRoot), { liveContent: true })
+
+    await writeFile(resolve(projectRoot, 'content', 'site.yaml'), 'site:\n  title: After\n')
+
+    await expect(readFile(resolve(prepared.root, 'content', 'site.yaml'), 'utf8')).resolves.toContain('After')
+
+    await prepared.cleanup()
+  })
 })

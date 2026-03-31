@@ -16,6 +16,7 @@ import { ProjectContentValidator } from '../validation/ProjectContentValidator'
 import { BrowserOpener } from '../runtime/BrowserOpener'
 import { StaticSiteServer } from '../runtime/StaticSiteServer'
 import { ViteSiteBuilder } from '../runtime/ViteSiteBuilder'
+import { ViteSiteDevServer } from '../runtime/ViteSiteDevServer'
 import type { CliLogger } from '../logging/CliLogger.types'
 
 import type { TdCliService } from './TdCliService'
@@ -51,6 +52,7 @@ interface TdCliApplicationServiceOptions {
   gitHubClientFactory?: (token?: string) => GitHubClient
   siteBuilder?: ViteSiteBuilder
   staticSiteServer?: StaticSiteServer
+  devSiteServer?: ViteSiteDevServer
   contentValidator?: ProjectContentValidator
   browserOpener?: BrowserOpener
   fileSystem?: FileSystem
@@ -76,6 +78,7 @@ export class TdCliApplicationService implements TdCliService {
   private readonly gitHubClientFactory: (token?: string) => GitHubClient
   private readonly siteBuilder: ViteSiteBuilder
   private readonly staticSiteServer: StaticSiteServer
+  private readonly devSiteServer: ViteSiteDevServer
   private readonly contentValidator: ProjectContentValidator
   private readonly browserOpener: BrowserOpener
   private readonly fileSystem: FileSystem
@@ -101,6 +104,7 @@ export class TdCliApplicationService implements TdCliService {
     }))
     this.siteBuilder = options.siteBuilder ?? new ViteSiteBuilder()
     this.staticSiteServer = options.staticSiteServer ?? new StaticSiteServer()
+    this.devSiteServer = options.devSiteServer ?? new ViteSiteDevServer()
     this.contentValidator = options.contentValidator ?? new ProjectContentValidator()
     this.browserOpener = options.browserOpener ?? new BrowserOpener()
     this.fileSystem = options.fileSystem ?? new NodeFileSystem()
@@ -268,18 +272,17 @@ export class TdCliApplicationService implements TdCliService {
     const host = input.host ?? TdCliApplicationService.defaultServeHost
     const preferredPort = input.port ?? TdCliApplicationService.defaultServePort
     await this.contentValidator.validate(paths)
-    await this.siteBuilder.build(paths)
 
     let port: number
 
     try {
-      port = await this.staticSiteServer.start(paths.getDistPath(), host, preferredPort)
+      port = await this.devSiteServer.start(paths, host, preferredPort)
     } catch (error) {
       if (input.port !== undefined || !this.isAddressInUseError(error)) {
         throw error
       }
 
-      port = await this.staticSiteServer.start(paths.getDistPath(), host, 0)
+      port = await this.devSiteServer.start(paths, host, 0)
     }
 
     const url = `http://${host}:${port}/`

@@ -4,6 +4,7 @@ import { RouterView, useRoute } from 'vue-router'
 
 import AppFooter from './components/AppFooter.vue'
 import AppNav from './components/AppNav.vue'
+import { contentVersion } from './content/ContentRepository'
 
 const route = useRoute()
 const fullscreenActive = ref(false)
@@ -33,7 +34,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="app-shell">
+  <div :key="contentVersion" class="app-shell">
     <AppNav v-if="showChrome" />
     <div class="app-shell__view" :class="{ 'app-shell__view--nav-hidden': !showChrome }">
       <RouterView />

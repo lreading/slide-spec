@@ -1,11 +1,17 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { describe, expect, it, vi } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import App from './App.vue'
+import { contentRepository, rawContentFiles } from './content/ContentRepository'
 import { createAppRouter } from './router'
 
 describe('App', () => {
   const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
+  const sitePath = Object.keys(rawContentFiles).find((path) => path.endsWith('site.yaml'))
+
+  afterEach(() => {
+    contentRepository.replaceFiles(rawContentFiles)
+  })
 
   it('renders the app nav and the routed home view', async () => {
     Object.defineProperty(document, 'fullscreenElement', {
@@ -88,5 +94,50 @@ describe('App', () => {
     wrapper.unmount()
 
     expect(removeEventListener).toHaveBeenCalledWith('fullscreenchange', expect.any(Function))
+  })
+
+  it('re-renders when the content changes', async () => {
+    Object.defineProperty(document, 'fullscreenElement', {
+      configurable: true,
+      value: null,
+    })
+
+    const router = createAppRouter(true)
+    await router.push('/')
+    await router.isReady()
+
+    const wrapper = mount(App, {
+      global: {
+        plugins: [router],
+      },
+    })
+
+    expect(normalizeText(wrapper.text())).toContain('Threat Dragon Updates')
+
+    expect(sitePath).toBeDefined()
+
+    contentRepository.replaceFiles({
+      ...rawContentFiles,
+      [sitePath as string]: `
+site:
+  title: Updated Demo
+  home_intro: Updated intro
+  home_cta_label: Open
+  presentations_cta_label: Presentations
+  links:
+    repository:
+      label: Repository
+      url: https://example.com/repository
+    docs:
+      label: Docs
+      url: https://example.com/docs
+    community:
+      label: Community
+      url: https://example.com/community
+`,
+    })
+    await flushPromises()
+
+    expect(normalizeText(wrapper.text())).toContain('Updated intro')
   })
 })

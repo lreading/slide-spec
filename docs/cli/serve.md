@@ -1,6 +1,6 @@
 # serve
 
-Validates and builds the project, then starts a local preview server.
+Validates the project, then starts a local Vite dev server with hot reload for `content/` changes.
 
 ```bash
 npx @slide-spec/cli serve
