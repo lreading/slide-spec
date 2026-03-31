@@ -35,7 +35,7 @@ npx @slide-spec/cli init
 npx @slide-spec/cli serve
 ```
 
-Open the URL printed in your terminal. You should have a working deck in under two minutes.
+Open the URL printed in your terminal. If `5173` is busy, `serve` picks another free port. You should have a working deck in under two minutes.
 
 From there, edit the YAML under `content/`, then validate and build:
 
@@ -70,7 +70,7 @@ Slide Spec follows [semver](https://semver.org). The CLI is published to npm as 
 
 > ⚠️ **v0 / alpha** - the project is pre-1.0 and minor versions may contain breaking changes without prior deprecation. Pin your version if you need stability.
 
-Tagged commits on `main` trigger the release pipeline. CI runs all quality gates, publishes to npm, and attaches a source tarball to the [GitHub release](https://github.com/lreading/slide-spec/releases).
+Tagged commits on `main` trigger the release pipeline. CI runs all quality gates, publishes to npm, and attaches both a source tarball and a CycloneDX SBOM to the [GitHub release](https://github.com/lreading/slide-spec/releases).
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 

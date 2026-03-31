@@ -64,6 +64,7 @@ Important notes:
 - [Meta index](https://docs.slide-spec.dev/meta/): Index of documentation policies, publishing notes, and support guidance.
 - [Accessibility notes](https://docs.slide-spec.dev/meta/accessibility): Accessibility goals, test coverage, and current expectations for the docs and app.
 - [AI usage notes](https://docs.slide-spec.dev/meta/ai): Guidance for tools consuming these docs, including stable entry points and common pitfalls.
+- [SBOM notes](https://docs.slide-spec.dev/meta/sbom): Release SBOM format, where to find published artifacts, and what repository contents they cover.
 - [Agent assistance policy](https://docs.slide-spec.dev/meta/agent-assistance): How maintainers expect coding agents to work with the repository and generated content.
 - [Supply chain notes](https://docs.slide-spec.dev/meta/supply-chain): Dependency, provenance, and release-process notes relevant to implementation work.
 - [Cloudflare Pages deployment guide](https://docs.slide-spec.dev/meta/cloudflare-pages): Recommended deployment model for static Slide Spec sites built from committed source.

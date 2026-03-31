@@ -224,6 +224,11 @@ export const documentationSections: DocumentationSection[] = [
         description: 'Guidance for tools consuming these docs, including stable entry points and common pitfalls.',
       },
       {
+        path: '/meta/sbom',
+        title: 'SBOM notes',
+        description: 'Release SBOM format, where to find published artifacts, and what repository contents they cover.',
+      },
+      {
         path: '/meta/agent-assistance',
         title: 'Agent assistance policy',
         description: 'How maintainers expect coding agents to work with the repository and generated content.',
