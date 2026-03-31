@@ -97,5 +97,8 @@ describe('ViteSiteBuilder', () => {
     await expect(readFile(resolve(projectRoot, 'dist', 'sitemap.xml'), 'utf8')).resolves.toContain(
       '/presentations/2026-q1',
     )
+    await expect(readFile(resolve(projectRoot, 'dist', 'llms.txt'), 'utf8')).resolves.toContain(
+      '[Featured presentation: Demo (Example)](https://updates.example.com/presentations/2026-q1)',
+    )
   })
 })

@@ -2,6 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://docs.slide-spec.dev/</loc></url>
   <url><loc>https://docs.slide-spec.dev/quickstart</loc></url>
+  <url><loc>https://docs.slide-spec.dev/concepts</loc></url>
   <url><loc>https://docs.slide-spec.dev/schema/</loc></url>
   <url><loc>https://docs.slide-spec.dev/schema/site</loc></url>
   <url><loc>https://docs.slide-spec.dev/schema/presentations-index</loc></url>
@@ -23,8 +24,13 @@
   <url><loc>https://docs.slide-spec.dev/cli/build</loc></url>
   <url><loc>https://docs.slide-spec.dev/cli/serve</loc></url>
   <url><loc>https://docs.slide-spec.dev/cli/validate</loc></url>
+  <url><loc>https://docs.slide-spec.dev/connectors/</loc></url>
   <url><loc>https://docs.slide-spec.dev/connectors/github</loc></url>
   <url><loc>https://docs.slide-spec.dev/examples/</loc></url>
+  <url><loc>https://docs.slide-spec.dev/examples/open-source-update</loc></url>
+  <url><loc>https://docs.slide-spec.dev/examples/product-review</loc></url>
+  <url><loc>https://docs.slide-spec.dev/examples/security-posture</loc></url>
+  <url><loc>https://docs.slide-spec.dev/examples/community-update</loc></url>
   <url><loc>https://docs.slide-spec.dev/examples/tutorial-example</loc></url>
   <url><loc>https://docs.slide-spec.dev/examples/manual-data-example</loc></url>
   <url><loc>https://docs.slide-spec.dev/meta/</loc></url>
@@ -32,4 +38,5 @@
   <url><loc>https://docs.slide-spec.dev/meta/ai</loc></url>
   <url><loc>https://docs.slide-spec.dev/meta/agent-assistance</loc></url>
   <url><loc>https://docs.slide-spec.dev/meta/supply-chain</loc></url>
+  <url><loc>https://docs.slide-spec.dev/meta/cloudflare-pages</loc></url>
 </urlset>

@@ -1,40 +1,7 @@
 import { mkdir, writeFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
-const documentationRoutes = [
-  '/',
-  '/quickstart',
-  '/schema/',
-  '/schema/site',
-  '/schema/presentations-index',
-  '/schema/presentation',
-  '/schema/generated',
-  '/templates/',
-  '/templates/hero',
-  '/templates/agenda',
-  '/templates/section-list-grid',
-  '/templates/timeline',
-  '/templates/progress-timeline',
-  '/templates/people',
-  '/templates/metrics-and-links',
-  '/templates/action-cards',
-  '/templates/closing',
-  '/cli/',
-  '/cli/init',
-  '/cli/fetch',
-  '/cli/build',
-  '/cli/serve',
-  '/cli/validate',
-  '/connectors/github',
-  '/examples/',
-  '/examples/tutorial-example',
-  '/examples/manual-data-example',
-  '/meta/',
-  '/meta/accessibility',
-  '/meta/ai',
-  '/meta/agent-assistance',
-  '/meta/supply-chain',
-]
+import { documentationPaths, documentationSections } from './documentation-manifest'
 
 class DocumentationSiteFileGenerator {
   private readonly docsRoot = process.cwd()
@@ -45,6 +12,7 @@ class DocumentationSiteFileGenerator {
     await mkdir(this.publicRoot, { recursive: true })
     await writeFile(resolve(this.publicRoot, 'robots.txt'), this.buildRobots(siteUrl), 'utf8')
     await writeFile(resolve(this.publicRoot, 'sitemap.xml'), this.buildSitemap(siteUrl), 'utf8')
+    await writeFile(resolve(this.publicRoot, 'llms.txt'), this.buildLlmsTxt(siteUrl), 'utf8')
   }
 
   private resolveSiteUrl(): URL {
@@ -57,11 +25,38 @@ class DocumentationSiteFileGenerator {
   }
 
   private buildSitemap(siteUrl: URL): string {
-    const urlEntries = documentationRoutes
+    const urlEntries = documentationPaths
       .map((route) => `  <url><loc>${this.escapeXml(new URL(route.replace(/^\//, ''), siteUrl).toString())}</loc></url>`)
       .join('\n')
 
     return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urlEntries}\n</urlset>\n`
+  }
+
+  private buildLlmsTxt(siteUrl: URL): string {
+    const lines = [
+      '# Slide Spec Docs',
+      '',
+      '> Canonical documentation for Slide Spec, a YAML-first static site and presentation system. Use these pages for the validated file formats, built-in slide templates, CLI workflow, and worked examples.',
+      '',
+      'Important notes:',
+      '- Validation is strict. Prefer the schema reference over inference from examples.',
+      '- Read the four project files in order: `site.yaml` -> `presentations/index.yaml` -> `presentation.yaml` -> `generated.yaml`.',
+      '- `generated.yaml` may be hand-authored or connector-produced; GitHub is the only built-in fetch source today.',
+      '- Template pages explain which values come from authored content versus generated data.',
+      '',
+    ]
+
+    for (const section of documentationSections) {
+      lines.push(`## ${section.title}`, '')
+
+      for (const resource of section.resources) {
+        lines.push(`- [${resource.title}](${new URL(resource.path.replace(/^\//, ''), siteUrl).toString()}): ${resource.description}`)
+      }
+
+      lines.push('')
+    }
+
+    return `${lines.join('\n').trim()}\n`
   }
 
   private escapeXml(value: string): string {

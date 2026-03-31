@@ -3,22 +3,13 @@ import { resolve } from 'node:path'
 
 import { parse } from 'yaml'
 
+import {
+  buildPresentationSiteLlmsText,
+  type PresentationSiteDocument,
+  type PresentationSiteIndexDocument,
+} from '../../shared/src/presentation-site-llms'
 import { SiteArtifactGenerator } from '../../shared/src/site-artifact-generator'
 import { ContentValidator } from '../src/content/ContentValidator'
-
-interface SiteDocument {
-  site: {
-    deployment_url?: string
-    sitemap_enabled?: boolean
-  }
-}
-
-interface PresentationIndexDocument {
-  presentations: Array<{
-    id: string
-    published: boolean
-  }>
-}
 
 class AppSiteFilesRunner {
   private readonly appRoot = process.cwd()
@@ -27,8 +18,8 @@ class AppSiteFilesRunner {
   private readonly validator = new ContentValidator()
 
   public async run(): Promise<void> {
-    const siteDocument = await this.readYaml<SiteDocument>(resolve(this.projectRoot, 'content', 'site.yaml'))
-    const indexDocument = await this.readYaml<PresentationIndexDocument>(
+    const siteDocument = await this.readYaml<PresentationSiteDocument>(resolve(this.projectRoot, 'content', 'site.yaml'))
+    const indexDocument = await this.readYaml<PresentationSiteIndexDocument>(
       resolve(this.projectRoot, 'content', 'presentations', 'index.yaml'),
     )
 
@@ -42,6 +33,11 @@ class AppSiteFilesRunner {
       publishedPresentationIds: indexDocument.presentations
         .filter((entry) => entry.published)
         .map((entry) => entry.id),
+      llmsText: buildPresentationSiteLlmsText(
+        process.env.SLIDE_SPEC_DEPLOYMENT_URL || siteDocument.site.deployment_url,
+        siteDocument,
+        indexDocument,
+      ),
     })
   }
 

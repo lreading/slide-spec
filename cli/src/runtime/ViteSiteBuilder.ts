@@ -7,6 +7,11 @@ import vue from '@vitejs/plugin-vue'
 import { build as viteBuild } from 'vite'
 import { parse } from 'yaml'
 
+import {
+  buildPresentationSiteLlmsText,
+  type PresentationSiteDocument,
+  type PresentationSiteIndexDocument,
+} from '../../../shared/src/presentation-site-llms'
 import { RuntimeWorkspace } from './RuntimeWorkspace'
 import { SiteArtifactGenerator } from '../../../shared/src/site-artifact-generator'
 import { ContentValidator } from '../../../shared/src/content-validator'
@@ -48,10 +53,8 @@ export class ViteSiteBuilder {
           emptyOutDir: true,
         },
       })
-      const siteDocument = await this.readYaml<{ site: { deployment_url?: string; sitemap_enabled?: boolean } }>(paths.getSiteConfigPath())
-      const indexDocument = await this.readYaml<{
-        presentations: Array<{ id: string; published: boolean }>
-      }>(paths.getPresentationsIndexPath())
+      const siteDocument = await this.readYaml<PresentationSiteDocument>(paths.getSiteConfigPath())
+      const indexDocument = await this.readYaml<PresentationSiteIndexDocument>(paths.getPresentationsIndexPath())
       this.contentValidator.validateSiteDocument(siteDocument)
       this.contentValidator.validatePresentationIndexDocument(indexDocument)
       await this.siteArtifactGenerator.generate({
@@ -61,6 +64,11 @@ export class ViteSiteBuilder {
         publishedPresentationIds: indexDocument.presentations
           .filter((entry) => entry.published)
           .map((entry) => entry.id),
+        llmsText: buildPresentationSiteLlmsText(
+          process.env.SLIDE_SPEC_DEPLOYMENT_URL || siteDocument.site.deployment_url,
+          siteDocument,
+          indexDocument,
+        ),
       })
       await rm(paths.getDistPath(), { recursive: true, force: true })
       await mkdir(paths.getProjectRoot(), { recursive: true })

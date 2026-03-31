@@ -6,6 +6,7 @@ export interface SiteArtifactGeneratorOptions {
   siteUrl?: string | undefined
   sitemapEnabled?: boolean
   publishedPresentationIds: string[]
+  llmsText?: string | undefined
 }
 
 export class SiteArtifactGenerator {
@@ -14,6 +15,9 @@ export class SiteArtifactGenerator {
     const robotsTxt = this.buildRobots(siteUrl, options.sitemapEnabled === true)
 
     await this.writeOutput(resolve(options.outputRoot, 'robots.txt'), robotsTxt)
+    if (options.llmsText) {
+      await this.writeOutput(resolve(options.outputRoot, 'llms.txt'), options.llmsText)
+    }
     if (siteUrl && options.sitemapEnabled === true) {
       const sitemapXml = this.buildSitemap(siteUrl, options.publishedPresentationIds)
       await this.writeOutput(resolve(options.outputRoot, 'sitemap.xml'), sitemapXml)

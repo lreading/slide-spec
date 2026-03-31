@@ -1,65 +1,69 @@
-# slide-spec
+# Slide Spec Docs
 
-slide-spec is a YAML-first static site and presentation tool: you edit YAML, validate, build to `dist/`, and optionally pull metrics from GitHub.
+> Canonical documentation for Slide Spec, a YAML-first static site and presentation system. Use these pages for the validated file formats, built-in slide templates, CLI workflow, and worked examples.
 
-Site: https://docs.slide-spec.dev/
+Important notes:
+- Validation is strict. Prefer the schema reference over inference from examples.
+- Read the four project files in order: `site.yaml` -> `presentations/index.yaml` -> `presentation.yaml` -> `generated.yaml`.
+- `generated.yaml` may be hand-authored or connector-produced; GitHub is the only built-in fetch source today.
+- Template pages explain which values come from authored content versus generated data.
 
-## Start here
+## Getting Started
 
-- https://docs.slide-spec.dev/quickstart — install path, `init` → validate → build → serve; optional `fetch` with a token.
+- [Slide Spec overview](https://docs.slide-spec.dev/): Product overview, core value proposition, and entry points into the docs.
+- [Quickstart](https://docs.slide-spec.dev/quickstart): Recommended first path from install through init, validate, build, serve, and optional fetch.
+- [Concepts](https://docs.slide-spec.dev/concepts): Core mental model for content structure, template-driven slides, generated data, and validation.
 
-## Schema (four documents, validated together)
+## Schema Reference
 
-Read in order: site → presentations index → presentation → generated. Field-level rules and required keys live on each page; do not guess shapes from examples alone.
+- [Schema overview](https://docs.slide-spec.dev/schema/): Explains how site.yaml, presentations/index.yaml, presentation.yaml, and generated.yaml fit together.
+- [site.yaml schema](https://docs.slide-spec.dev/schema/site): Global branding, navigation labels, external links, and site-level configuration.
+- [presentations/index.yaml schema](https://docs.slide-spec.dev/schema/presentations-index): Presentation catalog, publish state, featured flags, and file path references.
+- [presentation.yaml schema](https://docs.slide-spec.dev/schema/presentation): Slide definitions, template ids, authored slide content, and presentation metadata.
+- [generated.yaml schema](https://docs.slide-spec.dev/schema/generated): Generated or manually authored metrics, releases, contributors, and other computed content.
 
-- https://docs.slide-spec.dev/schema/ — how the four files relate.
-- https://docs.slide-spec.dev/schema/site — global branding, navigation copy, links, optional `data_sources`.
-- https://docs.slide-spec.dev/schema/presentations-index — published presentation list and archive metadata.
-- https://docs.slide-spec.dev/schema/presentation — slide list, template ids, authored content blocks.
-- https://docs.slide-spec.dev/schema/generated — metrics, releases, contributors, merged PRs; may be hand-authored or produced by `fetch`.
+## Templates
 
-## Templates (slide layouts)
-
-- https://docs.slide-spec.dev/templates/ — index of layouts and how they consume `presentation.yaml` / `generated.yaml`.
-- https://docs.slide-spec.dev/templates/hero
-- https://docs.slide-spec.dev/templates/agenda
-- https://docs.slide-spec.dev/templates/section-list-grid
-- https://docs.slide-spec.dev/templates/timeline
-- https://docs.slide-spec.dev/templates/progress-timeline
-- https://docs.slide-spec.dev/templates/people
-- https://docs.slide-spec.dev/templates/metrics-and-links
-- https://docs.slide-spec.dev/templates/action-cards
-- https://docs.slide-spec.dev/templates/closing
+- [Template index](https://docs.slide-spec.dev/templates/): Summary of every built-in slide template and how template validation works.
+- [Hero template](https://docs.slide-spec.dev/templates/hero): Opening slide for project identity, title framing, and top-level messaging.
+- [Agenda template](https://docs.slide-spec.dev/templates/agenda): Auto-generated table of contents slide driven by the presentation structure.
+- [Section list grid template](https://docs.slide-spec.dev/templates/section-list-grid): Grid layout for grouped lists, themes, or workstream summaries.
+- [Timeline template](https://docs.slide-spec.dev/templates/timeline): Release or milestone cards sourced from generated data.
+- [Progress timeline template](https://docs.slide-spec.dev/templates/progress-timeline): Self-contained staged progress slide authored directly in presentation content.
+- [People template](https://docs.slide-spec.dev/templates/people): Contributor or team spotlight slide for profiles, roles, and recognition.
+- [Metrics and links template](https://docs.slide-spec.dev/templates/metrics-and-links): Metric tiles plus linked references for status reporting and supporting resources.
+- [Action cards template](https://docs.slide-spec.dev/templates/action-cards): Call-to-action card grid for follow-ups, asks, or next-step links.
+- [Closing template](https://docs.slide-spec.dev/templates/closing): Final slide for wrap-up messaging and outbound links.
 
 ## CLI
 
-- https://docs.slide-spec.dev/cli/ — overview.
-- https://docs.slide-spec.dev/cli/init — scaffold a project.
-- https://docs.slide-spec.dev/cli/validate — schema check.
-- https://docs.slide-spec.dev/cli/build — static output.
-- https://docs.slide-spec.dev/cli/serve — build then serve `dist/`.
-- https://docs.slide-spec.dev/cli/fetch — populate `generated.yaml` from configured sources (GitHub today).
-
-## Examples
-
-- https://docs.slide-spec.dev/examples/ — how examples relate to the repo fixture.
-- https://docs.slide-spec.dev/examples/tutorial-example — end-to-end walkthrough aligned with `docs/fixtures/reference-project/`.
-- https://docs.slide-spec.dev/examples/manual-data-example — no GitHub connector; you own `generated.yaml`.
+- [CLI overview](https://docs.slide-spec.dev/cli/): Command-line workflow and the relationship between init, validate, fetch, build, and serve.
+- [init command](https://docs.slide-spec.dev/cli/init): Scaffolds a new Slide Spec project with starter content.
+- [fetch command](https://docs.slide-spec.dev/cli/fetch): Populates generated.yaml from configured connectors, currently GitHub-backed.
+- [build command](https://docs.slide-spec.dev/cli/build): Produces the static site output.
+- [serve command](https://docs.slide-spec.dev/cli/serve): Builds and serves the site locally for preview.
+- [validate command](https://docs.slide-spec.dev/cli/validate): Runs strict schema and template validation against the project content.
 
 ## Connectors
 
-- https://docs.slide-spec.dev/connectors/github — GitHub-backed metrics and configuration for `fetch`.
+- [Connectors overview](https://docs.slide-spec.dev/connectors/): How connectors feed generated.yaml and where external data enters the project.
+- [GitHub connector](https://docs.slide-spec.dev/connectors/github): Explains the GitHub-backed data source used by fetch and generated.yaml.
 
-## Meta / policies
+## Examples
 
-- https://docs.slide-spec.dev/meta/ — docs meta index.
-- https://docs.slide-spec.dev/meta/accessibility
-- https://docs.slide-spec.dev/meta/ai
-- https://docs.slide-spec.dev/meta/supply-chain
-- https://docs.slide-spec.dev/meta/agent-assistance
+- [Examples index](https://docs.slide-spec.dev/examples/): Overview of the included example projects and how to choose among them.
+- [Open source update example](https://docs.slide-spec.dev/examples/open-source-update): Quarterly community-update style project with releases, contributors, and roadmap data.
+- [Product review example](https://docs.slide-spec.dev/examples/product-review): Product-management reporting example focused on milestones, initiatives, and customer themes.
+- [Security posture example](https://docs.slide-spec.dev/examples/security-posture): Security-reporting example for vulnerabilities, patch status, and compliance metrics.
+- [Community update example](https://docs.slide-spec.dev/examples/community-update): Community and DevRel example for engagement metrics, events, and highlights.
+- [Tutorial example](https://docs.slide-spec.dev/examples/tutorial-example): Step-by-step walkthrough aligned with the reference project fixture.
+- [Manual data example](https://docs.slide-spec.dev/examples/manual-data-example): Example project that authors generated.yaml by hand without a connector.
 
-## Facts for implementers
+## Meta
 
-- Validation is strict; match the schema pages for required fields and nesting.
-- GitHub is the only built-in `fetch` source today; manual `generated.yaml` is always valid if it matches the schema.
-- Published screenshots and the tutorial reference the same validated fixture under `docs/fixtures/reference-project/` in the slide-spec repository.
+- [Meta index](https://docs.slide-spec.dev/meta/): Index of documentation policies, publishing notes, and support guidance.
+- [Accessibility notes](https://docs.slide-spec.dev/meta/accessibility): Accessibility goals, test coverage, and current expectations for the docs and app.
+- [AI usage notes](https://docs.slide-spec.dev/meta/ai): Guidance for tools consuming these docs, including stable entry points and common pitfalls.
+- [Agent assistance policy](https://docs.slide-spec.dev/meta/agent-assistance): How maintainers expect coding agents to work with the repository and generated content.
+- [Supply chain notes](https://docs.slide-spec.dev/meta/supply-chain): Dependency, provenance, and release-process notes relevant to implementation work.
+- [Cloudflare Pages deployment guide](https://docs.slide-spec.dev/meta/cloudflare-pages): Recommended deployment model for static Slide Spec sites built from committed source.
