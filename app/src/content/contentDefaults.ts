@@ -40,6 +40,7 @@ export const resolveNavigationContent = (
   home_label: trimOrUndefined(site.navigation?.home_label),
   presentations_label: trimOrUndefined(site.navigation?.presentations_label),
   latest_presentation_label: trimOrUndefined(site.navigation?.latest_presentation_label),
+  docs_enabled: site.navigation?.docs_enabled ?? true,
   toggle_label: trimOrUndefined(site.navigation?.toggle_label),
 })
 

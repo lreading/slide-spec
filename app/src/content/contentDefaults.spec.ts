@@ -33,6 +33,7 @@ describe('contentDefaults', () => {
       home_label: 'Home',
       presentations_label: 'Presentations',
       latest_presentation_label: 'Latest Presentation',
+      docs_enabled: true,
       toggle_label: 'Toggle navigation',
     })
     expect(resolveAppFooterContent(site)).toEqual({
@@ -115,6 +116,7 @@ describe('contentDefaults', () => {
     }
 
     expect(resolveNavigationContent(blankSite).brand_title).toBeUndefined()
+    expect(resolveNavigationContent(blankSite).docs_enabled).toBe(true)
     expect(resolveAppFooterContent(blankSite).repository_label).toBeUndefined()
     expect(resolveAttributionContent(blankSite)).toEqual({
       enabled: true,
@@ -142,6 +144,20 @@ describe('contentDefaults', () => {
     })
     expect(resolveHomeHeroContent(blankSite).title_primary).toBeUndefined()
     expect(resolvePresentationChromeLabel(blankSite)).toBeUndefined()
+  })
+
+  it('respects an explicit disabled docs nav toggle', () => {
+    expect(
+      resolveNavigationContent({
+        ...site,
+        navigation: {
+          ...site.navigation,
+          docs_enabled: false,
+        },
+      }),
+    ).toMatchObject({
+      docs_enabled: false,
+    })
   })
 
   it('normalizes authored slide and roadmap labels', () => {
