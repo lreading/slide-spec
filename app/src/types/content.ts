@@ -50,6 +50,7 @@ export interface NavigationContent {
   home_label?: string
   presentations_label?: string
   latest_presentation_label?: string
+  docs_enabled?: boolean
   toggle_label?: string
 }
 

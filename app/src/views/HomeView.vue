@@ -20,6 +20,7 @@ const badge = computed(() => getProjectBadgeDisplay(site))
 const heroContent = computed(() => resolveHomeHeroContent(site))
 const mascotUrl = computed(() => assetResolver.resolve(site.mascot?.url))
 const mascotAlt = computed(() => site.mascot?.alt?.trim() || undefined)
+const docsLink = computed(() => site.links.docs)
 </script>
 
 <template>
@@ -39,6 +40,16 @@ const mascotAlt = computed(() => site.mascot?.alt?.trim() || undefined)
         </ActionButton>
         <ActionButton :to="{ name: 'presentations' }" variant="secondary" class="hero-cta">
           <span class="hero-cta__single">{{ site.presentations_cta_label }}</span>
+        </ActionButton>
+        <ActionButton
+          v-if="docsLink"
+          :href="docsLink.url"
+          target="_blank"
+          rel="noreferrer"
+          variant="secondary"
+          class="hero-cta"
+        >
+          <span class="hero-cta__single">{{ docsLink.label }}</span>
         </ActionButton>
       </div>
 

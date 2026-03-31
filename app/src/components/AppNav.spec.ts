@@ -29,6 +29,7 @@ describe('AppNav', () => {
       name: 'presentation',
       params: { presentationId: '2026-q1' },
     })
+    expect(wrapper.get('a[href="https://www.threatdragon.com/docs"]').text()).toBe('Threat Dragon Docs')
 
     await wrapper.find('.app-nav__toggle').trigger('click')
     expect(wrapper.find('.app-nav__links').classes()).toContain('app-nav__links--open')
@@ -96,6 +97,52 @@ describe('AppNav', () => {
     })
   })
 
+  it('hides the docs nav link when navigation.docs_enabled is false', async () => {
+    vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
+      title: 'Threat Dragon Quarterly Updates',
+      home_intro: 'Intro',
+      home_cta_label: 'Latest',
+      presentations_cta_label: 'Presentations',
+      navigation: {
+        brand_title: 'Threat Dragon Updates',
+        home_label: 'Home',
+        presentations_label: 'Presentations',
+        latest_presentation_label: 'Latest Presentation',
+        docs_enabled: false,
+        toggle_label: 'Toggle navigation',
+      },
+      links: {
+        repository: {
+          label: 'Repo',
+          url: 'https://example.com/repo',
+        },
+        docs: {
+          label: 'Docs',
+          url: 'https://example.com/docs',
+        },
+        community: {
+          label: 'Community',
+          url: 'https://example.com/community',
+        },
+      },
+    })
+
+    const router = createAppRouter(true)
+    await router.push('/')
+    await router.isReady()
+
+    const wrapper = mount(AppNav, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.find('a[href="https://example.com/docs"]').exists()).toBe(false)
+  })
+
   it('hides navigation labels when config values are blank', async () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
       title: 'Threat Dragon Quarterly Updates',
@@ -107,12 +154,21 @@ describe('AppNav', () => {
         home_label: '   ',
         presentations_label: '   ',
         latest_presentation_label: '   ',
+        docs_enabled: false,
         toggle_label: '   ',
       },
       links: {
         repository: {
           label: 'Repo',
           url: 'https://example.com/repo',
+        },
+        docs: {
+          label: 'Docs',
+          url: 'https://example.com/docs',
+        },
+        community: {
+          label: 'Community',
+          url: 'https://example.com/community',
         },
       },
     })
