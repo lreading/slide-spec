@@ -37,7 +37,7 @@ body:
       label: Environment
       description: Node version, OS, CLI version or app commit.
       placeholder: |
-        Node: 22.x
+        Node: 24.x
         OS: Ubuntu 24.04
         CLI: 0.0.1
     validations:

@@ -1,7 +1,5 @@
 verbose = "info"
 exclude = [
-  "todo-demo-url",
-  "todo-docs-url",
   "npmjs\\.com",
   "^https://github\\.com/user-attachments/assets/076d3140-4d1d-47a3-8f5b-5a1dd58f03c1$",
 ]
