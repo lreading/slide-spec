@@ -4,25 +4,54 @@
 
 **Create beautiful slides from YAML, not PowerPoint.**
 
-[![npm](https://img.shields.io/npm/v/@slide-spec/cli)](https://www.npmjs.com/package/@slide-spec/cli)
 [![CI](https://img.shields.io/github/actions/workflow/status/lreading/slide-spec/main.yml?branch=main&label=CI)](https://github.com/lreading/slide-spec/actions/workflows/main.yml)
 [![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)](./LICENSE)
 [![OpenSSF Best Practices](https://www.bestpractices.dev/projects/12235/badge)](https://www.bestpractices.dev/en/projects/12235/passing)
 
 [Live Demo](https://www.slide-spec.dev) · [Docs](https://docs.slide-spec.dev) · [Example YAML](content/)
 
-https://github.com/user-attachments/assets/076d3140-4d1d-47a3-8f5b-5a1dd58f03c1
+<video src="assets/readme-demo.mp4" controls muted playsinline style="max-width: 100%; border-radius: 12px;"></video>
 
 </div>
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
-Slide Spec turns structured YAML into a static slide deck you can host anywhere. Keep your presentations in the same repo as your code, reviewable in PRs and diffable like everything else.
+Slide Spec turns structured YAML into a static slide deck you can host anywhere. It is for teams who want presentations that are reviewable in PRs, diffable like code, and generated without proprietary authoring tools.
 
 - Write slides as structured YAML you can diff, lint, and generate
 - Build a static site you can deploy to GitHub Pages, S3, or any CDN
 - No proprietary file formats or authoring tools
 - Validation baked into CI for a GitOps workflow
+
+Example:
+
+```yaml
+presentation:
+  id: 2026-q1
+  title: Q1 Update
+  slides:
+    - template: hero
+      enabled: true
+      content:
+        title_primary: Slide
+        title_accent: Spec
+        subtitle_prefix: Quarterly Update
+
+generated:
+  id: 2026-q1
+  period:
+    start: 2026-01-01
+    end: 2026-03-31
+  stats:
+    stars:
+      label: GitHub Stars
+      current: 123
+      previous: 100
+      delta: 23
+      metadata:
+        comparison_status: complete
+        warning_codes: []
+```
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
@@ -31,22 +60,24 @@ Slide Spec turns structured YAML into a static slide deck you can host anywhere.
 Prereqs: Node 24+ and npm.
 
 ```sh
-npx @slide-spec/cli init
-npx @slide-spec/cli serve
+cd cli
+npm install
+npm run cli -- init ../my-slides
+npm run cli -- serve ../my-slides
 ```
 
 Open the URL printed in your terminal. If `5173` is busy, `serve` picks another free port. You should have a working deck in under two minutes.
 
-From there, edit the YAML under `content/`, then validate and build:
+From there, edit the YAML under `../my-slides/content/`, then validate and build:
 
 ```sh
-npx @slide-spec/cli validate
-npx @slide-spec/cli build      # outputs to ./dist
+npm run cli -- validate ../my-slides
+npm run cli -- build ../my-slides      # outputs to ./dist
 ```
 
 Pass `--deployment-url` to `build` for `sitemap.xml` generation.
 
-Every command accepts an optional directory as its first argument (e.g. `npx @slide-spec/cli serve ./my-deck`). When omitted, the current working directory is used.
+Every command accepts an optional directory as its first argument (e.g. `npm run cli -- serve ../my-deck`). When omitted, the current working directory is used.
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
@@ -66,11 +97,11 @@ Monorepo with independent packages. Each has its own README with setup, developm
 
 ## Releases
 
-Slide Spec follows [semver](https://semver.org). The CLI is published to npm as [`@slide-spec/cli`](https://www.npmjs.com/package/@slide-spec/cli).
+Slide Spec follows [semver](https://semver.org). The CLI is not yet published to npm; the first public release will define the stable package story.
 
-> ⚠️ **v0 / alpha** - the project is pre-1.0 and minor versions may contain breaking changes without prior deprecation. Pin your version if you need stability.
+> ⚠️ **Pre-v1** - the project is still stabilizing. Expect a little churn until the first public release lands.
 
-Tagged commits on `main` trigger the release pipeline. CI runs all quality gates, publishes to npm, and attaches both a source tarball and a CycloneDX SBOM to the [GitHub release](https://github.com/lreading/slide-spec/releases).
+Tagged commits on `main` trigger the release pipeline. CI runs all quality gates and attaches both a source tarball and a CycloneDX SBOM to the [GitHub release](https://github.com/lreading/slide-spec/releases). npm publishing will be added when the package is ready.
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
