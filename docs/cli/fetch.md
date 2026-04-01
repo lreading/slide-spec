@@ -33,4 +33,6 @@ It does not touch slide titles, roadmap content, spotlights, or CTAs.
 ## Requirements
 
 - `site.yaml` must define a data source (see [connectors](/connectors/))
-- Authentication credentials may be required depending on the connector
+- For GitHub-backed fetches, set `GITHUB_PAT` in the project root `.env` file
+- If you use interactive `init`, it can write that `.env` file for you
+- Without a PAT, GitHub fetches run in best-effort mode and may return less data

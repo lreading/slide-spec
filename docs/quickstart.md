@@ -10,6 +10,8 @@ npx @slide-spec/cli init
 
 The interactive prompts walk you through project setup: name, title, dates, and optional connector configuration.
 
+If you enable GitHub-backed data during setup, the CLI can write `GITHUB_PAT` into the project root `.env` file for you.
+
 This creates a common `content/` layout with:
 
 - `site.yaml` - global branding, navigation, links
