@@ -1,12 +1,33 @@
 {
   "name": "@slide-spec/cli",
   "version": "0.0.0",
+  "description": "CLI for Slide Spec: scaffold, validate, fetch, build, and serve YAML-driven slide decks.",
+  "license": "Apache-2.0",
   "type": "module",
   "engines": {
     "node": ">=24.0.0"
   },
+  "homepage": "https://github.com/lreading/slide-spec#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lreading/slide-spec.git",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/lreading/slide-spec/issues"
+  },
   "bin": {
     "slide-spec": "./dist/index.js"
+  },
+  "keywords": [
+    "slide",
+    "presentation",
+    "yaml",
+    "cli",
+    "static-site"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "files": [
     "dist",

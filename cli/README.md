@@ -1,6 +1,6 @@
 # Slide Spec CLI
 
-Standalone CLI for Slide Spec, published to npm as `@slide-spec/cli`. It scaffolds projects, validates YAML, fetches GitHub data into generated content, builds static sites, and serves them locally.
+Standalone CLI for Slide Spec. It scaffolds projects, validates YAML, fetches GitHub data into generated content, builds static sites, and serves them locally.
 
 ## Getting started
 
@@ -40,4 +40,4 @@ Per-subcommand help: `npm run cli -- <command> --help`.
 - `fetch` supports date ranges and best-effort mode without a token.
 - `build --deployment-url <url>` enables `sitemap.xml` generation.
 - Accepts an explicit project root, so it works against external projects too.
-- Tagged commits on `main` trigger `npm publish` in CI. This is the distributed package.
+- Tagged commits on `main` are intended to trigger `npm publish` in CI once the package is published and the release pipeline is finalized.
