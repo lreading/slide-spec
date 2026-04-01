@@ -7,7 +7,7 @@
   "engines": {
     "node": ">=24.0.0"
   },
-  "homepage": "https://github.com/lreading/slide-spec#readme",
+  "homepage": "https://www.slide-spec.dev/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/lreading/slide-spec.git",
