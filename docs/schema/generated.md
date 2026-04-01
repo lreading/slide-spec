@@ -59,15 +59,17 @@ generated:
 
 ## `generated.releases`
 
-Array of release objects. The validator checks that `releases` is an array. Expected shape for each entry:
+Required array of release objects. The validator only checks that `releases` is an array; it does not validate the shape of each release entry beyond normal downstream use.
 
-| Field | Description |
-| --- | --- |
-| `id` | Unique release id (referenced by timeline slides) |
-| `version` | Display version string |
-| `published_at` | Publication date |
-| `url` | Link to the release |
-| `summary_bullets` | Array of summary strings |
+### `generated.releases[]`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `id` | yes | string | Unique release id, usually the tag name. Used by timeline slides to match entries. |
+| `version` | yes | string | Display version string. The CLI currently sets this to the release tag name. |
+| `published_at` | yes | string | Publication timestamp. The CLI emits an ISO-like UTC string. |
+| `url` | yes | string | Link to the release page. |
+| `summary_bullets` | yes | string[] | Short summary bullets shown on the slide. The CLI limits this to a small list of bullet strings. |
 
 ## `generated.contributors`
 
@@ -76,29 +78,39 @@ Array of release objects. The validator checks that `releases` is an array. Expe
 | `total` | yes | number |
 | `authors` | yes | array |
 
-The validator checks structure only. Expected shape for each author:
+`total` is the number of unique authors in the current reporting period.
 
-| Field | Description |
-| --- | --- |
-| `login` | Username or handle |
-| `name` | Display name |
-| `avatar_url` | Avatar image URL |
-| `merged_prs` | Number of merged PRs or completed items |
-| `first_time` | Whether this is a first-time contributor |
+### `generated.contributors.authors[]`
+
+The validator checks that `authors` is an array. It does not validate the shape of each author entry beyond the fields consumed by the app and CLI.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `login` | yes | string | GitHub username or handle. Used for profile links and contributor matching. |
+| `name` | yes | string | Display name. The CLI falls back to the login when GitHub does not provide a name. |
+| `avatar_url` | yes | string | Avatar image URL. The CLI falls back to a GitHub avatar URL when needed. |
+| `merged_prs` | yes | number | Number of merged pull requests attributed to this contributor in the reporting period. |
+| `first_time` | yes | boolean | Whether this contributor had no merged PR history before the current period. |
 
 ## `generated.merged_prs`
 
-Optional. If present, must be an array. Expected shape per entry:
+Optional. If present, it must be an array. The validator does not inspect the individual entries beyond the array check.
 
-| Field | Description |
-| --- | --- |
-| `number` | Item number |
-| `title` | Item title |
-| `merged_at` | Completion date |
-| `author_login` | Author's username |
+### `generated.merged_prs[]`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `number` | yes | number | Pull request number. |
+| `title` | yes | string | Pull request title. |
+| `merged_at` | yes | string | Merge timestamp. The CLI emits an ISO-like UTC string. |
+| `author_login` | yes | string | Author's GitHub username. |
 
 ## Notes
 
 - The `id` in `generated.yaml` must match the presentation's `id`
 - Keep metric keys aligned with `stat_keys` in any [metrics-and-links](/templates/metrics-and-links) slide that references them
+- `generated.releases` is required even when it is an empty array
+- `generated.contributors.authors` is required even when it is an empty array
+- `generated.previous_presentation_id` is optional and only present when a previous period exists
+- `generated.merged_prs` is optional and omitted when the CLI does not include historical merged PR data
 - This file does not have to come from a connector - hand-author it with data from any source
