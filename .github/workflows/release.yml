@@ -119,7 +119,8 @@ jobs:
 
           GitHub-generated release notes below summarize merged work and highlight first-time contributors when GitHub can determine them.
           EOF
-      - uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
+      - id: create-release
+        uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
         with:
           name: ${{ needs.prepare-release.outputs.release-name }}
           body_path: release-artifacts/release-notes-preface.md
@@ -135,9 +136,9 @@ jobs:
         if: ${{ fromJSON(needs.prepare-release.outputs.prerelease) }}
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_ID: ${{ steps.create-release.outputs.id }}
         run: |
-          release_id="$(gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${GITHUB_REF_NAME}" --jq '.id')"
-          gh api "repos/${GITHUB_REPOSITORY}/releases/${release_id}" \
+          gh api "repos/${GITHUB_REPOSITORY}/releases/${RELEASE_ID}" \
             --method PATCH \
             -F draft=false \
             -F prerelease=true \
