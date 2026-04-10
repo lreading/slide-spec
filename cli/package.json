@@ -1,6 +1,6 @@
 {
   "name": "@slide-spec/cli",
-  "version": "0.0.0",
+  "version": "0.0.0-alpha.0",
   "description": "CLI for Slide Spec: scaffold, validate, fetch, build, and serve YAML-driven slide decks.",
   "license": "Apache-2.0",
   "type": "module",
@@ -17,7 +17,7 @@
     "url": "https://github.com/lreading/slide-spec/issues"
   },
   "bin": {
-    "slide-spec": "./dist/index.js"
+    "slide-spec": "dist/index.js"
   },
   "keywords": [
     "slide",
@@ -31,7 +31,6 @@
   },
   "files": [
     "dist",
-    "dist/examples",
     "README.md"
   ],
   "scripts": {

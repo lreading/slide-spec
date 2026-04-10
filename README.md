@@ -70,7 +70,9 @@ Slide Spec follows [semver](https://semver.org). The CLI is published to npm as 
 
 > ⚠️ **v0 / alpha** - the project is pre-1.0 and minor versions may contain breaking changes without prior deprecation. Pin your version if you need stability.
 
-Tagged commits on `main` trigger the release pipeline. CI runs all quality gates, publishes to npm, and attaches both a source tarball and a CycloneDX SBOM to the [GitHub release](https://github.com/lreading/slide-spec/releases).
+Pushing a `v*` release tag triggers the release pipeline. CI runs all quality gates, publishes to npm, and attaches both a source tarball and a CycloneDX SBOM to the [GitHub release](https://github.com/lreading/slide-spec/releases).
+
+Stable releases use signed `vX.Y.Z` tags. Prereleases use signed `vX.Y.Z-alpha`, `vX.Y.Z-beta`, or `vX.Y.Z-rc` tags and publish to matching npm dist-tags.
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 

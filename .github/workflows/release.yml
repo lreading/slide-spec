@@ -10,7 +10,48 @@ permissions:
   pull-requests: read
 
 jobs:
+  prepare-release:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.metadata.outputs.version }}
+      dist-tag: ${{ steps.metadata.outputs.dist_tag }}
+      prerelease: ${{ steps.metadata.outputs.prerelease }}
+      release-name: ${{ steps.metadata.outputs.release_name }}
+      release-channel: ${{ steps.metadata.outputs.release_channel }}
+      make-latest: ${{ steps.metadata.outputs.make_latest }}
+    steps:
+      - name: Derive release metadata
+        id: metadata
+        env:
+          TAG_NAME: ${{ github.ref_name }}
+        run: |
+          version="${TAG_NAME#v}"
+
+          node - "${version}" >> "${GITHUB_OUTPUT}" <<'EOF'
+          const version = process.argv[2]
+          const versionPattern = /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-(alpha|beta|rc)(?:\.[0-9A-Za-z-]+)?)?$/
+          const match = version.match(versionPattern)
+
+          if (!match) {
+            console.error(`Unsupported release tag version: ${version}`)
+            process.exit(1)
+          }
+
+          const channel = match[4] ?? 'latest'
+          const prerelease = channel !== 'latest'
+          const releaseChannel = prerelease ? `${channel} prerelease` : 'stable release'
+          const makeLatest = prerelease ? 'false' : 'true'
+
+          console.log(`version=${version}`)
+          console.log(`dist_tag=${channel}`)
+          console.log(`prerelease=${prerelease}`)
+          console.log(`release_name=Slide Spec CLI v${version}`)
+          console.log(`release_channel=${releaseChannel}`)
+          console.log(`make_latest=${makeLatest}`)
+          EOF
+
   quality:
+    needs: prepare-release
     uses: ./.github/workflows/reusable-quality.yml
     with:
       run-dependency-review: false
@@ -18,13 +59,15 @@ jobs:
 
   publish-cli:
     runs-on: ubuntu-latest
-    needs: quality
+    needs:
+      - prepare-release
+      - quality
     permissions:
       contents: read
       id-token: write
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.2.0
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
         with:
           node-version: 24
           cache: npm
@@ -32,12 +75,23 @@ jobs:
           registry-url: https://registry.npmjs.org
       - run: npm ci
         working-directory: cli
-      - run: npm publish --provenance --access public
+      - run: npm version "${RELEASE_VERSION}" --allow-same-version --no-git-tag-version
         working-directory: cli
+        env:
+          RELEASE_VERSION: ${{ needs.prepare-release.outputs.version }}
+      - run: npm pack --dry-run
+        working-directory: cli
+      - run: npm publish --provenance --access public --tag "${NPM_DIST_TAG}"
+        working-directory: cli
+        env:
+          NPM_DIST_TAG: ${{ needs.prepare-release.outputs.dist-tag }}
 
   github-release:
     runs-on: ubuntu-latest
-    needs: quality
+    needs:
+      - prepare-release
+      - quality
+      - publish-cli
     permissions:
       contents: write
     steps:
@@ -47,9 +101,32 @@ jobs:
           name: sbom-cyclonedx
           path: release-artifacts
       - run: mkdir -p release-artifacts && git archive --format=tar.gz --output=release-artifacts/source.tar.gz HEAD
+      - name: Build release notes preface
+        env:
+          RELEASE_VERSION: ${{ needs.prepare-release.outputs.version }}
+          RELEASE_CHANNEL: ${{ needs.prepare-release.outputs.release-channel }}
+        run: |
+          cat > release-artifacts/release-notes-preface.md <<EOF
+          ## Published artifacts
+
+          - npm package: [\`@slide-spec/cli@${RELEASE_VERSION}\`](https://www.npmjs.com/package/@slide-spec/cli/v/${RELEASE_VERSION})
+          - Docs: <https://docs.slide-spec.dev>
+          - Live site: <https://www.slide-spec.dev>
+          - Release channel: ${RELEASE_CHANNEL}
+          - Source tarball: attached as \`source.tar.gz\`
+          - SBOM: attached as \`sbom.cyclonedx.json\`
+          - Provenance: published via npm trusted publishing
+
+          GitHub-generated release notes below summarize merged work and highlight first-time contributors when GitHub can determine them.
+          EOF
       - uses: softprops/action-gh-release@153bb8e04406b158c6c84fc1615b65b24149a1fe # v2.6.1
         with:
+          name: ${{ needs.prepare-release.outputs.release-name }}
+          body_path: release-artifacts/release-notes-preface.md
           generate_release_notes: true
+          prerelease: ${{ fromJSON(needs.prepare-release.outputs.prerelease) }}
+          make_latest: ${{ needs.prepare-release.outputs.make-latest }}
+          fail_on_unmatched_files: true
           files: |
             release-artifacts/source.tar.gz
             release-artifacts/sbom.cyclonedx.json

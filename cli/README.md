@@ -40,4 +40,4 @@ Per-subcommand help: `npm run cli -- <command> --help`.
 - `fetch` supports date ranges and best-effort mode without a token.
 - `build --deployment-url <url>` enables `sitemap.xml` generation.
 - Accepts an explicit project root, so it works against external projects too.
-- Tagged commits on `main` are intended to trigger `npm publish` in CI once the package is published and the release pipeline is finalized.
+- Signed release tags trigger `npm publish` in CI. Stable tags publish to `latest`; prerelease tags publish to `alpha`, `beta`, or `rc` based on the tag suffix.
