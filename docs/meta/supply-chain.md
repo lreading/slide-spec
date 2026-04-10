@@ -33,6 +33,7 @@ Recommended maintainer steps:
 1. Make sure the release commit is clean and reviewed.
 2. Create a signed annotated tag:
    - `git tag -s v1.0.0 -m "v1.0.0"`
+   - or use the helper: `./scripts/release.sh v1.0.0`
 3. Verify the tag locally:
    - `git tag -v v1.0.0`
 4. Push the signed tag to `origin`:
@@ -65,6 +66,7 @@ Recommended prerelease flow:
 1. Make sure the prerelease commit is clean and reviewed.
 2. Create a signed prerelease tag:
    - `git tag -s v0.0.1-alpha -m "v0.0.1-alpha"`
+   - or use the helper: `./scripts/release.sh v0.0.1-alpha`
 3. Verify the tag locally:
    - `git tag -v v0.0.1-alpha`
 4. Push the signed tag:
