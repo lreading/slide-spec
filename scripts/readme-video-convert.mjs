@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { execFileSync } from 'node:child_process'
-import { existsSync, readdirSync } from 'node:fs'
+import { existsSync, readdirSync, rmSync } from 'node:fs'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -32,23 +32,32 @@ if (!webm) {
   process.exit(1)
 }
 
-const outMp4 = join(repoRoot, 'assets/readme-demo.mp4')
+const palette = join(repoRoot, 'assets/readme-demo-palette.png')
+const outGif = join(repoRoot, 'assets/readme-demo.gif')
 execFileSync(
   'ffmpeg',
   [
     '-y',
-    '-ss', '4.0',
     '-i', webm,
-    '-an',
-    '-c:v', 'libx264',
-    '-pix_fmt', 'yuv420p',
-    '-movflags', '+faststart',
-    '-preset', 'slow',
-    '-crf', '23',
-    '-vf', 'scale=1280:-2',
-    outMp4,
+    '-vf', 'fps=10,scale=960:-1:flags=lanczos,palettegen',
+    '-frames:v', '1',
+    palette,
   ],
   { stdio: 'inherit' },
 )
 
-console.log(`Wrote ${outMp4}`)
+execFileSync(
+  'ffmpeg',
+  [
+    '-y',
+    '-i', webm,
+    '-i', palette,
+    '-lavfi', 'fps=10,scale=960:-1:flags=lanczos[x];[x][1:v]paletteuse',
+    outGif,
+  ],
+  { stdio: 'inherit' },
+)
+
+rmSync(palette, { force: true })
+
+console.log(`Wrote ${outGif}`)
