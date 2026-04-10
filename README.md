@@ -11,7 +11,7 @@
 
 [Live Demo](https://www.slide-spec.dev) · [Docs](https://docs.slide-spec.dev) · [Example YAML](content/)
 
-https://github.com/user-attachments/assets/076d3140-4d1d-47a3-8f5b-5a1dd58f03c1
+![Slide Spec demo](assets/readme-demo.gif)
 
 </div>
 

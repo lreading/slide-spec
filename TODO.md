@@ -1,4 +1,5 @@
 # Review:
+- Do the published site examples match our cli examples exactly?
 - Manually test interactive CLI
 - Check the Ladybird test
 - Check out documentation site
@@ -7,7 +8,13 @@
 - Review Contributing
 - Review README
 - Review License
+- Does the GH connector use avatars for the spotlight/people template? can it?
 
+# Examples to build
+“OSS project release update template”
+“Quarterly roadmap template”
+“Security incident postmortem deck”
+“Engineering demo day template”
 
 # Docs Updates
 - The schemas are not fully documented.  The examples have fields that are not in the reference table.  For example, generated: stats is not fully documented. That is unacceptable. ALL fields, optional or otherwise, no matter how deep the field spec is, MUST be documented.
