@@ -21,6 +21,8 @@ The SBOM gives consumers a better way to inspect what was published without unpa
 ## Notes for maintainers
 
 - The SBOM is attached to tagged releases created by the current workflow.
+- Stable and prerelease releases both attach the SBOM.
+- The release notes preface should reference the attached SBOM alongside the source tarball and npm package.
 - If the release process changes, keep this page and [Supply Chain](/meta/supply-chain) in sync with the workflow.
 
 ## Related docs
