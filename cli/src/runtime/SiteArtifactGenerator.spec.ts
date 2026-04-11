@@ -45,6 +45,7 @@ describe('SiteArtifactGenerator', () => {
       'Sitemap: https://updates.example.test/sitemap.xml',
     )
     await expect(readFile(resolve(outputRoot, 'llms.txt'), 'utf8')).resolves.toBe('# Example\n\n> Example summary.\n')
+    await expect(readFile(resolve(outputRoot, '404.html'), 'utf8')).resolves.toContain('Slide not found.')
     await expect(readFile(resolve(outputRoot, 'sitemap.xml'), 'utf8')).resolves.toContain(
       '<loc>https://updates.example.test/presentations/public-one</loc>',
     )
@@ -72,6 +73,7 @@ describe('SiteArtifactGenerator', () => {
     })
 
     await expect(readFile(resolve(outputRoot, 'robots.txt'), 'utf8')).resolves.toBe('User-agent: *\nAllow: /\n')
+    await expect(readFile(resolve(outputRoot, '404.html'), 'utf8')).resolves.toContain('Slide not found.')
     await expect(readFile(resolve(outputRoot, 'llms.txt'), 'utf8')).rejects.toThrow()
     await expect(readFile(resolve(outputRoot, 'sitemap.xml'), 'utf8')).rejects.toThrow()
     await expect(readFile(resolve(outputRoot, 'presentations', 'index.html'), 'utf8')).resolves.toBe(

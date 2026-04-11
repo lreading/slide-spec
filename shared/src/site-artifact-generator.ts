@@ -1,6 +1,8 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 
+import { buildSiteNotFoundPage } from './site-not-found-page'
+
 export interface SiteArtifactGeneratorOptions {
   outputRoot: string
   siteUrl?: string | undefined
@@ -22,6 +24,7 @@ export class SiteArtifactGenerator {
       const sitemapXml = this.buildSitemap(siteUrl, options.publishedPresentationIds)
       await this.writeOutput(resolve(options.outputRoot, 'sitemap.xml'), sitemapXml)
     }
+    await this.writeOutput(resolve(options.outputRoot, '404.html'), buildSiteNotFoundPage())
     await this.writeRouteEntrypoints(options.outputRoot, options.publishedPresentationIds)
   }
 
