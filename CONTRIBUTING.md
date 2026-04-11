@@ -70,6 +70,7 @@ Start with the package you changed:
 
 - `cd app && npm run verify`
 - `cd cli && npm run verify`
+- `cd shared && npm run verify`
 - `cd docs && npm run verify`
 
 Depending on the change, you may also need additional commands that are part of GitHub Actions but not included in a package `verify` script. The full source of truth is [`.github/workflows/reusable-quality.yml`](.github/workflows/reusable-quality.yml).

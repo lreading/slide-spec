@@ -54,7 +54,7 @@ The core audience is comfortable with source control, static sites, and YAML dat
 ## Testing rules
 
 - Work is not complete until the full reusable quality workflow is expected to pass. Do not treat a change as done while any repo quality gate is failing.
-- Coverage must meet declared thresholds. Current repo thresholds are 80% statements, branches, functions, and lines, enforced per file in `app/` and `cli/`.
+- Coverage must meet declared thresholds. Current repo thresholds are 80% statements, branches, functions, and lines, enforced per file in `app/`, `cli/`, and `shared/`.
 - Prefer one assertion per test when practical.
 - Unit tests must isolate one unit of work and mock external dependencies.
 - Do not test third-party code in unit tests.
@@ -70,6 +70,7 @@ The core audience is comfortable with source control, static sites, and YAML dat
 - Prefer the existing package-level verify commands as your local starting point:
   - `cd app && npm run verify`
   - `cd cli && npm run verify`
+  - `cd shared && npm run verify`
   - `cd docs && npm run verify`
 - Run any additional commands needed to cover gates that are not included in those verify scripts.
 
@@ -100,6 +101,7 @@ Before handoff, run every local command needed to give high confidence that the 
 
 - Keep shared code small, explicit, and stable.
 - Avoid leaking package-specific assumptions into shared abstractions.
+- Run `cd shared && npm run verify` after changing shared code; this package has its own lint, typecheck, and per-file coverage gates.
 
 ## Agent behavior
 
