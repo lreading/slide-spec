@@ -8,6 +8,13 @@ Each slide owns its own `content` block. If two slides need the same copy or lab
 
 ## Top level
 
+```yaml
+# yaml-language-server: $schema=https://slide-spec.dev/schema/presentation.schema.json
+schemaVersion: 1
+presentation:
+  id: 2026-spring-briefing
+```
+
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
 | `schemaVersion` | yes | number | Major schema version. Must be `1` for this Slide Spec release. |

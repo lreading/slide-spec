@@ -6,6 +6,13 @@ For a complete example, see the [reference generated.yaml](https://github.com/lr
 
 ## Top level
 
+```yaml
+# yaml-language-server: $schema=https://slide-spec.dev/schema/generated.schema.json
+schemaVersion: 1
+generated:
+  id: 2026-spring-briefing
+```
+
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
 | `schemaVersion` | yes | number | Major schema version. Must be `1` for this Slide Spec release. |
@@ -60,7 +67,7 @@ generated:
 
 ## `generated.releases`
 
-Required array of release objects. The validator only checks that `releases` is an array; it does not validate the shape of each release entry beyond normal downstream use.
+Required array of release objects.
 
 ### `generated.releases[]`
 
@@ -83,8 +90,6 @@ Required array of release objects. The validator only checks that `releases` is 
 
 ### `generated.contributors.authors[]`
 
-The validator checks that `authors` is an array. It does not validate the shape of each author entry beyond the fields consumed by the app and CLI.
-
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `login` | yes | string | GitHub username or handle. Used for profile links and contributor matching. |
@@ -95,7 +100,7 @@ The validator checks that `authors` is an array. It does not validate the shape 
 
 ## `generated.merged_prs`
 
-Optional. If present, it must be an array. The validator does not inspect the individual entries beyond the array check.
+Optional. If present, it must be an array of merged pull request entries.
 
 ### `generated.merged_prs[]`
 

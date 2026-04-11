@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://slide-spec.dev/schema/defs.schema.json",
+  "title": "Slide Spec shared schema definitions",
+  "$defs": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "nonBlankString": {
+      "type": "string",
+      "pattern": "\\S"
+    },
+    "stringArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/nonBlankString"
+      }
+    },
+    "link": {
+      "type": "object",
+      "required": ["label", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "$ref": "#/$defs/nonBlankString" },
+        "url": { "$ref": "#/$defs/nonBlankString" },
+        "eyebrow": { "$ref": "#/$defs/nonBlankString" }
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "dependentRequired": {
+        "image_alt": ["image_url"]
+      },
+      "properties": {
+        "title": { "$ref": "#/$defs/nonBlankString" },
+        "description": { "$ref": "#/$defs/nonBlankString" },
+        "image_url": { "$ref": "#/$defs/nonBlankString" },
+        "image_alt": { "$ref": "#/$defs/nonBlankString" }
+      }
+    },
+    "metricValue": {
+      "type": "object",
+      "required": ["label", "current", "previous", "delta", "metadata"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "$ref": "#/$defs/nonBlankString" },
+        "current": { "type": "number" },
+        "previous": { "type": "number" },
+        "delta": { "type": "number" },
+        "metadata": {
+          "type": "object",
+          "required": ["comparison_status", "warning_codes"],
+          "additionalProperties": false,
+          "properties": {
+            "comparison_status": {
+              "type": "string",
+              "enum": ["complete", "partial", "skipped", "unavailable"]
+            },
+            "warning_codes": { "$ref": "#/$defs/stringArray" }
+          }
+        }
+      }
+    },
+    "releaseEntry": {
+      "type": "object",
+      "required": ["id", "version", "published_at", "url", "summary_bullets"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "#/$defs/nonBlankString" },
+        "version": { "$ref": "#/$defs/nonBlankString" },
+        "published_at": { "$ref": "#/$defs/nonBlankString" },
+        "url": { "$ref": "#/$defs/nonBlankString" },
+        "summary_bullets": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "contributorEntry": {
+      "type": "object",
+      "required": ["login", "name", "avatar_url", "merged_prs", "first_time"],
+      "additionalProperties": false,
+      "properties": {
+        "login": { "$ref": "#/$defs/nonBlankString" },
+        "name": { "$ref": "#/$defs/nonBlankString" },
+        "avatar_url": { "$ref": "#/$defs/nonBlankString" },
+        "merged_prs": { "type": "number" },
+        "first_time": { "type": "boolean" }
+      }
+    },
+    "mergedPullRequestEntry": {
+      "type": "object",
+      "required": ["number", "title", "merged_at", "author_login"],
+      "additionalProperties": false,
+      "properties": {
+        "number": { "type": "number" },
+        "title": { "$ref": "#/$defs/nonBlankString" },
+        "merged_at": { "$ref": "#/$defs/nonBlankString" },
+        "author_login": { "$ref": "#/$defs/nonBlankString" }
+      }
+    },
+    "contentSection": {
+      "type": "object",
+      "required": ["title", "bullets"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "$ref": "#/$defs/nonBlankString" },
+        "bullets": { "$ref": "#/$defs/stringArray" }
+      }
+    },
+    "roadmapStage": {
+      "type": "object",
+      "required": ["label", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "label": { "$ref": "#/$defs/nonBlankString" },
+        "summary": { "$ref": "#/$defs/nonBlankString" }
+      }
+    },
+    "roadmapTheme": {
+      "type": "object",
+      "required": ["category", "target"],
+      "additionalProperties": false,
+      "properties": {
+        "category": { "$ref": "#/$defs/nonBlankString" },
+        "target": { "$ref": "#/$defs/nonBlankString" }
+      }
+    },
+    "spotlightEntry": {
+      "type": "object",
+      "required": ["login", "summary"],
+      "additionalProperties": false,
+      "properties": {
+        "login": { "$ref": "#/$defs/nonBlankString" },
+        "summary": { "$ref": "#/$defs/nonBlankString" }
+      }
+    },
+    "communityMention": {
+      "type": "object",
+      "required": ["type", "title"],
+      "additionalProperties": false,
+      "dependentRequired": {
+        "url": ["url_label"],
+        "url_label": ["url"]
+      },
+      "properties": {
+        "type": { "$ref": "#/$defs/nonBlankString" },
+        "title": { "$ref": "#/$defs/nonBlankString" },
+        "url_label": { "$ref": "#/$defs/nonBlankString" },
+        "url": { "$ref": "#/$defs/nonBlankString" }
+      }
+    },
+    "contributionCard": {
+      "type": "object",
+      "required": ["title", "description", "url_label", "url"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "$ref": "#/$defs/nonBlankString" },
+        "description": { "$ref": "#/$defs/nonBlankString" },
+        "url_label": { "$ref": "#/$defs/nonBlankString" },
+        "url": { "$ref": "#/$defs/nonBlankString" }
+      }
+    }
+  }
+}

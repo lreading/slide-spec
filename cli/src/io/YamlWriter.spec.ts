@@ -44,4 +44,17 @@ describe('YamlWriter', () => {
     expect(fileSystem.writes.get('/tmp/generated.yaml')).toContain('generated:')
     expect(fileSystem.writes.get('/tmp/generated.yaml')).toContain('id: 2026-q1')
   })
+
+  it('prepends a yaml language server schema comment when a schema URL is provided', async () => {
+    const fileSystem = new MemoryFileSystem()
+    const writer = new YamlWriter(fileSystem)
+
+    await writer.writeDocument('/tmp/site.yaml', { schemaVersion: 1, site: {} }, {
+      schemaUrl: 'https://slide-spec.dev/schema/site.schema.json',
+    })
+
+    expect(fileSystem.writes.get('/tmp/site.yaml')?.startsWith(
+      '# yaml-language-server: $schema=https://slide-spec.dev/schema/site.schema.json\n',
+    )).toBe(true)
+  })
 })

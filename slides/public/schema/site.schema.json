@@ -1,0 +1,186 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://slide-spec.dev/schema/site.schema.json",
+  "title": "Slide Spec site.yaml",
+  "type": "object",
+  "required": ["schemaVersion", "site"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "$ref": "defs.schema.json#/$defs/schemaVersion" },
+    "site": {
+      "type": "object",
+      "required": ["title", "home_intro", "home_cta_label", "presentations_cta_label", "links"],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": { "sitemap_enabled": { "const": true } },
+            "required": ["sitemap_enabled"]
+          },
+          "then": { "required": ["deployment_url"] }
+        }
+      ],
+      "properties": {
+        "title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "deployment_url": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "sitemap_enabled": { "type": "boolean" },
+        "metadata": { "$ref": "defs.schema.json#/$defs/metadata" },
+        "mascot": { "$ref": "#/$defs/optionalImage" },
+        "data_sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type", "url"],
+            "additionalProperties": false,
+            "properties": {
+              "type": { "const": "github" },
+              "url": {
+                "allOf": [
+                  { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                  {
+                    "type": "string",
+                    "pattern": "^[a-zA-Z][a-zA-Z0-9+.-]*://(www\\.)?github\\.com(?:/|$)"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "project_badge": { "$ref": "#/$defs/projectBadge" },
+        "presentation_logo": { "$ref": "#/$defs/optionalImage" },
+        "navigation": { "$ref": "#/$defs/navigation" },
+        "app_footer": { "$ref": "#/$defs/appFooter" },
+        "attribution": { "$ref": "#/$defs/attribution" },
+        "presentation_chrome": { "$ref": "#/$defs/presentationChrome" },
+        "presentation_toolbar": { "$ref": "#/$defs/presentationToolbar" },
+        "home_hero": { "$ref": "#/$defs/homeHero" },
+        "home_intro": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "home_cta_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "presentations_cta_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "presentations_page": { "$ref": "#/$defs/presentationsPage" },
+        "links": {
+          "type": "object",
+          "required": ["repository", "docs", "community"],
+          "additionalProperties": false,
+          "properties": {
+            "repository": { "$ref": "defs.schema.json#/$defs/link" },
+            "docs": { "$ref": "defs.schema.json#/$defs/link" },
+            "community": { "$ref": "defs.schema.json#/$defs/link" }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "optionalImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "dependentRequired": { "alt": ["url"] },
+      "properties": {
+        "url": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "alt": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    },
+    "projectBadge": {
+      "type": "object",
+      "additionalProperties": false,
+      "anyOf": [
+        { "required": ["label"] },
+        { "required": ["fa_icon"] }
+      ],
+      "properties": {
+        "label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "fa_icon": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "icon_position": { "enum": ["before", "after"] }
+      }
+    },
+    "navigation": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "brand_title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "home_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "presentations_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "latest_presentation_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "docs_enabled": { "type": "boolean" },
+        "toggle_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    },
+    "appFooter": {
+      "type": "object",
+      "additionalProperties": false,
+      "dependentRequired": {
+        "repository_label": ["repository_url"],
+        "repository_url": ["repository_label"]
+      },
+      "properties": {
+        "repository_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "repository_url": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    },
+    "attribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "dependentRequired": {
+        "label": ["url"],
+        "url": ["label"]
+      },
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "url": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    },
+    "presentationChrome": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mark_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    },
+    "presentationToolbar": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "navigation_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "previous_slide_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "next_slide_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "presentation_mode_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "shortcut_help_title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "shortcut_help_body": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "shortcut_help_dismiss_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    },
+    "homeHero": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title_primary": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "title_accent": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "subtitle": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    },
+    "presentationsPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "search_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "search_placeholder": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "year_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "all_years_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "open_presentation_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "empty_title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "empty_message": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "previous_page_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "next_page_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "page_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "page_of_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "showing_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "total_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "presentation_singular_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "presentation_plural_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { ExampleRegistry } from '../examples/ExampleRegistry'
+import { slideSpecSchemaUrls } from '../../../shared/src/json-schema-urls'
 import { ContentConfigLoader } from '../config/ContentConfigLoader'
 import { DataSourceResolver } from '../config/DataSourceResolver'
 import { EnvLoader } from '../config/EnvLoader'
@@ -141,7 +142,7 @@ export class TdCliApplicationService implements TdCliService {
         ...(input.docsUrl !== undefined ? { docsUrl: input.docsUrl } : {}),
         ...(input.websiteUrl !== undefined ? { websiteUrl: input.websiteUrl } : {}),
         ...(input.githubDataSourceUrl !== undefined ? { githubDataSourceUrl: input.githubDataSourceUrl } : {}),
-      }))
+      }), { schemaUrl: slideSpecSchemaUrls.site })
       createdPaths.push(paths.getSiteConfigPath())
     }
     const presentationPath = paths.getPresentationPath(input.presentationId)
@@ -149,7 +150,9 @@ export class TdCliApplicationService implements TdCliService {
       id: input.presentationId,
     })
 
-    await this.yamlWriter.writeDocument(presentationPath, presentationDocument)
+    await this.yamlWriter.writeDocument(presentationPath, presentationDocument, {
+      schemaUrl: slideSpecSchemaUrls.presentation,
+    })
     await this.generatedDataStore.writeGeneratedData(paths, { id: input.presentationId }, generatedDocument)
     createdPaths.push(presentationPath, generatedPath)
 

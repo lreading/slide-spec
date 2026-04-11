@@ -1,4 +1,5 @@
 import { SLIDE_SPEC_SCHEMA_VERSION } from '../../../shared/src/content'
+import { slideSpecSchemaUrls } from '../../../shared/src/json-schema-urls'
 import { YamlReader } from '../io/YamlReader'
 import { YamlWriter } from '../io/YamlWriter'
 
@@ -52,6 +53,8 @@ export class GeneratedDataStore {
     await this.yamlWriter.writeDocument(generatedPath, {
       schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
       generated,
+    }, {
+      schemaUrl: slideSpecSchemaUrls.generated,
     })
     return generatedPath
   }

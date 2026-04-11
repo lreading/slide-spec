@@ -49,3 +49,5 @@ content/
 ```
 
 If `site.yaml` or `index.yaml` already exist, they are updated rather than overwritten (unless `--force` is used).
+
+Scaffolded YAML files include `yaml-language-server` comments that point to the public Slide Spec JSON Schemas for editor validation and autocomplete.
