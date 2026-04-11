@@ -82,6 +82,7 @@ Before handoff, run every local command needed to give high confidence that the 
 - Respect existing Vue 3 and Playwright patterns.
 - Any user-visible UI change should trigger review of unit, e2e, a11y, and visual coverage.
 - Treat accessibility, deterministic output, and static-site generation as release-quality requirements.
+- When adding or changing app routes, update static route entrypoint generation, `sitemap.xml`/`llms.txt` behavior, and route/deep-link tests in the same change.
 
 ### `cli/`
 

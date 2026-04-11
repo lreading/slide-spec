@@ -79,6 +79,7 @@ As a practical rule:
 - If you changed product code, run the relevant package verify command and any missing checks needed for confidence.
 - If you changed docs, make sure docs build cleanly and the markdown, spellcheck, and link checks still make sense.
 - If you changed UI or rendering, think about unit tests, e2e coverage, accessibility, and visual regression impact together.
+- If you changed app routes, make sure direct links and hard refreshes work in static builds and update sitemap/LLM metadata behavior if the public route surface changed.
 
 ## Common GitHub Actions failures
 
