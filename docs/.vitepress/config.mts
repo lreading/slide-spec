@@ -14,6 +14,8 @@ export default defineConfig({
   cleanUrls: true,
   lastUpdated: false,
   head: [
+    ['link', { rel: 'icon', href: '/favicon.ico', sizes: 'any' }],
+    ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { name: 'theme-color', content: '#1e1e2e' }],
     ['meta', { property: 'og:title', content: 'Slide Spec documentation' }],
     ['meta', { property: 'og:description', content: 'Open source, YAML-driven slide decks with connectors, templates, and static builds.' }],

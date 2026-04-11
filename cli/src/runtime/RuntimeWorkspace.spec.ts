@@ -29,6 +29,7 @@ describe('RuntimeWorkspace', () => {
     await mkdir(resolve(cliRoot, 'node_modules'), { recursive: true })
     await writeFile(resolve(cliRoot, 'runtime-template', 'app', 'index.html'), '<html></html>')
     await mkdir(resolve(cliRoot, 'runtime-template', 'app', 'public'), { recursive: true })
+    await writeFile(resolve(cliRoot, 'runtime-template', 'app', 'public', 'favicon.ico'), 'ico')
     await writeFile(resolve(cliRoot, 'runtime-template', 'app', 'public', 'favicon.svg'), '<svg></svg>')
     await writeFile(resolve(cliRoot, 'runtime-template', 'shared', 'src', 'content.ts'), 'export {}')
     await mkdir(resolve(projectRoot, 'content'), { recursive: true })
@@ -40,6 +41,7 @@ describe('RuntimeWorkspace', () => {
     const prepared = await workspace.prepare(new FileSystemPaths(projectRoot))
 
     await expect(readFile(resolve(prepared.appRoot, 'index.html'), 'utf8')).resolves.toContain('<html>')
+    await expect(readFile(resolve(prepared.appRoot, 'public', 'favicon.ico'), 'utf8')).resolves.toBe('ico')
     await expect(readFile(resolve(prepared.appRoot, 'public', 'favicon.svg'), 'utf8')).resolves.toContain('<svg>')
     await expect(readFile(resolve(prepared.appRoot, 'public', 'social-preview.png'), 'utf8')).resolves.toBe('preview')
     await expect(readFile(resolve(prepared.root, 'content', 'site.yaml'), 'utf8')).resolves.toContain('site:')
