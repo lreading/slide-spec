@@ -91,6 +91,9 @@ generated:
     })).resolves.toBe('/workspace/project/content/presentations/2026-q1/generated.yaml')
 
     expect(fileSystem.files.get('/workspace/project/content/presentations/2026-q1/generated.yaml')).toContain(
+      '# yaml-language-server: $schema=https://slide-spec.dev/schema/generated.schema.json',
+    )
+    expect(fileSystem.files.get('/workspace/project/content/presentations/2026-q1/generated.yaml')).toContain(
       'schemaVersion:',
     )
     expect(fileSystem.files.get('/workspace/project/content/presentations/2026-q1/generated.yaml')).toContain(

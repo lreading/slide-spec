@@ -5,6 +5,7 @@ Controls what appears on the presentations list page.
 ## Example
 
 ```yaml
+# yaml-language-server: $schema=https://slide-spec.dev/schema/presentations-index.schema.json
 schemaVersion: 1
 presentations:
   - id: 2026-spring-briefing

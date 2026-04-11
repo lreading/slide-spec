@@ -105,9 +105,35 @@ const validGeneratedDocument = {
         metadata: { comparison_status: 'complete', warning_codes: [] },
       },
     },
-    releases: [],
-    contributors: { total: 0, authors: [] },
-    merged_prs: [],
+    releases: [
+      {
+        id: 'v1.0.0',
+        version: 'v1.0.0',
+        published_at: '2026-01-31T00:00:00Z',
+        url: 'https://github.com/lreading/slide-spec/releases/tag/v1.0.0',
+        summary_bullets: ['First release'],
+      },
+    ],
+    contributors: {
+      total: 1,
+      authors: [
+        {
+          login: 'octocat',
+          name: 'Octocat',
+          avatar_url: 'https://avatars.githubusercontent.com/u/1?v=4',
+          merged_prs: 2,
+          first_time: true,
+        },
+      ],
+    },
+    merged_prs: [
+      {
+        number: 42,
+        title: 'Ship launch content',
+        merged_at: '2026-01-30T00:00:00Z',
+        author_login: 'octocat',
+      },
+    ],
   },
 } satisfies { schemaVersion: number, generated: GeneratedPresentationData }
 
@@ -339,6 +365,21 @@ describe('ContentValidator', () => {
         generated: { ...validGeneratedDocument.generated, merged_prs: 'not an array' },
       }),
     ).toThrow('generated document.generated.merged_prs must be an array.')
+    expect(() =>
+      validator.validateGeneratedDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        generated: { ...validGeneratedDocument.generated, releases: [{ id: 'v1.0.0' }] },
+      }),
+    ).toThrow('generated document.generated.releases[0].version must be a string.')
+    expect(() =>
+      validator.validateGeneratedDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        generated: {
+          ...validGeneratedDocument.generated,
+          contributors: { total: 1, authors: [{ login: 'octocat' }] },
+        },
+      }),
+    ).toThrow('generated document.generated.contributors.authors[0].name must be a string.')
   })
 
   it('rejects inconsistent presentation ids', () => {

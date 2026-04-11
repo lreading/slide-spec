@@ -1,4 +1,5 @@
 import { SLIDE_SPEC_SCHEMA_VERSION } from '../../../shared/src/content'
+import { slideSpecSchemaUrls } from '../../../shared/src/json-schema-urls'
 import { PresentationIndexLoader } from '../generation/PresentationIndexLoader'
 import { YamlWriter } from '../io/YamlWriter'
 
@@ -34,6 +35,8 @@ export class PresentationIndexStore {
     await this.yamlWriter.writeDocument(paths.getPresentationsIndexPath(), {
       schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
       presentations: entries,
+    }, {
+      schemaUrl: slideSpecSchemaUrls.presentationsIndex,
     })
   }
 }

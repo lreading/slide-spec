@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://slide-spec.dev/schema/presentations-index.schema.json
 schemaVersion: 1
 presentations:
   - id: readme-demo

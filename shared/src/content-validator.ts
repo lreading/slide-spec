@@ -36,6 +36,7 @@ interface GeneratedDocument {
 
 function assertLink(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['label', 'url', 'eyebrow'], path)
   assertNonBlankString(value.label, `${path}.label`)
   assertNonBlankString(value.url, `${path}.url`)
   assertOptionalString(value.eyebrow, `${path}.eyebrow`)
@@ -43,6 +44,7 @@ function assertLink(value: unknown, path: string): void {
 
 function assertProjectBadge(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['label', 'fa_icon', 'icon_position'], path)
   assertOptionalString(value.label, `${path}.label`)
   assertOptionalString(value.fa_icon, `${path}.fa_icon`)
   assertOptionalString(value.icon_position, `${path}.icon_position`)
@@ -54,6 +56,7 @@ function assertProjectBadge(value: unknown, path: string): void {
 
 function assertPresentationLogo(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['url', 'alt'], path)
   assertOptionalString(value.url, `${path}.url`)
   assertOptionalString(value.alt, `${path}.alt`)
   assert(value.url !== undefined || value.alt === undefined, `${path}.alt requires ${path}.url.`)
@@ -61,6 +64,7 @@ function assertPresentationLogo(value: unknown, path: string): void {
 
 function assertMascotContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['url', 'alt'], path)
   assertOptionalString(value.url, `${path}.url`)
   assertOptionalString(value.alt, `${path}.alt`)
   assert(value.url !== undefined || value.alt === undefined, `${path}.alt requires ${path}.url.`)
@@ -68,6 +72,7 @@ function assertMascotContent(value: unknown, path: string): void {
 
 function assertSiteMetadata(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['title', 'description', 'image_url', 'image_alt'], path)
   assertOptionalString(value.title, `${path}.title`)
   assertOptionalString(value.description, `${path}.description`)
   assertOptionalString(value.image_url, `${path}.image_url`)
@@ -77,6 +82,7 @@ function assertSiteMetadata(value: unknown, path: string): void {
 
 function assertDataSource(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['type', 'url'], path)
   assertNonBlankString(value.type, `${path}.type`)
   assert(value.type === 'github', `${path}.type must be "github".`)
   assertNonBlankString(value.url, `${path}.url`)
@@ -103,6 +109,7 @@ function assertOptionalUrlString(value: unknown, path: string): void {
 
 function assertNavigationContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['brand_title', 'home_label', 'presentations_label', 'latest_presentation_label', 'docs_enabled', 'toggle_label'], path)
   assertOptionalString(value.brand_title, `${path}.brand_title`)
   assertOptionalString(value.home_label, `${path}.home_label`)
   assertOptionalString(value.presentations_label, `${path}.presentations_label`)
@@ -115,6 +122,7 @@ function assertNavigationContent(value: unknown, path: string): void {
 
 function assertAppFooterContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['repository_label', 'repository_url'], path)
   assertOptionalString(value.repository_label, `${path}.repository_label`)
   assertOptionalString(value.repository_url, `${path}.repository_url`)
   assert(
@@ -126,6 +134,7 @@ function assertAppFooterContent(value: unknown, path: string): void {
 
 function assertAttributionContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['enabled', 'label', 'url'], path)
   if (value.enabled !== undefined) {
     assertBoolean(value.enabled, `${path}.enabled`)
   }
@@ -140,11 +149,25 @@ function assertAttributionContent(value: unknown, path: string): void {
 
 function assertPresentationChromeContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['mark_label'], path)
   assertOptionalString(value.mark_label, `${path}.mark_label`)
 }
 
 function assertPresentationToolbarContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(
+    value,
+    [
+      'navigation_label',
+      'previous_slide_label',
+      'next_slide_label',
+      'presentation_mode_label',
+      'shortcut_help_title',
+      'shortcut_help_body',
+      'shortcut_help_dismiss_label',
+    ],
+    path,
+  )
   assertOptionalString(value.navigation_label, `${path}.navigation_label`)
   assertOptionalString(value.previous_slide_label, `${path}.previous_slide_label`)
   assertOptionalString(value.next_slide_label, `${path}.next_slide_label`)
@@ -156,6 +179,7 @@ function assertPresentationToolbarContent(value: unknown, path: string): void {
 
 function assertHomeHeroContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['title_primary', 'title_accent', 'subtitle'], path)
   assertOptionalString(value.title_primary, `${path}.title_primary`)
   assertOptionalString(value.title_accent, `${path}.title_accent`)
   assertOptionalString(value.subtitle, `${path}.subtitle`)
@@ -163,6 +187,28 @@ function assertHomeHeroContent(value: unknown, path: string): void {
 
 function assertPresentationsPageContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(
+    value,
+    [
+      'title',
+      'search_label',
+      'search_placeholder',
+      'year_label',
+      'all_years_label',
+      'open_presentation_label',
+      'empty_title',
+      'empty_message',
+      'previous_page_label',
+      'next_page_label',
+      'page_label',
+      'page_of_label',
+      'showing_label',
+      'total_label',
+      'presentation_singular_label',
+      'presentation_plural_label',
+    ],
+    path,
+  )
   assertOptionalString(value.title, `${path}.title`)
   assertOptionalString(value.search_label, `${path}.search_label`)
   assertOptionalString(value.search_placeholder, `${path}.search_placeholder`)
@@ -183,17 +229,48 @@ function assertPresentationsPageContent(value: unknown, path: string): void {
 
 function assertMetricValue(value: unknown, path: string): asserts value is MetricValue {
   assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['label', 'current', 'previous', 'delta', 'metadata'], path)
   assertNonBlankString(value.label, `${path}.label`)
   assertNumber(value.current, `${path}.current`)
   assertNumber(value.previous, `${path}.previous`)
   assertNumber(value.delta, `${path}.delta`)
   assert(isRecord(value.metadata), `${path}.metadata must be an object.`)
+  assertNoUnexpectedKeys(value.metadata, ['comparison_status', 'warning_codes'], `${path}.metadata`)
   assertNonBlankString(value.metadata.comparison_status, `${path}.metadata.comparison_status`)
   assert(
     ['complete', 'partial', 'skipped', 'unavailable'].includes(value.metadata.comparison_status),
     `${path}.metadata.comparison_status must be one of complete, partial, skipped, or unavailable.`,
   )
   assertStringArray(value.metadata.warning_codes, `${path}.metadata.warning_codes`)
+}
+
+function assertReleaseEntry(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['id', 'version', 'published_at', 'url', 'summary_bullets'], path)
+  assertNonBlankString(value.id, `${path}.id`)
+  assertNonBlankString(value.version, `${path}.version`)
+  assertNonBlankString(value.published_at, `${path}.published_at`)
+  assertNonBlankString(value.url, `${path}.url`)
+  assertStringArray(value.summary_bullets, `${path}.summary_bullets`)
+}
+
+function assertContributorEntry(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['login', 'name', 'avatar_url', 'merged_prs', 'first_time'], path)
+  assertNonBlankString(value.login, `${path}.login`)
+  assertNonBlankString(value.name, `${path}.name`)
+  assertNonBlankString(value.avatar_url, `${path}.avatar_url`)
+  assertNumber(value.merged_prs, `${path}.merged_prs`)
+  assertBoolean(value.first_time, `${path}.first_time`)
+}
+
+function assertMergedPullRequestEntry(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['number', 'title', 'merged_at', 'author_login'], path)
+  assertNumber(value.number, `${path}.number`)
+  assertNonBlankString(value.title, `${path}.title`)
+  assertNonBlankString(value.merged_at, `${path}.merged_at`)
+  assertNonBlankString(value.author_login, `${path}.author_login`)
 }
 
 function validateSlide(value: unknown, path: string): void {
@@ -227,6 +304,31 @@ export class ContentValidator {
     assertSchemaVersion(document.schemaVersion, 'site.yaml.schemaVersion')
     assert(isRecord(document.site), 'site.yaml.site must be an object.')
     const site = document.site
+    assertNoUnexpectedKeys(
+      site,
+      [
+        'title',
+        'deployment_url',
+        'sitemap_enabled',
+        'metadata',
+        'mascot',
+        'data_sources',
+        'project_badge',
+        'presentation_logo',
+        'navigation',
+        'app_footer',
+        'attribution',
+        'presentation_chrome',
+        'presentation_toolbar',
+        'home_hero',
+        'home_intro',
+        'home_cta_label',
+        'presentations_cta_label',
+        'presentations_page',
+        'links',
+      ],
+      'site.yaml.site',
+    )
     assertNonBlankString(site.title, 'site.yaml.site.title')
     assertOptionalUrlString(site.deployment_url, 'site.yaml.site.deployment_url')
     if (site.sitemap_enabled !== undefined) {
@@ -276,6 +378,11 @@ export class ContentValidator {
     ;(document.presentations as unknown[]).forEach((entry, index) => {
       const path = `presentations/index.yaml.presentations[${index}]`
       assert(isRecord(entry), `${path} must be an object.`)
+      assertNoUnexpectedKeys(
+        entry,
+        ['id', 'year', 'title', 'subtitle', 'summary', 'presentation_path', 'generated_path', 'published', 'featured'],
+        path,
+      )
       assertNonBlankString(entry.id, `${path}.id`)
       const id = entry.id
       assert(!ids.has(id), `${path}.id must be unique.`)
@@ -320,19 +427,32 @@ export class ContentValidator {
     assertSchemaVersion(document.schemaVersion, 'generated document.schemaVersion')
     assert(isRecord(document.generated), 'generated document.generated must be an object.')
     const generated = document.generated
+    assertNoUnexpectedKeys(
+      generated,
+      ['id', 'period', 'previous_presentation_id', 'stats', 'releases', 'contributors', 'merged_prs'],
+      'generated document.generated',
+    )
     assertNonBlankString(generated.id, 'generated document.generated.id')
     assert(isRecord(generated.period), 'generated document.generated.period must be an object.')
+    assertNoUnexpectedKeys(generated.period, ['start', 'end'], 'generated document.generated.period')
     assertNonBlankString(generated.period.start, 'generated document.generated.period.start')
     assertNonBlankString(generated.period.end, 'generated document.generated.period.end')
     assertOptionalString(generated.previous_presentation_id, 'generated document.generated.previous_presentation_id')
     assert(isRecord(generated.stats), 'generated document.generated.stats must be an object.')
     Object.entries(generated.stats).forEach(([key, value]) => assertMetricValue(value, `generated document.generated.stats.${key}`))
     assert(Array.isArray(generated.releases), 'generated document.generated.releases must be an array.')
+    ;(generated.releases as unknown[]).forEach((release, index) =>
+      assertReleaseEntry(release, `generated document.generated.releases[${index}]`))
     assert(isRecord(generated.contributors), 'generated document.generated.contributors must be an object.')
+    assertNoUnexpectedKeys(generated.contributors, ['total', 'authors'], 'generated document.generated.contributors')
     assertNumber(generated.contributors.total, 'generated document.generated.contributors.total')
     assert(Array.isArray(generated.contributors.authors), 'generated document.generated.contributors.authors must be an array.')
+    ;(generated.contributors.authors as unknown[]).forEach((author, index) =>
+      assertContributorEntry(author, `generated document.generated.contributors.authors[${index}]`))
     if (generated.merged_prs !== undefined) {
       assert(Array.isArray(generated.merged_prs), 'generated document.generated.merged_prs must be an array.')
+      ;(generated.merged_prs as unknown[]).forEach((pullRequest, index) =>
+        assertMergedPullRequestEntry(pullRequest, `generated document.generated.merged_prs[${index}]`))
     }
   }
 

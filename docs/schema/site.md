@@ -5,6 +5,7 @@ Global branding, navigation labels, footer links, and page copy.
 ## Minimal example
 
 ```yaml
+# yaml-language-server: $schema=https://slide-spec.dev/schema/site.schema.json
 schemaVersion: 1
 site:
   title: My Project Updates
@@ -124,6 +125,7 @@ At least one of `label` or `fa_icon` must be present.
 | `home_label` | string |
 | `presentations_label` | string |
 | `latest_presentation_label` | string |
+| `docs_enabled` | boolean |
 | `toggle_label` | string |
 
 All fields optional.

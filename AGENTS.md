@@ -45,6 +45,7 @@ The core audience is comfortable with source control, static sites, and YAML dat
 
 - If behavior changes, update documentation in the same task.
 - If schema, config, CLI flags, generated data, templates, or connector behavior change, update the relevant docs and examples before calling the work complete.
+- If the YAML schema changes, update the public JSON Schema files, schema tests, docs, examples, and scaffolded templates in the same task.
 - Do not leave placeholder copy, TODO-style public docs, or undocumented options.
 - Keep README, package READMEs, docs pages, examples, and CLI help aligned.
 - Keep `AGENTS.md`, `CONTRIBUTING.md`, and `CODE_OF_CONDUCT.md` aligned when shared expectations change.

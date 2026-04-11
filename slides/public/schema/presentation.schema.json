@@ -1,0 +1,292 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://slide-spec.dev/schema/presentation.schema.json",
+  "title": "Slide Spec presentation.yaml",
+  "type": "object",
+  "required": ["schemaVersion", "presentation"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "$ref": "defs.schema.json#/$defs/schemaVersion" },
+    "presentation": {
+      "type": "object",
+      "required": ["id", "title", "subtitle", "slides"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "year": { "type": "number" },
+        "title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "subtitle": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "slides": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              { "$ref": "#/$defs/heroSlide" },
+              { "$ref": "#/$defs/agendaSlide" },
+              { "$ref": "#/$defs/sectionListGridSlide" },
+              { "$ref": "#/$defs/timelineSlide" },
+              { "$ref": "#/$defs/progressTimelineSlide" },
+              { "$ref": "#/$defs/peopleSlide" },
+              { "$ref": "#/$defs/metricsAndLinksSlide" },
+              { "$ref": "#/$defs/actionCardsSlide" },
+              { "$ref": "#/$defs/closingSlide" }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "slideBase": {
+      "type": "object",
+      "required": ["template", "enabled"],
+      "additionalProperties": false,
+      "properties": {
+        "template": {
+          "enum": [
+            "hero",
+            "agenda",
+            "section-list-grid",
+            "timeline",
+            "progress-timeline",
+            "people",
+            "metrics-and-links",
+            "action-cards",
+            "closing"
+          ]
+        },
+        "enabled": { "type": "boolean" },
+        "title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "subtitle": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "content": { "type": "object" }
+      }
+    },
+    "heroSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "content"],
+          "properties": {
+            "template": { "const": "hero" },
+            "content": {
+              "type": "object",
+              "additionalProperties": false,
+              "anyOf": [
+                { "required": ["title_primary"] },
+                { "required": ["title_accent"] }
+              ],
+              "properties": {
+                "title_primary": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "title_accent": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "subtitle_prefix": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "quote": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "agendaSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title"],
+          "properties": {
+            "template": { "const": "agenda" },
+            "content": {
+              "type": "object",
+              "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    "sectionListGridSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "section-list-grid" },
+            "content": {
+              "type": "object",
+              "required": ["sections"],
+              "additionalProperties": false,
+              "properties": {
+                "sections": {
+                  "type": "array",
+                  "items": { "$ref": "defs.schema.json#/$defs/contentSection" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "timelineSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "timeline" },
+            "content": {
+              "type": "object",
+              "required": ["featured_release_ids"],
+              "additionalProperties": false,
+              "properties": {
+                "latest_badge_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "footer_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "empty_state_title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "empty_state_message": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "featured_release_ids": { "$ref": "defs.schema.json#/$defs/stringArray" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "progressTimelineSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "progress-timeline" },
+            "content": {
+              "type": "object",
+              "required": ["stage", "stages", "items", "themes"],
+              "additionalProperties": false,
+              "properties": {
+                "stage": { "enum": ["completed", "in-progress", "planned", "future"] },
+                "deliverables_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "focus_areas_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "footer_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "stages": {
+                  "type": "object",
+                  "required": ["completed", "in-progress", "planned", "future"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "completed": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
+                    "in-progress": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
+                    "planned": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
+                    "future": { "$ref": "defs.schema.json#/$defs/roadmapStage" }
+                  }
+                },
+                "items": { "$ref": "defs.schema.json#/$defs/stringArray" },
+                "themes": {
+                  "type": "array",
+                  "items": { "$ref": "defs.schema.json#/$defs/roadmapTheme" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "peopleSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "people" },
+            "content": {
+              "type": "object",
+              "required": ["spotlight"],
+              "additionalProperties": false,
+              "properties": {
+                "banner_prefix": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "contributors_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "banner_suffix": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "spotlight": {
+                  "type": "array",
+                  "items": { "$ref": "defs.schema.json#/$defs/spotlightEntry" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "metricsAndLinksSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "metrics-and-links" },
+            "content": {
+              "type": "object",
+              "required": ["stat_keys", "mentions"],
+              "additionalProperties": false,
+              "properties": {
+                "section_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "stats_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "show_deltas": { "type": "boolean" },
+                "trend_suffix": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "stat_keys": { "$ref": "defs.schema.json#/$defs/stringArray" },
+                "mentions": {
+                  "type": "array",
+                  "items": { "$ref": "defs.schema.json#/$defs/communityMention" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "actionCardsSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "action-cards" },
+            "content": {
+              "type": "object",
+              "required": ["cards"],
+              "additionalProperties": false,
+              "properties": {
+                "footer_text": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "cards": {
+                  "type": "array",
+                  "items": { "$ref": "defs.schema.json#/$defs/contributionCard" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "closingSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "content"],
+          "properties": {
+            "template": { "const": "closing" },
+            "content": {
+              "type": "object",
+              "required": ["heading", "message"],
+              "additionalProperties": false,
+              "properties": {
+                "heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "message": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "quote": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

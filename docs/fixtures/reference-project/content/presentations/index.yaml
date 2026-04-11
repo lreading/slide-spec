@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://slide-spec.dev/schema/presentations-index.schema.json
 schemaVersion: 1
 presentations:
   - id: 2026-spring-briefing
@@ -9,8 +10,6 @@ presentations:
     summary: Reliability work, platform roadmap, and team highlights for the first half of spring.
     published: true
     featured: true
-    presentation_path: presentations/2026-spring-briefing/presentation.yaml
-    generated_path: presentations/2026-spring-briefing/generated.yaml
   - id: 2025-winter-summary
     presentation_path: presentations/2025-winter-summary/presentation.yaml
     generated_path: presentations/2025-winter-summary/generated.yaml
@@ -20,5 +19,3 @@ presentations:
     summary: Earlier update used for archive navigation examples in the docs.
     published: true
     featured: false
-    presentation_path: presentations/2025-winter-summary/presentation.yaml
-    generated_path: presentations/2025-winter-summary/generated.yaml

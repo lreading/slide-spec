@@ -32,6 +32,7 @@ If you only read one section, read this one:
 - Explicit configuration instead of magic behavior
 - Secure defaults
 - Updated docs, examples, or help text when user-facing behavior changes
+- Updated public JSON Schemas and schema tests when YAML fields or validation behavior change
 - Tests that cover the behavior you changed
 
 Slide Spec is primarily for people comfortable with source control and YAML data files. That means clarity matters more than cleverness.

@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://slide-spec.dev/schema/presentations-index.schema.json",
+  "title": "Slide Spec presentations/index.yaml",
+  "type": "object",
+  "required": ["schemaVersion", "presentations"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "$ref": "defs.schema.json#/$defs/schemaVersion" },
+    "presentations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "subtitle",
+          "summary",
+          "presentation_path",
+          "published",
+          "featured"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+          "year": { "type": "number" },
+          "title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+          "subtitle": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+          "summary": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+          "presentation_path": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+          "generated_path": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+          "published": { "type": "boolean" },
+          "featured": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}

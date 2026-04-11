@@ -19,7 +19,7 @@ This creates a common `content/` layout with:
 - `presentations/<id>/presentation.yaml` - slides and content
 - `presentations/<id>/generated.yaml` - generated data (metrics, releases, contributors)
 
-Each of these files declares a major `schemaVersion` (currently `1`) at the top level. See the [schema reference](/schema/) for details.
+Each of these files declares a major `schemaVersion` (currently `1`) at the top level and includes a JSON Schema comment for editor validation. See the [schema reference](/schema/) for details.
 
 The scaffold uses a conventional folder layout, but the registry points to presentation files explicitly.
 

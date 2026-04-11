@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://slide-spec.dev/schema/generated.schema.json",
+  "title": "Slide Spec generated.yaml",
+  "type": "object",
+  "required": ["schemaVersion", "generated"],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": { "$ref": "defs.schema.json#/$defs/schemaVersion" },
+    "generated": {
+      "type": "object",
+      "required": ["id", "period", "stats", "releases", "contributors"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "period": {
+          "type": "object",
+          "required": ["start", "end"],
+          "additionalProperties": false,
+          "properties": {
+            "start": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+            "end": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+          }
+        },
+        "previous_presentation_id": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "stats": {
+          "type": "object",
+          "additionalProperties": { "$ref": "defs.schema.json#/$defs/metricValue" }
+        },
+        "releases": {
+          "type": "array",
+          "items": { "$ref": "defs.schema.json#/$defs/releaseEntry" }
+        },
+        "contributors": {
+          "type": "object",
+          "required": ["total", "authors"],
+          "additionalProperties": false,
+          "properties": {
+            "total": { "type": "number" },
+            "authors": {
+              "type": "array",
+              "items": { "$ref": "defs.schema.json#/$defs/contributorEntry" }
+            }
+          }
+        },
+        "merged_prs": {
+          "type": "array",
+          "items": { "$ref": "defs.schema.json#/$defs/mergedPullRequestEntry" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://slide-spec.dev/schema.json",
+  "title": "Slide Spec YAML document",
+  "description": "Dispatcher schema for Slide Spec YAML documents. Prefer a specific schema URL when the file type is known.",
+  "oneOf": [
+    { "$ref": "schema/site.schema.json" },
+    { "$ref": "schema/presentations-index.schema.json" },
+    { "$ref": "schema/presentation.schema.json" },
+    { "$ref": "schema/generated.schema.json" }
+  ]
+}
