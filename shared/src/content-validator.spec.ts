@@ -1,11 +1,12 @@
 import { describe, expect, it } from 'vitest'
 
 import { ContentValidator } from './content-validator'
-import type { GeneratedPresentationData, PresentationIndexEntry } from './content'
+import { SLIDE_SPEC_SCHEMA_VERSION, type GeneratedPresentationData, type PresentationIndexEntry } from './content'
 
 const validator = new ContentValidator()
 
 const validSiteDocument = {
+  schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
   site: {
     title: 'Slide Spec',
     deployment_url: 'https://www.slide-spec.dev',
@@ -65,6 +66,7 @@ const validSiteDocument = {
 }
 
 const validPresentationDocument = {
+  schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
   presentation: {
     id: 'launch',
     year: 2026,
@@ -89,6 +91,7 @@ const validPresentationDocument = {
 }
 
 const validGeneratedDocument = {
+  schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
   generated: {
     id: 'launch',
     period: { start: '2026-01-01', end: '2026-03-31' },
@@ -106,7 +109,7 @@ const validGeneratedDocument = {
     contributors: { total: 0, authors: [] },
     merged_prs: [],
   },
-} satisfies { generated: GeneratedPresentationData }
+} satisfies { schemaVersion: number, generated: GeneratedPresentationData }
 
 describe('ContentValidator', () => {
   it('accepts valid site, index, presentation, generated, and consistency records', () => {
@@ -122,7 +125,9 @@ describe('ContentValidator', () => {
     }
 
     expect(() => validator.validateSiteDocument(validSiteDocument)).not.toThrow()
-    expect(() => validator.validatePresentationIndexDocument({ presentations: [indexEntry] })).not.toThrow()
+    expect(() =>
+      validator.validatePresentationIndexDocument({ schemaVersion: SLIDE_SPEC_SCHEMA_VERSION, presentations: [indexEntry] }),
+    ).not.toThrow()
     expect(() => validator.validatePresentationDocument(validPresentationDocument)).not.toThrow()
     expect(() => validator.validateGeneratedDocument(validGeneratedDocument)).not.toThrow()
     expect(() =>
@@ -132,6 +137,7 @@ describe('ContentValidator', () => {
 
   it('accepts minimal site options and explicit generated paths', () => {
     const minimalSite = {
+      schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
       site: {
         title: 'Slide Spec',
         home_intro: 'Structured slide decks.',
@@ -144,6 +150,7 @@ describe('ContentValidator', () => {
     expect(() => validator.validateSiteDocument(minimalSite)).not.toThrow()
     expect(() =>
       validator.validatePresentationIndexDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
         presentations: [
           {
             id: 'launch',
@@ -160,6 +167,7 @@ describe('ContentValidator', () => {
     ).not.toThrow()
     expect(() =>
       validator.validatePresentationDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
         presentation: {
           ...validPresentationDocument.presentation,
           slides: [{ template: 'agenda', enabled: true, title: 'Agenda' }],
@@ -170,43 +178,82 @@ describe('ContentValidator', () => {
 
   it('rejects invalid site configuration', () => {
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, deployment_url: 'not a url' } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, deployment_url: 'not a url' },
+      }),
     ).toThrow('site.yaml.site.deployment_url must be a valid URL.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, mascot: { alt: 'Mascot' } } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, mascot: { alt: 'Mascot' } },
+      }),
     ).toThrow('site.yaml.site.mascot.alt requires site.yaml.site.mascot.url.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, presentation_logo: { alt: 'Logo' } } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, presentation_logo: { alt: 'Logo' } },
+      }),
     ).toThrow('site.yaml.site.presentation_logo.alt requires site.yaml.site.presentation_logo.url.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, project_badge: { icon_position: 'middle' } } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, project_badge: { icon_position: 'middle' } },
+      }),
     ).toThrow('site.yaml.site.project_badge must include label or fa_icon.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, project_badge: { label: 'Badge', icon_position: 'middle' } } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, project_badge: { label: 'Badge', icon_position: 'middle' } },
+      }),
     ).toThrow('site.yaml.site.project_badge.icon_position must be "before" or "after".')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, navigation: { docs_enabled: 'true' } } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, navigation: { docs_enabled: 'true' } },
+      }),
     ).toThrow('site.yaml.site.navigation.docs_enabled must be a boolean.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, deployment_url: undefined, sitemap_enabled: true } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, deployment_url: undefined, sitemap_enabled: true },
+      }),
     ).toThrow('site.yaml.site.deployment_url is required when site.yaml.site.sitemap_enabled is true.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, data_sources: [{ type: 'github', url: 'https://example.test/repo' }] } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, data_sources: [{ type: 'github', url: 'https://example.test/repo' }] },
+      }),
     ).toThrow('site.yaml.site.data_sources[0].url must point to github.com.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, data_sources: [{ type: 'github', url: 'not a url' }] } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, data_sources: [{ type: 'github', url: 'not a url' }] },
+      }),
     ).toThrow('site.yaml.site.data_sources[0].url must be a valid URL.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, data_sources: [{ type: 'gitlab', url: 'https://github.com/lreading/slide-spec' }] } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, data_sources: [{ type: 'gitlab', url: 'https://github.com/lreading/slide-spec' }] },
+      }),
     ).toThrow('site.yaml.site.data_sources[0].type must be "github".')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, data_sources: 'github' } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, data_sources: 'github' },
+      }),
     ).toThrow('site.yaml.site.data_sources must be an array.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, app_footer: { repository_label: 'GitHub' } } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, app_footer: { repository_label: 'GitHub' } },
+      }),
     ).toThrow('site.yaml.site.app_footer must provide both repository_label and repository_url together.')
     expect(() =>
-      validator.validateSiteDocument({ site: { ...validSiteDocument.site, attribution: { label: 'Built with' } } }),
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, attribution: { label: 'Built with' } },
+      }),
     ).toThrow('site.yaml.site.attribution must provide both label and url together.')
   })
 
@@ -222,13 +269,20 @@ describe('ContentValidator', () => {
     }
 
     expect(() =>
-      validator.validatePresentationIndexDocument({ presentations: [entry, { ...entry, id: 'other' }] }),
+      validator.validatePresentationIndexDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        presentations: [entry, { ...entry, id: 'other' }],
+      }),
     ).toThrow('presentations/index.yaml.presentations[1].presentation_path must be unique.')
     expect(() =>
-      validator.validatePresentationIndexDocument({ presentations: [entry, { ...entry, presentation_path: 'presentations/other/presentation.yaml' }] }),
+      validator.validatePresentationIndexDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        presentations: [entry, { ...entry, presentation_path: 'presentations/other/presentation.yaml' }],
+      }),
     ).toThrow('presentations/index.yaml.presentations[1].id must be unique.')
     expect(() =>
       validator.validatePresentationIndexDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
         presentations: [
           { ...entry, generated_path: 'generated.yaml' },
           { ...entry, id: 'other', presentation_path: 'presentations/other/presentation.yaml', generated_path: 'generated.yaml' },
@@ -239,19 +293,35 @@ describe('ContentValidator', () => {
 
   it('rejects invalid presentation and generated documents', () => {
     expect(() =>
-      validator.validatePresentationDocument({ presentation: { ...validPresentationDocument.presentation, extra: true } }),
+      validator.validatePresentationDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        presentation: { ...validPresentationDocument.presentation, extra: true },
+      }),
     ).toThrow('presentation document.presentation.extra is not allowed.')
     expect(() =>
-      validator.validatePresentationDocument({ presentation: { ...validPresentationDocument.presentation, slides: [{ template: 'unknown', enabled: true }] } }),
+      validator.validatePresentationDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        presentation: { ...validPresentationDocument.presentation, slides: [{ template: 'unknown', enabled: true }] },
+      }),
     ).toThrow('presentation document.presentation.slides[0].template must be a supported template id.')
     expect(() =>
-      validator.validatePresentationDocument({ presentation: { ...validPresentationDocument.presentation, slides: [{ template: 'agenda', enabled: true, title: 'Agenda', content: { extra: true } }] } }),
+      validator.validatePresentationDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        presentation: {
+          ...validPresentationDocument.presentation,
+          slides: [{ template: 'agenda', enabled: true, title: 'Agenda', content: { extra: true } }],
+        },
+      }),
     ).toThrow('presentation document.presentation.slides[0].content must be omitted or an empty object for agenda slides.')
     expect(() =>
-      validator.validateGeneratedDocument({ generated: { ...validGeneratedDocument.generated, stats: { stars: { label: 'Stars' } } } }),
+      validator.validateGeneratedDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        generated: { ...validGeneratedDocument.generated, stats: { stars: { label: 'Stars' } } },
+      }),
     ).toThrow('generated document.generated.stats.stars.current must be a number.')
     expect(() =>
       validator.validateGeneratedDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
         generated: {
           ...validGeneratedDocument.generated,
           stats: {
@@ -264,7 +334,10 @@ describe('ContentValidator', () => {
       }),
     ).toThrow('generated document.generated.stats.stars.metadata.comparison_status must be one of complete, partial, skipped, or unavailable.')
     expect(() =>
-      validator.validateGeneratedDocument({ generated: { ...validGeneratedDocument.generated, merged_prs: 'not an array' } }),
+      validator.validateGeneratedDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        generated: { ...validGeneratedDocument.generated, merged_prs: 'not an array' },
+      }),
     ).toThrow('generated document.generated.merged_prs must be an array.')
   })
 

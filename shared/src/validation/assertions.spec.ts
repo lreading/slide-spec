@@ -8,6 +8,7 @@ import {
   assertOptionalBoolean,
   assertOptionalNumber,
   assertOptionalString,
+  assertSchemaVersion,
   assertStringArray,
   isRecord,
 } from './assertions'
@@ -33,5 +34,13 @@ describe('validation assertions', () => {
     expect(() => assertOptionalNumber(Number.NaN, 'count')).toThrow('count must be a number.')
     expect(() => assertStringArray(['ok', ''], 'items')).toThrow('items[1] must not be blank.')
     expect(() => assertNoUnexpectedKeys({ extra: true }, ['allowed'], 'record')).toThrow('record.extra is not allowed.')
+  })
+
+  it('validates schema major version', () => {
+    expect(() => assertSchemaVersion(1, 'doc.schemaVersion')).not.toThrow()
+    expect(() => assertSchemaVersion(2, 'doc.schemaVersion')).toThrow(
+      'doc.schemaVersion must be 1. This Slide Spec release does not support schema version 2.',
+    )
+    expect(() => assertSchemaVersion(1.2, 'doc.schemaVersion')).toThrow('doc.schemaVersion must be an integer.')
   })
 })
