@@ -23,6 +23,9 @@ cli/.runtime-workspaces/
 dast-report/
 docs/.vitepress/cache/
 docs/.vitepress/dist/
+docs/public/llms.txt
+docs/public/robots.txt
+docs/public/sitemap.xml
 
 # Logs
 logs/
