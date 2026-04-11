@@ -137,6 +137,12 @@ describe('ContentValidator', () => {
       validator.validateSiteDocument({
         site: {
           title: 'Threat Dragon Quarterly Updates',
+          metadata: {
+            title: 'Threat Dragon Updates',
+            description: 'Quarterly static slide decks.',
+            image_url: '/social-preview.png',
+            image_alt: 'Threat Dragon updates preview.',
+          },
           data_sources: [
             {
               type: 'github',
@@ -339,6 +345,34 @@ describe('ContentValidator', () => {
         },
       }),
     ).toThrow('site.yaml.site.deployment_url is required when site.yaml.site.sitemap_enabled is true.')
+
+    expect(() =>
+      validator.validateSiteDocument({
+        site: {
+          title: 'Test',
+          metadata: {
+            image_alt: 'Preview',
+          },
+          home_intro: 'Intro',
+          home_cta_label: 'Open',
+          presentations_cta_label: 'Presentations',
+          links: {
+            repository: {
+              label: 'GitHub Repo',
+              url: 'https://github.com/OWASP/threat-dragon',
+            },
+            docs: {
+              label: 'Docs',
+              url: 'https://example.com/docs',
+            },
+            community: {
+              label: 'Community',
+              url: 'https://example.com/community',
+            },
+          },
+        },
+      }),
+    ).toThrow('site.yaml.site.metadata.image_alt requires site.yaml.site.metadata.image_url.')
   })
 
   it('rejects blank authored content and incomplete grouped fields', () => {

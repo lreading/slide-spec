@@ -1,4 +1,4 @@
-import { cp, mkdir, rm, symlink } from 'node:fs/promises'
+import { cp, mkdir, rm, stat, symlink } from 'node:fs/promises'
 import { resolve } from 'node:path'
 
 import { CliPackagePaths } from './CliPackagePaths'
@@ -29,6 +29,7 @@ export class RuntimeWorkspace {
     await mkdir(workspaceRoot, { recursive: true })
     await cp(resolve(templateRoot, 'app'), resolve(workspaceRoot, 'app'), { recursive: true })
     await cp(resolve(templateRoot, 'shared'), resolve(workspaceRoot, 'shared'), { recursive: true })
+    await this.copyProjectPublic(paths, workspaceRoot)
     if (options.liveContent) {
       await symlink(paths.getContentRoot(), resolve(workspaceRoot, 'content'), 'junction')
     } else {
@@ -42,6 +43,25 @@ export class RuntimeWorkspace {
         await rm(workspaceRoot, { recursive: true, force: true })
         await this.cleanupWorkspaceParent()
       },
+    }
+  }
+
+  private async copyProjectPublic(paths: FileSystemPaths, workspaceRoot: string): Promise<void> {
+    if (!await this.directoryExists(paths.getPublicRoot())) {
+      return
+    }
+
+    await cp(paths.getPublicRoot(), resolve(workspaceRoot, 'app', 'public'), {
+      recursive: true,
+      force: true,
+    })
+  }
+
+  private async directoryExists(path: string): Promise<boolean> {
+    try {
+      return (await stat(path)).isDirectory()
+    } catch {
+      return false
     }
   }
 

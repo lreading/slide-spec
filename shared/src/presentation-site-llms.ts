@@ -1,8 +1,11 @@
+import type { SiteMetadataConfig } from './content'
+
 export interface PresentationSiteDocument {
   site: {
     title: string
     deployment_url?: string
     sitemap_enabled?: boolean
+    metadata?: SiteMetadataConfig
     navigation?: {
       brand_title?: string
     }

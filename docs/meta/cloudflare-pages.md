@@ -121,6 +121,15 @@ If the domain is already managed in Cloudflare, the setup is usually automatic.
 
 Cloudflare Pages will provision TLS for the custom domain automatically.
 
+If you use both an apex domain and a `www` hostname, pick one canonical host and apply it everywhere. The production Slide Spec site uses `https://www.slide-spec.dev/` as canonical:
+
+- `content/site.yaml` sets `site.deployment_url: https://www.slide-spec.dev`
+- `content/site.yaml` sets `site.metadata` for the root title, description, and social preview image
+- the built root HTML document emits canonical, Open Graph, and Twitter/X URLs under `https://www.slide-spec.dev/`
+- Cloudflare redirects `https://slide-spec.dev/` to `https://www.slide-spec.dev/`
+
+To reproduce that setup in Cloudflare, add the `www` hostname as the Pages custom domain, then add a `301` Redirect Rule for the apex hostname. Use a static target such as `https://www.slide-spec.dev/` for root-only redirects, or a dynamic expression such as `concat("https://www.slide-spec.dev", http.request.uri.path)` with query-string preservation when paths should be preserved.
+
 ---
 
 ## Step 5: Ongoing workflow

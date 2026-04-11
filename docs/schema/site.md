@@ -37,6 +37,7 @@ For a complete example, see the [reference site.yaml](https://github.com/lreadin
 | `site.links` | yes | object | Footer/resource links (see below) |
 | `site.deployment_url` | | string | Public URL for the deployed site. Required when `sitemap_enabled` is `true` |
 | `site.sitemap_enabled` | | boolean | Enable sitemap generation. Requires `deployment_url` |
+| `site.metadata` | | object | Static HTML metadata for search and social previews |
 | `site.mascot` | | object | Shared mascot image |
 | `site.data_sources` | | array | External data sources (GitHub only) |
 | `site.project_badge` | | object | Badge near the hero/title |
@@ -50,6 +51,19 @@ For a complete example, see the [reference site.yaml](https://github.com/lreadin
 | `site.presentations_page` | | object | Presentations list page labels |
 
 All optional string fields must be non-blank when present. Optional objects can be omitted entirely.
+
+### `site.metadata`
+
+These values are written into the built root HTML document so crawlers and link previews can read them before the app loads.
+
+| Field | Type | Notes |
+| --- | --- | --- |
+| `title` | string | Falls back to `site.title` |
+| `description` | string | Falls back to `site.home_intro` |
+| `image_url` | string | Absolute URL or root-relative path for Open Graph and Twitter/X preview images |
+| `image_alt` | string | Requires `image_url` |
+
+If `site.deployment_url` or `--deployment-url` is set, relative `image_url` values are resolved against that canonical site URL. Put root-relative static preview images in the project `public/` directory so they are copied into `dist/`. The canonical URL, Open Graph URL, and sitemap URL all use the same deployment URL.
 
 ### `site.links`
 

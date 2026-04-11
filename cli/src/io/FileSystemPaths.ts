@@ -17,6 +17,10 @@ export class FileSystemPaths {
     return resolve(this.getProjectRoot(), 'content')
   }
 
+  public getPublicRoot(): string {
+    return resolve(this.getProjectRoot(), 'public')
+  }
+
   public getDistPath(): string {
     return resolve(this.getProjectRoot(), 'dist')
   }

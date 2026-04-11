@@ -84,6 +84,37 @@ describe('SiteArtifactGenerator', () => {
     )
   })
 
+  it('writes static metadata into route entrypoints', async () => {
+    const projectRoot = await workspace.create()
+    const outputRoot = resolve(projectRoot, 'dist')
+    await mkdir(outputRoot, { recursive: true })
+    await writeFile(resolve(outputRoot, 'index.html'), '<!doctype html><head><title>Loading...</title></head>', 'utf8')
+
+    await new SiteArtifactGenerator().generate({
+      outputRoot,
+      siteUrl: 'https://updates.example.test',
+      sitemapEnabled: false,
+      publishedPresentationIds: ['public-one'],
+      htmlMetadata: {
+        title: 'Example Updates',
+        description: 'Quarterly status decks.',
+        siteUrl: 'https://updates.example.test',
+        imageUrl: '/social-preview.png',
+        imageAlt: 'Example site preview.',
+      },
+    })
+
+    await expect(readFile(resolve(outputRoot, 'index.html'), 'utf8')).resolves.toContain(
+      '<title>Example Updates</title>',
+    )
+    await expect(readFile(resolve(outputRoot, 'index.html'), 'utf8')).resolves.toContain(
+      '<meta property="og:image" content="https://updates.example.test/social-preview.png" />',
+    )
+    await expect(readFile(resolve(outputRoot, 'presentations', 'public-one', 'index.html'), 'utf8')).resolves.toContain(
+      '<meta name="twitter:image:alt" content="Example site preview." />',
+    )
+  })
+
   it('rejects presentation ids that cannot be written as static route segments', async () => {
     const projectRoot = await workspace.create()
     const outputRoot = resolve(projectRoot, 'dist')

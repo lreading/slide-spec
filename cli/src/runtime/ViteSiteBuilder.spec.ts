@@ -17,7 +17,10 @@ class StubRuntimeWorkspace {
   public async prepare(): Promise<{ appRoot: string; cleanup(): Promise<void> }> {
     this.preparedRoots.push(this.workspaceRoot)
     await mkdir(resolve(this.workspaceRoot, 'app', 'dist'), { recursive: true })
-    await writeFile(resolve(this.workspaceRoot, 'app', 'dist', 'index.html'), '<html>built</html>')
+    await writeFile(
+      resolve(this.workspaceRoot, 'app', 'dist', 'index.html'),
+      '<html><head><title>Loading...</title></head><body>built</body></html>',
+    )
 
     return {
       appRoot: resolve(this.workspaceRoot, 'app'),
@@ -90,7 +93,10 @@ describe('ViteSiteBuilder', () => {
       root: resolve(workspaceRoot, 'app'),
       postcssConfigured: true,
     }])
-    await expect(readFile(resolve(projectRoot, 'dist', 'index.html'), 'utf8')).resolves.toContain('built')
+    await expect(readFile(resolve(projectRoot, 'dist', 'index.html'), 'utf8')).resolves.toContain('<title>Demo</title>')
+    await expect(readFile(resolve(projectRoot, 'dist', 'index.html'), 'utf8')).resolves.toContain(
+      '<meta property="og:url" content="https://updates.example.com/" />',
+    )
     await expect(readFile(resolve(projectRoot, 'dist', 'robots.txt'), 'utf8')).resolves.toContain(
       'Sitemap: https://updates.example.com/sitemap.xml',
     )

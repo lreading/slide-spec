@@ -8,6 +8,13 @@ export interface SiteDeploymentConfig {
   sitemap_enabled?: boolean
 }
 
+export interface SiteMetadataConfig {
+  title?: string
+  description?: string
+  image_url?: string
+  image_alt?: string
+}
+
 export interface PresentationIndexEntry {
   id: string
   year?: number

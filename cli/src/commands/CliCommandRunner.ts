@@ -181,7 +181,7 @@ export class CliCommandRunner {
           'Project root (optional)',
         )
         const deploymentUrl = await this.promptOptional(
-          'Optional public deployment URL used for sitemap.xml. Leave blank to skip sitemap generation.',
+          'Optional public deployment URL used for canonical metadata and sitemap.xml. Leave blank to omit deployment URLs.',
           'Deployment URL (optional)',
         )
         await this.runBuild(projectRoot, deploymentUrl)
@@ -610,14 +610,14 @@ export class CliCommandRunner {
           `Usage: ${CLI_BIN_NAME} build [project-root] [--project-root <path>] [--deployment-url <url>]`,
           '',
           'Build the packaged presentation app and write static output to dist/ in the target project.',
-          'Sitemap generation is disabled by default. Provide --deployment-url or enable it in site.yaml when you have a real deployment URL.',
+          'Provide --deployment-url or site.deployment_url when you have a real deployment URL for canonical metadata and sitemap.xml.',
           '',
           globalOptions,
           '',
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
           '  --project-root <path>   Optional. Named presentation project root',
-          '  --deployment-url <url>  Optional. Public deployment URL used for sitemap.xml generation',
+          '  --deployment-url <url>  Optional. Public deployment URL for canonical metadata and sitemap.xml',
           '',
           'Examples:',
           `  ${CLI_BIN_NAME} build`,
@@ -690,7 +690,7 @@ export class CliCommandRunner {
       '  serve [project-root] [--project-root <path>] [--host <host>] [--port <port>] [--open]',
       '    Build the site and serve dist/ locally so you can review the presentation in a browser.',
       '  build [project-root] [--project-root <path>] [--deployment-url <url>]',
-      '    Build the packaged app runtime and write dist/ to the target project. Sitemap generation is opt-in.',
+      '    Build the packaged app runtime and write dist/ to the target project. Deployment URLs are opt-in.',
     ].join('\n')
   }
 

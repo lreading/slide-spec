@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { dirname, resolve } from 'node:path'
 
+import { SiteHtmlMetadataBuilder, type SiteHtmlMetadata } from './site-html-metadata'
 import { buildSiteNotFoundPage } from './site-not-found-page'
 
 export interface SiteArtifactGeneratorOptions {
@@ -9,9 +10,12 @@ export interface SiteArtifactGeneratorOptions {
   sitemapEnabled?: boolean
   publishedPresentationIds: string[]
   llmsText?: string | undefined
+  htmlMetadata?: SiteHtmlMetadata | undefined
 }
 
 export class SiteArtifactGenerator {
+  public constructor(private readonly htmlMetadataBuilder: SiteHtmlMetadataBuilder = new SiteHtmlMetadataBuilder()) {}
+
   public async generate(options: SiteArtifactGeneratorOptions): Promise<void> {
     const siteUrl = this.resolveSiteUrl(options.siteUrl)
     const robotsTxt = this.buildRobots(siteUrl, options.sitemapEnabled === true)
@@ -23,6 +27,9 @@ export class SiteArtifactGenerator {
     if (siteUrl && options.sitemapEnabled === true) {
       const sitemapXml = this.buildSitemap(siteUrl, options.publishedPresentationIds)
       await this.writeOutput(resolve(options.outputRoot, 'sitemap.xml'), sitemapXml)
+    }
+    if (options.htmlMetadata) {
+      await this.updateIndexHtml(options.outputRoot, options.htmlMetadata)
     }
     await this.writeOutput(resolve(options.outputRoot, '404.html'), buildSiteNotFoundPage())
     await this.writeRouteEntrypoints(options.outputRoot, options.publishedPresentationIds)
@@ -79,6 +86,12 @@ export class SiteArtifactGenerator {
   private async writeOutput(path: string, contents: string): Promise<void> {
     await mkdir(dirname(path), { recursive: true })
     await writeFile(path, contents, 'utf8')
+  }
+
+  private async updateIndexHtml(outputRoot: string, metadata: SiteHtmlMetadata): Promise<void> {
+    const indexPath = resolve(outputRoot, 'index.html')
+    const indexHtml = await readFile(indexPath, 'utf8')
+    await this.writeOutput(indexPath, this.htmlMetadataBuilder.apply(indexHtml, metadata))
   }
 
   private async writeRouteEntrypoints(outputRoot: string, publishedPresentationIds: string[]): Promise<void> {

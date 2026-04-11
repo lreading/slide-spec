@@ -61,6 +61,15 @@ function assertMascotContent(value: unknown, path: string): void {
   assert(value.url !== undefined || value.alt === undefined, `${path}.alt requires ${path}.url.`)
 }
 
+function assertSiteMetadata(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertOptionalString(value.title, `${path}.title`)
+  assertOptionalString(value.description, `${path}.description`)
+  assertOptionalString(value.image_url, `${path}.image_url`)
+  assertOptionalString(value.image_alt, `${path}.image_alt`)
+  assert(value.image_url !== undefined || value.image_alt === undefined, `${path}.image_alt requires ${path}.image_url.`)
+}
+
 function assertDataSource(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNonBlankString(value.type, `${path}.type`)
@@ -219,6 +228,7 @@ export class ContentValidator {
     if (site.sitemap_enabled === true) {
       assert(site.deployment_url !== undefined, 'site.yaml.site.deployment_url is required when site.yaml.site.sitemap_enabled is true.')
     }
+    if (site.metadata !== undefined) assertSiteMetadata(site.metadata, 'site.yaml.site.metadata')
     if (site.data_sources !== undefined) {
       assert(Array.isArray(site.data_sources), 'site.yaml.site.data_sources must be an array.')
       ;(site.data_sources as unknown[]).forEach((source, index) => assertDataSource(source, `site.yaml.site.data_sources[${index}]`))

@@ -18,6 +18,7 @@ import { ContentValidator } from '../../../shared/src/content-validator'
 
 import type { FileSystemPaths } from '../io/FileSystemPaths'
 import type { InlineConfig } from 'vite'
+import type { SiteHtmlMetadata } from '../../../shared/src/site-html-metadata'
 
 type ViteBuildFunction = (config: InlineConfig) => Promise<unknown>
 
@@ -57,18 +58,20 @@ export class ViteSiteBuilder {
       const indexDocument = await this.readYaml<PresentationSiteIndexDocument>(paths.getPresentationsIndexPath())
       this.contentValidator.validateSiteDocument(siteDocument)
       this.contentValidator.validatePresentationIndexDocument(indexDocument)
+      const siteUrl = process.env.SLIDE_SPEC_DEPLOYMENT_URL || siteDocument.site.deployment_url
       await this.siteArtifactGenerator.generate({
         outputRoot: resolve(workspace.appRoot, 'dist'),
-        siteUrl: process.env.SLIDE_SPEC_DEPLOYMENT_URL || siteDocument.site.deployment_url,
+        siteUrl,
         sitemapEnabled: process.env.SLIDE_SPEC_SITEMAP_ENABLED === 'true' || siteDocument.site.sitemap_enabled === true,
         publishedPresentationIds: indexDocument.presentations
           .filter((entry) => entry.published)
           .map((entry) => entry.id),
         llmsText: buildPresentationSiteLlmsText(
-          process.env.SLIDE_SPEC_DEPLOYMENT_URL || siteDocument.site.deployment_url,
+          siteUrl,
           siteDocument,
           indexDocument,
         ),
+        htmlMetadata: this.buildHtmlMetadata(siteUrl, siteDocument),
       })
       await rm(paths.getDistPath(), { recursive: true, force: true })
       await mkdir(paths.getProjectRoot(), { recursive: true })
@@ -81,5 +84,15 @@ export class ViteSiteBuilder {
 
   private async readYaml<T>(path: string): Promise<T> {
     return parse(await readFile(path, 'utf8')) as T
+  }
+
+  private buildHtmlMetadata(siteUrl: string | undefined, siteDocument: PresentationSiteDocument): SiteHtmlMetadata {
+    return {
+      title: siteDocument.site.metadata?.title ?? siteDocument.site.title,
+      description: siteDocument.site.metadata?.description ?? siteDocument.site.home_intro,
+      siteUrl,
+      imageUrl: siteDocument.site.metadata?.image_url,
+      imageAlt: siteDocument.site.metadata?.image_alt,
+    }
   }
 }

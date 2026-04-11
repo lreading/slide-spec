@@ -4,6 +4,7 @@ import type {
   GeneratedPresentationData,
   PresentationIndexEntry,
   SiteDeploymentConfig,
+  SiteMetadataConfig,
 } from '../../../shared/src/content'
 
 export type {
@@ -15,6 +16,7 @@ export type {
   MetricValue,
   PresentationIndexEntry,
   ReleaseEntry,
+  SiteMetadataConfig,
 } from '../../../shared/src/content'
 
 export interface SiteLink {
@@ -102,6 +104,7 @@ export interface SiteContent {
   title: string
   deployment_url?: SiteDeploymentConfig['deployment_url']
   sitemap_enabled?: SiteDeploymentConfig['sitemap_enabled']
+  metadata?: SiteMetadataConfig
   mascot?: MascotContent
   data_sources?: DataSource[]
   project_badge?: ProjectBadge

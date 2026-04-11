@@ -38,6 +38,6 @@ Per-subcommand help: `npm run cli -- <command> --help`.
 - Run with no args for interactive mode.
 - `init` can write a masked `GITHUB_PAT` into `.env` for you.
 - `fetch` supports date ranges and best-effort mode without a token.
-- `build --deployment-url <url>` enables `sitemap.xml` generation.
+- `build --deployment-url <url>` enables canonical metadata and `sitemap.xml` generation.
 - Accepts an explicit project root, so it works against external projects too.
 - Signed release tags trigger `npm publish` in CI. Stable tags publish to `latest`; prerelease tags publish to `alpha`, `beta`, or `rc` based on the tag suffix.

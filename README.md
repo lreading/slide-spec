@@ -44,7 +44,7 @@ npx @slide-spec/cli validate
 npx @slide-spec/cli build      # outputs to ./dist
 ```
 
-Pass `--deployment-url` to `build` for `sitemap.xml` generation.
+Pass `--deployment-url` to `build` for canonical metadata and `sitemap.xml` generation.
 
 Every command accepts an optional directory as its first argument (e.g. `npx @slide-spec/cli serve ./my-deck`). When omitted, the current working directory is used.
 
