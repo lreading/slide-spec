@@ -4,6 +4,8 @@ updates:
     directory: /app
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
     groups:
       app-dependencies:
@@ -18,6 +20,8 @@ updates:
     directory: /cli
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
     groups:
       cli-dependencies:
@@ -32,6 +36,8 @@ updates:
     directory: /docs
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
     groups:
       docs-dependencies:
@@ -46,6 +52,8 @@ updates:
     directory: /shared
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
     groups:
       shared-dependencies:
@@ -60,6 +68,8 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
     groups:
       github-actions-patch:
