@@ -13,3 +13,19 @@ jobs:
     with:
       run-dependency-review: true
     secrets: inherit
+
+  required-quality:
+    name: Quality
+    needs:
+      - quality
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Confirm reusable quality gates passed
+        run: |
+          if [ "${{ needs.quality.result }}" != "success" ]; then
+            echo "Reusable quality gates finished with result: ${{ needs.quality.result }}"
+            exit 1
+          fi
+
+          echo "Reusable quality gates passed."
