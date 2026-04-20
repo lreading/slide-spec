@@ -4,7 +4,13 @@ updates:
     directory: /app
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
     groups:
       app-dependencies:
         applies-to: version-updates
@@ -18,7 +24,13 @@ updates:
     directory: /cli
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
     groups:
       cli-dependencies:
         applies-to: version-updates
@@ -32,7 +44,13 @@ updates:
     directory: /docs
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
     groups:
       docs-dependencies:
         applies-to: version-updates
@@ -46,7 +64,13 @@ updates:
     directory: /shared
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
     groups:
       shared-dependencies:
         applies-to: version-updates
@@ -60,7 +84,13 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    cooldown:
+      default-days: 10
     open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
     groups:
       github-actions-patch:
         applies-to: version-updates

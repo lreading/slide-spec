@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   enable-auto-merge:
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'github-actions')
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && contains(github.event.pull_request.labels.*.name, 'github_actions')
     runs-on: ubuntu-latest
     steps:
       - id: metadata
