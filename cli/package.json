@@ -1,7 +1,7 @@
 {
   "name": "@slide-spec/cli",
   "version": "0.0.0-alpha.0",
-  "description": "CLI for Slide Spec: scaffold, validate, fetch, build, and serve YAML-driven slide decks.",
+  "description": "Create beautiful slides from YAML - presentations as structured data for open sharing and collaboration. Built for open source, usable everywhere.",
   "license": "Apache-2.0",
   "type": "module",
   "engines": {
@@ -24,7 +24,9 @@
     "presentation",
     "yaml",
     "cli",
-    "static-site"
+    "static-site",
+    "open-source",
+    "collaboration"
   ],
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,6 @@
 # Concepts
 
-Slide Spec turns YAML files into a static presentation website. This page explains the core ideas you need to understand before writing your first deck.
+Slide Spec creates beautiful slides from YAML by treating presentations as structured data for open sharing and collaboration. This page explains the core ideas you need to understand before writing your first deck.
 
 ## Content directory
 

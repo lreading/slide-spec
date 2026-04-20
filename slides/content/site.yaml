@@ -5,10 +5,10 @@ site:
   deployment_url: https://www.slide-spec.dev
   sitemap_enabled: true
   metadata:
-    title: Slide Spec | YAML-Driven Slide Decks
-    description: Slide Spec turns structured YAML into static slide decks you can review in PRs and host anywhere.
+    title: Slide Spec | Beautiful Slides from YAML
+    description: Create beautiful slides from YAML - presentations as structured data for open sharing and collaboration. Built for open source, usable everywhere.
     image_url: /social-preview.png
-    image_alt: Slide Spec homepage preview with YAML-driven presentation examples.
+    image_alt: Slide Spec homepage preview with YAML-authored presentation examples.
   mascot:
     url: content/assets/slide-spec-mascot.svg
     alt: Slide Spec mascot
@@ -26,7 +26,7 @@ site:
     title_primary: Slide
     title_accent: Spec
     subtitle: Create beautiful slides from YAML
-  home_intro: Slide Spec turns structured YAML into static slide decks you can host anywhere. Keep presentations in the same repo as your code, review them in PRs, and skip proprietary authoring tools.
+  home_intro: Presentations as structured data for open sharing and collaboration. Built for open source, usable everywhere.
   home_cta_label: See Slide Spec in action
   presentations_cta_label: Browse the showcase
   navigation:

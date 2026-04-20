@@ -2,7 +2,7 @@
 
 # Slide Spec
 
-**Create beautiful slides from YAML, not PowerPoint.**
+**Create beautiful slides from YAML - presentations as structured data for open sharing and collaboration. Built for open source, usable everywhere.**
 
 [![npm](https://img.shields.io/npm/v/@slide-spec/cli)](https://www.npmjs.com/package/@slide-spec/cli)
 [![CI](https://img.shields.io/github/actions/workflow/status/lreading/slide-spec/main.yml?branch=main&label=CI)](https://github.com/lreading/slide-spec/actions/workflows/main.yml)
@@ -17,12 +17,12 @@
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
-Slide Spec turns structured YAML into a static slide deck you can host anywhere. Keep your presentations in the same repo as your code so teams can review them in PRs and diff changes like any other project artifact.
+Slide Spec turns structured YAML into static slide decks you can host anywhere. Keep presentations in the same repo as your code so teams can review them in PRs, diff changes, and publish open formats without proprietary authoring tools.
 
-- Write slides as structured YAML you can diff, lint, and generate
+- Write slides as structured YAML you can diff, lint, and review
 - Build a static site you can deploy to GitHub Pages, S3, or any CDN
-- No proprietary file formats or authoring tools
-- Validation baked into CI for a GitOps workflow
+- Share presentations as open web output, not proprietary files
+- Use validation in CI for a source-controlled workflow
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 

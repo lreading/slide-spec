@@ -10,7 +10,7 @@ export default defineConfig({
     },
   },
   title: 'Slide Spec',
-  description: 'Open source, YAML-driven slide decks with connectors, templates, and static builds.',
+  description: 'Create beautiful slides from YAML - presentations as structured data for open sharing and collaboration. Built for open source, usable everywhere.',
   cleanUrls: true,
   lastUpdated: false,
   head: [
@@ -18,7 +18,7 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' }],
     ['meta', { name: 'theme-color', content: '#1e1e2e' }],
     ['meta', { property: 'og:title', content: 'Slide Spec documentation' }],
-    ['meta', { property: 'og:description', content: 'Open source, YAML-driven slide decks with connectors, templates, and static builds.' }],
+    ['meta', { property: 'og:description', content: 'Create beautiful slides from YAML - presentations as structured data for open sharing and collaboration. Built for open source, usable everywhere.' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:url', content: `${siteUrl}/` }],
     ['meta', { property: 'og:image', content: `${siteUrl}/screenshots/home-reference.png` }],

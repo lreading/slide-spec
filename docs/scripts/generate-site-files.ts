@@ -36,7 +36,7 @@ class DocumentationSiteFileGenerator {
     const lines = [
       '# Slide Spec Docs',
       '',
-      '> Canonical documentation for Slide Spec, a YAML-first static site and presentation system. Use these pages for the validated file formats, built-in slide templates, CLI workflow, and worked examples.',
+      '> Canonical documentation for Slide Spec: create beautiful slides from YAML - presentations as structured data for open sharing and collaboration. Built for open source, usable everywhere.',
       '',
       'Important notes:',
       '- Validation is strict. Prefer the schema reference over inference from examples.',

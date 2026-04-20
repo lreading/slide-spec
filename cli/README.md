@@ -1,8 +1,8 @@
 # Slide Spec CLI
 
-Create beautiful slides from YAML.
+Create beautiful slides from YAML - presentations as structured data for open sharing and collaboration. Built for open source, usable everywhere.
 
-Write presentations as structured data. Version control them like code, review them in pull requests, and publish them without relying on proprietary slide formats.
+Write presentations as structured data. Version control them like code, review them in pull requests, and publish static sites without relying on proprietary slide formats.
 
 ![Slide Spec demo](../assets/readme-demo.gif)
 
@@ -10,13 +10,13 @@ Write presentations as structured data. Version control them like code, review t
 
 ## Why Slide Spec?
 
-Slide Spec is for developers, docs-as-code teams, and open source projects that want presentations to be:
+Slide Spec is for technical maintainers, docs-as-code teams, and open source projects that want presentations to be:
 
 - **Structured** instead of hand-edited in opaque binaries
 - **Version controlled** alongside code and docs
 - **Reviewable** in pull requests
-- **Reusable** across updates, releases, and community reports
-- **Openly shareable** without locking content into proprietary authoring tools
+- **Reusable** across updates, releases, briefings, and reports
+- **Openly shareable** as static web output without proprietary authoring tools
 
 <img src="../assets/readme-divider.svg" width="100%" height="8" alt="" />
 

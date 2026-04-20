@@ -1,6 +1,6 @@
 # Agent Assistance
 
-slide-spec's YAML-first design works well with AI coding assistants.
+Slide Spec's structured YAML design works well with AI coding assistants.
 
 **Good fits:** drafting `presentation.yaml` slides, filling `generated.yaml` from approved data, running schema validation, regenerating screenshots from fixtures.
 
