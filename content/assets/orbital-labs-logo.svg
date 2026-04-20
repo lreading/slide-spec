@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Orbital Labs logo</title>
+  <desc id="desc">A red orbital ring around a pale center dot.</desc>
+  <circle cx="80" cy="80" r="74" fill="#101827"/>
+  <ellipse cx="80" cy="80" rx="55" ry="24" fill="none" stroke="#e8341c" stroke-width="10" transform="rotate(-28 80 80)"/>
+  <ellipse cx="80" cy="80" rx="55" ry="24" fill="none" stroke="#93a0bd" stroke-width="8" opacity="0.75" transform="rotate(28 80 80)"/>
+  <circle cx="80" cy="80" r="22" fill="#f5f7ff"/>
+  <circle cx="118" cy="51" r="9" fill="#ff8d78"/>
+</svg>

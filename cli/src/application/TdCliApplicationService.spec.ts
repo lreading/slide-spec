@@ -441,6 +441,9 @@ describe('TdCliApplicationService', () => {
     })
 
     expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('schemaVersion:')
+    expect(fileSystem.writes.get('/repo/content/site.yaml')?.startsWith(
+      '# Slide Spec\n# https://www.slide-spec.dev/\n# Documentation: https://docs.slide-spec.dev/\n',
+    )).toBe(true)
     expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain(
       '# yaml-language-server: $schema=https://slide-spec.dev/schema/site.schema.json',
     )
@@ -449,6 +452,9 @@ describe('TdCliApplicationService', () => {
     expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('https://example.com')
     expect(fileSystem.writes.get('/repo/content/site.yaml')).toContain('data_sources:')
     expect(fileSystem.writes.get('/repo/content/presentations/2026-q1/presentation.yaml')).toContain('schemaVersion:')
+    expect(fileSystem.writes.get('/repo/content/presentations/2026-q1/presentation.yaml')?.startsWith(
+      '# Slide Spec\n# https://www.slide-spec.dev/\n# Documentation: https://docs.slide-spec.dev/\n',
+    )).toBe(true)
     expect(fileSystem.writes.get('/repo/content/presentations/2026-q1/presentation.yaml')).toContain(
       '# yaml-language-server: $schema=https://slide-spec.dev/schema/presentation.schema.json',
     )

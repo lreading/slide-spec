@@ -51,6 +51,7 @@ For a complete example, see the [reference site.yaml](https://github.com/lreadin
 | `site.presentation_chrome` | | object | Slide chrome labels |
 | `site.presentation_toolbar` | | object | Toolbar labels and shortcut copy |
 | `site.home_hero` | | object | Home page hero title parts |
+| `site.home_logos` | | array | Optional compact home page logo links |
 | `site.presentations_page` | | object | Presentations list page labels |
 
 All optional string fields must be non-blank when present. Optional objects can be omitted entirely.
@@ -174,6 +175,23 @@ All fields optional.
 | `subtitle` | string |
 
 All fields optional.
+
+### `site.home_logos[]`
+
+Compact logo links rendered below the home page hero. Use them for "used by" links, featured projects, partner logos, or other small logo-based references.
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `name` | yes | string | Link text shown below the logo |
+| `url` | yes | string | Link target |
+| `logo` | yes | object | Logo image |
+
+#### `site.home_logos[].logo`
+
+| Field | Required | Type | Notes |
+| --- | --- | --- | --- |
+| `url` | yes | string | Local or remote image path |
+| `alt` | yes | string | Accessible image text |
 
 ### `site.presentations_page`
 

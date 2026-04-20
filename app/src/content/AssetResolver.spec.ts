@@ -32,8 +32,8 @@ describe('AssetResolver', () => {
   })
 
   it('resolves project asset paths to bundled asset URLs', () => {
-    expect(assetResolver.resolve('content/assets/cupcake-logo.png')).toContain('cupcake-logo')
-    expect(assetResolver.resolve('assets/cupcake-mascot.png')).toContain('cupcake-mascot')
+    expect(assetResolver.resolve('content/assets/aurora-notes-logo.svg')).toContain('data:image/svg+xml')
+    expect(assetResolver.resolve('assets/aurora-notes-mascot.svg')).toContain('data:image/svg+xml')
   })
 
   it('passes through remote and absolute URLs unchanged', () => {

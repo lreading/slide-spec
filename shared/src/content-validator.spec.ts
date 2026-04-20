@@ -39,6 +39,13 @@ const validSiteDocument = {
       shortcut_help_dismiss_label: 'Dismiss',
     },
     home_hero: { title_primary: 'Slide', title_accent: 'Spec', subtitle: 'Decks as data' },
+    home_logos: [
+      {
+        name: 'Acorn Cloud',
+        url: 'https://example.com/acorn-cloud',
+        logo: { url: '/logo.png', alt: 'Acorn Cloud logo' },
+      },
+    ],
     presentations_page: {
       title: 'Presentations',
       search_label: 'Search',
@@ -281,6 +288,24 @@ describe('ContentValidator', () => {
         site: { ...validSiteDocument.site, attribution: { label: 'Built with' } },
       }),
     ).toThrow('site.yaml.site.attribution must provide both label and url together.')
+    expect(() =>
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, home_logos: 'Featured project' },
+      }),
+    ).toThrow('site.yaml.site.home_logos must be an array.')
+    expect(() =>
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, home_logos: [{ name: 'Featured project', url: 'https://example.com' }] },
+      }),
+    ).toThrow('site.yaml.site.home_logos[0].logo must be an object.')
+    expect(() =>
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, home_logos: [{ name: 'Featured project', url: 'https://example.com', logo: { url: '/logo.png' } }] },
+      }),
+    ).toThrow('site.yaml.site.home_logos[0].logo.alt must be a string.')
   })
 
   it('rejects duplicate presentation index paths', () => {

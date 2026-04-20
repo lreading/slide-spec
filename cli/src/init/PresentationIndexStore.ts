@@ -37,6 +37,7 @@ export class PresentationIndexStore {
       presentations: entries,
     }, {
       schemaUrl: slideSpecSchemaUrls.presentationsIndex,
+      includeSlideSpecHeader: true,
     })
   }
 }

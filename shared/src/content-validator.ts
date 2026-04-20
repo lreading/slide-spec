@@ -185,6 +185,21 @@ function assertHomeHeroContent(value: unknown, path: string): void {
   assertOptionalString(value.subtitle, `${path}.subtitle`)
 }
 
+function assertHomeLogoImage(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['url', 'alt'], path)
+  assertNonBlankString(value.url, `${path}.url`)
+  assertNonBlankString(value.alt, `${path}.alt`)
+}
+
+function assertHomeLogoLink(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['name', 'url', 'logo'], path)
+  assertNonBlankString(value.name, `${path}.name`)
+  assertNonBlankString(value.url, `${path}.url`)
+  assertHomeLogoImage(value.logo, `${path}.logo`)
+}
+
 function assertPresentationsPageContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNoUnexpectedKeys(
@@ -321,6 +336,7 @@ export class ContentValidator {
         'presentation_chrome',
         'presentation_toolbar',
         'home_hero',
+        'home_logos',
         'home_intro',
         'home_cta_label',
         'presentations_cta_label',
@@ -358,6 +374,10 @@ export class ContentValidator {
       assertPresentationToolbarContent(site.presentation_toolbar, 'site.yaml.site.presentation_toolbar')
     }
     if (site.home_hero !== undefined) assertHomeHeroContent(site.home_hero, 'site.yaml.site.home_hero')
+    if (site.home_logos !== undefined) {
+      assert(Array.isArray(site.home_logos), 'site.yaml.site.home_logos must be an array.')
+      ;(site.home_logos as unknown[]).forEach((logo, index) => assertHomeLogoLink(logo, `site.yaml.site.home_logos[${index}]`))
+    }
     if (site.presentations_page !== undefined) {
       assertPresentationsPageContent(site.presentations_page, 'site.yaml.site.presentations_page')
     }

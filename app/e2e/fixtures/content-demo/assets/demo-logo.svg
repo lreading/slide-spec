@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Demo logo</title>
+  <desc id="desc">A geometric demo project mark.</desc>
+  <circle cx="80" cy="80" r="74" fill="#192132"/>
+  <rect x="46" y="46" width="68" height="68" rx="14" fill="#f5f7ff"/>
+  <path d="M63 102l17-44 17 44" fill="none" stroke="#e8341c" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M70 86h20" stroke="#93a0bd" stroke-width="8" stroke-linecap="round"/>
+</svg>

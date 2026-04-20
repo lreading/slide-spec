@@ -5,6 +5,7 @@ import {
   resolveAttributionContent,
   resolveAppFooterContent,
   resolveHomeHeroContent,
+  resolveHomeLogos,
   resolveNavigationContent,
   resolvePresentationChromeLabel,
   resolvePresentationsPageContent,
@@ -61,6 +62,28 @@ describe('contentDefaults', () => {
       title_accent: 'Notes',
       subtitle: 'Community Updates',
     })
+    expect(resolveHomeLogos({
+      ...site,
+      home_logos: [
+        {
+          name: 'Demo Project',
+          url: 'https://example.org/projects/aurora-notes/',
+          logo: {
+            url: 'content/assets/aurora-notes-logo.svg',
+            alt: 'Demo project logo',
+          },
+        },
+      ],
+    })).toEqual([
+      {
+        name: 'Demo Project',
+        url: 'https://example.org/projects/aurora-notes/',
+        logo: {
+          url: 'content/assets/aurora-notes-logo.svg',
+          alt: 'Demo project logo',
+        },
+      },
+    ])
     expect(resolvePresentationChromeLabel(site)).toBe('Aurora Notes')
   })
 
@@ -95,6 +118,16 @@ describe('contentDefaults', () => {
         title_accent: '   ',
         subtitle: '   ',
       },
+      home_logos: [
+        {
+          name: '   ',
+          url: '   ',
+          logo: {
+            url: '   ',
+            alt: '   ',
+          },
+        },
+      ],
       presentations_page: {
         title: '   ',
         search_label: '   ',
@@ -143,6 +176,7 @@ describe('contentDefaults', () => {
       presentation_plural_label: 'presentations',
     })
     expect(resolveHomeHeroContent(blankSite).title_primary).toBeUndefined()
+    expect(resolveHomeLogos(blankSite)).toEqual([])
     expect(resolvePresentationChromeLabel(blankSite)).toBeUndefined()
   })
 

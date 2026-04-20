@@ -26,7 +26,7 @@
     "demo:record": "playwright test e2e/demo-walkthrough.spec.ts -c playwright.demo.config.ts",
     "readme:video": "playwright test e2e/readme-gif-walkthrough.spec.ts -c playwright.readme-gif.config.ts && node ../scripts/readme-video-convert.mjs",
     "e2e:install": "playwright install chromium",
-    "verify": "npm run lint && npm run test && npm run build && npm run e2e && npm run a11y && npm run visual",
+    "verify": "npm run lint && npm run coverage && npm run build && npm run e2e && npm run a11y && npm run visual",
     "verify:ci": "npm run lint && npm run build && npm run e2e && npm run a11y && npm run visual"
   },
   "dependencies": {

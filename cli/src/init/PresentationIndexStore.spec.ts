@@ -82,6 +82,9 @@ presentations:
     ])
 
     const content = fileSystem.files.get('/workspace/project/content/presentations/index.yaml') ?? ''
+    expect(content.startsWith(
+      '# Slide Spec\n# https://www.slide-spec.dev/\n# Documentation: https://docs.slide-spec.dev/\n',
+    )).toBe(true)
     expect(content).toContain('# yaml-language-server: $schema=https://slide-spec.dev/schema/presentations-index.schema.json')
     expect(content).toContain('schemaVersion:')
     expect(content.indexOf('id: 2025-q4')).toBeLessThan(content.indexOf('id: 2026-q1'))
@@ -171,6 +174,9 @@ presentations:
     ])
 
     const content = fileSystem.files.get('/workspace/project/content/presentations/index.yaml') ?? ''
+    expect(content.startsWith(
+      '# Slide Spec\n# https://www.slide-spec.dev/\n# Documentation: https://docs.slide-spec.dev/\n',
+    )).toBe(true)
     expect(content).toContain('# yaml-language-server: $schema=https://slide-spec.dev/schema/presentations-index.schema.json')
     expect(content).toContain('schemaVersion:')
     expect(content).toContain('presentation_path: presentations/2026-q1/presentation.yaml')
