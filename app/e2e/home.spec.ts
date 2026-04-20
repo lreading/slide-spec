@@ -15,14 +15,14 @@ function formatFooterText(url: string): string {
 test('renders home content from config-backed fixtures', async ({ page }) => {
   await page.goto('/')
 
-  await expect(page.getByRole('link', { name: 'Threat Dragon Updates' })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Aurora Notes Updates' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Home' })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Presentations', exact: true })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Latest Presentation', exact: true })).toBeVisible()
   await expect(page.getByText(site.project_badge?.label ?? '')).toBeVisible()
   await expect(page.getByRole('link', { name: site.home_cta_label })).toBeVisible()
   await expect(page.getByRole('link', { name: site.presentations_cta_label })).toBeVisible()
-  await expect(page.getByRole('heading', { name: /owasp threat dragon/i })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /aurora notes/i })).toBeVisible()
   await expect(page.getByRole('heading', { name: site.home_hero?.subtitle ?? '' })).toBeVisible()
   await expect(page.getByText(site.home_intro)).toBeVisible()
 

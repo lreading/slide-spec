@@ -39,7 +39,7 @@ describe('ReleasesSlideView', () => {
       expect(wrapper.text()).toContain('Latest')
     }
     expect(wrapper.get('.github-link').attributes('href')).toBe(
-      'https://github.com/OWASP/threat-dragon/releases',
+      'https://github.com/example-org/aurora-notes/releases',
     )
     expect(wrapper.text()).toContain('View release history on GitHub')
   })
@@ -62,7 +62,7 @@ describe('ReleasesSlideView', () => {
               id: 'release-b',
               version: 'v9.8.0',
               published_at: '2026-02-15',
-              url: 'https://github.com/OWASP/threat-dragon/releases/tag/v9.8.0',
+              url: 'https://github.com/example-org/aurora-notes/releases/tag/v9.8.0',
               summary_bullets: ['Second bullet'],
             },
             {
@@ -92,10 +92,10 @@ describe('ReleasesSlideView', () => {
 
     expect(releaseCards).toHaveLength(2)
     expect(releaseCards[0]?.attributes('href')).toBe(
-      'https://github.com/OWASP/threat-dragon/releases/tag/v9.9.0',
+      'https://github.com/example-org/aurora-notes/releases/tag/v9.9.0',
     )
     expect(releaseCards[1]?.attributes('href')).toBe(
-      'https://github.com/OWASP/threat-dragon/releases/tag/v9.8.0',
+      'https://github.com/example-org/aurora-notes/releases/tag/v9.8.0',
     )
     expect(releaseComponents[0]?.props('labelIcon')).toBe('tag')
     expect(releaseComponents[1]?.props('labelIcon')).toBe('code-branch')
@@ -149,7 +149,7 @@ describe('ReleasesSlideView', () => {
     expect(wrapper.text()).toContain(slide.content.empty_state_message ?? '')
     expect(wrapper.text()).not.toContain('Latest')
     expect(wrapper.get('.github-link').attributes('href')).toBe(
-      'https://github.com/OWASP/threat-dragon/releases',
+      'https://github.com/example-org/aurora-notes/releases',
     )
   })
 

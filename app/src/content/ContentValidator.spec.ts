@@ -16,7 +16,7 @@ const createValidPresentationDocument = () => ({
         template: 'hero',
         enabled: true,
         content: {
-          title_primary: 'Threat Dragon',
+          title_primary: 'Aurora Notes',
         },
       },
       {
@@ -115,7 +115,7 @@ const createValidPresentationDocument = () => ({
               title: 'Report bugs',
               description: 'Open an issue',
               url_label: 'Issues',
-              url: 'https://github.com/OWASP/threat-dragon/issues',
+              url: 'https://github.com/example-org/aurora-notes/issues',
             },
           ],
         },
@@ -138,17 +138,17 @@ describe('ContentValidator', () => {
       validator.validateSiteDocument({
         schemaVersion: 1,
         site: {
-          title: 'Threat Dragon Quarterly Updates',
+          title: 'Aurora Notes Quarterly Updates',
           metadata: {
-            title: 'Threat Dragon Updates',
+            title: 'Aurora Notes Updates',
             description: 'Quarterly static slide decks.',
             image_url: '/social-preview.png',
-            image_alt: 'Threat Dragon updates preview.',
+            image_alt: 'Aurora Notes updates preview.',
           },
           data_sources: [
             {
               type: 'github',
-              url: 'https://github.com/OWASP/threat-dragon',
+              url: 'https://github.com/example-org/aurora-notes',
             },
           ],
           home_intro: 'Intro',
@@ -157,7 +157,7 @@ describe('ContentValidator', () => {
           links: {
             repository: {
               label: 'GitHub Repo',
-              url: 'https://github.com/OWASP/threat-dragon',
+              url: 'https://github.com/example-org/aurora-notes',
               eyebrow: 'Source Code',
             },
             docs: {
@@ -220,7 +220,7 @@ describe('ContentValidator', () => {
               id: 'v1.0.0',
               version: 'v1.0.0',
               published_at: '2026-01-31',
-              url: 'https://github.com/OWASP/threat-dragon/releases/tag/v1.0.0',
+              url: 'https://github.com/example-org/aurora-notes/releases/tag/v1.0.0',
               summary_bullets: ['Bullet'],
             },
           ],
@@ -320,7 +320,7 @@ describe('ContentValidator', () => {
           links: {
             repository: {
               label: 'GitHub Repo',
-              url: 'https://github.com/OWASP/threat-dragon',
+              url: 'https://github.com/example-org/aurora-notes',
             },
             docs: {
               label: 'Docs',
@@ -347,7 +347,7 @@ describe('ContentValidator', () => {
           links: {
             repository: {
               label: 'GitHub Repo',
-              url: 'https://github.com/OWASP/threat-dragon',
+              url: 'https://github.com/example-org/aurora-notes',
             },
             docs: {
               label: 'Docs',
@@ -374,7 +374,7 @@ describe('ContentValidator', () => {
           links: {
             repository: {
               label: 'GitHub Repo',
-              url: 'https://github.com/OWASP/threat-dragon',
+              url: 'https://github.com/example-org/aurora-notes',
             },
             docs: {
               label: 'Docs',
@@ -403,7 +403,7 @@ describe('ContentValidator', () => {
           links: {
             repository: {
               label: 'GitHub Repo',
-              url: 'https://github.com/OWASP/threat-dragon',
+              url: 'https://github.com/example-org/aurora-notes',
             },
             docs: {
               label: 'Docs',
@@ -496,7 +496,7 @@ describe('ContentValidator', () => {
         template: 'not-real',
         enabled: true,
         content: {
-          title_primary: 'Threat Dragon',
+          title_primary: 'Aurora Notes',
         },
       } as never,
     ]

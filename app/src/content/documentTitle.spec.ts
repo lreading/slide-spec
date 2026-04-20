@@ -13,13 +13,13 @@ describe('resolveDocumentTitle', () => {
 
   it('uses the site title for the home route', () => {
     expect(resolveDocumentTitle({ name: 'home', params: {} })).toBe(
-      'Threat Dragon Quarterly Updates',
+      'Aurora Notes Quarterly Updates',
     )
   })
 
   it('uses the configured presentations page title for the presentations route', () => {
     expect(resolveDocumentTitle({ name: 'presentations', params: {} })).toBe(
-      'All presentations | Threat Dragon Quarterly Updates',
+      'All presentations | Aurora Notes Quarterly Updates',
     )
   })
 
@@ -31,7 +31,7 @@ describe('resolveDocumentTitle', () => {
           presentationId: '2026-q1',
         },
       }),
-    ).toBe('OWASP Threat Dragon Community Update | Threat Dragon Quarterly Updates')
+    ).toBe('Aurora Notes Community Update | Aurora Notes Quarterly Updates')
   })
 
   it('falls back to the site title when the presentation cannot be resolved', () => {
@@ -48,7 +48,7 @@ describe('resolveDocumentTitle', () => {
           presentationId: 'missing',
         },
       }),
-    ).toBe('Threat Dragon Quarterly Updates')
+    ).toBe('Aurora Notes Quarterly Updates')
     expect(getPresentation).toHaveBeenCalledWith('missing')
   })
 
@@ -65,7 +65,7 @@ describe('resolveDocumentTitle', () => {
     } as unknown as Router)
 
     expect(afterEach).toHaveBeenCalledOnce()
-    expect(document.title).toBe('All presentations | Threat Dragon Quarterly Updates')
+    expect(document.title).toBe('All presentations | Aurora Notes Quarterly Updates')
   })
 
   it('updates document.title when live content changes and the router has a current route', async () => {
@@ -87,7 +87,7 @@ describe('resolveDocumentTitle', () => {
       [sitePath as string]: `
 schemaVersion: 1
 site:
-  title: Updated Threat Dragon Title
+  title: Updated Aurora Notes Title
   home_intro: Intro
   home_cta_label: Latest
   presentations_cta_label: Presentations
@@ -106,12 +106,12 @@ site:
 
     await Promise.resolve()
 
-    expect(document.title).toBe('Updated Threat Dragon Title')
+    expect(document.title).toBe('Updated Aurora Notes Title')
   })
 
   it('falls back to the default presentations title when the presentations-page title is not configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Quarterly Updates',
+      title: 'Aurora Notes Quarterly Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -122,7 +122,7 @@ site:
     })
 
     expect(resolveDocumentTitle({ name: 'presentations', params: {} })).toBe(
-      'All presentations | Threat Dragon Quarterly Updates',
+      'All presentations | Aurora Notes Quarterly Updates',
     )
   })
 })

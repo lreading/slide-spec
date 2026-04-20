@@ -38,7 +38,7 @@ const markLabel = computed(() => resolvePresentationChromeLabel(site))
             :alt="logoAlt"
             class="logo-image"
           />
-          <FontAwesomeIcon v-else icon="dragon" />
+          <FontAwesomeIcon v-else icon="star" />
         </div>
         <div class="slide-number">{{ slideNumber }}/{{ slideTotal }}</div>
       </div>

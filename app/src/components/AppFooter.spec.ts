@@ -22,7 +22,7 @@ describe('AppFooter', () => {
 
   it('renders the repository footer link when configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Quarterly Updates',
+      title: 'Aurora Notes Quarterly Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -53,7 +53,7 @@ describe('AppFooter', () => {
 
   it('hides the footer when repository and attribution are both unavailable', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Quarterly Updates',
+      title: 'Aurora Notes Quarterly Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',

@@ -15,7 +15,7 @@ async function assertSparseSlide(page: Page, slideNumber: number): Promise<void>
 
   switch (slide.template) {
     case 'hero':
-      await expect(page.getByRole('heading', { name: /threat dragon/i })).toBeVisible()
+      await expect(page.getByRole('heading', { name: /aurora notes/i })).toBeVisible()
       await expect(page.locator('.hero-subtitle')).toHaveCount(0)
       await expect(page.locator('.hero-quote')).toHaveCount(0)
       break

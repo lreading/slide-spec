@@ -27,7 +27,7 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     template: 'hero',
     enabled: true,
     content: {
-      title_primary: 'Threat Dragon',
+      title_primary: 'Aurora Notes',
     },
   },
   agenda: {
@@ -109,7 +109,7 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
           title: 'Report bugs',
           description: 'Open an issue',
           url_label: 'Issues',
-          url: 'https://github.com/OWASP/threat-dragon/issues',
+          url: 'https://github.com/example-org/aurora-notes/issues',
         },
       ],
     },
@@ -129,7 +129,7 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     template: 'hero',
     enabled: true,
     content: {
-      title_accent: 'Threat Dragon',
+      title_accent: 'Notes',
     },
   },
   agenda: {
@@ -201,7 +201,7 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
           title: 'Submit code',
           description: 'Open a PR',
           url_label: 'Contribute',
-          url: 'https://github.com/OWASP/threat-dragon/pulls',
+          url: 'https://github.com/example-org/aurora-notes/pulls',
         },
       ],
     },

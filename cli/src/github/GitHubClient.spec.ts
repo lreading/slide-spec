@@ -36,10 +36,10 @@ function createJsonResponse(body: unknown, status = 200, statusText = 'OK'): Git
 }
 
 const repository: GitHubRepositoryRef = {
-  owner: 'OWASP',
-  repo: 'threat-dragon',
+  owner: 'example-org',
+  repo: 'aurora-notes',
   type: 'github',
-  url: 'https://github.com/OWASP/threat-dragon',
+  url: 'https://github.com/example-org/aurora-notes',
 }
 
 describe('GitHubApiClient', () => {
@@ -48,8 +48,8 @@ describe('GitHubApiClient', () => {
       createJsonResponse({
         created_at: '2023-01-01T00:00:00Z',
         default_branch: 'main',
-        full_name: 'OWASP/threat-dragon',
-        html_url: 'https://github.com/OWASP/threat-dragon',
+        full_name: 'example-org/aurora-notes',
+        html_url: 'https://github.com/example-org/aurora-notes',
         open_issues_count: 12,
         stargazers_count: 321,
       }),
@@ -61,10 +61,10 @@ describe('GitHubApiClient', () => {
     })
 
     await expect(client.getRepositoryMetadata(repository)).resolves.toEqual({
-      owner: 'OWASP',
-      repo: 'threat-dragon',
-      fullName: 'OWASP/threat-dragon',
-      htmlUrl: 'https://github.com/OWASP/threat-dragon',
+      owner: 'example-org',
+      repo: 'aurora-notes',
+      fullName: 'example-org/aurora-notes',
+      htmlUrl: 'https://github.com/example-org/aurora-notes',
       defaultBranch: 'main',
       createdAt: '2023-01-01T00:00:00Z',
       stars: 321,
@@ -73,7 +73,7 @@ describe('GitHubApiClient', () => {
 
     expect(transport.requests[0]).toMatchObject({
       method: 'GET',
-      url: 'https://api.github.com/repos/OWASP/threat-dragon',
+      url: 'https://api.github.com/repos/example-org/aurora-notes',
     })
     expect(transport.requests[0]?.headers.Authorization).toBe('Bearer secret-token')
   })
@@ -83,8 +83,8 @@ describe('GitHubApiClient', () => {
       createJsonResponse({
         created_at: '2023-01-01T00:00:00Z',
         default_branch: 'main',
-        full_name: 'OWASP/threat-dragon',
-        html_url: 'https://github.com/OWASP/threat-dragon',
+        full_name: 'example-org/aurora-notes',
+        html_url: 'https://github.com/example-org/aurora-notes',
         open_issues_count: 12,
         stargazers_count: 321,
       }),
@@ -93,8 +93,8 @@ describe('GitHubApiClient', () => {
     const client = new GitHubApiClient({ transport })
 
     await expect(client.getRepositoryMetadata(repository)).resolves.toMatchObject({
-      owner: 'OWASP',
-      repo: 'threat-dragon',
+      owner: 'example-org',
+      repo: 'aurora-notes',
     })
 
     expect(transport.requests[0]?.headers.Authorization).toBeUndefined()
@@ -313,7 +313,7 @@ describe('GitHubApiClient', () => {
       createJsonResponse(Array.from({ length: 100 }, (_, index) => ({
         body: `Body ${index + 1}`,
         draft: false,
-        html_url: `https://github.com/OWASP/threat-dragon/releases/tag/v${index + 1}`,
+        html_url: `https://github.com/example-org/aurora-notes/releases/tag/v${index + 1}`,
         id: index + 1,
         name: `Release ${index + 1}`,
         prerelease: false,
@@ -324,7 +324,7 @@ describe('GitHubApiClient', () => {
         {
           body: 'Last page',
           draft: false,
-          html_url: 'https://github.com/OWASP/threat-dragon/releases/tag/v101',
+          html_url: 'https://github.com/example-org/aurora-notes/releases/tag/v101',
           id: 101,
           name: 'Release 101',
           prerelease: true,
@@ -357,7 +357,7 @@ describe('GitHubApiClient', () => {
                 mergedAt: '2026-01-10T12:00:00Z',
                 number: 12,
                 title: 'Add feature',
-                url: 'https://github.com/OWASP/threat-dragon/pull/12',
+                url: 'https://github.com/example-org/aurora-notes/pull/12',
               },
             ],
             pageInfo: {
@@ -376,7 +376,7 @@ describe('GitHubApiClient', () => {
                 mergedAt: '2026-01-11T12:00:00Z',
                 number: 13,
                 title: 'Fix bug',
-                url: 'https://github.com/OWASP/threat-dragon/pull/13',
+                url: 'https://github.com/example-org/aurora-notes/pull/13',
               },
             ],
             pageInfo: {
@@ -400,14 +400,14 @@ describe('GitHubApiClient', () => {
         mergedAt: '2026-01-10T12:00:00Z',
         number: 12,
         title: 'Add feature',
-        url: 'https://github.com/OWASP/threat-dragon/pull/12',
+        url: 'https://github.com/example-org/aurora-notes/pull/12',
       },
       {
         authorLogin: 'hubot',
         mergedAt: '2026-01-11T12:00:00Z',
         number: 13,
         title: 'Fix bug',
-        url: 'https://github.com/OWASP/threat-dragon/pull/13',
+        url: 'https://github.com/example-org/aurora-notes/pull/13',
       },
     ])
 
@@ -434,21 +434,21 @@ describe('GitHubApiClient', () => {
                 mergedAt: '2025-12-30T12:00:00Z',
                 number: 10,
                 title: 'Docs',
-                url: 'https://github.com/OWASP/threat-dragon/pull/10',
+                url: 'https://github.com/example-org/aurora-notes/pull/10',
               },
               {
                 author: { login: 'octocat' },
                 mergedAt: '2025-12-29T12:00:00Z',
                 number: 9,
                 title: 'More docs',
-                url: 'https://github.com/OWASP/threat-dragon/pull/9',
+                url: 'https://github.com/example-org/aurora-notes/pull/9',
               },
               {
                 author: { login: 'alice' },
                 mergedAt: '2025-12-20T12:00:00Z',
                 number: 8,
                 title: 'Fix tests',
-                url: 'https://github.com/OWASP/threat-dragon/pull/8',
+                url: 'https://github.com/example-org/aurora-notes/pull/8',
               },
             ],
             pageInfo: {
@@ -478,7 +478,7 @@ describe('GitHubApiClient', () => {
                 mergedAt: '2025-12-30T12:00:00Z',
                 number: 10,
                 title: 'Docs',
-                url: 'https://github.com/OWASP/threat-dragon/pull/10',
+                url: 'https://github.com/example-org/aurora-notes/pull/10',
               },
             ],
             pageInfo: {
@@ -539,7 +539,7 @@ describe('GitHubApiClient', () => {
                 closedAt: '2026-02-05T09:00:00Z',
                 number: 88,
                 title: 'Improve export flow',
-                url: 'https://github.com/OWASP/threat-dragon/issues/88',
+                url: 'https://github.com/example-org/aurora-notes/issues/88',
               },
             ],
             pageInfo: {
@@ -561,7 +561,7 @@ describe('GitHubApiClient', () => {
         closedAt: '2026-02-05T09:00:00Z',
         number: 88,
         title: 'Improve export flow',
-        url: 'https://github.com/OWASP/threat-dragon/issues/88',
+        url: 'https://github.com/example-org/aurora-notes/issues/88',
       },
     ])
   })
@@ -571,7 +571,7 @@ describe('GitHubApiClient', () => {
       createJsonResponse([
         {
           draft: false,
-          html_url: 'https://github.com/OWASP/threat-dragon/releases/tag/v1',
+          html_url: 'https://github.com/example-org/aurora-notes/releases/tag/v1',
           id: 1,
           name: '   ',
           prerelease: false,
@@ -588,7 +588,7 @@ describe('GitHubApiClient', () => {
                 mergedAt: '2026-01-10T12:00:00Z',
                 number: 12,
                 title: 'Add feature',
-                url: 'https://github.com/OWASP/threat-dragon/pull/12',
+                url: 'https://github.com/example-org/aurora-notes/pull/12',
               },
             ],
             pageInfo: {
@@ -604,7 +604,7 @@ describe('GitHubApiClient', () => {
 
     await expect(client.listReleases(repository)).resolves.toEqual([
       {
-        htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v1',
+        htmlUrl: 'https://github.com/example-org/aurora-notes/releases/tag/v1',
         id: 1,
         isDraft: false,
         isPrerelease: false,
@@ -620,7 +620,7 @@ describe('GitHubApiClient', () => {
         mergedAt: '2026-01-10T12:00:00Z',
         number: 12,
         title: 'Add feature',
-        url: 'https://github.com/OWASP/threat-dragon/pull/12',
+        url: 'https://github.com/example-org/aurora-notes/pull/12',
       },
     ])
   })
@@ -804,7 +804,7 @@ describe('GitHubApiClient', () => {
 
     await expect(result).rejects.toBeInstanceOf(GitHubApiError)
     await expect(result).rejects.toThrow(
-      'GitHub request failed with 401 Unauthorized for "https://api.github.com/repos/OWASP/threat-dragon".',
+      'GitHub request failed with 401 Unauthorized for "https://api.github.com/repos/example-org/aurora-notes".',
     )
   })
 })

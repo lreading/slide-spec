@@ -33,7 +33,7 @@ describe('PresentationView', () => {
       },
     })
 
-    expect(normalizeText(wrapper.text())).toContain('OWASP Threat Dragon')
+    expect(normalizeText(wrapper.text())).toContain('Aurora Notes')
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }))
     await flushPromises()

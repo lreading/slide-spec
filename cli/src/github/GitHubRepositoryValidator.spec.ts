@@ -9,18 +9,18 @@ import type { DataSourceResolver } from '../config/DataSourceResolver'
 
 const repository: GitHubRepositoryRef = {
   type: 'github',
-  owner: 'OWASP',
-  repo: 'threat-dragon',
-  url: 'https://github.com/OWASP/threat-dragon',
+  owner: 'example-org',
+  repo: 'aurora-notes',
+  url: 'https://github.com/example-org/aurora-notes',
 }
 
 describe('GitHubRepositoryValidator', () => {
   it('verifies a reachable repository', async () => {
     const repositoryClient = {
       getRepositoryMetadata: vi.fn().mockResolvedValue({
-        owner: 'OWASP',
-        repo: 'threat-dragon',
-        fullName: 'OWASP/threat-dragon',
+        owner: 'example-org',
+        repo: 'aurora-notes',
+        fullName: 'example-org/aurora-notes',
         htmlUrl: repository.url,
         defaultBranch: 'main',
         stars: 1,
@@ -45,7 +45,7 @@ describe('GitHubRepositoryValidator', () => {
   it('re-prompts callers by throwing a specific error for missing repositories', async () => {
     const repositoryClient = {
       getRepositoryMetadata: vi.fn().mockRejectedValue(
-        new GitHubApiError(404, 'Not Found', 'https://api.github.com/repos/OWASP/threat-dragon'),
+        new GitHubApiError(404, 'Not Found', 'https://api.github.com/repos/example-org/aurora-notes'),
       ),
     } as unknown as GitHubApiClient
     const dataSourceResolver = {
@@ -58,7 +58,7 @@ describe('GitHubRepositoryValidator', () => {
     })
 
     await expect(validator.validate(repository.url)).rejects.toThrow(
-      'GitHub repository "https://github.com/OWASP/threat-dragon" was not found. Double-check the URL and try again.',
+      'GitHub repository "https://github.com/example-org/aurora-notes" was not found. Double-check the URL and try again.',
     )
   })
 

@@ -29,7 +29,7 @@ describe('AppNav', () => {
       name: 'presentation',
       params: { presentationId: '2026-q1' },
     })
-    expect(wrapper.get('a[href="https://www.threatdragon.com/docs"]').text()).toBe('Threat Dragon Docs')
+    expect(wrapper.get('a[href="https://docs.example.org/aurora-notes"]').text()).toBe('Aurora Notes Docs')
 
     await wrapper.find('.app-nav__toggle').trigger('click')
     expect(wrapper.find('.app-nav__links').classes()).toContain('app-nav__links--open')
@@ -99,12 +99,12 @@ describe('AppNav', () => {
 
   it('hides the docs nav link when navigation.docs_enabled is false', async () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Quarterly Updates',
+      title: 'Aurora Notes Quarterly Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
       navigation: {
-        brand_title: 'Threat Dragon Updates',
+        brand_title: 'Aurora Notes Updates',
         home_label: 'Home',
         presentations_label: 'Presentations',
         latest_presentation_label: 'Latest Presentation',
@@ -145,7 +145,7 @@ describe('AppNav', () => {
 
   it('hides navigation labels when config values are blank', async () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Quarterly Updates',
+      title: 'Aurora Notes Quarterly Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -186,7 +186,7 @@ describe('AppNav', () => {
       },
     })
 
-    expect(wrapper.text()).not.toContain('Threat Dragon Updates')
+    expect(wrapper.text()).not.toContain('Aurora Notes Updates')
     expect(wrapper.text()).not.toContain('Home')
     expect(wrapper.text()).not.toContain('Presentations')
     expect(wrapper.text()).not.toContain('Latest Presentation')

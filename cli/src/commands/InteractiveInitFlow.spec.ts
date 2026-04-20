@@ -96,8 +96,8 @@ describe('InteractiveInitFlow', () => {
         .mockResolvedValueOnce('demo-id')
         .mockResolvedValueOnce('Demo Title')
         .mockResolvedValueOnce('2026-04-01')
-        .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon')
-        .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon'),
+        .mockResolvedValueOnce('https://github.com/example-org/aurora-notes')
+        .mockResolvedValueOnce('https://github.com/example-org/aurora-notes'),
       promptSecret: vi.fn().mockResolvedValueOnce('secret-token'),
       promptBoolean: vi.fn()
         .mockResolvedValueOnce(false)
@@ -109,13 +109,13 @@ describe('InteractiveInitFlow', () => {
 
     const repositoryValidator = {
       validate: vi.fn()
-        .mockRejectedValueOnce(new Error('GitHub repository "https://github.com/OWASP/threat-dragon" was not found. Double-check the URL and try again.'))
+        .mockRejectedValueOnce(new Error('GitHub repository "https://github.com/example-org/aurora-notes" was not found. Double-check the URL and try again.'))
         .mockResolvedValueOnce({
           repository: {
             type: 'github',
-            owner: 'OWASP',
-            repo: 'threat-dragon',
-            url: 'https://github.com/OWASP/threat-dragon',
+            owner: 'example-org',
+            repo: 'aurora-notes',
+            url: 'https://github.com/example-org/aurora-notes',
           },
           verified: true,
         } satisfies GitHubRepositoryValidationResult),
@@ -135,8 +135,8 @@ describe('InteractiveInitFlow', () => {
       fromDate: '2026-04-01',
       toDate: '2026-04-30',
       summary: 'Summary',
-      repositoryUrl: 'https://github.com/OWASP/threat-dragon',
-      githubDataSourceUrl: 'https://github.com/OWASP/threat-dragon',
+      repositoryUrl: 'https://github.com/example-org/aurora-notes',
+      githubDataSourceUrl: 'https://github.com/example-org/aurora-notes',
       websiteUrl: 'https://example.com',
       force: true,
     })
@@ -167,7 +167,7 @@ describe('InteractiveInitFlow', () => {
         .mockResolvedValueOnce('demo-id')
         .mockResolvedValueOnce('Demo Title')
         .mockResolvedValueOnce('2026-04-01')
-        .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon'),
+        .mockResolvedValueOnce('https://github.com/example-org/aurora-notes'),
       promptBoolean: vi.fn()
         .mockResolvedValueOnce(false)
         .mockResolvedValueOnce(true)
@@ -180,9 +180,9 @@ describe('InteractiveInitFlow', () => {
       validate: vi.fn().mockResolvedValue({
         repository: {
           type: 'github',
-          owner: 'OWASP',
-          repo: 'threat-dragon',
-          url: 'https://github.com/OWASP/threat-dragon',
+          owner: 'example-org',
+          repo: 'aurora-notes',
+          url: 'https://github.com/example-org/aurora-notes',
         },
         verified: false,
         warning: 'GitHub repository could not be verified right now. Continuing best-effort.',
@@ -198,8 +198,8 @@ describe('InteractiveInitFlow', () => {
       presentationId: 'demo-id',
       title: 'Demo Title',
       fromDate: '2026-04-01',
-      repositoryUrl: 'https://github.com/OWASP/threat-dragon',
-      githubDataSourceUrl: 'https://github.com/OWASP/threat-dragon',
+      repositoryUrl: 'https://github.com/example-org/aurora-notes',
+      githubDataSourceUrl: 'https://github.com/example-org/aurora-notes',
       force: false,
     })
     expect(output.info).toHaveBeenCalledWith(
@@ -228,7 +228,7 @@ describe('InteractiveInitFlow', () => {
         .mockResolvedValueOnce('demo-id')
         .mockResolvedValueOnce('Demo Title')
         .mockResolvedValueOnce('2026-04-01')
-        .mockResolvedValueOnce('https://github.com/OWASP/threat-dragon'),
+        .mockResolvedValueOnce('https://github.com/example-org/aurora-notes'),
       promptSecret: vi.fn().mockResolvedValue('new-token'),
       promptBoolean: vi.fn()
         .mockResolvedValueOnce(false)
@@ -242,9 +242,9 @@ describe('InteractiveInitFlow', () => {
       validate: vi.fn().mockResolvedValue({
         repository: {
           type: 'github',
-          owner: 'OWASP',
-          repo: 'threat-dragon',
-          url: 'https://github.com/OWASP/threat-dragon',
+          owner: 'example-org',
+          repo: 'aurora-notes',
+          url: 'https://github.com/example-org/aurora-notes',
         },
         verified: true,
       } satisfies GitHubRepositoryValidationResult),
@@ -263,8 +263,8 @@ describe('InteractiveInitFlow', () => {
       presentationId: 'demo-id',
       title: 'Demo Title',
       fromDate: '2026-04-01',
-      repositoryUrl: 'https://github.com/OWASP/threat-dragon',
-      githubDataSourceUrl: 'https://github.com/OWASP/threat-dragon',
+      repositoryUrl: 'https://github.com/example-org/aurora-notes',
+      githubDataSourceUrl: 'https://github.com/example-org/aurora-notes',
       force: false,
     })
   })

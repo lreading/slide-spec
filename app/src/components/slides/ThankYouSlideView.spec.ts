@@ -25,7 +25,7 @@ describe('ThankYouSlideView', () => {
 
     expect(wrapper.text()).toContain('Thank you')
     expect(wrapper.text()).toContain('See you in the next update.')
-    expect(wrapper.text()).toContain('Threat Dragon')
+    expect(wrapper.text()).toContain('Aurora Notes')
     expect(wrapper.text()).toContain('Q1 2026')
   })
 
@@ -36,9 +36,9 @@ describe('ThankYouSlideView', () => {
         generated: record.generated,
         site: {
           ...site,
-          title: 'Threat Dragon Quarterly Updates',
+          title: 'Aurora Notes Quarterly Updates',
           navigation: {
-            brand_title: 'Threat Dragon Updates',
+            brand_title: 'Aurora Notes Updates',
           },
           presentation_chrome: undefined,
         },
@@ -63,7 +63,7 @@ describe('ThankYouSlideView', () => {
         generated: record.generated,
         site: {
           ...site,
-          title: 'Threat Dragon Quarterly Updates',
+          title: 'Aurora Notes Quarterly Updates',
           navigation: undefined,
           presentation_chrome: undefined,
         },

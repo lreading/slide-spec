@@ -10,14 +10,14 @@ describe('DataSourceResolver', () => {
       data_sources: [
         {
           type: 'github',
-          url: 'https://www.github.com/OWASP/threat-dragon.git',
+          url: 'https://www.github.com/example-org/aurora-notes.git',
         },
       ],
     })).toEqual({
       type: 'github',
-      url: 'https://github.com/OWASP/threat-dragon',
-      owner: 'OWASP',
-      repo: 'threat-dragon',
+      url: 'https://github.com/example-org/aurora-notes',
+      owner: 'example-org',
+      repo: 'aurora-notes',
     })
   })
 
@@ -30,7 +30,7 @@ describe('DataSourceResolver', () => {
       data_sources: [
         {
           type: 'github',
-          url: 'https://github.com/OWASP/threat-dragon',
+          url: 'https://github.com/example-org/aurora-notes',
         },
         {
           type: 'github',
@@ -61,11 +61,11 @@ describe('DataSourceResolver', () => {
       data_sources: [
         {
           type: 'github',
-          url: 'https://gitlab.com/OWASP/threat-dragon',
+          url: 'https://gitlab.com/example-org/aurora-notes',
         },
       ],
     })).toThrow(
-      'GitHub data source URL "https://gitlab.com/OWASP/threat-dragon" must point to github.com.',
+      'GitHub data source URL "https://gitlab.com/example-org/aurora-notes" must point to github.com.',
     )
 
     expect(() => resolver.resolveGitHubRepository({

@@ -7,7 +7,7 @@ import HowToContributeSlideView from './HowToContributeSlideView.vue'
 const presentation: PresentationContent = {
   id: '2026-q1',
   year: 2026,
-  title: 'Threat Dragon Quarterly Community Update',
+  title: 'Aurora Notes Quarterly Community Update',
   subtitle: 'Q1 2026',
   slides: [],
 }
@@ -49,7 +49,7 @@ const slide: HowToContributeSlide = {
 describe('HowToContributeSlideView', () => {
   it('uses the configured repository link in the footer', () => {
     const site: SiteContent = {
-      title: 'Threat Dragon Updates',
+      title: 'Aurora Notes Updates',
       home_intro: 'Intro',
       home_cta_label: 'View latest presentation',
       presentations_cta_label: 'View all presentations',
@@ -79,7 +79,7 @@ describe('HowToContributeSlideView', () => {
 
   it('omits the repository footer link when no repository link is configured', () => {
     const site: SiteContent = {
-      title: 'Threat Dragon Updates',
+      title: 'Aurora Notes Updates',
       home_intro: 'Intro',
       home_cta_label: 'View latest presentation',
       presentations_cta_label: 'View all presentations',
@@ -102,7 +102,7 @@ describe('HowToContributeSlideView', () => {
 
   it('omits the footer callout entirely when footer copy and repository link are both missing', () => {
     const site: SiteContent = {
-      title: 'Threat Dragon Updates',
+      title: 'Aurora Notes Updates',
       home_intro: 'Intro',
       home_cta_label: 'View latest presentation',
       presentations_cta_label: 'View all presentations',

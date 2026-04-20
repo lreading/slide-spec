@@ -9,7 +9,7 @@ describe('resolveSlideTemplateId', () => {
         template: 'hero',
         enabled: true,
         content: {
-          title_primary: 'Threat Dragon',
+          title_primary: 'Aurora Notes',
         },
       }),
     ).toBe('hero')

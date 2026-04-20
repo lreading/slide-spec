@@ -8,32 +8,32 @@ generated:
   stats:
     stars:
       label: GitHub Stars
-      current: 1355
-      previous: 1263
-      delta: 92
+      current: 842
+      previous: 781
+      delta: 61
       metadata:
         comparison_status: complete
         warning_codes: []
     issues_closed:
       label: Issues closed
-      current: 31
-      previous: 14
-      delta: 17
+      current: 19
+      previous: 12
+      delta: 7
       metadata:
         comparison_status: complete
         warning_codes: []
     prs_merged:
       label: PRs Merged
-      current: 27
-      previous: 17
-      delta: 10
+      current: 24
+      previous: 18
+      delta: 6
       metadata:
         comparison_status: complete
         warning_codes: []
     new_contributors:
       label: New contributors
-      current: 4
-      previous: 5
+      current: 5
+      previous: 6
       delta: -1
       metadata:
         comparison_status: complete
@@ -42,143 +42,142 @@ generated:
   contributors:
     total: 6
     authors:
-      - login: jgadsden
-        name: Jon Gadsden
-        avatar_url: https://avatars.githubusercontent.com/u/29352392?u=e54b694a117a1c893e879048eb7d6ac49eb2e4c7&v=4
-        merged_prs: 8
+      - login: river-park
+        name: River Park
+        avatar_url: https://avatars.githubusercontent.com/u/583231?v=4
+        merged_prs: 7
         first_time: false
-      - login: lreading
-        name: Leo
-        avatar_url: https://avatars.githubusercontent.com/u/5851985?u=99b9298dfd5651861ff9b1068f27151022730731&v=4
-        merged_prs: 8
+      - login: mint-owl
+        name: Mina Patel
+        avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
+        merged_prs: 5
         first_time: false
-      - login: Ajith-Penmatsa-GGL
-        name: Ajith-Penmatsa-GGL
-        avatar_url: https://avatars.githubusercontent.com/u/244636293?v=4
-        merged_prs: 6
+      - login: sunny-batch
+        name: Sunny Ramos
+        avatar_url: https://avatars.githubusercontent.com/u/583231?v=4
+        merged_prs: 4
         first_time: true
-      - login: sn3ha-dev278
-        name: Sneha
-        avatar_url: https://avatars.githubusercontent.com/u/243399891?v=4
+      - login: orbit-catalog
+        name: Noor Kim
+        avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
         merged_prs: 3
         first_time: true
-      - login: AndreFerreiraMsc
-        name: André R. Ferreira
-        avatar_url: https://avatars.githubusercontent.com/u/186318329?u=8fc321eec0a7c3c0a1f93a2865d8574c8a70238d&v=4
-        merged_prs: 1
+      - login: fern-notes
+        name: Fern Silva
+        avatar_url: https://avatars.githubusercontent.com/u/583231?v=4
+        merged_prs: 3
         first_time: true
-      - login: Mahaboobunnisa123
-        name: Mahaboobunnisa Md
-        avatar_url: https://avatars.githubusercontent.com/u/179287447?v=4
-        merged_prs: 1
+      - login: pixel-ledger
+        name: Jules Morgan
+        avatar_url: https://avatars.githubusercontent.com/u/9919?v=4
+        merged_prs: 2
         first_time: true
   merged_prs:
-    - number: 1421
-      title: Workflow dependency updates
+    - number: 201
+      title: Refresh CI dependency pins
       merged_at: 2026-01-05T07:14:58Z
-      author_login: jgadsden
-    - number: 1424
-      title: Fix SVG/PNG export to exclude selection decorations
+      author_login: river-park
+    - number: 204
+      title: Add roadmap briefing template
       merged_at: 2026-01-07T19:07:33Z
-      author_login: sn3ha-dev278
-    - number: 1430
-      title: Fix image export affected by zoom level
+      author_login: sunny-batch
+    - number: 208
+      title: Improve search empty state copy
       merged_at: 2026-01-16T11:10:00Z
-      author_login: sn3ha-dev278
-    - number: 1432
-      title: Fix diagram count for demo models
+      author_login: mint-owl
+    - number: 209
+      title: Sort presentation archive by published date
       merged_at: 2026-01-16T11:22:07Z
-      author_login: jgadsden
-    - number: 1436
-      title: Fix for docs links to schemas
+      author_login: river-park
+    - number: 212
+      title: Fix documentation links for template examples
       merged_at: 2026-01-17T15:39:33Z
-      author_login: jgadsden
-    - number: 1437
-      title: Fix possible loss of diagram changes when using Save/Save As in  desktop
-        menu
+      author_login: river-park
+    - number: 215
+      title: Keep presenter shortcut help stable on small screens
       merged_at: 2026-01-25T08:12:07Z
-      author_login: sn3ha-dev278
-    - number: 1443
-      title: Fix link formatting in vulnerability reporting section
+      author_login: mint-owl
+    - number: 219
+      title: Clarify preview notes in contributor guidance
       merged_at: 2026-02-01T17:54:50Z
-      author_login: lreading
-    - number: 1453
-      title: Update threat model schema to version 1.0.2
+      author_login: orbit-catalog
+    - number: 224
+      title: Add publication owner metadata to content manifest
       merged_at: 2026-02-16T19:46:41Z
-      author_login: jgadsden
-    - number: 1444
-      title: reusable templates feature (Web and Github only)
+      author_login: river-park
+    - number: 225
+      title: Add reusable release recap template
       merged_at: 2026-02-17T00:04:23Z
-      author_login: Ajith-Penmatsa-GGL
-    - number: 1455
-      title: "Fixed a bug in desktop app introduced in pr #1444"
+      author_login: sunny-batch
+    - number: 226
+      title: Fix preview route for nested presentation paths
       merged_at: 2026-02-17T21:16:38Z
-      author_login: Ajith-Penmatsa-GGL
-    - number: 1454
-      title: Fix/gitlab error opening models
+      author_login: river-park
+    - number: 227
+      title: Improve validation message for missing slide titles
       merged_at: 2026-02-18T18:48:17Z
-      author_login: Ajith-Penmatsa-GGL
-    - number: 1458
+      author_login: mint-owl
+    - number: 231
       title: Update dependencies
       merged_at: 2026-02-23T05:34:25Z
-      author_login: jgadsden
-    - number: 1461
-      title: "Fix: Broken link in model select page"
+      author_login: river-park
+    - number: 233
+      title: Fix broken link in template gallery
       merged_at: 2026-02-23T08:43:19Z
-      author_login: Ajith-Penmatsa-GGL
-    - number: 1462
-      title: updated the link so that the unit test passes
+      author_login: sunny-batch
+    - number: 234
+      title: Add weekly notes starter example
       merged_at: 2026-02-23T18:17:15Z
-      author_login: Ajith-Penmatsa-GGL
-    - number: 1465
-      title: provide example minimal production env-vars
+      author_login: sunny-batch
+    - number: 236
+      title: Provide minimal static hosting configuration example
       merged_at: 2026-02-23T20:02:09Z
-      author_login: jgadsden
-    - number: 1464
-      title: "Bug: hide 'Manage Templates' for desktop app"
+      author_login: river-park
+    - number: 237
+      title: Hide unavailable template actions in archive view
       merged_at: 2026-02-24T07:02:55Z
-      author_login: jgadsden
-    - number: 1459
-      title: "Fix: Add Cornucopia MobileApp Deck to EoP Games diagram (#1447)"
+      author_login: orbit-catalog
+    - number: 238
+      title: Add planning review example deck
       merged_at: 2026-02-24T07:48:26Z
-      author_login: Mahaboobunnisa123
-    - number: 1467
-      title: "fixed rendering issues with template docs "
+      author_login: sunny-batch
+    - number: 241
+      title: Fix rendering issue in template documentation
       merged_at: 2026-03-05T09:44:01Z
-      author_login: Ajith-Penmatsa-GGL
-    - number: 1471
-      title: Documentation Dependencies Updates
+      author_login: river-park
+    - number: 244
+      title: Documentation dependency updates
       merged_at: 2026-03-06T13:16:54Z
-      author_login: lreading
-    - number: 1473
-      title: Dependency Vuln Cleanup
+      author_login: fern-notes
+    - number: 246
+      title: Build dependency cleanup
       merged_at: 2026-03-07T14:14:28Z
-      author_login: lreading
-    - number: 1476
-      title: Dockerfile Refactor
+      author_login: fern-notes
+    - number: 249
+      title: Static preview build refactor
       merged_at: 2026-03-08T06:15:39Z
-      author_login: lreading
-    - number: 1479
-      title: Documentation Updates
+      author_login: fern-notes
+    - number: 252
+      title: Documentation refresh for authoring workflow
       merged_at: 2026-03-08T15:12:15Z
-      author_login: lreading
-    - number: 1486
-      title: Desktop unit test coverage
+      author_login: mint-owl
+    - number: 258
+      title: Presentation search unit test coverage
       merged_at: 2026-03-14T13:14:53Z
-      author_login: lreading
-    - number: 1497
-      title: Update workflows for latest actions
+      author_login: mint-owl
+    - number: 261
+      title: Update CI workflows for latest actions
       merged_at: 2026-03-15T16:20:32Z
-      author_login: jgadsden
-    - number: 1499
-      title: "Contributing: Requirement to Manually Test Changes"
+      author_login: river-park
+    - number: 263
+      title: "Contributing: require local preview notes"
       merged_at: 2026-03-15T21:42:50Z
-      author_login: lreading
-    - number: 1501
-      title: Update Brazilian Portuguese translation
+      author_login: pixel-ledger
+    - number: 266
+      title: Update Spanish localization strings
       merged_at: 2026-03-16T17:05:19Z
-      author_login: AndreFerreiraMsc
-    - number: 1494
-      title: Desktop e2e coverage
+      author_login: pixel-ledger
+    - number: 268
+      title: Keyboard navigation end-to-end coverage
       merged_at: 2026-03-21T13:51:02Z
-      author_login: lreading
+      author_login: mint-owl

@@ -13,7 +13,7 @@ describe('SlideRenderer', () => {
 
   it('renders every enabled slide from the YAML presentation', () => {
     const headings = [
-      'OWASP Threat Dragon',
+      'Aurora Notes',
       'Agenda',
       'What Happened Since Last Update',
       'Releases',

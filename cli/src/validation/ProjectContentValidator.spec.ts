@@ -22,11 +22,11 @@ site:
   presentations_cta_label: Browse
   data_sources:
     - type: github
-      url: https://github.com/OWASP/threat-dragon
+      url: https://github.com/example-org/aurora-notes
   links:
     repository:
       label: Repo
-      url: https://github.com/OWASP/threat-dragon
+      url: https://github.com/example-org/aurora-notes
     docs:
       label: Docs
       url: https://example.com/docs

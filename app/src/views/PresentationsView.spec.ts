@@ -9,7 +9,7 @@ describe('PresentationsView', () => {
 
   beforeEach(() => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Updates',
+      title: 'Aurora Notes Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -199,7 +199,7 @@ describe('PresentationsView', () => {
 
   it('falls back to default chrome when presentations-page labels are missing', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Updates',
+      title: 'Aurora Notes Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',

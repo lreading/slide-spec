@@ -29,7 +29,7 @@ describe('contentDefaults', () => {
 
   it('normalizes configured site content', () => {
     expect(resolveNavigationContent(site)).toEqual({
-      brand_title: 'Threat Dragon Updates',
+      brand_title: 'Aurora Notes Updates',
       home_label: 'Home',
       presentations_label: 'Presentations',
       latest_presentation_label: 'Latest Presentation',
@@ -57,11 +57,11 @@ describe('contentDefaults', () => {
     expect(resolvePresentationsPageContent(site).search_placeholder).toBe('Search presentations...')
     expect(resolvePresentationsPageContent(site).page_of_label).toBe('of')
     expect(resolveHomeHeroContent(site)).toEqual({
-      title_primary: 'OWASP',
-      title_accent: 'Threat Dragon',
+      title_primary: 'Aurora',
+      title_accent: 'Notes',
       subtitle: 'Community Updates',
     })
-    expect(resolvePresentationChromeLabel(site)).toBe('Threat Dragon')
+    expect(resolvePresentationChromeLabel(site)).toBe('Aurora Notes')
   })
 
   it('falls back to presentations-page defaults when page copy is blank', () => {
@@ -162,8 +162,8 @@ describe('contentDefaults', () => {
 
   it('normalizes authored slide and roadmap labels', () => {
     expect(resolveTitleSlideContent(titleSlide)).toEqual({
-      titlePrimary: 'OWASP',
-      titleAccent: 'Threat Dragon',
+      titlePrimary: 'Aurora',
+      titleAccent: 'Notes',
       subtitlePrefix: 'Community Update',
     })
     expect(resolveRoadmapLabels(roadmapSlide.content)).toEqual({

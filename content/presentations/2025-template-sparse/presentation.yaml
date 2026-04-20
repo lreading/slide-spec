@@ -3,13 +3,13 @@ schemaVersion: 1
 presentation:
   id: 2025-template-sparse
   year: 2025
-  title: Threat Dragon Sparse Template Coverage
+  title: Aurora Notes Sparse Template Coverage
   subtitle: Sparse Coverage
   slides:
     - template: hero
       enabled: true
       content:
-        title_accent: Threat Dragon
+        title_accent: Aurora Notes
     - template: agenda
       enabled: true
       title: Agenda

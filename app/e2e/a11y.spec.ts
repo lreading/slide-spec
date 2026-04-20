@@ -45,11 +45,11 @@ test('supports keyboard focus on the main home-page navigation path', async ({ p
   }
 
   expect(focusedLinks).toEqual([
-    { text: 'Threat Dragon Updates', href: '/' },
+    { text: 'Aurora Notes Updates', href: '/' },
     { text: 'Home', href: '/' },
     { text: 'Presentations', href: '/presentations' },
     { text: 'Latest Presentation', href: '/presentations/2026-q1' },
-    { text: 'Threat Dragon Docs', href: 'https://www.threatdragon.com/docs' },
+    { text: 'Aurora Notes Docs', href: 'https://docs.example.org/aurora-notes' },
     { text: 'View latest presentation', href: '/presentations/2026-q1' },
   ])
 })

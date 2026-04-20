@@ -22,7 +22,7 @@ test('enters and exits presentation mode cleanly', async ({ page }) => {
   await page.goto('/presentations/2026-q1?slide=1')
 
   const modeButton = page.getByRole('button', { name: 'Presentation mode' })
-  const navBrand = page.getByRole('link', { name: 'Threat Dragon Updates' })
+  const navBrand = page.getByRole('link', { name: 'Aurora Notes Updates' })
   const appFooterLink = page.getByRole('link', { name: 'Powered by slide-spec' })
 
   await expect(modeButton).toBeVisible()

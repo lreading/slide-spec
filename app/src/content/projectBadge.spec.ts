@@ -6,9 +6,9 @@ describe('getProjectBadgeDisplay', () => {
   it('returns the configured generic badge metadata', () => {
     expect(
       getProjectBadgeDisplay({
-        title: 'Threat Dragon Quarterly Updates',
+        title: 'Aurora Notes Quarterly Updates',
         project_badge: {
-          label: 'OWASP Lab Project',
+          label: 'Demo Lab Project',
           fa_icon: 'fa-flask',
           icon_position: 'before',
         },
@@ -18,7 +18,7 @@ describe('getProjectBadgeDisplay', () => {
         links: {},
       }),
     ).toEqual({
-      label: 'OWASP Lab Project',
+      label: 'Demo Lab Project',
       iconClass: 'fas fa-flask',
       iconPosition: 'before',
     })
@@ -27,7 +27,7 @@ describe('getProjectBadgeDisplay', () => {
   it('supports icon-only badges and normalizes default icon placement', () => {
     expect(
       getProjectBadgeDisplay({
-        title: 'Threat Dragon Quarterly Updates',
+        title: 'Aurora Notes Quarterly Updates',
         project_badge: {
           fa_icon: 'fab fa-github',
         },
@@ -46,7 +46,7 @@ describe('getProjectBadgeDisplay', () => {
   it('returns null when the badge config is missing or empty', () => {
     expect(
       getProjectBadgeDisplay({
-        title: 'Threat Dragon Quarterly Updates',
+        title: 'Aurora Notes Quarterly Updates',
         home_intro: 'Quarterly community updates',
         home_cta_label: 'View latest presentation',
         presentations_cta_label: 'View all presentations',
@@ -56,7 +56,7 @@ describe('getProjectBadgeDisplay', () => {
 
     expect(
       getProjectBadgeDisplay({
-        title: 'Threat Dragon Quarterly Updates',
+        title: 'Aurora Notes Quarterly Updates',
         project_badge: {
           label: '   ',
           fa_icon: '   ',
@@ -72,7 +72,7 @@ describe('getProjectBadgeDisplay', () => {
   it('supports icons after the label when configured', () => {
     expect(
       getProjectBadgeDisplay({
-        title: 'Threat Dragon Quarterly Updates',
+        title: 'Aurora Notes Quarterly Updates',
         project_badge: {
           label: 'Custom Badge',
           fa_icon: 'fa-flag',

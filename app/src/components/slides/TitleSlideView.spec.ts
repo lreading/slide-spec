@@ -28,11 +28,11 @@ describe('TitleSlideView', () => {
     expect(links[0].attributes('href')).toBe(site.links.repository.url)
     expect(links[1].attributes('href')).toBe(site.links.docs.url)
     expect(links[2].attributes('href')).toBe(site.links.community.url)
-    expect(wrapper.text()).toContain('OWASP Lab Project')
+    expect(wrapper.text()).toContain('Demo Lab Project')
     expect(wrapper.find('.project-badge-pill .fa-flask').exists()).toBe(true)
-    expect(wrapper.text()).toContain('github.com/OWASP/threat-dragon')
-    expect(wrapper.text()).toContain('threatdragon.com/docs')
-    expect(wrapper.text()).toContain('owasp.org/www-project-threat-dragon')
+    expect(wrapper.text()).toContain('github.com/example-org/aurora-notes')
+    expect(wrapper.text()).toContain('docs.example.org/aurora-notes')
+    expect(wrapper.text()).toContain('example.org/projects/aurora-notes')
   })
 
   it('omits hero headings when title config is missing', () => {
@@ -69,7 +69,7 @@ describe('TitleSlideView', () => {
           content: {
             ...slide.content,
             title_primary: undefined,
-            title_accent: 'Threat Dragon',
+            title_accent: 'Notes',
             subtitle_prefix: 'Quarterly Community Update',
             quote: undefined,
           },
@@ -77,7 +77,7 @@ describe('TitleSlideView', () => {
       },
     })
 
-    expect(wrapper.find('.hero-title')?.text()).toContain('Threat Dragon')
+    expect(wrapper.find('.hero-title')?.text()).toContain('Notes')
     expect(wrapper.find('.hero-subtitle').exists()).toBe(true)
     expect(wrapper.find('.hero-quote').exists()).toBe(false)
     expect(wrapper.find('.floating-mascot__image').exists()).toBe(false)

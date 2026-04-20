@@ -26,7 +26,7 @@ describe('StandardSlideLayout', () => {
     expect(wrapper.text()).toContain('Roadmap')
     expect(wrapper.text()).toContain('Future direction')
     expect(wrapper.text()).toContain('4/12')
-    expect(wrapper.text()).toContain('Threat Dragon')
+    expect(wrapper.text()).toContain('Aurora Notes')
     expect(wrapper.find('.bg-dots').exists()).toBe(true)
     expect(wrapper.find('.logo-image').attributes('src')).toContain('cupcake-logo')
     expect(wrapper.find('.slot-marker').exists()).toBe(true)
@@ -59,9 +59,9 @@ describe('StandardSlideLayout', () => {
     expect(wrapper.find('.page-title').exists()).toBe(false)
   })
 
-  it('falls back to the dragon icon when no presentation logo is configured', () => {
+  it('falls back to the star icon when no presentation logo is configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Updates',
+      title: 'Aurora Notes Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -87,7 +87,7 @@ describe('StandardSlideLayout', () => {
 
   it('omits the alt text when the logo alt is blank', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Updates',
+      title: 'Aurora Notes Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',
@@ -117,7 +117,7 @@ describe('StandardSlideLayout', () => {
 
   it('omits the presentation mark when no explicit chrome label is configured', () => {
     vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
-      title: 'Threat Dragon Quarterly Updates',
+      title: 'Aurora Notes Quarterly Updates',
       home_intro: 'Intro',
       home_cta_label: 'Latest',
       presentations_cta_label: 'Presentations',

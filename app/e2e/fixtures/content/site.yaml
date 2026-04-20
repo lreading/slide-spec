@@ -1,22 +1,22 @@
 # yaml-language-server: $schema=https://slide-spec.dev/schema/site.schema.json
 schemaVersion: 1
 site:
-  title: Threat Dragon Quarterly Updates
+  title: Aurora Notes Quarterly Updates
   mascot:
     url: content/assets/cupcake-mascot.png
     alt: Cupcake mascot
   data_sources:
     - type: github
-      url: https://github.com/OWASP/threat-dragon
+      url: https://github.com/example-org/aurora-notes
   project_badge:
-    label: OWASP Lab Project
+    label: Demo Lab Project
     fa_icon: fa-flask
     icon_position: before
   presentation_logo:
     url: content/assets/cupcake-logo.png
-    alt: Threat Dragon logo
+    alt: Aurora Notes logo
   navigation:
-    brand_title: Threat Dragon Updates
+    brand_title: Aurora Notes Updates
     home_label: Home
     presentations_label: Presentations
     latest_presentation_label: Latest Presentation
@@ -26,7 +26,7 @@ site:
     label: Powered by slide-spec
     url: https://github.com/lreading/slide-spec
   presentation_chrome:
-    mark_label: Threat Dragon
+    mark_label: Aurora Notes
   presentation_toolbar:
     navigation_label: Slide navigation
     previous_slide_label: Previous slide
@@ -36,8 +36,8 @@ site:
     shortcut_help_body: Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.
     shortcut_help_dismiss_label: Do not show again
   home_hero:
-    title_primary: OWASP
-    title_accent: Threat Dragon
+    title_primary: Aurora
+    title_accent: Notes
     subtitle: Community Updates
   home_intro: Quarterly community updates, published as a static presentation app.
   home_cta_label: View latest presentation
@@ -62,13 +62,13 @@ site:
   links:
     repository:
       label: GitHub Repo
-      url: https://github.com/OWASP/threat-dragon
+      url: https://github.com/example-org/aurora-notes
       eyebrow: Source Code
     docs:
-      label: Threat Dragon Docs
-      url: https://www.threatdragon.com/docs
+      label: Aurora Notes Docs
+      url: https://docs.example.org/aurora-notes
       eyebrow: Documentation
     community:
-      label: OWASP Project
-      url: https://owasp.org/www-project-threat-dragon/
+      label: Demo Project
+      url: https://example.org/projects/aurora-notes/
       eyebrow: Foundation

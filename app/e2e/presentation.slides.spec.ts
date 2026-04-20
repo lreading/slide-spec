@@ -36,7 +36,7 @@ function formatContributorsLinkLabel(total: number, label: string): string {
 async function assertSlideContent(page: Page, slide: PresentationSlide): Promise<void> {
   switch (slide.template) {
     case 'hero':
-      await expect(page.getByRole('heading', { name: /owasp threat dragon/i })).toBeVisible()
+      await expect(page.getByRole('heading', { name: /aurora notes/i })).toBeVisible()
       await expect(
         page.getByRole('heading', {
           name: formatHeroTitle(slide.content.title_primary, slide.content.title_accent),

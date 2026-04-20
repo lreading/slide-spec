@@ -32,8 +32,8 @@ describe('App', () => {
 
     const text = normalizeText(wrapper.text())
 
-    expect(text).toContain('Threat Dragon Updates')
-    expect(text).toContain('OWASP Threat Dragon')
+    expect(text).toContain('Aurora Notes Updates')
+    expect(text).toContain('Aurora Notes')
     expect(text).toContain('Home')
     expect(text).toContain('Presentations')
     expect(text).toContain('Latest Presentation')
@@ -112,7 +112,7 @@ describe('App', () => {
       },
     })
 
-    expect(normalizeText(wrapper.text())).toContain('Threat Dragon Updates')
+    expect(normalizeText(wrapper.text())).toContain('Aurora Notes Updates')
 
     expect(sitePath).toBeDefined()
 

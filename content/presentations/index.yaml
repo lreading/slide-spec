@@ -5,7 +5,7 @@ presentations:
     presentation_path: presentations/2026-q1/presentation.yaml
     generated_path: presentations/2026-q1/generated.yaml
     year: 2026
-    title: OWASP Threat Dragon Community Update
+    title: Aurora Notes Community Update
     subtitle: Q1 2026
     summary: Product progress, releases, contributor recognition, and community growth.
     published: true
@@ -14,7 +14,7 @@ presentations:
     presentation_path: presentations/2025-template-sparse/presentation.yaml
     generated_path: presentations/2025-template-sparse/generated.yaml
     year: 2025
-    title: Threat Dragon Sparse Template Coverage
+    title: Aurora Notes Sparse Template Coverage
     subtitle: Sparse Coverage
     summary: Sparse authored example used to exercise optional template sections.
     published: true

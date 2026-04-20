@@ -2,16 +2,16 @@
 schemaVersion: 1
 presentation:
   id: 2026-q1
-  title: OWASP Threat Dragon Community Update
+  title: Aurora Notes Community Update
   subtitle: Q1 2026
   slides:
     - template: hero
       enabled: true
       content:
-        title_primary: OWASP
-        title_accent: Threat Dragon
+        title_primary: Aurora
+        title_accent: Notes
         subtitle_prefix: Community Update
-        quote: making threat modeling less threatening
+        quote: making project updates easier to share
     - template: agenda
       enabled: true
       title: Agenda
@@ -21,27 +21,27 @@ presentation:
       subtitle: Product, documentation, and contributor progress from January through March
       content:
         sections:
-          - title: Templates, schema, and interoperability
+          - title: Authoring, templates, and publishing
             bullets:
-              - Reusable threat-model templates landed for Web and GitHub-backed workflows.
-              - Threat model schema advanced to version 1.0.2 in support of TM-BOM alignment.
-              - Cornucopia MobileApp deck support was added to the EoP Games integration.
-              - GitLab model-opening issues were fixed for affected repository workflows.
-              - Desktop template-management UI was corrected to match current feature support.
-          - title: Quality, docs, and release engineering
+              - Reusable briefing templates landed for roadmap, release, and community updates.
+              - The content manifest gained clearer metadata for publication windows and owners.
+              - Starter examples now cover weekly notes, planning reviews, and decision logs.
+              - Preview routing was tightened for nested presentation paths.
+              - The presentation picker now handles larger local archives with predictable ordering.
+          - title: Quality, docs, and delivery
             bullets:
-              - Template documentation rendering issues were fixed in the version 2.6.1 stream.
-              - Documentation dependencies and links were refreshed across the docs set.
-              - Dependency cleanup and Dockerfile refactoring reduced maintenance and security friction.
-              - GitHub workflow actions were updated to current versions.
-              - Contribution guidance now explicitly requires manual testing before submission.
-          - title: Desktop quality and contributor growth
+              - Template documentation examples were refreshed to match current rendering behavior.
+              - Content validation messages now point authors to the field that needs attention.
+              - Dependency cleanup and build script refactoring reduced maintenance overhead.
+              - CI workflow actions were updated to current versions.
+              - Contribution guidance now asks for local preview notes before submission.
+          - title: Community and usability
             bullets:
-              - SVG and PNG export issues were fixed so output no longer depends on zoom or selection state.
-              - A desktop Save/Save As bug that could lose diagram changes was fixed.
-              - Desktop unit-test coverage and desktop end-to-end coverage both increased in March.
-              - Brazilian Portuguese localization was updated by a first-time contributor.
-              - The period added 4 first-time contributors and 27 merged pull requests.
+              - Keyboard shortcuts were clarified in the presenter help panel.
+              - Empty-state copy was improved for first-run local content.
+              - Unit-test coverage and end-to-end coverage both increased in March.
+              - Spanish localization strings were updated by a first-time contributor.
+              - The period added 5 first-time contributors and 24 merged pull requests.
     - template: timeline
       enabled: true
       title: Releases
@@ -50,7 +50,7 @@ presentation:
         latest_badge_label: Latest
         footer_link_label: View release history on GitHub
         empty_state_title: No tagged releases in this period
-        empty_state_message: Q1 work focused on reusable templates, desktop quality, documentation, and release engineering
+        empty_state_message: Q1 work focused on reusable templates, authoring quality, documentation, and release engineering
           improvements rather than a packaged release.
         featured_release_ids: []
     - template: progress-timeline
@@ -64,7 +64,7 @@ presentation:
         stages:
           completed:
             label: Completed
-            summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
+            summary: Templates, content metadata, and publishing improvements landed in the product during this period.
           in-progress:
             label: In Progress
             summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation,
@@ -77,17 +77,17 @@ presentation:
             label: Future
             summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
         items:
-          - Reusable threat-model templates landed for Web and GitHub-backed workflows.
-          - Threat Dragon's schema was updated to version 1.0.2 as part of TM-BOM alignment.
-          - Cornucopia MobileApp deck support was added to the EoP Games integration.
-          - Desktop and repository fixes landed for exports, save flows, GitLab opening, and template visibility.
+          - Reusable briefing templates landed for roadmap, release, and community updates.
+          - Aurora Notes' content manifest gained clearer publication metadata.
+          - Starter examples now cover weekly notes, planning reviews, and decision logs.
+          - Preview and archive fixes landed for nested routes, ordering, and template visibility.
         themes:
-          - category: Enterprise Readiness
-            target: Templates and deployment-oriented fixes continue to move Threat Dragon toward broader organizational use.
-          - category: Interoperability
-            target: TM-BOM and EoP/Cornucopia work improved compatibility with adjacent threat-modeling workflows.
-          - category: Desktop Quality
-            target: Export and save fixes reduced friction in day-to-day desktop modeling.
+          - category: Team Readiness
+            target: Templates and preview fixes continue to make Aurora Notes easier for teams to adopt.
+          - category: Publishing Flow
+            target: Archive ordering and nested routes improved compatibility with static hosting workflows.
+          - category: Authoring Quality
+            target: Validation and empty-state updates reduced friction in day-to-day editing.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: In Progress"
@@ -99,7 +99,7 @@ presentation:
         stages:
           completed:
             label: Completed
-            summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
+            summary: Templates, content metadata, and publishing improvements landed in the product during this period.
           in-progress:
             label: In Progress
             summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation,
@@ -112,17 +112,16 @@ presentation:
             label: Future
             summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
         items:
-          - Desktop unit test coverage and desktop end-to-end coverage both landed in March.
-          - Documentation cleanup continued with dependency updates, template-doc fixes, and contributor guidance
-            changes.
-          - Workflow and dependency maintenance continued across GitHub Actions and container/build assets.
-          - The public strategic roadmap opened on March 8 to align future work under shared strategic pillars.
+          - Presentation search coverage and keyboard navigation coverage both landed in March.
+          - Documentation cleanup continued with dependency updates, template example fixes, and contributor guidance changes.
+          - Workflow and dependency maintenance continued across CI actions and build assets.
+          - The public planning board opened on March 8 to align future work under shared themes.
         themes:
-          - category: Tech Debt & Maintainability
-            target: Testing coverage, dependency hygiene, and infrastructure cleanup remain active themes.
-          - category: Community & Trust
+          - category: Maintainability
+            target: Testing coverage, dependency hygiene, and build cleanup remain active themes.
+          - category: Community Confidence
             target: Contributor guidance and documentation are being tightened as the project grows.
-          - category: Release Engineering
+          - category: Release Notes
             target: Release-readiness work continued even without a tagged GitHub release in the window.
     - template: progress-timeline
       enabled: true
@@ -135,7 +134,7 @@ presentation:
         stages:
           completed:
             label: Completed
-            summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
+            summary: Templates, content metadata, and publishing improvements landed in the product during this period.
           in-progress:
             label: In Progress
             summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation,
@@ -148,18 +147,17 @@ presentation:
             label: Future
             summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
         items:
-          - OIDC support, structured audit logging, and threat-model templates remain part of the enterprise-readiness
-            backlog.
-          - Threat catalogs, OpenAPI documentation, and restored CLI tooling are called out as future deliverables.
-          - UX work includes diagramming ergonomics, WCAG accessibility baselines, and a UI style guide.
-          - Integration hooks, import/export improvements, and CI/CD workflows are listed under interoperability.
+          - Workspace presets, review checklists, and project templates remain part of the team-readiness backlog.
+          - Content catalogs, authoring guides, and CLI preview polish are called out as future deliverables.
+          - UX work includes search ergonomics, WCAG accessibility baselines, and a UI style guide.
+          - Export options, preview hooks, and publishing workflows are listed under automation.
         themes:
-          - category: Enterprise Readiness
-            target: Support organizational adoption without abandoning Git-based workflows.
+          - category: Team Readiness
+            target: Support team adoption without abandoning Git-based workflows.
           - category: UX & Accessibility
             target: Improve approachability, consistency, and accessibility across the product.
           - category: Automation & Integration
-            target: Make Threat Dragon easier to connect to external workflows and tooling.
+            target: Make Aurora Notes easier to connect to publishing workflows and tooling.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Future"
@@ -171,7 +169,7 @@ presentation:
         stages:
           completed:
             label: Completed
-            summary: Templates, TM-BOM alignment, and interoperability improvements landed in the product during this period.
+            summary: Templates, content metadata, and publishing improvements landed in the product during this period.
           in-progress:
             label: In Progress
             summary: March delivery and the new public roadmap show active investment in maintainability, testing, documentation,
@@ -184,35 +182,33 @@ presentation:
             label: Future
             summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
         items:
-          - Version 3.x is expected to move toward a threat-model-centric format instead of editor-specific graph data.
-          - TM-BOM is the likely direction for the future model schema.
-          - The OWASP project page explicitly calls out interoperability with pytm, Threagile, and Open Threat Model.
-          - The long-horizon roadmap also aims for OWASP Production maturity.
+          - Version 3.x is expected to move toward reusable content packages instead of one-off decks.
+          - Portable metadata is the likely direction for the future project manifest.
+          - The project page explicitly calls out integrations with adjacent publishing tools.
+          - The long-horizon roadmap also aims for a stable template marketplace.
         themes:
-          - category: TM-BOM / File Format
-            target: Center the model around reusable threat-model data and interchange.
-          - category: Ecosystem Interop
-            target: Reduce friction between Threat Dragon and other open-source threat-model tools.
+          - category: Portable Metadata
+            target: Center authored updates around reusable project data and interchange.
+          - category: Publishing Ecosystem
+            target: Reduce friction between Aurora Notes and other open-source publishing tools.
           - category: Project Maturity
-            target: Continue the path from OWASP Lab toward Production-level maturity.
+            target: Continue the path from Demo Lab toward stable-template maturity.
     - template: people
       enabled: true
       title: Contributor Spotlight
-      subtitle: Real contributions that materially moved Threat Dragon forward in this reporting period
+      subtitle: Real contributions that materially moved Aurora Notes forward in this reporting period
       content:
         banner_prefix: Special thanks to all
         contributors_link_label: contributors
         banner_suffix: who shipped code, docs, tests, translations, and roadmap work during Q1 2026.
         spotlight:
-          - login: Ajith-Penmatsa-GGL
-            summary: Delivered reusable threat-model templates for Web and GitHub-backed workflows, then followed through with fixes
-              for desktop visibility, GitLab opening, links, and template documentation.
-          - login: sn3ha-dev278
-            summary: Tightened core desktop reliability by fixing SVG and PNG export behavior and addressing a Save/Save As path
-              that could lose diagram changes.
-          - login: Mahaboobunnisa123
-            summary: Expanded the EoP Games integration by adding the Cornucopia MobileApp deck, extending the project's
-              interoperability story.
+          - login: river-park
+            summary: Delivered reusable briefing templates for roadmap and release updates, then followed through with preview
+              routing and documentation fixes.
+          - login: mint-owl
+            summary: Tightened authoring reliability by improving validation messages and expanding keyboard navigation coverage.
+          - login: sunny-batch
+            summary: Expanded the sample library with planning review examples, extending the project's publishing story.
     - template: metrics-and-links
       enabled: true
       title: Community Highlights
@@ -228,20 +224,20 @@ presentation:
           - new_contributors
         mentions:
           - type: Public roadmap
-            title: Threat Dragon's public strategic roadmap opened in March 2026 with pillars for maintainability, enterprise
-              readiness, UX/accessibility, interoperability, and community trust.
+            title: Aurora Notes' public planning board opened in March 2026 with themes for maintainability, team readiness,
+              UX/accessibility, publishing workflows, and community confidence.
             url_label: Join the GitHub discussion
-            url: https://github.com/OWASP/threat-dragon/discussions/1480
-          - type: OWASP initiative
-            title: The OWASP project page now highlights reusable threat-model templates and EoP Games integration as named
-              initiatives from the community.
-            url_label: View the OWASP project page
-            url: https://owasp.org/www-project-threat-dragon/
+            url: https://github.com/example-org/aurora-notes/discussions/42
+          - type: Project initiative
+            title: The project page now highlights reusable briefing templates and publishing examples as named community
+              initiatives.
+            url_label: View the project page
+            url: https://example.org/projects/aurora-notes/
           - type: Documentation
-            title: The version 2 documentation continues to cover configuration, schema, testing, and TM-BOM background for current
+            title: The version 2 documentation continues to cover configuration, templates, testing, and content metadata for current
               users and contributors.
             url_label: Browse the docs
-            url: https://www.threatdragon.com/docs
+            url: https://docs.example.org/aurora-notes
     - template: action-cards
       enabled: true
       title: How to Contribute
@@ -250,28 +246,28 @@ presentation:
         footer_text: Open Source and Community Driven
         cards:
           - title: Report Bugs
-            description: File a reproducible issue with environment details, screenshots, and any model or stack context that helps
+            description: File a reproducible issue with environment details, screenshots, and any project or stack context that helps
               maintainers confirm the problem.
             url_label: Submit an issue
-            url: https://github.com/OWASP/threat-dragon/issues
+            url: https://github.com/example-org/aurora-notes/issues
           - title: Submit Code
             description: Pick up a tracked issue, fork the repository, and submit a pull request that includes the manual testing
               now required in the contribution guide.
             url_label: Read CONTRIBUTING.md
-            url: https://github.com/OWASP/threat-dragon/blob/main/CONTRIBUTING.md
+            url: https://github.com/example-org/aurora-notes/blob/main/CONTRIBUTING.md
           - title: Improve Docs
             description: Improve installation docs, schema guidance, deployment notes, or contributor documentation so users can
-              adopt Threat Dragon more easily.
+              adopt Aurora Notes more easily.
             url_label: Edit docs on GitHub
-            url: https://github.com/OWASP/threat-dragon
+            url: https://github.com/example-org/aurora-notes
           - title: Spread the Word
-            description: Join the roadmap discussion, share your usage patterns, star the repository, or help connect Threat Dragon
+            description: Join the roadmap discussion, share your usage patterns, star the repository, or help connect Aurora Notes
               to adjacent open-source workflows.
             url_label: Share & Star
-            url: https://github.com/OWASP/threat-dragon
+            url: https://github.com/example-org/aurora-notes
     - template: closing
       enabled: true
       content:
         heading: Thank you
         message: See you in the next update.
-        quote: making threat modeling less threatening
+        quote: making project updates easier to share

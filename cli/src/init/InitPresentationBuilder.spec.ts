@@ -49,13 +49,13 @@ describe('InitPresentationBuilder', () => {
       repositoryUrl: 'https://github.com/example/project',
       docsUrl: 'https://example.com/docs',
       websiteUrl: 'https://example.com',
-      githubDataSourceUrl: 'https://github.com/OWASP/threat-dragon',
+      githubDataSourceUrl: 'https://github.com/example-org/aurora-notes',
     })).toMatchObject({
       site: {
         data_sources: [
           {
             type: 'github',
-            url: 'https://github.com/OWASP/threat-dragon',
+            url: 'https://github.com/example-org/aurora-notes',
           },
         ],
         links: {

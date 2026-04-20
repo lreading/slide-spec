@@ -9,10 +9,10 @@ import type { ReportingPeriod } from './Generation.types'
 class StubGitHubClient implements GitHubClient {
   public async getRepositoryMetadata() {
     return {
-      owner: 'OWASP',
-      repo: 'threat-dragon',
-      fullName: 'OWASP/threat-dragon',
-      htmlUrl: 'https://github.com/OWASP/threat-dragon',
+      owner: 'example-org',
+      repo: 'aurora-notes',
+      fullName: 'example-org/aurora-notes',
+      htmlUrl: 'https://github.com/example-org/aurora-notes',
       defaultBranch: 'main',
       createdAt: '2023-01-01T00:00:00Z',
       stars: 250,
@@ -27,7 +27,7 @@ class StubGitHubClient implements GitHubClient {
         tagName: 'v2.1.0',
         name: 'Period release',
         publishedAt: '2026-02-10',
-        htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.1.0',
+        htmlUrl: 'https://github.com/example-org/aurora-notes/releases/tag/v2.1.0',
         body: '- Added thing\n- Fixed thing',
         isDraft: false,
         isPrerelease: false,
@@ -37,7 +37,7 @@ class StubGitHubClient implements GitHubClient {
         tagName: 'v2.0.0',
         name: 'Older release',
         publishedAt: '2025-12-20',
-        htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.0.0',
+        htmlUrl: 'https://github.com/example-org/aurora-notes/releases/tag/v2.0.0',
         isDraft: false,
         isPrerelease: false,
       },
@@ -80,7 +80,7 @@ class StubGitHubClient implements GitHubClient {
           mergedAt: '2025-11-12T10:00:00Z',
           number: 10,
           title: 'Prior feature',
-          url: 'https://github.com/OWASP/threat-dragon/pull/10',
+          url: 'https://github.com/example-org/aurora-notes/pull/10',
         },
       ]
     }
@@ -93,14 +93,14 @@ class StubGitHubClient implements GitHubClient {
         mergedAt: '2026-01-12T10:00:00Z',
         number: 12,
         title: 'Add feature',
-        url: 'https://github.com/OWASP/threat-dragon/pull/12',
+        url: 'https://github.com/example-org/aurora-notes/pull/12',
       },
       {
         authorLogin: 'alice',
         mergedAt: '2026-02-01T10:00:00Z',
         number: 13,
         title: 'Fix bug',
-        url: 'https://github.com/OWASP/threat-dragon/pull/13',
+        url: 'https://github.com/example-org/aurora-notes/pull/13',
       },
     ]
   }
@@ -112,7 +112,7 @@ class StubGitHubClient implements GitHubClient {
           number: 77,
           title: 'Issue 0',
           closedAt: '2025-11-01T00:00:00Z',
-          url: 'https://github.com/OWASP/threat-dragon/issues/77',
+          url: 'https://github.com/example-org/aurora-notes/issues/77',
         },
       ]
     }
@@ -122,7 +122,7 @@ class StubGitHubClient implements GitHubClient {
         number: 88,
         title: 'Issue 1',
         closedAt: '2026-02-01T00:00:00Z',
-        url: 'https://github.com/OWASP/threat-dragon/issues/88',
+        url: 'https://github.com/example-org/aurora-notes/issues/88',
       },
     ]
   }
@@ -131,10 +131,10 @@ class StubGitHubClient implements GitHubClient {
 describe('GeneratedDataBuilder', () => {
   const builder = new GeneratedDataBuilder()
   const repository: GitHubRepositoryRef = {
-    owner: 'OWASP',
-    repo: 'threat-dragon',
+    owner: 'example-org',
+    repo: 'aurora-notes',
     type: 'github',
-    url: 'https://github.com/OWASP/threat-dragon',
+    url: 'https://github.com/example-org/aurora-notes',
   }
   const currentPeriod: ReportingPeriod = {
     start: '2026-01-01',
@@ -310,7 +310,7 @@ describe('GeneratedDataBuilder', () => {
             id: 3,
             tagName: 'v2.2.0',
             publishedAt: '2026-03-15T10:00:00Z',
-            htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.2.0',
+            htmlUrl: 'https://github.com/example-org/aurora-notes/releases/tag/v2.2.0',
             isDraft: false,
             isPrerelease: false,
           },
@@ -318,14 +318,14 @@ describe('GeneratedDataBuilder', () => {
             id: 4,
             tagName: 'v2.1.9',
             publishedAt: '2025-12-31T23:59:59Z',
-            htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.1.9',
+            htmlUrl: 'https://github.com/example-org/aurora-notes/releases/tag/v2.1.9',
             isDraft: false,
             isPrerelease: false,
           },
           {
             id: 5,
             tagName: 'v2.1.8',
-            htmlUrl: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.1.8',
+            htmlUrl: 'https://github.com/example-org/aurora-notes/releases/tag/v2.1.8',
             isDraft: false,
             isPrerelease: false,
           },
@@ -345,8 +345,8 @@ describe('GeneratedDataBuilder', () => {
         id: 'v2.2.0',
         version: 'v2.2.0',
         published_at: '2026-03-15T10:00:00Z',
-        url: 'https://github.com/OWASP/threat-dragon/releases/tag/v2.2.0',
-        summary_bullets: ['Release for OWASP/threat-dragon'],
+        url: 'https://github.com/example-org/aurora-notes/releases/tag/v2.2.0',
+        summary_bullets: ['Release for example-org/aurora-notes'],
       },
     ])
   })

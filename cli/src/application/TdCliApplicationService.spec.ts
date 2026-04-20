@@ -14,7 +14,7 @@ class StubContentConfigLoader {
       data_sources: [
         {
           type: 'github',
-          url: 'https://github.com/OWASP/threat-dragon',
+          url: 'https://github.com/example-org/aurora-notes',
         },
       ],
     }
