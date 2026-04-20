@@ -110,7 +110,7 @@ If link checking fails:
 ## Pull request and repository rules
 
 - Signed commits are required.
-- `main` is branch protected.
+- `main` is branch protected, and every pull request to `main` must pass the required `Quality` status check.
 - Tags are restricted to maintainers.
 - For PRs from outside contributors, GitHub Actions may require a maintainer to approve the run before checks start.
 - Over time, consistent high-quality contributions can lead to direct contributor access.
