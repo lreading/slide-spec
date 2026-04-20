@@ -8,6 +8,7 @@
 
 Closes #
 
+
 ## Type of change
 
 - [ ] Bug fix
@@ -15,6 +16,8 @@ Closes #
 - [ ] Refactor
 - [ ] Documentation
 - [ ] Other (describe below)
+
+<!-- If selecting "Other", please describe the type of change -->
 
 ## Breaking changes
 
@@ -28,6 +31,6 @@ Closes #
 ## Checklist
 
 - [ ] I have tested this locally
-- [ ] Quality gates pass (see project READMEs for specific gates)
+- [ ] Quality gates passed locally
 - [ ] Documentation is updated (if applicable)
 - [ ] No unnecessary dependency changes

@@ -6,28 +6,14 @@ body:
     id: summary
     attributes:
       label: Summary
-      description: What do you want and why?
+      description: What do you want and why? Please be as descriptive as possible.
     validations:
       required: true
-  - type: textarea
-    id: use-case
-    attributes:
-      label: Use case
-      description: Describe the problem this would solve or the workflow it would improve.
-    validations:
-      required: true
-  - type: textarea
-    id: proposed-solution
-    attributes:
-      label: Proposed solution
-      description: How would you approach this? (Optional)
-    validations:
-      required: false
   - type: textarea
     id: alternatives
     attributes:
       label: Alternatives considered
-      description: Any other approaches you've thought about. (Optional)
+      description: Any other approaches you've thought about? (Optional)
     validations:
       required: false
   - type: checkboxes

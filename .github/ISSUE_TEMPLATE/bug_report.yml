@@ -34,14 +34,14 @@ body:
   - type: textarea
     id: environment
     attributes:
-      label: Environment
+      label: Environment (if applicable)
       description: Node version, OS, CLI version or app commit.
       placeholder: |
         Node: 24.x
         OS: Ubuntu 24.04
         CLI: 0.0.1
     validations:
-      required: true
+      required: false
   - type: textarea
     id: context
     attributes:
