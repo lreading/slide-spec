@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Demo mascot</title>
+  <desc id="desc">A simple robot mascot with a red antenna.</desc>
+  <circle cx="80" cy="80" r="74" fill="#192132"/>
+  <rect x="45" y="55" width="70" height="58" rx="16" fill="#f5f7ff"/>
+  <path d="M80 55V34" stroke="#e8341c" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="80" cy="30" r="7" fill="#ff8d78"/>
+  <circle cx="66" cy="82" r="6" fill="#192132"/>
+  <circle cx="94" cy="82" r="6" fill="#192132"/>
+  <path d="M67 99h26" stroke="#93a0bd" stroke-width="7" stroke-linecap="round"/>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Aurora Notes mascot</title>
+  <desc id="desc">A smiling note character with a red pencil.</desc>
+  <circle cx="80" cy="80" r="74" fill="#192132"/>
+  <rect x="48" y="34" width="64" height="88" rx="14" fill="#f5f7ff"/>
+  <path d="M63 62h34M63 80h34" stroke="#93a0bd" stroke-width="7" stroke-linecap="round"/>
+  <path d="M65 101c9 8 21 8 30 0" fill="none" stroke="#192132" stroke-width="6" stroke-linecap="round"/>
+  <path d="M101 39l21 21" stroke="#e8341c" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="66" cy="91" r="4" fill="#192132"/>
+  <circle cx="95" cy="91" r="4" fill="#192132"/>
+</svg>

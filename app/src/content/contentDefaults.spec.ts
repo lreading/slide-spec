@@ -69,7 +69,7 @@ describe('contentDefaults', () => {
           name: 'Demo Project',
           url: 'https://example.org/projects/aurora-notes/',
           logo: {
-            url: 'content/assets/cupcake-logo.png',
+            url: 'content/assets/aurora-notes-logo.svg',
             alt: 'Demo project logo',
           },
         },
@@ -79,7 +79,7 @@ describe('contentDefaults', () => {
         name: 'Demo Project',
         url: 'https://example.org/projects/aurora-notes/',
         logo: {
-          url: 'content/assets/cupcake-logo.png',
+          url: 'content/assets/aurora-notes-logo.svg',
           alt: 'Demo project logo',
         },
       },

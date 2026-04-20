@@ -3,14 +3,14 @@ schemaVersion: 1
 site:
   title: Acorn Cloud Updates
   mascot:
-    url: content/assets/cupcake-mascot.png
+    url: content/assets/demo-mascot.svg
     alt: Demo mascot
   project_badge:
     label: YAML-First Slides
     fa_icon: fa-code
     icon_position: before
   presentation_logo:
-    url: content/assets/cupcake-logo.png
+    url: content/assets/demo-logo.svg
     alt: Demo logo
   navigation:
     brand_title: Acorn Cloud Updates

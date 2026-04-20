@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Aurora Notes logo</title>
+  <desc id="desc">A folded note with a red aurora ribbon.</desc>
+  <circle cx="80" cy="80" r="74" fill="#192132"/>
+  <path d="M45 34h50l25 25v67H45z" fill="#f5f7ff"/>
+  <path d="M95 34v25h25z" fill="#d0d7e8"/>
+  <path d="M55 97c19-27 39-27 60 0" fill="none" stroke="#e8341c" stroke-width="10" stroke-linecap="round"/>
+  <path d="M55 116h50" stroke="#93a0bd" stroke-width="8" stroke-linecap="round"/>
+</svg>
