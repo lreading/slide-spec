@@ -35,7 +35,7 @@
   ],
   "scripts": {
     "cli": "node --import tsx src/index.ts",
-    "build": "node --import tsx scripts/sync-runtime-template.ts --out runtime-template && node --import tsx scripts/sync-examples.ts --out examples-synced && tsup src/index.ts --format esm --dts --out-dir dist --clean && node --import tsx scripts/sync-runtime-template.ts --out dist/runtime-template && node --import tsx scripts/sync-examples.ts --out dist/examples",
+    "build": "node --import tsx scripts/sync-runtime-template.ts --out runtime-template && node --import tsx scripts/sync-examples.ts --out examples-synced && node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && esbuild src/index.ts --bundle --platform=node --format=esm --target=es2022 --packages=external --outfile=dist/index.js && node --import tsx scripts/sync-runtime-template.ts --out dist/runtime-template && node --import tsx scripts/sync-examples.ts --out dist/examples",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
     "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
@@ -68,11 +68,11 @@
     "@eslint/js": "^10.0.1",
     "@types/node": "^25.5.2",
     "@vitest/coverage-v8": "^4.1.2",
+    "esbuild": "^0.27.7",
     "eslint": "^10.2.0",
     "globals": "^17.4.0",
     "tsx": "^4.20.6",
-    "tsup": "^8.5.0",
-    "typescript": "~5.9.3",
+    "typescript": "~6.0.3",
     "typescript-eslint": "^8.58.0",
     "vitest": "^4.1.0"
   }
