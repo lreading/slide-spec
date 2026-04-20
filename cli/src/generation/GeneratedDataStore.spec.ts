@@ -93,6 +93,9 @@ generated:
     expect(fileSystem.files.get('/workspace/project/content/presentations/2026-q1/generated.yaml')).toContain(
       '# yaml-language-server: $schema=https://slide-spec.dev/schema/generated.schema.json',
     )
+    expect(fileSystem.files.get('/workspace/project/content/presentations/2026-q1/generated.yaml')?.startsWith(
+      '# Slide Spec\n# https://www.slide-spec.dev/\n# Documentation: https://docs.slide-spec.dev/\n',
+    )).toBe(true)
     expect(fileSystem.files.get('/workspace/project/content/presentations/2026-q1/generated.yaml')).toContain(
       'schemaVersion:',
     )
