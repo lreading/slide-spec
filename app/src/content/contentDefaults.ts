@@ -2,6 +2,7 @@ import type {
   AppFooterContent,
   AttributionContent,
   HomeHeroContent,
+  HomeLogoLinkContent,
   NavigationContent,
   ProgressTimelineSlideContent,
   PresentationToolbarContent,
@@ -132,6 +133,20 @@ export const resolveHomeHeroContent = (
   title_accent: trimOrUndefined(site.home_hero?.title_accent),
   subtitle: trimOrUndefined(site.home_hero?.subtitle),
 })
+
+export const resolveHomeLogos = (
+  site: SiteContent,
+): HomeLogoLinkContent[] =>
+  (site.home_logos ?? [])
+    .map((logo) => ({
+      name: trimOrUndefined(logo.name) ?? '',
+      url: trimOrUndefined(logo.url) ?? '',
+      logo: {
+        url: trimOrUndefined(logo.logo.url) ?? '',
+        alt: trimOrUndefined(logo.logo.alt) ?? '',
+      },
+    }))
+    .filter((logo) => logo.name && logo.url && logo.logo.url && logo.logo.alt)
 
 export const resolveTitleSlideContent = (
   slide: TitleSlide,

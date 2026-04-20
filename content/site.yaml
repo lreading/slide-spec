@@ -42,6 +42,17 @@ site:
   home_intro: Quarterly community updates, published as a static presentation app.
   home_cta_label: View latest presentation
   presentations_cta_label: View all presentations
+  home_logos:
+    - name: Aurora Notes
+      url: https://example.org/projects/aurora-notes/
+      logo:
+        url: content/assets/cupcake-logo.png
+        alt: Aurora Notes logo
+    - name: Cupcake Ops
+      url: https://example.org/projects/cupcake-ops/
+      logo:
+        url: content/assets/cupcake-mascot.png
+        alt: Cupcake Ops logo
   presentations_page:
     title: All presentations
     search_label: Search

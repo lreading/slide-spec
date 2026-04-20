@@ -154,6 +154,16 @@ describe('ContentValidator', () => {
           home_intro: 'Intro',
           home_cta_label: 'View latest presentation',
           presentations_cta_label: 'View all presentations',
+          home_logos: [
+            {
+              name: 'Demo project',
+              url: 'https://example.org/projects/aurora-notes/',
+              logo: {
+                url: 'content/assets/cupcake-logo.png',
+                alt: 'Demo project logo',
+              },
+            },
+          ],
           links: {
             repository: {
               label: 'GitHub Repo',

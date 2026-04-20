@@ -54,6 +54,10 @@
         "presentation_chrome": { "$ref": "#/$defs/presentationChrome" },
         "presentation_toolbar": { "$ref": "#/$defs/presentationToolbar" },
         "home_hero": { "$ref": "#/$defs/homeHero" },
+        "home_logos": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/homeLogoLink" }
+        },
         "home_intro": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "home_cta_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "presentations_cta_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
@@ -158,6 +162,24 @@
         "title_primary": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "title_accent": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "subtitle": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+      }
+    },
+    "homeLogoLink": {
+      "type": "object",
+      "required": ["name", "url", "logo"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "url": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "logo": {
+          "type": "object",
+          "required": ["url", "alt"],
+          "additionalProperties": false,
+          "properties": {
+            "url": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+            "alt": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+          }
+        }
       }
     },
     "presentationsPage": {

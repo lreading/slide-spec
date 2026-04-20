@@ -47,6 +47,17 @@ export interface HomeHeroContent {
   subtitle?: string
 }
 
+export interface HomeLogoImage {
+  url: string
+  alt: string
+}
+
+export interface HomeLogoLinkContent {
+  name: string
+  url: string
+  logo: HomeLogoImage
+}
+
 export interface NavigationContent {
   brand_title?: string
   home_label?: string
@@ -115,6 +126,7 @@ export interface SiteContent {
   presentation_chrome?: PresentationChromeContent
   presentation_toolbar?: PresentationToolbarContent
   home_hero?: HomeHeroContent
+  home_logos?: HomeLogoLinkContent[]
   home_intro: string
   home_cta_label: string
   presentations_cta_label: string

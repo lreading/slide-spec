@@ -12,6 +12,20 @@ describe('HomeView', () => {
   })
 
   it('renders the landing page hero, footer links, and CTA links', () => {
+    vi.spyOn(contentRepository, 'getSiteContent').mockReturnValue({
+      ...contentRepository.getSiteContent(),
+      home_logos: [
+        {
+          name: 'Demo Project',
+          url: 'https://example.org/projects/aurora-notes/',
+          logo: {
+            url: 'content/assets/cupcake-logo.png',
+            alt: 'Demo project logo',
+          },
+        },
+      ],
+    })
+
     const wrapper = mount(HomeView, {
       global: {
         stubs: {
@@ -30,6 +44,9 @@ describe('HomeView', () => {
     expect(text).toContain('View latest presentation')
     expect(text).toContain('View all presentations')
     expect(text).toContain('Aurora Notes Docs')
+    expect(text).toContain('Demo Project')
+    expect(wrapper.get('a[href="https://example.org/projects/aurora-notes/"]').text()).toBe('Demo Project')
+    expect(wrapper.find('img[alt="Demo project logo"]').exists()).toBe(true)
     expect(text).toContain('github.com/example-org/aurora-notes')
   })
 
@@ -118,6 +135,16 @@ describe('HomeView', () => {
       home_hero: {
         title_accent: 'Slide Spec',
       },
+      home_logos: [
+        {
+          name: '   ',
+          url: '   ',
+          logo: {
+            url: '   ',
+            alt: '   ',
+          },
+        },
+      ],
       mascot: {
         url: '',
         alt: '   ',
@@ -142,5 +169,6 @@ describe('HomeView', () => {
     expect(wrapper.find('.accent-text').text()).toBe('Slide Spec')
     expect(wrapper.find('.hero-description').exists()).toBe(false)
     expect(wrapper.find('.mascot-wrap').exists()).toBe(false)
+    expect(wrapper.find('.home-logo-links').exists()).toBe(false)
   })
 })
