@@ -57,4 +57,24 @@ describe('YamlWriter', () => {
       '# yaml-language-server: $schema=https://slide-spec.dev/schema/site.schema.json\n',
     )).toBe(true)
   })
+
+  it('prepends the Slide Spec header before schema comments when requested', async () => {
+    const fileSystem = new MemoryFileSystem()
+    const writer = new YamlWriter(fileSystem)
+
+    await writer.writeDocument('/tmp/site.yaml', { schemaVersion: 1, site: {} }, {
+      schemaUrl: 'https://slide-spec.dev/schema/site.schema.json',
+      includeSlideSpecHeader: true,
+    })
+
+    expect(fileSystem.writes.get('/tmp/site.yaml')?.startsWith(
+      [
+        '# Slide Spec',
+        '# https://www.slide-spec.dev/',
+        '# Documentation: https://docs.slide-spec.dev/',
+        '# yaml-language-server: $schema=https://slide-spec.dev/schema/site.schema.json',
+        'schemaVersion:',
+      ].join('\n'),
+    )).toBe(true)
+  })
 })

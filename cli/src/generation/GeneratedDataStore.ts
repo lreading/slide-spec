@@ -55,6 +55,7 @@ export class GeneratedDataStore {
       generated,
     }, {
       schemaUrl: slideSpecSchemaUrls.generated,
+      includeSlideSpecHeader: true,
     })
     return generatedPath
   }

@@ -142,7 +142,7 @@ export class TdCliApplicationService implements TdCliService {
         ...(input.docsUrl !== undefined ? { docsUrl: input.docsUrl } : {}),
         ...(input.websiteUrl !== undefined ? { websiteUrl: input.websiteUrl } : {}),
         ...(input.githubDataSourceUrl !== undefined ? { githubDataSourceUrl: input.githubDataSourceUrl } : {}),
-      }), { schemaUrl: slideSpecSchemaUrls.site })
+      }), { schemaUrl: slideSpecSchemaUrls.site, includeSlideSpecHeader: true })
       createdPaths.push(paths.getSiteConfigPath())
     }
     const presentationPath = paths.getPresentationPath(input.presentationId)
@@ -152,6 +152,7 @@ export class TdCliApplicationService implements TdCliService {
 
     await this.yamlWriter.writeDocument(presentationPath, presentationDocument, {
       schemaUrl: slideSpecSchemaUrls.presentation,
+      includeSlideSpecHeader: true,
     })
     await this.generatedDataStore.writeGeneratedData(paths, { id: input.presentationId }, generatedDocument)
     createdPaths.push(presentationPath, generatedPath)
