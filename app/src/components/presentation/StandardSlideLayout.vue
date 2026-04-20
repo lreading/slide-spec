@@ -243,9 +243,13 @@ const markLabel = computed(() => resolvePresentationChromeLabel(site))
 
 @media (max-width: 767px) {
   .header-section {
-    gap: 12px;
+    gap: 1.5rem;
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .page-title::after {
+    bottom: -0.75rem;
   }
 
   .presentation-mark {

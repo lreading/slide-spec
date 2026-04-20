@@ -41,6 +41,31 @@ describe('AppNav', () => {
     expect(wrapper.findAll('.app-nav__link--active')[0]?.text()).toBe('Presentations')
   })
 
+  it('closes the mobile menu when the user clicks outside navigation', async () => {
+    const router = createAppRouter(true)
+    await router.push('/')
+    await router.isReady()
+
+    const wrapper = mount(AppNav, {
+      attachTo: document.body,
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    await wrapper.find('.app-nav__toggle').trigger('click')
+    expect(wrapper.find('.app-nav__links').classes()).toContain('app-nav__links--open')
+
+    document.body.dispatchEvent(new MouseEvent('pointerdown', { bubbles: true }))
+    await flushPromises()
+
+    expect(wrapper.find('.app-nav__links').classes()).not.toContain('app-nav__links--open')
+    wrapper.unmount()
+  })
+
   it('uses the current presentation route when already inside a deck', async () => {
     const router = createAppRouter(true)
     await router.push('/presentations/2026-q1')

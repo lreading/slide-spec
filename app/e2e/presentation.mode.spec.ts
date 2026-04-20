@@ -18,6 +18,52 @@ test('supports keyboard navigation on the presentation page', async ({ page }) =
   await expect(page.getByText('Community Update')).toBeVisible()
 })
 
+test('supports mobile slide controls and swipe navigation', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 })
+  await page.goto('/presentations/2026-q1?slide=1&mode=presentation')
+
+  await expect(page).not.toHaveURL(/mode=presentation/)
+  await expect(page.getByRole('link', { name: 'Aurora Notes Updates' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeHidden()
+  await expect(page.getByLabel('Slide navigation')).toContainText('1 / 12')
+
+  await page.getByRole('button', { name: 'Next slide' }).click()
+  await expect(page).toHaveURL(/slide=2/)
+  await expect(page.getByLabel('Slide navigation')).toContainText('2 / 12')
+
+  await page.getByRole('button', { name: 'Previous slide' }).click()
+  await expect(page).toHaveURL(/slide=1/)
+
+  const slideStage = page.locator('.slide-stage')
+  await slideStage.dispatchEvent('pointerdown', {
+    pointerId: 1,
+    pointerType: 'touch',
+    clientX: 340,
+    clientY: 420,
+  })
+  await slideStage.dispatchEvent('pointerup', {
+    pointerId: 1,
+    pointerType: 'touch',
+    clientX: 80,
+    clientY: 430,
+  })
+  await expect(page).toHaveURL(/slide=2/)
+
+  await slideStage.dispatchEvent('pointerdown', {
+    pointerId: 2,
+    pointerType: 'touch',
+    clientX: 80,
+    clientY: 420,
+  })
+  await slideStage.dispatchEvent('pointerup', {
+    pointerId: 2,
+    pointerType: 'touch',
+    clientX: 340,
+    clientY: 430,
+  })
+  await expect(page).toHaveURL(/slide=1/)
+})
+
 test('enters and exits presentation mode cleanly', async ({ page }) => {
   await page.goto('/presentations/2026-q1?slide=1')
 

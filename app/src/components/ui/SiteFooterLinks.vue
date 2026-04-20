@@ -70,6 +70,7 @@ const footerLinks = computed(() =>
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
+  max-width: 100%;
   color: inherit;
   text-decoration: none;
   transition:
@@ -84,6 +85,7 @@ const footerLinks = computed(() =>
 
 .site-footer-links__link p {
   margin: 0;
+  overflow-wrap: anywhere;
 }
 
 .site-footer-links__icon {

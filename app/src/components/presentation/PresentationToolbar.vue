@@ -28,7 +28,7 @@ defineEmits<{
         :title="previousSlideLabel"
         @click="$emit('previous')"
       >
-        <FontAwesomeIcon :icon="['fas', 'arrow-left']" />
+        <span aria-hidden="true">&lt;</span>
       </button>
 
       <span class="toolbar-counter">{{ slideNumber }} / {{ slideTotal }}</span>
@@ -41,7 +41,7 @@ defineEmits<{
         :title="nextSlideLabel"
         @click="$emit('next')"
       >
-        <FontAwesomeIcon :icon="['fas', 'arrow-right']" />
+        <span aria-hidden="true">&gt;</span>
       </button>
     </div>
 
@@ -65,6 +65,7 @@ defineEmits<{
   gap: 0.75rem;
   align-items: center;
   justify-content: space-between;
+  min-height: 2.75rem;
 }
 
 .toolbar-group {
@@ -76,21 +77,25 @@ defineEmits<{
 
 .toolbar-group--nav {
   gap: 0.5rem;
+  padding: 0.2rem 0.45rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 999px;
+  background-color: rgba(18, 24, 36, 0.52);
 }
 
 .toolbar-icon-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 2rem;
+  height: 2rem;
+  border: 0;
   border-radius: 999px;
-  background-color: rgba(28, 35, 51, 0.34);
+  background-color: transparent;
   color: var(--primary-text);
+  font: 700 1.1rem/1 var(--font-mono);
   cursor: pointer;
   transition:
-    border-color 160ms ease,
     background-color 160ms ease,
     color 160ms ease,
     transform 160ms ease;
@@ -98,9 +103,8 @@ defineEmits<{
 
 .toolbar-icon-button:hover {
   transform: translateY(-1px);
-  border-color: rgba(232, 52, 28, 0.56);
   background-color: rgba(232, 52, 28, 0.14);
-  color: var(--brand);
+  color: var(--accent-color);
 }
 
 .toolbar-icon-button:focus-visible,
@@ -123,11 +127,17 @@ defineEmits<{
 @media (max-width: 640px) {
   .toolbar {
     justify-content: center;
+    gap: 0.55rem;
   }
 
   .toolbar-group--meta {
     width: 100%;
     justify-content: center;
+  }
+
+  .toolbar-mode-button {
+    min-height: 2.6rem;
+    padding: 0.7rem 1rem;
   }
 }
 </style>

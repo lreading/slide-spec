@@ -5,9 +5,11 @@ import { RouterView, useRoute } from 'vue-router'
 import AppFooter from './components/AppFooter.vue'
 import AppNav from './components/AppNav.vue'
 import { contentVersion } from './content/ContentRepository'
+import { useCompactViewport } from './composables/useCompactViewport'
 
 const route = useRoute()
 const fullscreenActive = ref(false)
+const { isCompactViewport } = useCompactViewport()
 
 const syncFullscreenState = (): void => {
   fullscreenActive.value = Boolean(document.fullscreenElement)
@@ -15,6 +17,10 @@ const syncFullscreenState = (): void => {
 
 const showChrome = computed(() => {
   if (route.name !== 'presentation') {
+    return true
+  }
+
+  if (isCompactViewport.value) {
     return true
   }
 

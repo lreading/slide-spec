@@ -8,11 +8,14 @@ import PresentationShortcutCallout from '../components/presentation/Presentation
 import { PresentationNavigation } from '../content/PresentationNavigation'
 import PresentationToolbar from '../components/presentation/PresentationToolbar.vue'
 import SlideRenderer from '../components/presentation/SlideRenderer.vue'
+import { useCompactViewport } from '../composables/useCompactViewport'
 
 const route = useRoute()
 const router = useRouter()
 const fullscreenActive = ref(false)
 const shortcutHelpDismissed = ref(false)
+const swipeStart = ref<{ pointerId: number, x: number, y: number }>()
+const { isCompactViewport } = useCompactViewport()
 
 const site = contentRepository.getSiteContent()
 const toolbarContent = resolvePresentationToolbarContent(site)
@@ -26,8 +29,15 @@ const slideNumber = computed(() => navigator.value.resolve(route.query.slide))
 const currentSlide = computed(() => slides.value[slideNumber.value - 1])
 const isPresentationMode = computed(() => route.query.mode === 'presentation')
 const isFullscreenAvailable = typeof document !== 'undefined' && Boolean(document.fullscreenEnabled)
+const minimumSwipeDistance = 48
+const maximumSwipeDriftRatio = 0.8
+const canUsePresentationMode = computed(() => !isCompactViewport.value)
 const isPresentationActive = computed(() =>
-  useUrlOnlyPresentation ? isPresentationMode.value : (isFullscreenAvailable ? fullscreenActive.value : isPresentationMode.value),
+  canUsePresentationMode.value
+  && (useUrlOnlyPresentation ? isPresentationMode.value : (isFullscreenAvailable ? fullscreenActive.value : isPresentationMode.value)),
+)
+const presentationModeLabel = computed(() =>
+  canUsePresentationMode.value ? toolbarContent.presentation_mode_label : undefined,
 )
 const showShortcutHelp = computed(
   () =>
@@ -63,15 +73,22 @@ const dismissShortcutHelp = (): void => {
 }
 
 const updateRoute = async (nextSlide: number, mode = isPresentationMode.value): Promise<void> => {
+  const canKeepPresentationMode = mode && canUsePresentationMode.value
+
   await router.replace({
     query: {
       slide: String(navigator.value.resolve(nextSlide)),
-      ...(mode ? { mode: 'presentation' } : {}),
+      ...(canKeepPresentationMode ? { mode: 'presentation' } : {}),
     },
   })
 }
 
 const enterPresentationMode = async (): Promise<void> => {
+  if (!canUsePresentationMode.value) {
+    await updateRoute(slideNumber.value, false)
+    return
+  }
+
   if (!useUrlOnlyPresentation && isFullscreenAvailable && !document.fullscreenElement) {
     await document.documentElement.requestFullscreen()
   }
@@ -89,12 +106,55 @@ const exitPresentationMode = async (): Promise<void> => {
 }
 
 const toggleMode = async (): Promise<void> => {
+  if (!canUsePresentationMode.value) {
+    await updateRoute(slideNumber.value, false)
+    return
+  }
+
   if (isPresentationMode.value || document.fullscreenElement) {
     await exitPresentationMode()
     return
   }
 
   await enterPresentationMode()
+}
+
+const startSlideSwipe = (event: PointerEvent): void => {
+  if (event.pointerType !== 'touch' && event.pointerType !== 'pen') {
+    return
+  }
+
+  swipeStart.value = {
+    pointerId: event.pointerId,
+    x: event.clientX,
+    y: event.clientY,
+  }
+}
+
+const cancelSlideSwipe = (): void => {
+  swipeStart.value = undefined
+}
+
+const finishSlideSwipe = async (event: PointerEvent): Promise<void> => {
+  const start = swipeStart.value
+
+  if (!start || start.pointerId !== event.pointerId) {
+    return
+  }
+
+  swipeStart.value = undefined
+
+  const deltaX = event.clientX - start.x
+  const deltaY = event.clientY - start.y
+  const isHorizontalSwipe =
+    Math.abs(deltaX) >= minimumSwipeDistance
+    && Math.abs(deltaY) <= Math.abs(deltaX) * maximumSwipeDriftRatio
+
+  if (!isHorizontalSwipe) {
+    return
+  }
+
+  await updateRoute(deltaX < 0 ? navigator.value.next(slideNumber.value) : navigator.value.previous(slideNumber.value))
 }
 
 const handleKeydown = async (event: KeyboardEvent): Promise<void> => {
@@ -130,8 +190,10 @@ const handleKeydown = async (event: KeyboardEvent): Promise<void> => {
     case 'P':
     case 'f':
     case 'F':
-      event.preventDefault()
-      await toggleMode()
+      if (canUsePresentationMode.value) {
+        event.preventDefault()
+        await toggleMode()
+      }
       break
     case 'Escape':
       if (document.fullscreenElement || isPresentationMode.value) {
@@ -149,6 +211,16 @@ watch(
 
     if (String(value ?? '') !== String(resolved)) {
       await updateRoute(resolved)
+    }
+  },
+  { immediate: true },
+)
+
+watch(
+  [isCompactViewport, () => route.query.mode],
+  async ([compactViewport, mode]) => {
+    if (compactViewport && mode === 'presentation') {
+      await updateRoute(slideNumber.value, false)
     }
   },
   { immediate: true },
@@ -186,13 +258,20 @@ onUnmounted(() => {
       :navigation-label="toolbarContent.navigation_label"
       :previous-slide-label="toolbarContent.previous_slide_label"
       :next-slide-label="toolbarContent.next_slide_label"
-      :presentation-mode-label="toolbarContent.presentation_mode_label"
+      :presentation-mode-label="presentationModeLabel"
       @previous="updateRoute(navigator.previous(slideNumber))"
       @next="updateRoute(navigator.next(slideNumber))"
       @toggle-mode="toggleMode"
     />
 
-    <div class="slide-stage" :class="{ 'slide-stage--presentation': isPresentationActive }">
+    <div
+      class="slide-stage"
+      :class="{ 'slide-stage--presentation': isPresentationActive }"
+      @pointerdown="startSlideSwipe"
+      @pointerup="finishSlideSwipe"
+      @pointercancel="cancelSlideSwipe"
+      @pointerleave="cancelSlideSwipe"
+    >
       <SlideRenderer
         v-if="currentSlide"
         :record="record"
@@ -218,6 +297,7 @@ onUnmounted(() => {
   display: flex;
   flex: 1;
   min-height: 0;
+  touch-action: pan-y;
 }
 
 .slide-stage :deep(.slide-container) {

@@ -197,13 +197,31 @@ const docsLink = computed(() => site.links.docs)
     gap: 1.5rem;
   }
 
+  .hero-badge {
+    order: 1;
+  }
+
+  .mascot-wrap {
+    order: 2;
+  }
+
+  .hero-copy {
+    order: 3;
+  }
+
   .hero-actions {
+    order: 4;
     width: 100%;
+    max-width: 22rem;
     flex-direction: column;
+    gap: 0.75rem;
   }
 
   .hero-cta {
     width: 100%;
+    min-width: 0;
+    min-height: 3.25rem;
+    flex: 0 1 auto;
   }
 
   .footer-wrap {

@@ -51,7 +51,7 @@ describe('contentDefaults', () => {
       next_slide_label: 'Next slide',
       presentation_mode_label: 'Presentation mode',
       shortcut_help_title: 'Keyboard shortcuts',
-      shortcut_help_body: 'Use Left and Right to move, Space or Enter for next, and Escape to exit presentation mode.',
+      shortcut_help_body: 'Use Left and Right, swipe left or right, Space or Enter for next, and Escape to exit presentation mode.',
       shortcut_help_dismiss_label: 'Do not show again',
     })
     expect(resolvePresentationsPageContent(site).search_placeholder).toBe('Search presentations...')

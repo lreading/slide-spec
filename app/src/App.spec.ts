@@ -1,5 +1,5 @@
 import { flushPromises, mount } from '@vue/test-utils'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import App from './App.vue'
 import { contentRepository, rawContentFiles } from './content/ContentRepository'
@@ -8,6 +8,17 @@ import { createAppRouter } from './router'
 describe('App', () => {
   const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
   const sitePath = Object.keys(rawContentFiles).find((path) => path.endsWith('site.yaml'))
+  const setViewportWidth = (width: number): void => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: width,
+    })
+    window.dispatchEvent(new Event('resize'))
+  }
+
+  beforeEach(() => {
+    setViewportWidth(1024)
+  })
 
   afterEach(() => {
     contentRepository.replaceFiles(rawContentFiles)
@@ -71,6 +82,29 @@ describe('App', () => {
 
     expect(wrapper.findComponent({ name: 'AppNav' }).exists()).toBe(false)
     expect(wrapper.findComponent({ name: 'AppFooter' }).exists()).toBe(false)
+  })
+
+  it('keeps chrome visible for mobile presentation-mode URLs', async () => {
+    setViewportWidth(390)
+    Object.defineProperty(document, 'fullscreenElement', {
+      configurable: true,
+      value: null,
+      writable: true,
+    })
+
+    const router = createAppRouter(true)
+
+    await router.push('/presentations/2026-q1?mode=presentation')
+    await router.isReady()
+
+    const wrapper = mount(App, {
+      global: {
+        plugins: [router],
+      },
+    })
+
+    expect(wrapper.findComponent({ name: 'AppNav' }).exists()).toBe(true)
+    expect(wrapper.findComponent({ name: 'AppFooter' }).exists()).toBe(true)
   })
 
   it('removes the fullscreen listener when unmounted', async () => {

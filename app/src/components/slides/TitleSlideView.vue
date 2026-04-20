@@ -184,12 +184,14 @@ const mascotAlt = computed(() => props.site.mascot?.alt?.trim() || undefined)
     position: relative;
     bottom: auto;
     margin-top: 2rem;
+    padding: 0 1.5rem;
   }
 
   :deep(.site-footer-links) {
+    align-items: flex-start;
     flex-direction: column;
     gap: 0.75rem;
-    text-align: center;
+    text-align: left;
   }
 }
 </style>

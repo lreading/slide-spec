@@ -6,8 +6,31 @@ import PresentationView from './PresentationView.vue'
 
 describe('PresentationView', () => {
   const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
+  const dispatchTouchPointerEvent = (
+    element: Element,
+    type: 'pointerdown' | 'pointerup',
+    options: { pointerId: number, clientX: number, clientY: number },
+  ): void => {
+    const event = new MouseEvent(type, {
+      bubbles: true,
+      clientX: options.clientX,
+      clientY: options.clientY,
+    })
+
+    Object.defineProperty(event, 'pointerId', { value: options.pointerId })
+    Object.defineProperty(event, 'pointerType', { value: 'touch' })
+    element.dispatchEvent(event)
+  }
+  const setViewportWidth = (width: number): void => {
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: width,
+    })
+    window.dispatchEvent(new Event('resize'))
+  }
 
   beforeEach(() => {
+    setViewportWidth(1024)
     Object.defineProperty(document, 'fullscreenEnabled', {
       configurable: true,
       value: false,
@@ -43,6 +66,52 @@ describe('PresentationView', () => {
     wrapper.unmount()
   })
 
+  it('supports touch swipe navigation on the slide stage', async () => {
+    const router = createAppRouter(true)
+
+    await router.push('/presentations/2026-q1?slide=1')
+    await router.isReady()
+
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    const slideStage = wrapper.get('.slide-stage').element
+    dispatchTouchPointerEvent(slideStage, 'pointerdown', {
+      pointerId: 1,
+      clientX: 320,
+      clientY: 220,
+    })
+    dispatchTouchPointerEvent(slideStage, 'pointerup', {
+      pointerId: 1,
+      clientX: 120,
+      clientY: 230,
+    })
+    await flushPromises()
+
+    expect(router.currentRoute.value.query.slide).toBe('2')
+
+    dispatchTouchPointerEvent(slideStage, 'pointerdown', {
+      pointerId: 2,
+      clientX: 120,
+      clientY: 220,
+    })
+    dispatchTouchPointerEvent(slideStage, 'pointerup', {
+      pointerId: 2,
+      clientX: 320,
+      clientY: 230,
+    })
+    await flushPromises()
+
+    expect(router.currentRoute.value.query.slide).toBe('1')
+    wrapper.unmount()
+  })
+
   it('normalizes invalid slide queries and exits presentation mode on escape', async () => {
     const router = createAppRouter(true)
 
@@ -66,6 +135,48 @@ describe('PresentationView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
     await flushPromises()
 
+    expect(router.currentRoute.value.query.mode).toBeUndefined()
+    wrapper.unmount()
+  })
+
+  it('removes presentation mode and hides the mode trigger on compact viewports', async () => {
+    setViewportWidth(390)
+
+    const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
+
+    Object.defineProperty(document, 'fullscreenEnabled', {
+      configurable: true,
+      value: true,
+    })
+    Object.defineProperty(document.documentElement, 'requestFullscreen', {
+      configurable: true,
+      value: requestFullscreen,
+    })
+
+    const router = createAppRouter(true)
+
+    await router.push('/presentations/2026-q1?slide=2&mode=presentation')
+    await router.isReady()
+
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+    await flushPromises()
+
+    expect(router.currentRoute.value.query.mode).toBeUndefined()
+    expect(wrapper.findComponent({ name: 'PresentationToolbar' }).exists()).toBe(true)
+    expect(wrapper.find('[aria-label="Previous slide"]').exists()).toBe(true)
+    expect(wrapper.text()).not.toContain('Presentation mode')
+
+    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
+    await flushPromises()
+
+    expect(requestFullscreen).not.toHaveBeenCalled()
     expect(router.currentRoute.value.query.mode).toBeUndefined()
     wrapper.unmount()
   })

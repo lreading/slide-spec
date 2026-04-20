@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 import { contentRepository } from '../content/ContentRepository'
@@ -9,6 +9,7 @@ const route = useRoute()
 const site = contentRepository.getSiteContent()
 const presentations = contentRepository.listPresentations()
 const mobileOpen = ref(false)
+const navRoot = ref<HTMLElement>()
 
 const featuredPresentation = computed(() => presentations.find((entry) => entry.featured) ?? presentations[0])
 const navigationContent = computed(() => resolveNavigationContent(site))
@@ -22,16 +23,36 @@ const presentationRoute = computed(() =>
 )
 const isPresentationActive = computed(() => route.name === 'presentation')
 
+const closeMobileMenu = (): void => {
+  mobileOpen.value = false
+}
+
+const handleDocumentPointerdown = (event: PointerEvent): void => {
+  if (!mobileOpen.value || !event.target) {
+    return
+  }
+
+  if (!navRoot.value?.contains(event.target as Node)) {
+    closeMobileMenu()
+  }
+}
+
 watch(
   () => route.fullPath,
-  () => {
-    mobileOpen.value = false
-  },
+  closeMobileMenu,
 )
+
+onMounted(() => {
+  document.addEventListener('pointerdown', handleDocumentPointerdown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('pointerdown', handleDocumentPointerdown)
+})
 </script>
 
 <template>
-  <header class="app-nav">
+  <header ref="navRoot" class="app-nav">
     <div class="app-nav__inner">
       <RouterLink :to="{ name: 'home' }" class="app-nav__brand">
         <span v-if="navigationContent.brand_title" class="app-nav__title">{{ navigationContent.brand_title }}</span>
