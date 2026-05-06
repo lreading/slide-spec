@@ -13,7 +13,7 @@
     "verify": "npm run build && npm run spellcheck"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.1",
+    "@axe-core/playwright": "^4.11.2",
     "@playwright/test": "^1.59.1",
     "playwright": "^1.55.0",
     "tsx": "^4.20.6",
