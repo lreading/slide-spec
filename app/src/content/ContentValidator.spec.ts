@@ -508,7 +508,7 @@ describe('ContentValidator', () => {
         content: {
           title_primary: 'Aurora Notes',
         },
-      } as never,
+      },
     ]
 
     expect(() => validator.validatePresentationDocument(unsupportedTemplateDocument)).toThrow(

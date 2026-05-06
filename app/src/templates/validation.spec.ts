@@ -366,7 +366,7 @@ describe('template validation', () => {
             stat_keys: ['stars'],
             mentions: [],
           },
-        } as unknown as Record<string, unknown>,
+        },
         'slides[metrics-and-links]',
       ),
     ).toThrow('slides[metrics-and-links].content.show_deltas must be a boolean.')
