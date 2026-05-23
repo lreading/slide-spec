@@ -54,6 +54,15 @@ export const resolveAppFooterContent = (
 
 const DEFAULT_ATTRIBUTION_LABEL = 'Powered by slide-spec'
 const DEFAULT_ATTRIBUTION_URL = 'https://github.com/lreading/slide-spec'
+const DEFAULT_PRESENTATION_TOOLBAR_CONTENT: Required<PresentationToolbarContent> = {
+  navigation_label: 'Slide navigation',
+  previous_slide_label: 'Previous slide',
+  next_slide_label: 'Next slide',
+  presentation_mode_label: 'Presentation mode',
+  shortcut_help_title: 'Keyboard shortcuts',
+  shortcut_help_body: 'Use Left and Right, swipe left or right, Space or Enter for next, and Escape to exit presentation mode.',
+  shortcut_help_dismiss_label: 'Do not show again',
+}
 const DEFAULT_PRESENTATIONS_PAGE_CONTENT: Required<PresentationsPageContent> = {
   title: 'All presentations',
   search_label: 'Search',
@@ -91,13 +100,20 @@ export const resolvePresentationChromeLabel = (site: SiteContent): string | unde
 export const resolvePresentationToolbarContent = (
   site: SiteContent,
 ): PresentationToolbarContent => ({
-  navigation_label: trimOrUndefined(site.presentation_toolbar?.navigation_label),
-  previous_slide_label: trimOrUndefined(site.presentation_toolbar?.previous_slide_label),
-  next_slide_label: trimOrUndefined(site.presentation_toolbar?.next_slide_label),
-  presentation_mode_label: trimOrUndefined(site.presentation_toolbar?.presentation_mode_label),
-  shortcut_help_title: trimOrUndefined(site.presentation_toolbar?.shortcut_help_title),
-  shortcut_help_body: trimOrUndefined(site.presentation_toolbar?.shortcut_help_body),
-  shortcut_help_dismiss_label: trimOrUndefined(site.presentation_toolbar?.shortcut_help_dismiss_label),
+  navigation_label: trimOrUndefined(site.presentation_toolbar?.navigation_label)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.navigation_label,
+  previous_slide_label: trimOrUndefined(site.presentation_toolbar?.previous_slide_label)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.previous_slide_label,
+  next_slide_label: trimOrUndefined(site.presentation_toolbar?.next_slide_label)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.next_slide_label,
+  presentation_mode_label: trimOrUndefined(site.presentation_toolbar?.presentation_mode_label)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.presentation_mode_label,
+  shortcut_help_title: trimOrUndefined(site.presentation_toolbar?.shortcut_help_title)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.shortcut_help_title,
+  shortcut_help_body: trimOrUndefined(site.presentation_toolbar?.shortcut_help_body)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.shortcut_help_body,
+  shortcut_help_dismiss_label: trimOrUndefined(site.presentation_toolbar?.shortcut_help_dismiss_label)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.shortcut_help_dismiss_label,
 })
 
 export const resolvePresentationsPageContent = (

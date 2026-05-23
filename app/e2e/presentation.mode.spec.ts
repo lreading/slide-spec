@@ -1,5 +1,14 @@
 import { expect, test } from '@playwright/test'
 
+test('shows default slide nav and presentation mode controls when toolbar content is not configured', async ({ page }) => {
+  await page.goto('/presentations/2026-q1?slide=1')
+
+  await expect(page.getByLabel('Slide navigation')).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Previous slide' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Next slide' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeVisible()
+})
+
 
 test('supports keyboard navigation on the presentation page', async ({ page }) => {
   await page.goto('/presentations/2026-q1?slide=1')

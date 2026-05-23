@@ -130,6 +130,8 @@ At least one of `label` or `fa_icon` must be present.
 | `toggle_label` | string |
 
 All fields optional.
+When omitted, Slide Spec uses these defaults: `Slide navigation`, `Previous slide`, `Next slide`,
+`Presentation mode`, `Keyboard shortcuts`, `Use Left and Right, swipe left or right, Space or Enter for next, and Escape to exit presentation mode.`, and `Do not show again`.
 
 ### `site.app_footer`
 
