@@ -70,7 +70,7 @@ The repo-level agent contract lives in [AGENTS.md](AGENTS.md). This contributing
 Install once from the repo root:
 
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
 ```
 
 Default local gate:
@@ -93,6 +93,22 @@ pnpm verify:ci
 ```
 
 The full source of truth is [`.github/workflows/reusable-quality.yml`](.github/workflows/reusable-quality.yml).
+
+## Dependency changes
+
+Use pnpm from the repo root:
+
+```sh
+pnpm --filter @slide-spec/app add <package>
+pnpm --filter @slide-spec/app add -D <package>
+pnpm --filter '@slide-spec/*' add <package>
+pnpm add -w -D <package>
+pnpm -r update <package> --latest
+```
+
+pnpm writes package manifests, the workspace catalog, and the lockfile. Do not hand-edit dependency versions unless a maintainer asks for a specific version.
+
+`pnpm-workspace.yaml` enforces a 10-day minimum release age. For an urgent security update before that wait, add an exact, reviewed `minimumReleaseAgeExclude` entry for the package version, then run the normal add/update command and `pnpm verify`.
 
 As a practical rule:
 

@@ -23,7 +23,20 @@ It currently:
 
 ## Dependency installs
 
-The repo uses a pnpm workspace with one root lockfile. `pnpm-workspace.yaml` sets `minimumReleaseAge: 14400`, so installs reject package versions published less than 10 days ago. Dependabot also waits 10 days before opening dependency update PRs.
+The repo uses a pnpm workspace with one root lockfile and a strict workspace catalog. Use pnpm commands from the repo root so package manifests, `pnpm-workspace.yaml`, and `pnpm-lock.yaml` stay aligned.
+
+```sh
+pnpm install --frozen-lockfile
+pnpm --filter @slide-spec/app add <package>
+pnpm --filter @slide-spec/app add -D <package>
+pnpm --filter '@slide-spec/*' add <package>
+pnpm add -w -D <package>
+pnpm -r update <package> --latest
+```
+
+`pnpm-workspace.yaml` sets `minimumReleaseAge: 14400`, so installs reject package versions published less than 10 days ago. Dependabot also waits 10 days before opening dependency update PRs.
+
+For an urgent security update before that wait, add an exact, reviewed `minimumReleaseAgeExclude` entry for that package version, then run the normal add/update command and `pnpm verify`.
 
 Latest release assets:
 

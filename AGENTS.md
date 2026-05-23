@@ -68,7 +68,7 @@ The core audience is comfortable with source control, static sites, and YAML dat
 
 - The source of truth for CI gates is [`.github/workflows/reusable-quality.yml`](./.github/workflows/reusable-quality.yml).
 - For PR-ready work, the expectation is that every gate in that workflow passes.
-- Install once from the repo root with `pnpm install`.
+- Install once from the repo root with `pnpm install --frozen-lockfile`.
 - Prefer the root quality gates as your local starting point:
   - `pnpm verify`
   - `pnpm verify:ci`
@@ -80,6 +80,18 @@ The core audience is comfortable with source control, static sites, and YAML dat
 - Run any additional commands needed to cover gates that are not included in those scripts.
 
 Before handoff, run every local command needed to give high confidence that the full workflow will pass. If you cannot run a required gate locally, say exactly what was not run and why.
+
+## Dependency management
+
+- Use pnpm from the repo root.
+- Add package dependency: `pnpm --filter @slide-spec/app add <package>`.
+- Add package dev dependency: `pnpm --filter @slide-spec/app add -D <package>`.
+- Add dependency to every workspace package: `pnpm --filter '@slide-spec/*' add <package>`.
+- Add root-only tooling: `pnpm add -w -D <package>`.
+- Update catalog version: `pnpm -r update <package> --latest`.
+- Let pnpm update package manifests, `pnpm-workspace.yaml`, and `pnpm-lock.yaml`.
+- Do not bypass the 10-day minimum release age unless a human explicitly approves an urgent security exception.
+- For an approved release-age exception, add an exact `minimumReleaseAgeExclude` entry, run the normal add/update command, then run `pnpm verify`.
 
 ## Package-specific expectations
 

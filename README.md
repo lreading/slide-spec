@@ -65,7 +65,7 @@ pnpm workspace with package-local READMEs for development details.
 Repo development:
 
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
 pnpm verify
 pnpm verify:ci
 ```
@@ -73,12 +73,20 @@ pnpm verify:ci
 Dependency changes:
 
 ```sh
-pnpm add -w -D <package>                    # root tooling
-pnpm --filter @slide-spec/app add <package> # package runtime dependency
-pnpm --filter @slide-spec/app add -D <package>
+pnpm --filter @slide-spec/app add <package>    # one package
+pnpm --filter @slide-spec/app add -D <package> # one package, dev dependency
+pnpm --filter '@slide-spec/*' add <package>    # all workspace packages
+pnpm add -w -D <package>                       # root-only tooling
+pnpm -r update <package> --latest              # update a catalog version
 ```
 
-Keep shared version ranges in `pnpm-workspace.yaml` when more than one package uses the same dependency.
+pnpm manages dependency versions through the workspace catalog. The repo also enforces a 10-day minimum release age for package versions.
+
+Emergency security update before the 10-day wait:
+
+1. Add an exact reviewed exception in `pnpm-workspace.yaml`: `minimumReleaseAgeExclude: ["<package>@<version>"]`.
+2. Run the normal add/update command.
+3. Run `pnpm verify`.
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 

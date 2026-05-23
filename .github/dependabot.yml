@@ -12,42 +12,7 @@ updates:
         update-types:
           - version-update:semver-major
     groups:
-      app-dependencies:
-        applies-to: version-updates
-        patterns:
-          - "@vue/test-utils"
-          - "@vue/tsconfig"
-          - "eslint-plugin-vue"
-          - "jsdom"
-          - "vue-eslint-parser"
-          - "vue-tsc"
-        update-types:
-          - minor
-          - patch
-      cli-dependencies:
-        applies-to: version-updates
-        patterns:
-          - "dotenv"
-          - "esbuild"
-        update-types:
-          - minor
-          - patch
-      docs-dependencies:
-        applies-to: version-updates
-        patterns:
-          - "vitepress"
-        update-types:
-          - minor
-          - patch
-      shared-dependencies:
-        applies-to: version-updates
-        patterns:
-          - "ajv"
-          - "yaml-language-server"
-        update-types:
-          - minor
-          - patch
-      common-dependencies:
+      workspace-dependencies:
         applies-to: version-updates
         patterns:
           - "*"
