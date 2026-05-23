@@ -64,7 +64,7 @@ Each slide in the `slides` array:
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
-| `template` | yes | string | One of the [ten template ids](/templates/) |
+| `template` | yes | string | One of the supported [template ids](/templates/) |
 | `enabled` | yes | boolean | Disabled slides are skipped |
 | `title` | varies | string | Required by most templates |
 | `subtitle` | | string | Optional on all templates |

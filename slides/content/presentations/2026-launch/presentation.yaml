@@ -23,11 +23,12 @@ presentation:
       subtitle: Core capabilities in the launch build
       content:
         sections:
-          - title: Nine slide templates
+          - title: Built-in slide templates
             bullets:
               - Hero, agenda, and section-list-grid for structure
               - Timeline and progress-timeline for releases and roadmaps
               - People for contributor spotlights
+              - Image-and-bullets for visual + key-point summaries
               - Metrics-and-links for community health data
               - Action-cards for calls to action
               - Closing slide for every deck
@@ -76,7 +77,7 @@ presentation:
             label: Future
             summary: Longer-horizon ideas being explored.
         items:
-          - 10 slide templates (hero through closing, including image-and-bullets)
+          - Full built-in template set (hero through closing, including image-and-bullets)
           - CLI with init, validate, fetch, build, serve
           - Vue 3 app renderer with Vite
           - Unit, E2E, a11y, and visual regression tests
