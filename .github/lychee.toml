@@ -1,7 +1,5 @@
 verbose = "info"
 exclude = [
   "npmjs\\.com",
-  "^https://www\\.bestpractices\\.dev/en/projects/12235/passing$",
-  "^https://www\\.bestpractices\\.dev/projects/12235/badge$",
   "^https://github\\.com/user-attachments/assets/076d3140-4d1d-47a3-8f5b-5a1dd58f03c1$",
 ]
