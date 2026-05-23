@@ -4,7 +4,7 @@ packages:
   - docs
   - shared
 
-minimumReleaseAge: 14400
+minimumReleaseAge: 7200
 minimumReleaseAgeStrict: true
 minimumReleaseAgeIgnoreMissingTime: false
 catalogMode: strict
@@ -14,6 +14,7 @@ onlyBuiltDependencies:
   - esbuild
 
 overrides:
+  js-cookie: ^3.0.7
   yaml-language-server>yaml: ^2.8.4
 
 catalog:

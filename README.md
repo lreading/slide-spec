@@ -80,9 +80,9 @@ pnpm add -w -D <package>                       # root-only tooling
 pnpm -r update <package> --latest              # update a catalog version
 ```
 
-pnpm manages dependency versions through the workspace catalog. The repo also enforces a 10-day minimum release age for package versions.
+pnpm manages dependency versions through the workspace catalog. The repo also enforces a 5-day minimum release age for package versions.
 
-Emergency security update before the 10-day wait:
+Emergency security update before the 5-day wait:
 
 1. Add an exact reviewed exception in `pnpm-workspace.yaml`: `minimumReleaseAgeExclude: ["<package>@<version>"]`.
 2. Run the normal add/update command.

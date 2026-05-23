@@ -90,7 +90,7 @@ Before handoff, run every local command needed to give high confidence that the 
 - Add root-only tooling: `pnpm add -w -D <package>`.
 - Update catalog version: `pnpm -r update <package> --latest`.
 - Let pnpm update package manifests, `pnpm-workspace.yaml`, and `pnpm-lock.yaml`.
-- Do not bypass the 10-day minimum release age unless a human explicitly approves an urgent security exception.
+- Do not bypass the 5-day minimum release age unless a human explicitly approves an urgent security exception.
 - For an approved release-age exception, add an exact `minimumReleaseAgeExclude` entry, run the normal add/update command, then run `pnpm verify`.
 
 ## Package-specific expectations

@@ -34,7 +34,7 @@ pnpm add -w -D <package>
 pnpm -r update <package> --latest
 ```
 
-`pnpm-workspace.yaml` sets `minimumReleaseAge: 14400`, so installs reject package versions published less than 10 days ago. Dependabot also waits 10 days before opening dependency update PRs.
+`pnpm-workspace.yaml` sets `minimumReleaseAge: 7200`, so installs reject package versions published less than 5 days ago. Dependabot also waits 5 days before opening dependency update PRs.
 
 For an urgent security update before that wait, add an exact, reviewed `minimumReleaseAgeExclude` entry for that package version, then run the normal add/update command and `pnpm verify`.
 

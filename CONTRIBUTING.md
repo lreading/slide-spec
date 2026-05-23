@@ -108,7 +108,7 @@ pnpm -r update <package> --latest
 
 pnpm writes package manifests, the workspace catalog, and the lockfile. Do not hand-edit dependency versions unless a maintainer asks for a specific version.
 
-`pnpm-workspace.yaml` enforces a 10-day minimum release age. For an urgent security update before that wait, add an exact, reviewed `minimumReleaseAgeExclude` entry for the package version, then run the normal add/update command and `pnpm verify`.
+`pnpm-workspace.yaml` enforces a 5-day minimum release age. For an urgent security update before that wait, add an exact, reviewed `minimumReleaseAgeExclude` entry for the package version, then run the normal add/update command and `pnpm verify`.
 
 As a practical rule:
 
