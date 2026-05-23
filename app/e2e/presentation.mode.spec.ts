@@ -34,11 +34,11 @@ test('supports mobile slide controls and swipe navigation', async ({ page }) => 
   await expect(page).not.toHaveURL(/mode=presentation/)
   await expect(page.getByRole('link', { name: 'Aurora Notes Updates' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeHidden()
-  await expect(page.getByLabel('Slide navigation')).toContainText('1 / 12')
+  await expect(page.getByLabel('Slide navigation')).toContainText('1 / 13')
 
   await page.getByRole('button', { name: 'Next slide' }).click()
   await expect(page).toHaveURL(/slide=2/)
-  await expect(page.getByLabel('Slide navigation')).toContainText('2 / 12')
+  await expect(page.getByLabel('Slide navigation')).toContainText('2 / 13')
 
   await page.getByRole('button', { name: 'Previous slide' }).click()
   await expect(page).toHaveURL(/slide=1/)

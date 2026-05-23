@@ -2,6 +2,10 @@
 
 Balanced slide layout for an image block and a bullet list, with support for image-only and bullets-only states.
 
+<figure class="template-doc-shot">
+  <img src="/screenshots/template-image-and-bullets-reference.png" alt="Image and bullets slide showing product screenshot and rollout highlights" />
+</figure>
+
 ## Example
 
 ```yaml
