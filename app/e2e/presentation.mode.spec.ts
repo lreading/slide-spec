@@ -1,6 +1,6 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
 
-const getSlideTotal = async (page: Parameters<typeof test>[0]['page']): Promise<string> => {
+const getSlideTotal = async (page: Page): Promise<string> => {
   const navigationText = await page.getByLabel('Slide navigation').innerText()
   const match = navigationText.match(/(\d+)\s*\/\s*(\d+)/)
   if (!match) {
