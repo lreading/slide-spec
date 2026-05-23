@@ -70,6 +70,16 @@ pnpm verify
 pnpm verify:ci
 ```
 
+Dependency changes:
+
+```sh
+pnpm add -w -D <package>                    # root tooling
+pnpm --filter @slide-spec/app add <package> # package runtime dependency
+pnpm --filter @slide-spec/app add -D <package>
+```
+
+Keep shared version ranges in `pnpm-workspace.yaml` when more than one package uses the same dependency.
+
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
 ## Releases
