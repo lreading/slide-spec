@@ -76,7 +76,7 @@ presentation:
             label: Future
             summary: Longer-horizon ideas being explored.
         items:
-          - 9 slide templates (hero through closing)
+          - 10 slide templates (hero through closing, including image-and-bullets)
           - CLI with init, validate, fetch, build, serve
           - Vue 3 app renderer with Vite
           - Unit, E2E, a11y, and visual regression tests

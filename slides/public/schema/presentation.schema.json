@@ -27,6 +27,7 @@
               { "$ref": "#/$defs/progressTimelineSlide" },
               { "$ref": "#/$defs/peopleSlide" },
               { "$ref": "#/$defs/metricsAndLinksSlide" },
+              { "$ref": "#/$defs/imageAndBulletsSlide" },
               { "$ref": "#/$defs/actionCardsSlide" },
               { "$ref": "#/$defs/closingSlide" }
             ]
@@ -50,6 +51,7 @@
             "progress-timeline",
             "people",
             "metrics-and-links",
+            "image-and-bullets",
             "action-cards",
             "closing"
           ]
@@ -259,6 +261,46 @@
                 "cards": {
                   "type": "array",
                   "items": { "$ref": "defs.schema.json#/$defs/contributionCard" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "imageAndBulletsSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "image-and-bullets" },
+            "content": {
+              "type": "object",
+              "anyOf": [
+                { "required": ["image"] },
+                { "required": ["bullets"] }
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "image_side": {
+                  "enum": ["left", "right"]
+                },
+                "image": {
+                  "type": "object",
+                  "required": ["src"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "src": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                    "alt": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                    "description": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+                  }
+                },
+                "bullets": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
                 }
               }
             }

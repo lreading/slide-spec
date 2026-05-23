@@ -57,6 +57,12 @@ presentation:
       content:
         stat_keys: []
         mentions: []
+    - template: image-and-bullets
+      enabled: true
+      title: Image and Bullets
+      content:
+        bullets:
+          - Minimal bullet
     - template: action-cards
       enabled: true
       title: How to Contribute

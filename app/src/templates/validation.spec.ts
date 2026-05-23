@@ -99,6 +99,20 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
       ],
     },
   },
+  'image-and-bullets': {
+    template: 'image-and-bullets',
+    enabled: true,
+    title: 'Highlights',
+    content: {
+      image_side: 'right',
+      image: {
+        src: '/assets/highlights.png',
+        alt: 'Highlights graphic',
+        description: 'Highlights from the quarter.',
+      },
+      bullets: ['One', 'Two'],
+    },
+  },
   'action-cards': {
     template: 'action-cards',
     enabled: true,
@@ -189,6 +203,14 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     content: {
       stat_keys: ['stars'],
       mentions: [],
+    },
+  },
+  'image-and-bullets': {
+    template: 'image-and-bullets',
+    enabled: true,
+    title: 'Highlights',
+    content: {
+      bullets: ['One'],
     },
   },
   'action-cards': {
@@ -302,6 +324,14 @@ describe('template validation', () => {
         ],
       },
     },
+    'image-and-bullets': {
+      template: 'image-and-bullets',
+      enabled: true,
+      title: 'Highlights',
+      content: {
+        image_side: 'up',
+      },
+    },
     'action-cards': {
       template: 'action-cards',
       enabled: true,
@@ -336,6 +366,7 @@ describe('template validation', () => {
       people: 'slides[people].content.spotlight[0].summary must be a string.',
       'metrics-and-links':
         'slides[metrics-and-links].content.mentions[0] must provide url and url_label together.',
+      'image-and-bullets': 'slides[image-and-bullets].content.image_side must be left or right.',
       'action-cards': 'slides[action-cards].content.cards[0].url must be a string.',
       closing: 'slides[closing].content.message must be a string.',
     }

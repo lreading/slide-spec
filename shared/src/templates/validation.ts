@@ -56,6 +56,14 @@ function assertContributionCard(value: unknown, path: string): void {
   assertNonBlankString(value.url, `${path}.url`)
 }
 
+function assertImageAndBulletsImage(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['src', 'alt', 'description'], path)
+  assertNonBlankString(value.src, `${path}.src`)
+  assertOptionalString(value.alt, `${path}.alt`)
+  assertOptionalString(value.description, `${path}.description`)
+}
+
 const heroValidator: SlideTemplateValidator = (slide, path) => {
   const content = slide.content as Record<string, unknown>
   assertNoUnexpectedKeys(content, ['title_primary', 'title_accent', 'subtitle_prefix', 'quote'], `${path}.content`)
@@ -179,6 +187,28 @@ const actionCardsValidator: SlideTemplateValidator = (slide, path) => {
     assertContributionCard(card, `${path}.content.cards[${index}]`))
 }
 
+const imageAndBulletsValidator: SlideTemplateValidator = (slide, path) => {
+  assertNonBlankString(slide.title, `${path}.title`)
+  const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(content, ['image_side', 'image', 'bullets'], `${path}.content`)
+  assertOptionalString(content.image_side, `${path}.content.image_side`)
+  assert(
+    content.image_side === undefined || content.image_side === 'left' || content.image_side === 'right',
+    `${path}.content.image_side must be left or right.`,
+  )
+  if (content.image !== undefined) {
+    assertImageAndBulletsImage(content.image, `${path}.content.image`)
+  }
+  if (content.bullets !== undefined) {
+    assertStringArray(content.bullets, `${path}.content.bullets`)
+    assert(content.bullets.length > 0, `${path}.content.bullets must include at least one item.`)
+  }
+  assert(
+    content.image !== undefined || content.bullets !== undefined,
+    `${path}.content must include image or bullets.`,
+  )
+}
+
 const closingValidator: SlideTemplateValidator = (slide, path) => {
   const content = slide.content as Record<string, unknown>
   assertNoUnexpectedKeys(content, ['heading', 'message', 'quote'], `${path}.content`)
@@ -195,6 +225,7 @@ export const slideTemplateValidators: Record<SlideTemplateId, SlideTemplateValid
   'progress-timeline': progressTimelineValidator,
   people: peopleValidator,
   'metrics-and-links': metricsAndLinksValidator,
+  'image-and-bullets': imageAndBulletsValidator,
   'action-cards': actionCardsValidator,
   closing: closingValidator,
 }
