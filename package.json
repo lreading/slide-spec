@@ -14,8 +14,8 @@
     "spellcheck": "cspell lint --no-progress \"README.md\" \"CONTRIBUTING.md\" \"docs/**/*.md\" --gitignore --config .cspell.json",
     "links": "node --import tsx scripts/check-links.ts",
     "security:trivy": "docker run --rm -v \"${PWD}:/repo\" aquasec/trivy:0.67.2 fs --severity HIGH,CRITICAL --scanners vuln,secret,misconfig --format sarif --output /repo/trivy-results.sarif /repo",
-    "security:semgrep": "docker run --rm -v \"${PWD}:/src\" semgrep/semgrep:1.124.0 semgrep scan --config auto --error --json --output /src/semgrep-results.json /src",
-    "security:gitleaks": "docker run --rm -v \"${PWD}:/repo\" zricethezav/gitleaks:v8.28.0 detect --source /repo --report-format sarif --report-path /repo/gitleaks-results.sarif --redact --no-banner",
+    "security:semgrep": "node --import tsx scripts/run-semgrep-docker.ts",
+    "security:gitleaks": "node --import tsx scripts/run-gitleaks-docker.ts",
     "sbom": "docker run --rm -v \"${PWD}:/repo\" anchore/syft:v1.38.0 dir:/repo -o cyclonedx-json=/repo/sbom.cyclonedx.json",
     "dast": "node --import tsx scripts/run-dast.ts"
   },

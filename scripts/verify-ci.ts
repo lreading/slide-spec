@@ -22,7 +22,6 @@ for (const step of steps) {
   console.log(`\n> ${step.name}`)
   const result = spawnSync(step.command[0]!, step.command.slice(1), {
     stdio: 'inherit',
-    shell: process.platform === 'win32',
   })
 
   if (result.status !== 0) {

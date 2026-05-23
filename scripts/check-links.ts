@@ -3,7 +3,6 @@ import { spawn, spawnSync } from 'node:child_process'
 function run(command: string, args: readonly string[]): void {
   const result = spawnSync(command, args, {
     stdio: 'inherit',
-    shell: process.platform === 'win32',
   })
 
   if (result.status !== 0) {
@@ -18,7 +17,6 @@ const server = spawn(
   ['exec', 'http-server', './docs/.vitepress/dist', '-p', '4174'],
   {
     stdio: 'ignore',
-    shell: process.platform === 'win32',
   },
 )
 
@@ -41,7 +39,7 @@ run('docker', [
   'host',
   '-v',
   `${process.cwd()}:/repo`,
-  'lycheeverse/lychee:v0.20.1',
+  'lycheeverse/lychee:latest',
   '--verbose',
   '--no-progress',
   '--config',
@@ -56,7 +54,7 @@ run('docker', [
   'host',
   '-v',
   `${process.cwd()}:/repo`,
-  'lycheeverse/lychee:v0.20.1',
+  'lycheeverse/lychee:latest',
   '--verbose',
   '--no-progress',
   '--config',
@@ -65,3 +63,5 @@ run('docker', [
   'http://127.0.0.1:4174/',
   '/repo/docs/.vitepress/dist/**/*.html',
 ])
+
+stopServer()

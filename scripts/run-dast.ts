@@ -5,7 +5,6 @@ function run(command: string, args: readonly string[], env: NodeJS.ProcessEnv = 
   const result = spawnSync(command, args, {
     env: { ...process.env, ...env },
     stdio: 'inherit',
-    shell: process.platform === 'win32',
   })
 
   if (result.status !== 0) {
@@ -24,7 +23,6 @@ run(
 
 const server = spawn('pnpm', ['exec', 'http-server', './app/dist', '-p', '4173'], {
   stdio: 'ignore',
-  shell: process.platform === 'win32',
 })
 
 const stopServer = (): void => {
@@ -64,3 +62,5 @@ run('docker', [
   'zap-warnings.md',
   '-I',
 ])
+
+stopServer()
