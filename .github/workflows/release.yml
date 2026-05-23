@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   prepare-release:
@@ -52,6 +53,8 @@ jobs:
   quality:
     needs: prepare-release
     uses: ./.github/workflows/reusable-quality.yml
+    with:
+      run-dependency-review: false
     secrets: inherit
 
   publish-cli:
