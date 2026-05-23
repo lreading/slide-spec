@@ -8,12 +8,8 @@ on:
 
 permissions:
   contents: read
-  pull-requests: read
 
 jobs:
   quality:
     uses: ./.github/workflows/reusable-quality.yml
-    with:
-      run-dependency-review: false
     secrets: inherit
-
