@@ -156,7 +156,15 @@ describe('contentDefaults', () => {
       label: 'Powered by slide-spec',
       url: 'https://github.com/lreading/slide-spec',
     })
-    expect(resolvePresentationToolbarContent(blankSite).presentation_mode_label).toBeUndefined()
+    expect(resolvePresentationToolbarContent(blankSite)).toEqual({
+      navigation_label: 'Slide navigation',
+      previous_slide_label: 'Previous slide',
+      next_slide_label: 'Next slide',
+      presentation_mode_label: 'Presentation mode',
+      shortcut_help_title: 'Keyboard shortcuts',
+      shortcut_help_body: 'Use Left and Right, swipe left or right, Space or Enter for next, and Escape to exit presentation mode.',
+      shortcut_help_dismiss_label: 'Do not show again',
+    })
     expect(resolvePresentationsPageContent(blankSite)).toEqual({
       title: 'All presentations',
       search_label: 'Search',
