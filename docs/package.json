@@ -7,17 +7,20 @@
     "build": "node --import tsx scripts/generate-site-files.ts && vitepress build",
     "preview": "vitepress preview",
     "screenshots": "node --import tsx scripts/generate-doc-assets.ts",
-    "a11y": "npm run build && playwright test",
+    "a11y": "pnpm run build && playwright test",
     "a11y:install": "playwright install chromium",
-    "spellcheck": "npx -y cspell@9.7.0 lint \"README.md\" \"**/*.md\" --gitignore --config ../.cspell.json",
-    "verify": "npm run build && npm run spellcheck"
+    "spellcheck": "pnpm exec cspell lint \"README.md\" \"**/*.md\" --gitignore --config ../.cspell.json",
+    "verify": "pnpm run build && pnpm run spellcheck"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.11.3",
-    "@playwright/test": "^1.59.1",
-    "playwright": "^1.55.0",
-    "tsx": "^4.20.6",
-    "typescript": "~6.0.3",
-    "vitepress": "^1.6.4"
-  }
+    "@axe-core/playwright": "catalog:",
+    "@playwright/test": "catalog:",
+    "playwright": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vitepress": "catalog:"
+  },
+  "name": "@slide-spec/docs",
+  "private": true,
+  "type": "module"
 }

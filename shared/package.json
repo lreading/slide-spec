@@ -11,25 +11,20 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run",
     "coverage": "vitest run --coverage --coverage.thresholds.perFile=true --coverage.thresholds.statements=80 --coverage.thresholds.branches=80 --coverage.thresholds.functions=80 --coverage.thresholds.lines=80",
-    "verify": "npm run lint && npm run typecheck && npm run coverage",
-    "verify:ci": "npm run lint && npm run typecheck && npm run coverage"
-  },
-  "overrides": {
-    "yaml-language-server": {
-      "yaml": "^2.8.3"
-    }
+    "verify": "pnpm run lint && pnpm run typecheck && pnpm run coverage",
+    "verify:ci": "pnpm run lint && pnpm run typecheck && pnpm run coverage"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/node": "^25.6.2",
-    "@vitest/coverage-v8": "^4.1.5",
-    "ajv": "^8.20.0",
-    "eslint": "^10.3.0",
-    "globals": "^17.6.0",
-    "typescript": "~6.0.3",
-    "typescript-eslint": "^8.59.2",
-    "vitest": "^4.1.0",
-    "yaml": "^2.8.4",
-    "yaml-language-server": "^1.23.0"
+    "@eslint/js": "catalog:",
+    "@types/node": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "ajv": "catalog:",
+    "eslint": "catalog:",
+    "globals": "catalog:",
+    "typescript": "catalog:",
+    "typescript-eslint": "catalog:",
+    "vitest": "catalog:",
+    "yaml": "catalog:",
+    "yaml-language-server": "catalog:"
   }
 }
