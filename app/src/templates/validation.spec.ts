@@ -30,6 +30,16 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
       title_primary: 'Aurora Notes',
     },
   },
+  'section-title': {
+    template: 'section-title',
+    enabled: true,
+    content: {
+      title: 'Platform Security',
+      subtitle: 'Compliance and governance',
+      image_url: '/content/assets/security-shield.svg',
+      image_alt: 'Shield icon',
+    },
+  },
   agenda: {
     template: 'agenda',
     enabled: true,
@@ -130,6 +140,13 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     content: {
       title_accent: 'Notes',
+    },
+  },
+  'section-title': {
+    template: 'section-title',
+    enabled: true,
+    content: {
+      title: 'Roadmap',
     },
   },
   agenda: {
@@ -245,6 +262,13 @@ describe('template validation', () => {
       enabled: true,
       content: {},
     },
+    'section-title': {
+      template: 'section-title',
+      enabled: true,
+      content: {
+        subtitle: 'No title',
+      },
+    },
     agenda: {
       template: 'agenda',
       enabled: true,
@@ -328,6 +352,7 @@ describe('template validation', () => {
   it('rejects invalid payloads for every template in the current catalog', () => {
     const expectations: Record<SlideTemplateId, string> = {
       hero: 'slides[hero].content must include title_primary or title_accent.',
+      'section-title': 'slides[section-title].content.title must be a string.',
       agenda: 'slides[agenda].title must not be blank.',
       'section-list-grid': 'slides[section-list-grid].content.sections must be an array.',
       timeline: 'slides[timeline].content.featured_release_ids must be an array.',

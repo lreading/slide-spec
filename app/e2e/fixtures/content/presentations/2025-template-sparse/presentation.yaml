@@ -13,6 +13,10 @@ presentation:
     - template: agenda
       enabled: true
       title: Agenda
+    - template: section-title
+      enabled: true
+      content:
+        title: Minimal Updates
     - template: section-list-grid
       enabled: true
       title: Minimal Updates

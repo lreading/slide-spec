@@ -1,5 +1,6 @@
 export const slideTemplateIds = [
   'hero',
+  'section-title',
   'agenda',
   'section-list-grid',
   'timeline',

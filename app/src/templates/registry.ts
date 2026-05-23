@@ -7,6 +7,7 @@ import HowToContributeSlideView from '../components/slides/HowToContributeSlideV
 import RecentUpdatesSlideView from '../components/slides/RecentUpdatesSlideView.vue'
 import ReleasesSlideView from '../components/slides/ReleasesSlideView.vue'
 import RoadmapSlideView from '../components/slides/RoadmapSlideView.vue'
+import SectionTitleSlideView from '../components/slides/SectionTitleSlideView.vue'
 import ThankYouSlideView from '../components/slides/ThankYouSlideView.vue'
 import TitleSlideView from '../components/slides/TitleSlideView.vue'
 
@@ -48,6 +49,13 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
       site: context.site,
       slide: context.slide,
     }),
+  },
+  'section-title': {
+    id: 'section-title',
+    label: 'Section Title',
+    component: SectionTitleSlideView,
+    validate: slideTemplateValidators['section-title'],
+    createProps: createSharedSlideProps,
   },
   agenda: {
     id: 'agenda',

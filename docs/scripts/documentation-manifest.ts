@@ -74,6 +74,11 @@ export const documentationSections: DocumentationSection[] = [
         description: 'Opening slide for project identity, title framing, and top-level messaging.',
       },
       {
+        path: '/templates/section-title',
+        title: 'Section title template',
+        description: 'Lightweight section divider focused on large headings and optional supporting context.',
+      },
+      {
         path: '/templates/agenda',
         title: 'Agenda template',
         description: 'Auto-generated table of contents slide driven by the presentation structure.',

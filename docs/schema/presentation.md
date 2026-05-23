@@ -64,7 +64,7 @@ Each slide in the `slides` array:
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
-| `template` | yes | string | One of the [nine template ids](/templates/) |
+| `template` | yes | string | One of the [ten template ids](/templates/) |
 | `enabled` | yes | boolean | Disabled slides are skipped |
 | `title` | varies | string | Required by most templates |
 | `subtitle` | | string | Optional on all templates |
@@ -91,6 +91,15 @@ Slide-level `title` is not required.
 | --- | --- | --- |
 | `title` | yes | |
 | `content` | | Omit entirely or pass `{}`. Row text comes from other slides |
+
+### section-title
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `content.title` | yes | |
+| `content.subtitle` | | |
+| `content.image_url` | | |
+| `content.image_alt` | | Requires `content.image_url` |
 
 ### section-list-grid
 

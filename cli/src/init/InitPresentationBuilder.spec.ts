@@ -31,7 +31,7 @@ describe('InitPresentationBuilder', () => {
     })
 
     const presentationDocument = builder.buildPresentationDocument(initInput)
-    expect(presentationDocument.presentation.slides).toHaveLength(9)
+    expect(presentationDocument.presentation.slides).toHaveLength(10)
     expect(presentationDocument.presentation.slides[0]).toMatchObject({
       template: 'hero',
       enabled: true,
