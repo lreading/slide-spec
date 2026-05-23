@@ -115,7 +115,7 @@ describe('PresentationView', () => {
   it('normalizes invalid slide queries and exits presentation mode on escape', async () => {
     const router = createAppRouter(true)
 
-    await router.push('/presentations/2026-q1?slide=999&mode=presentation')
+    await router.push('/presentations/2026-q1?slide=999&mode=viewport')
     await router.isReady()
 
     const wrapper = mount(PresentationView, {
@@ -155,7 +155,7 @@ describe('PresentationView', () => {
 
     const router = createAppRouter(true)
 
-    await router.push('/presentations/2026-q1?slide=2&mode=presentation')
+    await router.push('/presentations/2026-q1?slide=2&mode=viewport')
     await router.isReady()
 
     const wrapper = mount(PresentationView, {
@@ -171,7 +171,8 @@ describe('PresentationView', () => {
     expect(router.currentRoute.value.query.mode).toBeUndefined()
     expect(wrapper.findComponent({ name: 'PresentationToolbar' }).exists()).toBe(true)
     expect(wrapper.find('[aria-label="Previous slide"]').exists()).toBe(true)
-    expect(wrapper.text()).not.toContain('Presentation mode')
+    expect(wrapper.text()).not.toContain('Viewport mode')
+    expect(wrapper.text()).not.toContain('Fullscreen mode')
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
@@ -223,7 +224,7 @@ describe('PresentationView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
     expect(requestFullscreen).toHaveBeenCalledTimes(1)
-    expect(router.currentRoute.value.query.mode).toBe('presentation')
+    expect(router.currentRoute.value.query.mode).toBe('fullscreen')
 
     Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
@@ -245,21 +246,21 @@ describe('PresentationView', () => {
     wrapper.unmount()
   })
 
-  it('ignores modified shortcuts and toggles presentation mode with p', async () => {
-    const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
+  it('ignores modified shortcuts and toggles viewport mode with p', async () => {
+    const exitFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
 
-    Object.defineProperty(document, 'fullscreenEnabled', {
+    Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
-      value: true,
+      value: document.documentElement,
     })
-    Object.defineProperty(document.documentElement, 'requestFullscreen', {
+    Object.defineProperty(document, 'exitFullscreen', {
       configurable: true,
-      value: requestFullscreen,
+      value: exitFullscreen,
     })
 
     const router = createAppRouter(true)
 
-    await router.push('/presentations/2026-q1?slide=2')
+    await router.push('/presentations/2026-q1?slide=2&mode=fullscreen')
     await router.isReady()
 
     const wrapper = mount(PresentationView, {
@@ -277,13 +278,13 @@ describe('PresentationView', () => {
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'p' }))
     await flushPromises()
-    expect(requestFullscreen).toHaveBeenCalledTimes(1)
-    expect(router.currentRoute.value.query.mode).toBe('presentation')
+    expect(exitFullscreen).toHaveBeenCalledTimes(1)
+    expect(router.currentRoute.value.query.mode).toBe('viewport')
 
     wrapper.unmount()
   })
 
-  it('falls back to route-only presentation mode when fullscreen is unavailable', async () => {
+  it('falls back to route-only fullscreen mode when fullscreen is unavailable', async () => {
     const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
 
     Object.defineProperty(document, 'fullscreenEnabled', {
@@ -312,7 +313,7 @@ describe('PresentationView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
     expect(requestFullscreen).not.toHaveBeenCalled()
-    expect(router.currentRoute.value.query.mode).toBe('presentation')
+    expect(router.currentRoute.value.query.mode).toBe('fullscreen')
     wrapper.unmount()
   })
 

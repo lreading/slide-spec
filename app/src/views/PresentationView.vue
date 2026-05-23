@@ -27,17 +27,31 @@ const slides = computed(() => record.value.presentation.slides.filter((slide) =>
 const navigator = computed(() => new PresentationNavigation(slides.value.length))
 const slideNumber = computed(() => navigator.value.resolve(route.query.slide))
 const currentSlide = computed(() => slides.value[slideNumber.value - 1])
-const isPresentationMode = computed(() => route.query.mode === 'presentation')
+const routeMode = computed(() => {
+  if (route.query.mode === 'viewport') {
+    return 'viewport'
+  }
+
+  if (route.query.mode === 'fullscreen' || route.query.mode === 'presentation') {
+    return 'fullscreen'
+  }
+
+  return 'none'
+})
+const isPresentationMode = computed(() => routeMode.value !== 'none')
 const isFullscreenAvailable = typeof document !== 'undefined' && Boolean(document.fullscreenEnabled)
 const minimumSwipeDistance = 48
 const maximumSwipeDriftRatio = 0.8
 const canUsePresentationMode = computed(() => !isCompactViewport.value)
 const isPresentationActive = computed(() =>
   canUsePresentationMode.value
-  && (useUrlOnlyPresentation ? isPresentationMode.value : (isFullscreenAvailable ? fullscreenActive.value : isPresentationMode.value)),
+  && (routeMode.value === 'viewport' || (routeMode.value === 'fullscreen' && (useUrlOnlyPresentation || !isFullscreenAvailable || fullscreenActive.value))),
 )
-const presentationModeLabel = computed(() =>
-  canUsePresentationMode.value ? toolbarContent.presentation_mode_label : undefined,
+const viewportModeLabel = computed(() =>
+  canUsePresentationMode.value ? toolbarContent.viewport_mode_label : undefined,
+)
+const fullscreenModeLabel = computed(() =>
+  canUsePresentationMode.value && !useUrlOnlyPresentation && isFullscreenAvailable ? toolbarContent.fullscreen_mode_label : undefined,
 )
 const showShortcutHelp = computed(
   () =>
@@ -58,8 +72,8 @@ const syncFullscreenState = (): void => {
 
   fullscreenActive.value = Boolean(document.fullscreenElement)
 
-  if (!fullscreenActive.value && isPresentationMode.value && isFullscreenAvailable) {
-    void updateRoute(slideNumber.value, false)
+  if (!fullscreenActive.value && routeMode.value === 'fullscreen' && isFullscreenAvailable) {
+    void updateRoute(slideNumber.value, 'none')
   }
 }
 
@@ -72,20 +86,35 @@ const dismissShortcutHelp = (): void => {
   shortcutHelpDismissed.value = true
 }
 
-const updateRoute = async (nextSlide: number, mode = isPresentationMode.value): Promise<void> => {
-  const canKeepPresentationMode = mode && canUsePresentationMode.value
+const updateRoute = async (
+  nextSlide: number,
+  mode: 'none' | 'viewport' | 'fullscreen' = routeMode.value,
+): Promise<void> => {
+  const canKeepPresentationMode = mode !== 'none' && canUsePresentationMode.value
+  const nextMode =
+    canKeepPresentationMode
+      ? (mode === 'fullscreen' && useUrlOnlyPresentation ? 'viewport' : mode)
+      : 'none'
 
   await router.replace({
     query: {
       slide: String(navigator.value.resolve(nextSlide)),
-      ...(canKeepPresentationMode ? { mode: 'presentation' } : {}),
+      ...(nextMode !== 'none' ? { mode: nextMode } : {}),
     },
   })
 }
 
 const enterPresentationMode = async (): Promise<void> => {
+  if (!useUrlOnlyPresentation && document.fullscreenElement) {
+    await document.exitFullscreen()
+  }
+
+  await updateRoute(slideNumber.value, 'viewport')
+}
+
+const enterFullscreenMode = async (): Promise<void> => {
   if (!canUsePresentationMode.value) {
-    await updateRoute(slideNumber.value, false)
+    await updateRoute(slideNumber.value, 'none')
     return
   }
 
@@ -93,7 +122,7 @@ const enterPresentationMode = async (): Promise<void> => {
     await document.documentElement.requestFullscreen()
   }
 
-  await updateRoute(slideNumber.value, true)
+  await updateRoute(slideNumber.value, 'fullscreen')
 }
 
 const exitPresentationMode = async (): Promise<void> => {
@@ -102,21 +131,35 @@ const exitPresentationMode = async (): Promise<void> => {
     return
   }
 
-  await updateRoute(slideNumber.value, false)
+  await updateRoute(slideNumber.value, 'none')
 }
 
-const toggleMode = async (): Promise<void> => {
+const toggleViewportMode = async (): Promise<void> => {
   if (!canUsePresentationMode.value) {
-    await updateRoute(slideNumber.value, false)
+    await updateRoute(slideNumber.value, 'none')
     return
   }
 
-  if (isPresentationMode.value || document.fullscreenElement) {
+  if (routeMode.value === 'viewport') {
     await exitPresentationMode()
     return
   }
 
   await enterPresentationMode()
+}
+
+const toggleFullscreenMode = async (): Promise<void> => {
+  if (!canUsePresentationMode.value) {
+    await updateRoute(slideNumber.value, 'none')
+    return
+  }
+
+  if (routeMode.value === 'fullscreen' || document.fullscreenElement) {
+    await exitPresentationMode()
+    return
+  }
+
+  await enterFullscreenMode()
 }
 
 const startSlideSwipe = (event: PointerEvent): void => {
@@ -188,11 +231,16 @@ const handleKeydown = async (event: KeyboardEvent): Promise<void> => {
       break
     case 'p':
     case 'P':
+      if (canUsePresentationMode.value) {
+        event.preventDefault()
+        await toggleViewportMode()
+      }
+      break
     case 'f':
     case 'F':
       if (canUsePresentationMode.value) {
         event.preventDefault()
-        await toggleMode()
+        await toggleFullscreenMode()
       }
       break
     case 'Escape':
@@ -217,10 +265,10 @@ watch(
 )
 
 watch(
-  [isCompactViewport, () => route.query.mode],
+  [isCompactViewport, routeMode],
   async ([compactViewport, mode]) => {
-    if (compactViewport && mode === 'presentation') {
-      await updateRoute(slideNumber.value, false)
+    if (compactViewport && mode !== 'none') {
+      await updateRoute(slideNumber.value, 'none')
     }
   },
   { immediate: true },
@@ -258,10 +306,12 @@ onUnmounted(() => {
       :navigation-label="toolbarContent.navigation_label"
       :previous-slide-label="toolbarContent.previous_slide_label"
       :next-slide-label="toolbarContent.next_slide_label"
-      :presentation-mode-label="presentationModeLabel"
+      :viewport-mode-label="viewportModeLabel"
+      :fullscreen-mode-label="fullscreenModeLabel"
       @previous="updateRoute(navigator.previous(slideNumber))"
       @next="updateRoute(navigator.next(slideNumber))"
-      @toggle-mode="toggleMode"
+      @toggle-viewport-mode="toggleViewportMode"
+      @toggle-fullscreen-mode="toggleFullscreenMode"
     />
 
     <div

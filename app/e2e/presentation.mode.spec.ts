@@ -1,19 +1,21 @@
 import { expect, test } from '@playwright/test'
 
-test('shows default slide nav and presentation mode controls when toolbar content is not configured', async ({ page }) => {
+test('shows default slide nav and viewport/fullscreen controls when toolbar content is not configured', async ({ page }) => {
   await page.goto('/presentations/2026-q1?slide=1')
 
   await expect(page.getByLabel('Slide navigation')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Previous slide' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Next slide' })).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Viewport mode' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Fullscreen mode' })).toBeVisible()
 })
 
 
 test('supports keyboard navigation on the presentation page', async ({ page }) => {
   await page.goto('/presentations/2026-q1?slide=1')
 
-  await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Viewport mode' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Fullscreen mode' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Previous slide' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Next slide' })).toBeVisible()
   await expect(page.getByText('Keyboard shortcuts')).toBeVisible()
@@ -29,11 +31,12 @@ test('supports keyboard navigation on the presentation page', async ({ page }) =
 
 test('supports mobile slide controls and swipe navigation', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 })
-  await page.goto('/presentations/2026-q1?slide=1&mode=presentation')
+  await page.goto('/presentations/2026-q1?slide=1&mode=viewport')
 
-  await expect(page).not.toHaveURL(/mode=presentation/)
+  await expect(page).not.toHaveURL(/mode=viewport/)
   await expect(page.getByRole('link', { name: 'Aurora Notes Updates' })).toBeVisible()
-  await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Viewport mode' })).toBeHidden()
+  await expect(page.getByRole('button', { name: 'Fullscreen mode' })).toBeHidden()
   await expect(page.getByLabel('Slide navigation')).toContainText('1 / 12')
 
   await page.getByRole('button', { name: 'Next slide' }).click()
@@ -73,10 +76,10 @@ test('supports mobile slide controls and swipe navigation', async ({ page }) => 
   await expect(page).toHaveURL(/slide=1/)
 })
 
-test('enters and exits presentation mode cleanly', async ({ page }) => {
+test('enters and exits viewport mode cleanly', async ({ page }) => {
   await page.goto('/presentations/2026-q1?slide=1')
 
-  const modeButton = page.getByRole('button', { name: 'Presentation mode' })
+  const modeButton = page.getByRole('button', { name: 'Viewport mode' })
   const navBrand = page.getByRole('link', { name: 'Aurora Notes Updates' })
   const appFooterLink = page.getByRole('link', { name: 'Powered by slide-spec' })
 
@@ -85,15 +88,15 @@ test('enters and exits presentation mode cleanly', async ({ page }) => {
   await expect(appFooterLink).toBeVisible()
   await modeButton.click()
 
-  await expect(page).toHaveURL(/mode=presentation/)
+  await expect(page).toHaveURL(/mode=viewport/)
   await expect(modeButton).toBeHidden()
   await expect(page.getByRole('button', { name: 'Previous slide' })).toBeHidden()
   await expect(page.getByRole('button', { name: 'Next slide' })).toBeHidden()
   await expect(navBrand).toBeHidden()
   await expect(appFooterLink).toBeHidden()
   await page.keyboard.press('Escape')
-  await expect(page).not.toHaveURL(/mode=presentation/)
-  await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeVisible()
+  await expect(page).not.toHaveURL(/mode=viewport/)
+  await expect(page.getByRole('button', { name: 'Viewport mode' })).toBeVisible()
   await expect(navBrand).toBeVisible()
   await expect(appFooterLink).toBeVisible()
 })

@@ -4,7 +4,7 @@ test('readme walkthrough from CLI-initialized default deck', async ({ page }) =>
   await page.goto('/')
   await page.waitForTimeout(700)
 
-  await page.goto('/presentations/2026-demo?slide=1&mode=presentation')
+  await page.goto('/presentations/2026-demo?slide=1&mode=viewport')
   await page.waitForTimeout(500)
 
   const totalSlides = 9

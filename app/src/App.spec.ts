@@ -60,7 +60,7 @@ describe('App', () => {
 
     const router = createAppRouter(true)
 
-    await router.push('/presentations/2026-q1?mode=presentation')
+    await router.push('/presentations/2026-q1?mode=viewport')
     await router.isReady()
 
     const wrapper = mount(App, {

@@ -2,7 +2,7 @@
 
 ## Web app
 
-The slide-spec app runs automated axe audits in CI (Playwright + `@axe-core/playwright`), covering the home page, presentations index, presentation view, presentation mode, and keyboard navigation.
+The slide-spec app runs automated axe audits in CI (Playwright + `@axe-core/playwright`), covering the home page, presentations index, presentation view, viewport mode, fullscreen mode, and keyboard navigation.
 
 ```bash
 pnpm --filter @slide-spec/app a11y

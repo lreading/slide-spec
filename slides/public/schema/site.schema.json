@@ -149,6 +149,8 @@
         "navigation_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "previous_slide_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "next_slide_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "viewport_mode_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "fullscreen_mode_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "presentation_mode_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "shortcut_help_title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
         "shortcut_help_body": { "$ref": "defs.schema.json#/$defs/nonBlankString" },

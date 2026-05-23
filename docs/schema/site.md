@@ -131,7 +131,7 @@ At least one of `label` or `fa_icon` must be present.
 
 All fields optional.
 When omitted, Slide Spec uses these defaults: `Slide navigation`, `Previous slide`, `Next slide`,
-`Presentation mode`, `Keyboard shortcuts`, `Use Left and Right, swipe left or right, Space or Enter for next, and Escape to exit presentation mode.`, and `Do not show again`.
+`Viewport mode`, `Fullscreen mode`, `Keyboard shortcuts`, `Use Left and Right, swipe left or right, Space or Enter for next, P for viewport mode, F for fullscreen mode, and Escape to exit viewport or fullscreen mode.`, and `Do not show again`.
 
 ### `site.app_footer`
 
@@ -161,7 +161,9 @@ When omitted, Slide Spec uses these defaults: `Slide navigation`, `Previous slid
 | `navigation_label` | string |
 | `previous_slide_label` | string |
 | `next_slide_label` | string |
-| `presentation_mode_label` | string |
+| `viewport_mode_label` | string |
+| `fullscreen_mode_label` | string |
+| `presentation_mode_label` | string | Legacy alias for `viewport_mode_label` |
 | `shortcut_help_title` | string |
 | `shortcut_help_body` | string |
 | `shortcut_help_dismiss_label` | string |
