@@ -63,6 +63,18 @@ describe('template validation', () => {
           mentions: [{ type: 'release', title: 'v1', url_label: 'Read', url: 'https://example.test' }],
         },
       },
+      'image-and-bullets': {
+        title: 'Highlights',
+        content: {
+          image_side: 'left',
+          image: {
+            src: '/assets/highlights.png',
+            alt: 'Dashboard summary screenshot',
+            description: 'Q1 rollout summary',
+          },
+          bullets: ['One', 'Two'],
+        },
+      },
       'action-cards': {
         title: 'Actions',
         content: {
@@ -100,5 +112,14 @@ describe('template validation', () => {
     expect(() =>
       validateTemplateSlide('metrics-and-links', { title: 'Metrics', content: { stat_keys: [], mentions: [{ type: 'post', title: 'Post' }] } }, 'slides[3]'),
     ).not.toThrow()
+    expect(() =>
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { image_side: 'center', bullets: ['One'] } }, 'slides[4]'),
+    ).toThrow('slides[4].content.image_side must be left or right.')
+    expect(() =>
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: {} }, 'slides[5]'),
+    ).toThrow('slides[5].content must include image or bullets.')
+    expect(() =>
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { bullets: [] } }, 'slides[6]'),
+    ).toThrow('slides[6].content.bullets must include at least one item.')
   })
 })

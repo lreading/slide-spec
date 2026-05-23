@@ -52,6 +52,17 @@ The core audience is comfortable with source control, static sites, and YAML dat
 - When docs and code disagree, fix the mismatch rather than documenting around it.
 - Keep language concise, clear, and direct.
 
+## Template rollout expectations
+
+- For all content, images must render. Do not ship broken images.
+- New or changed templates must be showcased in the public example at `slides/content/presentations/2025-open-source-example`.
+- New or changed templates must be showcased in `content/presentations/2026-q1/presentation.yaml`.
+- New or changed templates must have a documentation page following the existing templates docs pattern, including a meaningful screenshot and complete field/schema documentation.
+- The templates overview page must include the template.
+- The templates docs sidebar navigation must include the template link.
+- If schema behavior changes, update the public schema files and related schema docs/tests in the same task.
+- Template changes must include validation coverage.
+
 ## Testing rules
 
 - Work is not complete until the full reusable quality workflow is expected to pass. Do not treat a change as done while any repo quality gate is failing.

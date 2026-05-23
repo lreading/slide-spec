@@ -23,6 +23,7 @@ describe('SlideRenderer', () => {
       'Roadmap: Future',
       'Contributor Spotlight',
       'Community Highlights',
+      'Image and Bullets',
       'How to Contribute',
       'Thank you',
     ]

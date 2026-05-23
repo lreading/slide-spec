@@ -13,6 +13,7 @@ describe('templateIds', () => {
       'progress-timeline',
       'people',
       'metrics-and-links',
+      'image-and-bullets',
       'action-cards',
       'closing',
     ])

@@ -4,6 +4,7 @@ import AgendaSlideView from '../components/slides/AgendaSlideView.vue'
 import CommunityHighlightsSlideView from '../components/slides/CommunityHighlightsSlideView.vue'
 import ContributorSpotlightSlideView from '../components/slides/ContributorSpotlightSlideView.vue'
 import HowToContributeSlideView from '../components/slides/HowToContributeSlideView.vue'
+import ImageAndBulletsSlideView from '../components/slides/ImageAndBulletsSlideView.vue'
 import RecentUpdatesSlideView from '../components/slides/RecentUpdatesSlideView.vue'
 import ReleasesSlideView from '../components/slides/ReleasesSlideView.vue'
 import RoadmapSlideView from '../components/slides/RoadmapSlideView.vue'
@@ -112,6 +113,13 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
       ...createSharedSlideProps(context),
       generated: context.record.generated,
     }),
+  },
+  'image-and-bullets': {
+    id: 'image-and-bullets',
+    label: 'Image and Bullets',
+    component: ImageAndBulletsSlideView,
+    validate: slideTemplateValidators['image-and-bullets'],
+    createProps: createSharedSlideProps,
   },
   'action-cards': {
     id: 'action-cards',

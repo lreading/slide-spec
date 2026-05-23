@@ -109,6 +109,11 @@ export const documentationSections: DocumentationSection[] = [
         description: 'Metric tiles plus linked references for status reporting and supporting resources.',
       },
       {
+        path: '/templates/image-and-bullets',
+        title: 'Image and bullets template',
+        description: 'Flexible two-column slide that supports image-only, bullets-only, or split layouts.',
+      },
+      {
         path: '/templates/action-cards',
         title: 'Action cards template',
         description: 'Call-to-action card grid for follow-ups, asks, or next-step links.',

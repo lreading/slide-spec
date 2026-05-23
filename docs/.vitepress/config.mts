@@ -65,6 +65,7 @@ export default defineConfig({
             { text: 'Progress Timeline', link: '/templates/progress-timeline' },
             { text: 'People', link: '/templates/people' },
             { text: 'Metrics and Links', link: '/templates/metrics-and-links' },
+            { text: 'Image and Bullets', link: '/templates/image-and-bullets' },
             { text: 'Action Cards', link: '/templates/action-cards' },
             { text: 'Closing', link: '/templates/closing' },
           ],

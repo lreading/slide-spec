@@ -119,6 +119,20 @@ presentation:
             title: Meridian named a Strong Performer in the 2026 project management wave.
             url_label: Read the report
             url: https://meridian.example.com/analyst-report
+    - template: image-and-bullets
+      enabled: true
+      title: Q1 Snapshot
+      subtitle: Product review at a glance
+      content:
+        image_side: right
+        image:
+          src: content/assets/logo.svg
+          alt: Meridian product review summary visual
+          description: Summary visual used during quarterly planning reviews.
+        bullets:
+          - Workspace redesign shipped across desktop and mobile.
+          - API v3 launched with migration support for partners.
+          - Self-serve onboarding reduced setup time for new teams.
     - template: action-cards
       enabled: true
       title: Q2 priorities
