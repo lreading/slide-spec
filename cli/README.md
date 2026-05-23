@@ -114,29 +114,29 @@ Notes:
 From the monorepo:
 
 ```sh
-npm install
-npm run cli -- help
+pnpm install
+pnpm --filter @slide-spec/cli cli -- help
 ```
 
 Development and quality commands:
 
 | Command | Description |
 | --- | --- |
-| `npm run build` | Compile the CLI |
-| `npm run verify` | Lint + typecheck + tests |
-| `npm run coverage` | Unit tests with coverage |
-| `npm run semgrep` | Semgrep security scan |
-| `npm run spellcheck` | Spelling check |
+| `pnpm --filter @slide-spec/cli build` | Compile the CLI |
+| `pnpm --filter @slide-spec/cli verify` | Lint + typecheck + tests |
+| `pnpm --filter @slide-spec/cli coverage` | Unit tests with coverage |
+| `pnpm --filter @slide-spec/cli semgrep` | Semgrep security scan |
+| `pnpm --filter @slide-spec/cli spellcheck` | Spelling check |
 
 ## Requirements
 
 - Node.js **24+**
-- npm
-- Docker for `semgrep`
+- pnpm
+- Docker for `pnpm verify:ci`
 
 ## Quality Gates
 
-`npm run verify` is the default local gate.
+`pnpm --filter @slide-spec/cli verify` is the package gate.
 
 CI also runs:
 

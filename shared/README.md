@@ -4,25 +4,25 @@ Shared TypeScript types and validation used by the app and CLI. Covers content s
 
 ## Getting started
 
-Node 24+ (same as the other packages). No dev server or build step.
+Node 24+ and pnpm. No dev server.
 
 1. Edit sources under `src/` as needed.
-2. Run `npm install` if `node_modules/` is missing.
-3. After changes, run `npm run verify`.
+2. From the repo root, `pnpm install`.
+3. After changes, run `pnpm --filter @slide-spec/shared verify`.
 
 ## Commands
 
 | Command | Description |
 | --- | --- |
-| `npm run lint` | Lint shared TypeScript and config files |
-| `npm run typecheck` | Type-check shared TypeScript |
-| `npm run test` | Run shared unit tests |
-| `npm run coverage` | Run unit tests with per-file 80% coverage thresholds |
-| `npm run verify` | Standard local gate: lint, typecheck, and coverage |
+| `pnpm --filter @slide-spec/shared lint` | Lint shared TypeScript and config files |
+| `pnpm --filter @slide-spec/shared typecheck` | Type-check shared TypeScript |
+| `pnpm --filter @slide-spec/shared test` | Run shared unit tests |
+| `pnpm --filter @slide-spec/shared coverage` | Run unit tests with coverage |
+| `pnpm --filter @slide-spec/shared verify` | Standard package gate |
 
 ## Quality gates
 
-Run `npm run verify` in this package after touching shared code. If the shared change affects app or CLI behavior, also run the relevant consumer package gate.
+Run `pnpm --filter @slide-spec/shared verify` after touching shared code. If the change affects app or CLI behavior, also run the relevant consumer gate.
 
 ## Notes
 

@@ -21,6 +21,10 @@ It currently:
 - publishes prereleases via a draft-first flow so assets can be attached on repositories with immutable releases enabled
 - attaches a source tarball and `sbom.cyclonedx.json`
 
+## Dependency installs
+
+The repo uses a pnpm workspace with one root lockfile. `pnpm-workspace.yaml` sets `minimumReleaseAge: 14400`, so installs reject package versions published less than 10 days ago. Dependabot also waits 10 days before opening dependency update PRs.
+
 Latest release assets:
 
 - <https://github.com/lreading/slide-spec/releases/latest>

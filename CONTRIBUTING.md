@@ -67,14 +67,32 @@ The repo-level agent contract lives in [AGENTS.md](AGENTS.md). This contributing
 
 ## Running checks locally
 
-Start with the package you changed:
+Install once from the repo root:
 
-- `cd app && npm run verify`
-- `cd cli && npm run verify`
-- `cd shared && npm run verify`
-- `cd docs && npm run verify`
+```sh
+pnpm install
+```
 
-Depending on the change, you may also need additional commands that are part of GitHub Actions but not included in a package `verify` script. The full source of truth is [`.github/workflows/reusable-quality.yml`](.github/workflows/reusable-quality.yml).
+Default local gate:
+
+```sh
+pnpm verify
+```
+
+Package gates:
+
+- `pnpm --filter @slide-spec/app verify`
+- `pnpm --filter @slide-spec/cli verify`
+- `pnpm --filter @slide-spec/shared verify`
+- `pnpm --filter @slide-spec/docs verify`
+
+CI-equivalent local gate:
+
+```sh
+pnpm verify:ci
+```
+
+The full source of truth is [`.github/workflows/reusable-quality.yml`](.github/workflows/reusable-quality.yml).
 
 As a practical rule:
 

@@ -4,28 +4,28 @@ Vue 3 + Vite + TypeScript renderer for Slide Spec. It loads YAML content and out
 
 ## Getting started
 
-1. Node 24+ and npm. Browser tests also need `npx playwright install chromium`.
-2. From this directory, `npm install`
-3. `npm run dev`
+1. Node 24+ and pnpm.
+2. From the repo root, `pnpm install`.
+3. `pnpm --filter @slide-spec/app dev`
 
 ## Commands
 
 | Command | Description |
 | --- | --- |
-| `npm run dev` | Start local dev server |
-| `npm run build` | Production build |
-| `npm run verify` | Standard local gate (lint + typecheck + unit tests) |
-| `npm run coverage` | Unit tests with coverage |
-| `npm run e2e` | Playwright end-to-end tests |
-| `npm run a11y` | Playwright + axe accessibility audit |
-| `npm run visual` | Playwright screenshot baseline comparison |
-| `npm run validate:content` | Validate YAML content |
-| `npm run demo:record` | Record a Playwright walkthrough (`VITE_CONTENT_SOURCE=demo`) |
-| `npm run readme:video` | Rebuild the root README demo video (needs `ffmpeg`) |
+| `pnpm --filter @slide-spec/app dev` | Start local dev server |
+| `pnpm --filter @slide-spec/app build` | Production build |
+| `pnpm --filter @slide-spec/app verify` | Standard local gate |
+| `pnpm --filter @slide-spec/app coverage` | Unit tests with coverage |
+| `pnpm --filter @slide-spec/app e2e` | Playwright end-to-end tests |
+| `pnpm --filter @slide-spec/app a11y` | Playwright + axe accessibility audit |
+| `pnpm --filter @slide-spec/app visual` | Playwright screenshot baseline comparison |
+| `pnpm --filter @slide-spec/app validate:content` | Validate YAML content |
+| `pnpm --filter @slide-spec/app demo:record` | Record a Playwright walkthrough (`VITE_CONTENT_SOURCE=demo`) |
+| `pnpm --filter @slide-spec/app readme:video` | Rebuild the root README demo video (needs `ffmpeg`) |
 
 ## Quality gates
 
-`npm run verify` is the default before you push. For UI work, also run `npm run visual` and `npm run a11y`. All of these run in CI via GitHub Actions.
+`pnpm --filter @slide-spec/app verify` is the package gate. For UI work, also run `visual` and `a11y`. CI runs both.
 
 ## Notes
 

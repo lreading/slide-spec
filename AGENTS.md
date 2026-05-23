@@ -68,12 +68,16 @@ The core audience is comfortable with source control, static sites, and YAML dat
 
 - The source of truth for CI gates is [`.github/workflows/reusable-quality.yml`](./.github/workflows/reusable-quality.yml).
 - For PR-ready work, the expectation is that every gate in that workflow passes.
-- Prefer the existing package-level verify commands as your local starting point:
-  - `cd app && npm run verify`
-  - `cd cli && npm run verify`
-  - `cd shared && npm run verify`
-  - `cd docs && npm run verify`
-- Run any additional commands needed to cover gates that are not included in those verify scripts.
+- Install once from the repo root with `pnpm install`.
+- Prefer the root quality gates as your local starting point:
+  - `pnpm verify`
+  - `pnpm verify:ci`
+- For focused package checks, use workspace filters:
+  - `pnpm --filter @slide-spec/app verify`
+  - `pnpm --filter @slide-spec/cli verify`
+  - `pnpm --filter @slide-spec/shared verify`
+  - `pnpm --filter @slide-spec/docs verify`
+- Run any additional commands needed to cover gates that are not included in those scripts.
 
 Before handoff, run every local command needed to give high confidence that the full workflow will pass. If you cannot run a required gate locally, say exactly what was not run and why.
 
@@ -102,7 +106,7 @@ Before handoff, run every local command needed to give high confidence that the 
 
 - Keep shared code small, explicit, and stable.
 - Avoid leaking package-specific assumptions into shared abstractions.
-- Run `cd shared && npm run verify` after changing shared code; this package has its own lint, typecheck, and per-file coverage gates.
+- Run `pnpm --filter @slide-spec/shared verify` after changing shared code; this package has its own lint, typecheck, and per-file coverage gates.
 
 ## Agent behavior
 

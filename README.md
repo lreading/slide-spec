@@ -28,7 +28,7 @@ Slide Spec turns structured YAML into static slide decks you can host anywhere. 
 
 ## ⚡ Quickstart
 
-Prereqs: Node 24+ and npm.
+Prereqs: Node 24+ and pnpm.
 
 ```sh
 npx @slide-spec/cli init
@@ -52,7 +52,7 @@ Every command accepts an optional directory as its first argument (e.g. `npx @sl
 
 ## Repository layout
 
-Monorepo with independent packages. Each has its own README with setup, development, and testing details.
+pnpm workspace with package-local READMEs for development details.
 
 | Directory | Purpose | |
 |---|---|---|
@@ -61,6 +61,14 @@ Monorepo with independent packages. Each has its own README with setup, developm
 | [`docs/`](docs/) | VitePress documentation site | [README](docs/README.md) |
 | [`shared/`](shared/) | Shared TypeScript types and validation | [README](shared/README.md) |
 | [`content/`](content/) | YAML for this repo's own slide decks | |
+
+Repo development:
+
+```sh
+pnpm install
+pnpm verify
+pnpm verify:ci
+```
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 
