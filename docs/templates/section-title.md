@@ -2,6 +2,10 @@
 
 Lightweight section divider related to Hero, but focused on section-level structure and pacing between dense slides.
 
+<figure class="template-doc-shot">
+  <img src="/screenshots/template-section-title-reference.png" alt="Section title slide showing a large section heading with supporting context" />
+</figure>
+
 ## Example
 
 ```yaml

@@ -180,6 +180,27 @@ describe('public JSON Schemas', () => {
         },
       },
       {
+        schemaId: schemaIds.presentation,
+        document: {
+          schemaVersion: 1,
+          presentation: {
+            id: 'demo',
+            title: 'Demo',
+            subtitle: 'Example',
+            slides: [
+              {
+                template: 'section-title',
+                enabled: true,
+                content: {
+                  title: 'Section',
+                  image_alt: 'Only alt',
+                },
+              },
+            ],
+          },
+        },
+      },
+      {
         schemaId: schemaIds.generated,
         document: {
           schemaVersion: 1,
@@ -195,6 +216,7 @@ describe('public JSON Schemas', () => {
     ]
 
     expect(invalidDocuments.map(({ schemaId, document }) => validateDocument(ajv, schemaId, document).length > 0)).toEqual([
+      true,
       true,
       true,
       true,

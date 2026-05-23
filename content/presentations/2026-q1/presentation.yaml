@@ -53,6 +53,13 @@ presentation:
         empty_state_message: Q1 work focused on reusable templates, authoring quality, documentation, and release engineering
           improvements rather than a packaged release.
         featured_release_ids: []
+    - template: section-title
+      enabled: true
+      content:
+        title: Roadmap Themes
+        subtitle: Authoring quality, reusable templates, and predictable publishing
+        image_url: content/assets/aurora-notes-logo.svg
+        image_alt: Aurora Notes mark
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Completed"

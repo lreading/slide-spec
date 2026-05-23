@@ -31,10 +31,18 @@ describe('InitPresentationBuilder', () => {
     })
 
     const presentationDocument = builder.buildPresentationDocument(initInput)
-    expect(presentationDocument.presentation.slides).toHaveLength(10)
+    expect(presentationDocument.presentation.slides).toHaveLength(11)
     expect(presentationDocument.presentation.slides[0]).toMatchObject({
       template: 'hero',
       enabled: true,
+    })
+    expect(presentationDocument.presentation.slides[2]).toMatchObject({
+      template: 'section-title',
+      enabled: true,
+      content: {
+        title: 'Section',
+        subtitle: 'Replace with section context.',
+      },
     })
     expect(presentationDocument.presentation.subtitle).toBe('Replace with a subtitle before publishing.')
 

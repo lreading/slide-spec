@@ -48,6 +48,13 @@ presentation:
         featured_release_ids:
           - starter-kit-v2
           - export-layout-v1
+    - template: section-title
+      enabled: true
+      content:
+        title: Launch Readiness
+        subtitle: Schema, docs, and examples stay aligned
+        image_url: content/assets/slide-spec-logo.svg
+        image_alt: Acorn Cloud mark
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Completed"
