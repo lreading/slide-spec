@@ -28,7 +28,7 @@ Slide Spec turns structured YAML into static slide decks you can host anywhere. 
 
 ## ⚡ Quickstart
 
-Prereqs: Node 24+ and npm.
+Prereqs: Node 24+ and pnpm.
 
 ```sh
 npx @slide-spec/cli init
@@ -52,7 +52,7 @@ Every command accepts an optional directory as its first argument (e.g. `npx @sl
 
 ## Repository layout
 
-Monorepo with independent packages. Each has its own README with setup, development, and testing details.
+pnpm workspace with package-local READMEs for development details.
 
 | Directory | Purpose | |
 |---|---|---|
@@ -61,6 +61,32 @@ Monorepo with independent packages. Each has its own README with setup, developm
 | [`docs/`](docs/) | VitePress documentation site | [README](docs/README.md) |
 | [`shared/`](shared/) | Shared TypeScript types and validation | [README](shared/README.md) |
 | [`content/`](content/) | YAML for this repo's own slide decks | |
+
+Repo development:
+
+```sh
+pnpm install --frozen-lockfile
+pnpm verify
+pnpm verify:ci
+```
+
+Dependency changes:
+
+```sh
+pnpm --filter @slide-spec/app add <package>    # one package
+pnpm --filter @slide-spec/app add -D <package> # one package, dev dependency
+pnpm --filter '@slide-spec/*' add <package>    # all workspace packages
+pnpm add -w -D <package>                       # root-only tooling
+pnpm -r update <package> --latest              # update a catalog version
+```
+
+pnpm manages dependency versions through the workspace catalog. The repo also enforces a 5-day minimum release age for package versions.
+
+Emergency security update before the 5-day wait:
+
+1. Add an exact reviewed exception in `pnpm-workspace.yaml`: `minimumReleaseAgeExclude: ["<package>@<version>"]`.
+2. Run the normal add/update command.
+3. Run `pnpm verify`.
 
 <img src="assets/readme-divider.svg" width="100%" height="8" alt="" />
 

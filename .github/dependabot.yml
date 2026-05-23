@@ -1,78 +1,18 @@
 version: 2
 updates:
   - package-ecosystem: npm
-    directory: /app
+    directory: /
     schedule:
       interval: weekly
     cooldown:
-      default-days: 10
+      default-days: 5
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: "*"
         update-types:
           - version-update:semver-major
     groups:
-      app-dependencies:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - minor
-          - patch
-
-  - package-ecosystem: npm
-    directory: /cli
-    schedule:
-      interval: weekly
-    cooldown:
-      default-days: 10
-    open-pull-requests-limit: 10
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - version-update:semver-major
-    groups:
-      cli-dependencies:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - minor
-          - patch
-
-  - package-ecosystem: npm
-    directory: /docs
-    schedule:
-      interval: weekly
-    cooldown:
-      default-days: 10
-    open-pull-requests-limit: 10
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - version-update:semver-major
-    groups:
-      docs-dependencies:
-        applies-to: version-updates
-        patterns:
-          - "*"
-        update-types:
-          - minor
-          - patch
-
-  - package-ecosystem: npm
-    directory: /shared
-    schedule:
-      interval: weekly
-    cooldown:
-      default-days: 10
-    open-pull-requests-limit: 10
-    ignore:
-      - dependency-name: "*"
-        update-types:
-          - version-update:semver-major
-    groups:
-      shared-dependencies:
+      workspace-dependencies:
         applies-to: version-updates
         patterns:
           - "*"
@@ -85,7 +25,7 @@ updates:
     schedule:
       interval: weekly
     cooldown:
-      default-days: 10
+      default-days: 5
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: "*"

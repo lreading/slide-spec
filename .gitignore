@@ -13,6 +13,10 @@ coverage/
 *.tsbuildinfo
 *.tgz
 semgrep-results.local.json
+semgrep-results.json
+trivy-results.sarif
+gitleaks-results.sarif
+sbom.cyclonedx.json
 app/dist/
 app/dist-ssr/
 app/coverage/

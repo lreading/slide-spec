@@ -172,9 +172,9 @@ Example:
   Build command: `npx @slide-spec/cli build`
   Output directory: `dist`
 - docs project
-  Root directory: `docs`
-  Build command: `npm ci && npm run build`
-  Output directory: `.vitepress/dist`
+  Root directory: `/`
+  Build command: `pnpm install --frozen-lockfile && pnpm --filter @slide-spec/docs build`
+  Output directory: `docs/.vitepress/dist`
 
 Keep them separate unless you have a strong reason to deploy both from one pipeline.
 

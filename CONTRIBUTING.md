@@ -67,14 +67,48 @@ The repo-level agent contract lives in [AGENTS.md](AGENTS.md). This contributing
 
 ## Running checks locally
 
-Start with the package you changed:
+Install once from the repo root:
 
-- `cd app && npm run verify`
-- `cd cli && npm run verify`
-- `cd shared && npm run verify`
-- `cd docs && npm run verify`
+```sh
+pnpm install --frozen-lockfile
+```
 
-Depending on the change, you may also need additional commands that are part of GitHub Actions but not included in a package `verify` script. The full source of truth is [`.github/workflows/reusable-quality.yml`](.github/workflows/reusable-quality.yml).
+Default local gate:
+
+```sh
+pnpm verify
+```
+
+Package gates:
+
+- `pnpm --filter @slide-spec/app verify`
+- `pnpm --filter @slide-spec/cli verify`
+- `pnpm --filter @slide-spec/shared verify`
+- `pnpm --filter @slide-spec/docs verify`
+
+CI-equivalent local gate:
+
+```sh
+pnpm verify:ci
+```
+
+The full source of truth is [`.github/workflows/reusable-quality.yml`](.github/workflows/reusable-quality.yml).
+
+## Dependency changes
+
+Use pnpm from the repo root:
+
+```sh
+pnpm --filter @slide-spec/app add <package>
+pnpm --filter @slide-spec/app add -D <package>
+pnpm --filter '@slide-spec/*' add <package>
+pnpm add -w -D <package>
+pnpm -r update <package> --latest
+```
+
+pnpm writes package manifests, the workspace catalog, and the lockfile. Do not hand-edit dependency versions unless a maintainer asks for a specific version.
+
+`pnpm-workspace.yaml` enforces a 5-day minimum release age. For an urgent security update before that wait, add an exact, reviewed `minimumReleaseAgeExclude` entry for the package version, then run the normal add/update command and `pnpm verify`.
 
 As a practical rule:
 

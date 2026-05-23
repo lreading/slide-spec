@@ -1,0 +1,29 @@
+{
+  "name": "slide-spec",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@11.2.2",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=11.2.2"
+  },
+  "scripts": {
+    "verify": "pnpm --filter @slide-spec/shared verify && pnpm --filter @slide-spec/cli verify && pnpm --filter @slide-spec/app verify && pnpm --filter @slide-spec/docs verify",
+    "verify:ci": "node --import tsx scripts/verify-ci.ts",
+    "lint:markdown": "markdownlint-cli2 \"README.md\" \"CONTRIBUTING.md\" \"docs/**/*.md\" \"!docs/node_modules/**\"",
+    "spellcheck": "cspell lint --no-progress \"README.md\" \"CONTRIBUTING.md\" \"docs/**/*.md\" --gitignore --config .cspell.json",
+    "links": "node --import tsx scripts/check-links.ts",
+    "security:trivy": "docker run --rm -v \"${PWD}:/repo\" aquasec/trivy:0.67.2 fs --severity HIGH,CRITICAL --scanners vuln,secret,misconfig --format sarif --output /repo/trivy-results.sarif /repo",
+    "security:semgrep": "node --import tsx scripts/run-semgrep-docker.ts",
+    "security:gitleaks": "node --import tsx scripts/run-gitleaks-docker.ts",
+    "sbom": "docker run --rm -v \"${PWD}:/repo\" anchore/syft:v1.38.0 dir:/repo -o cyclonedx-json=/repo/sbom.cyclonedx.json",
+    "dast": "node --import tsx scripts/run-dast.ts"
+  },
+  "devDependencies": {
+    "cspell": "catalog:",
+    "http-server": "catalog:",
+    "markdownlint-cli2": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
+  }
+}
