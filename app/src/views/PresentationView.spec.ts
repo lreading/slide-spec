@@ -1,11 +1,15 @@
 import { flushPromises, mount, RouterLinkStub } from '@vue/test-utils'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { contentRepository } from '../content/ContentRepository'
 import { createAppRouter } from '../router'
 import PresentationView from './PresentationView.vue'
 
 describe('PresentationView', () => {
   const normalizeText = (value: string): string => value.replace(/\s+/g, ' ').trim()
+  const presentationSlideTotal = String(
+    contentRepository.getPresentation('2026-q1').presentation.slides.filter((slide) => slide.enabled).length,
+  )
   const dispatchTouchPointerEvent = (
     element: Element,
     type: 'pointerdown' | 'pointerup',
@@ -129,7 +133,7 @@ describe('PresentationView', () => {
 
     await flushPromises()
 
-    expect(router.currentRoute.value.query.slide).toBe('12')
+    expect(router.currentRoute.value.query.slide).toBe(presentationSlideTotal)
     expect(wrapper.findComponent({ name: 'PresentationToolbar' }).exists()).toBe(false)
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }))
@@ -219,7 +223,7 @@ describe('PresentationView', () => {
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }))
     await flushPromises()
-    expect(router.currentRoute.value.query.slide).toBe('12')
+    expect(router.currentRoute.value.query.slide).toBe(presentationSlideTotal)
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()

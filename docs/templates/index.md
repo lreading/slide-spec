@@ -11,6 +11,7 @@ Templates are pre-built layouts for slides. Each slide in a presentation require
 | [`progress-timeline`](/templates/progress-timeline) | Self-contained stage detail |
 | [`people`](/templates/people) | Contributor spotlights |
 | [`metrics-and-links`](/templates/metrics-and-links) | Metric tiles and authored mentions |
+| [`image-and-bullets`](/templates/image-and-bullets) | Two-column image and bullet layout |
 | [`action-cards`](/templates/action-cards) | CTA card grid |
 | [`closing`](/templates/closing) | Final slide with message and links |
 

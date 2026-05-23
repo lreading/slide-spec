@@ -238,6 +238,20 @@ presentation:
               users and contributors.
             url_label: Browse the docs
             url: https://docs.example.org/aurora-notes
+    - template: image-and-bullets
+      enabled: true
+      title: Release Snapshot
+      subtitle: One visual plus the top quarter outcomes
+      content:
+        image_side: right
+        image:
+          src: content/assets/logo.svg
+          alt: Aurora Notes release summary visual
+          description: Quarter-end release summary used in team reviews.
+        bullets:
+          - Reusable briefing templates now cover roadmap, release, and community updates.
+          - Validation and documentation updates reduced day-to-day authoring friction.
+          - Preview and archive behavior is more predictable for larger local catalogs.
     - template: action-cards
       enabled: true
       title: How to Contribute

@@ -117,6 +117,20 @@ presentation:
             title: "DevTools Conf: Building extensible CLIs"
             url_label: Watch the recording
             url: https://example.com/talks/extensible-clis
+    - template: image-and-bullets
+      enabled: true
+      title: Q1 Snapshot
+      subtitle: One visual and the top outcomes
+      content:
+        image_side: right
+        image:
+          src: content/assets/slide-spec-logo.svg
+          alt: Vortex CLI quarterly snapshot visual
+          description: Quarterly summary visual used in the open-source update.
+        bullets:
+          - Plugin system shipped with local and registry-based resolution.
+          - Structured error messages now include fix suggestions and docs links.
+          - Shell completion support landed for bash, zsh, and fish.
     - template: action-cards
       enabled: true
       title: Get involved

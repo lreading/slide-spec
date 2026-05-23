@@ -6,6 +6,7 @@ import AgendaSlideView from './AgendaSlideView.vue'
 
 describe('AgendaSlideView', () => {
   const record = contentRepository.getPresentation('2026-q1')
+  const enabledSlideTotal = record.presentation.slides.filter((entry) => entry.enabled).length
   const slide = record.presentation.slides.find((entry) => entry.template === 'agenda')
 
   if (!slide || slide.template !== 'agenda') {
@@ -18,7 +19,7 @@ describe('AgendaSlideView', () => {
         presentation: record.presentation,
         slide,
         slideNumber: 2,
-        slideTotal: 12,
+        slideTotal: enabledSlideTotal,
       },
     })
 
@@ -33,6 +34,7 @@ describe('AgendaSlideView', () => {
       'Roadmap: Future',
       'Contributor Spotlight',
       'Community Highlights',
+      'Image and Bullets',
       'How to Contribute',
       'Thank you',
     ])

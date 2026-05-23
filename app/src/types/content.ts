@@ -196,6 +196,18 @@ export interface ActionCardsSlideContent {
   cards: ContributionCard[]
 }
 
+export interface ImageAndBulletsSlideImage {
+  src: string
+  alt?: string
+  description?: string
+}
+
+export interface ImageAndBulletsSlideContent {
+  image_side?: 'left' | 'right'
+  image?: ImageAndBulletsSlideImage
+  bullets?: string[]
+}
+
 export interface ClosingSlideContent {
   heading: string
   message: string
@@ -221,6 +233,8 @@ export type CommunityHighlightsSlide = SlideBase<'metrics-and-links', MetricsAnd
 
 export type HowToContributeSlide = SlideBase<'action-cards', ActionCardsSlideContent>
 
+export type ImageAndBulletsSlide = SlideBase<'image-and-bullets', ImageAndBulletsSlideContent>
+
 export type ThankYouSlide = SlideBase<'closing', ClosingSlideContent>
 
 export type PresentationSlide =
@@ -231,6 +245,7 @@ export type PresentationSlide =
   | RoadmapSlide
   | ContributorSpotlightSlide
   | CommunityHighlightsSlide
+  | ImageAndBulletsSlide
   | HowToContributeSlide
   | ThankYouSlide
 

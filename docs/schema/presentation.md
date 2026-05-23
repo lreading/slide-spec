@@ -64,7 +64,7 @@ Each slide in the `slides` array:
 
 | Field | Required | Type | Description |
 | --- | --- | --- | --- |
-| `template` | yes | string | One of the [nine template ids](/templates/) |
+| `template` | yes | string | One of the supported [template ids](/templates/) |
 | `enabled` | yes | boolean | Disabled slides are skipped |
 | `title` | varies | string | Required by most templates |
 | `subtitle` | | string | Optional on all templates |
@@ -150,6 +150,19 @@ Each `spotlight[]` entry: `{ login: string, summary: string }`.
 | `content.trend_suffix` | |
 
 Each `mentions[]` entry: `{ type: string, title: string }` with optional paired `url` + `url_label`.
+
+### image-and-bullets
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content.image_side` | | `left` or `right`, defaults to `right` in rendering |
+| `content.image` | conditional | Required if `content.bullets` is omitted |
+| `content.bullets` | conditional | Required if `content.image` is omitted; must include at least one item when present |
+
+`content` must include at least one major block: `image` or `bullets`.
+
+When present, `image` has shape: `{ src: string, alt?: string, description?: string }`.
 
 ### action-cards
 
