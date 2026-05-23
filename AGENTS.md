@@ -84,6 +84,7 @@ Before handoff, run every local command needed to give high confidence that the 
 ## Dependency management
 
 - Use pnpm from the repo root.
+- Use pnpm only; do not use npm in this repo.
 - Add package dependency: `pnpm --filter @slide-spec/app add <package>`.
 - Add package dev dependency: `pnpm --filter @slide-spec/app add -D <package>`.
 - Add dependency to every workspace package: `pnpm --filter '@slide-spec/*' add <package>`.
