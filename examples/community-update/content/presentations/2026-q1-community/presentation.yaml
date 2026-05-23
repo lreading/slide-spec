@@ -119,6 +119,20 @@ presentation:
             title: DevRel Weekly featured our community SDK launch as a top-5 developer tool release.
             url_label: Read the feature
             url: https://devrelweekly.example.com/issue/142
+    - template: image-and-bullets
+      enabled: true
+      title: Q1 Snapshot
+      subtitle: Community progress at a glance
+      content:
+        image_side: right
+        image:
+          src: content/assets/logo.svg
+          alt: Prism community quarterly summary visual
+          description: Community summary visual used in quarterly updates.
+        bullets:
+          - Three new learning paths launched on the developer portal.
+          - Community SDK shipped with multi-language client examples.
+          - Event participation expanded across four major conferences.
     - template: action-cards
       enabled: true
       title: Get involved

@@ -117,6 +117,20 @@ presentation:
             title: The release overview highlights how teams use templates to keep product briefings consistent.
             url_label: Read the announcement
             url: https://example.com/blog/spring-release
+    - template: image-and-bullets
+      enabled: true
+      title: Rollout highlights
+      subtitle: One visual summary and the top launch notes
+      content:
+        image_side: right
+        image:
+          src: https://api.dicebear.com/9.x/shapes/svg?seed=acorn-launch
+          alt: Acorn Cloud launch summary visual
+          description: Launch summary snapshot used in rollout reviews.
+        bullets:
+          - Launch checklist ownership and sign-off states are now explicit.
+          - Exported review decks preserve section grouping.
+          - Operator documentation now aligns with live templates.
     - template: action-cards
       enabled: true
       title: How to help

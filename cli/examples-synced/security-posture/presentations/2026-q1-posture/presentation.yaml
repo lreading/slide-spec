@@ -118,6 +118,20 @@ presentation:
             title: ISO 27001 certification renewed for another year.
             url_label: View certificate
             url: https://sentinel.example.com/compliance/iso27001
+    - template: image-and-bullets
+      enabled: true
+      title: Q1 Snapshot
+      subtitle: Security posture summary
+      content:
+        image_side: right
+        image:
+          src: content/assets/logo.svg
+          alt: Sentinel security quarterly summary visual
+          description: Security summary visual used in leadership readouts.
+        bullets:
+          - Automated dependency scanning is enabled across all production services.
+          - Mean time to patch dropped from 12 days to 3 days.
+          - Hardware security keys are now standard for engineering accounts.
     - template: action-cards
       enabled: true
       title: Remediation priorities

@@ -6,6 +6,7 @@ export const slideTemplateIds = [
   'progress-timeline',
   'people',
   'metrics-and-links',
+  'image-and-bullets',
   'action-cards',
   'closing',
 ] as const

@@ -1,4 +1,13 @@
-import { expect, test } from '@playwright/test'
+import { expect, test, type Page } from '@playwright/test'
+
+const getSlideTotal = async (page: Page): Promise<string> => {
+  const navigationText = await page.getByLabel('Slide navigation').innerText()
+  const match = navigationText.match(/(\d+)\s*\/\s*(\d+)/)
+  if (!match) {
+    throw new Error(`Unexpected slide navigation text: ${navigationText}`)
+  }
+  return match[2]
+}
 
 test('shows default slide nav and presentation mode controls when toolbar content is not configured', async ({ page }) => {
   await page.goto('/presentations/2026-q1?slide=1')
@@ -34,11 +43,12 @@ test('supports mobile slide controls and swipe navigation', async ({ page }) => 
   await expect(page).not.toHaveURL(/mode=presentation/)
   await expect(page.getByRole('link', { name: 'Aurora Notes Updates' })).toBeVisible()
   await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeHidden()
-  await expect(page.getByLabel('Slide navigation')).toContainText('1 / 12')
+  const slideTotal = await getSlideTotal(page)
+  await expect(page.getByLabel('Slide navigation')).toContainText(`1 / ${slideTotal}`)
 
   await page.getByRole('button', { name: 'Next slide' }).click()
   await expect(page).toHaveURL(/slide=2/)
-  await expect(page.getByLabel('Slide navigation')).toContainText('2 / 12')
+  await expect(page.getByLabel('Slide navigation')).toContainText(`2 / ${slideTotal}`)
 
   await page.getByRole('button', { name: 'Previous slide' }).click()
   await expect(page).toHaveURL(/slide=1/)

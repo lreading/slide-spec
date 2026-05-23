@@ -203,6 +203,18 @@ export class InitPresentationBuilder {
             },
           },
           {
+            template: 'image-and-bullets',
+            enabled: true,
+            title: 'Image and Bullets',
+            content: {
+              image_side: 'right',
+              bullets: [
+                'Pair a supporting image with concise takeaways.',
+                'Omit the image when a centered bullet-only layout fits better.',
+              ],
+            },
+          },
+          {
             template: 'action-cards',
             enabled: true,
             title: 'How to Contribute',
