@@ -149,6 +149,13 @@ export interface HeroSlideContent {
   quote?: string
 }
 
+export interface SectionTitleSlideContent {
+  title: string
+  subtitle?: string
+  image_url?: string
+  image_alt?: string
+}
+
 export type AgendaSlideContent = Record<string, never>
 
 export interface SectionListGridSlideContent {
@@ -213,6 +220,7 @@ export interface ClosingSlideContent {
 }
 
 export type TitleSlide = SlideBase<'hero', HeroSlideContent>
+export type SectionTitleSlide = SlideBase<'section-title', SectionTitleSlideContent>
 
 export type AgendaSlide = Omit<SlideBase<'agenda', AgendaSlideContent>, 'content'> & {
   /** Omitted in YAML when unused; `{}` is still accepted for backward compatibility. */
@@ -237,6 +245,7 @@ export type ThankYouSlide = SlideBase<'closing', ClosingSlideContent>
 
 export type PresentationSlide =
   | TitleSlide
+  | SectionTitleSlide
   | AgendaSlide
   | RecentUpdatesSlide
   | ReleasesSlide

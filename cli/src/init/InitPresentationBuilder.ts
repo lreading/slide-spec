@@ -142,6 +142,14 @@ export class InitPresentationBuilder {
             title: 'Agenda',
           },
           {
+            template: 'section-title',
+            enabled: true,
+            content: {
+              title: 'Section',
+              subtitle: 'Replace with section context.',
+            },
+          },
+          {
             template: 'section-list-grid',
             enabled: true,
             title: 'Recent Updates',

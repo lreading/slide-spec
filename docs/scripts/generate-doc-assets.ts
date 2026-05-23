@@ -15,12 +15,13 @@ const screenshotRoutes = [
   { name: 'template-agenda-reference.png', path: '/presentations/2026-spring-briefing?slide=2' },
   { name: 'template-section-list-grid-reference.png', path: '/presentations/2026-spring-briefing?slide=3' },
   { name: 'template-timeline-reference.png', path: '/presentations/2026-spring-briefing?slide=4' },
-  { name: 'template-progress-timeline-reference.png', path: '/presentations/2026-spring-briefing?slide=5' },
-  { name: 'template-people-reference.png', path: '/presentations/2026-spring-briefing?slide=6' },
-  { name: 'template-metrics-and-links-reference.png', path: '/presentations/2026-spring-briefing?slide=7' },
-  { name: 'template-image-and-bullets-reference.png', path: '/presentations/2026-spring-briefing?slide=8' },
-  { name: 'template-action-cards-reference.png', path: '/presentations/2026-spring-briefing?slide=9' },
-  { name: 'template-closing-reference.png', path: '/presentations/2026-spring-briefing?slide=10' },
+  { name: 'template-section-title-reference.png', path: '/presentations/2026-spring-briefing?slide=5' },
+  { name: 'template-progress-timeline-reference.png', path: '/presentations/2026-spring-briefing?slide=6' },
+  { name: 'template-people-reference.png', path: '/presentations/2026-spring-briefing?slide=7' },
+  { name: 'template-metrics-and-links-reference.png', path: '/presentations/2026-spring-briefing?slide=8' },
+  { name: 'template-image-and-bullets-reference.png', path: '/presentations/2026-spring-briefing?slide=9' },
+  { name: 'template-action-cards-reference.png', path: '/presentations/2026-spring-briefing?slide=10' },
+  { name: 'template-closing-reference.png', path: '/presentations/2026-spring-briefing?slide=11' },
 ] as const
 
 export class DocsAssetGenerator {

@@ -77,6 +77,19 @@ const heroValidator: SlideTemplateValidator = (slide, path) => {
   )
 }
 
+const sectionTitleValidator: SlideTemplateValidator = (slide, path) => {
+  const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(content, ['title', 'subtitle', 'image_url', 'image_alt'], `${path}.content`)
+  assertNonBlankString(content.title, `${path}.content.title`)
+  assertOptionalString(content.subtitle, `${path}.content.subtitle`)
+  assertOptionalString(content.image_url, `${path}.content.image_url`)
+  assertOptionalString(content.image_alt, `${path}.content.image_alt`)
+  assert(
+    content.image_url !== undefined || content.image_alt === undefined,
+    `${path}.content.image_alt requires ${path}.content.image_url.`,
+  )
+}
+
 const agendaValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
 }
@@ -219,6 +232,7 @@ const closingValidator: SlideTemplateValidator = (slide, path) => {
 
 export const slideTemplateValidators: Record<SlideTemplateId, SlideTemplateValidator> = {
   hero: heroValidator,
+  'section-title': sectionTitleValidator,
   agenda: agendaValidator,
   'section-list-grid': sectionListGridValidator,
   timeline: timelineValidator,
