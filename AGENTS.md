@@ -71,6 +71,7 @@ The core audience is comfortable with source control, static sites, and YAML dat
 - Unit tests must isolate one unit of work and mock external dependencies.
 - Do not test third-party code in unit tests.
 - Add or update e2e tests for user-facing behavior that needs end-to-end confidence.
+- CLI e2e coverage must exercise the built CLI artifact, not the npm-published package or TypeScript source entrypoint. Cover every command function, option, default, and expected error path; when adding or changing CLI behavior, update the matrix instead of relying only on unit tests.
 - Add or update visual regression tests for new pages, templates, or materially changed visual features.
 - Never update visual baselines without explicit human permission. Stop and ask first.
 - For regressions, prefer adding a failing test first, then fix to green.

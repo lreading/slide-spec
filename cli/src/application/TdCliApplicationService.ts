@@ -113,6 +113,7 @@ export class TdCliApplicationService implements TdCliService {
   }
 
   public async initPresentation(input: InitPresentationInput): Promise<InitPresentationResult> {
+    this.validatePresentationId(input.presentationId)
     const paths = this.getPaths(input.projectRoot)
     const createdPaths: string[] = []
     const period = this.reportingPeriodResolver.resolve(input.fromDate, input.toDate).current
@@ -314,7 +315,20 @@ export class TdCliApplicationService implements TdCliService {
     return new FileSystemPaths(projectRoot ?? this.defaultProjectRoot)
   }
 
+  private validatePresentationId(presentationId: string): void {
+    if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(presentationId)) {
+      throw new Error(
+        'presentationId must be path-safe and contain only letters, numbers, dots, underscores, and hyphens.',
+      )
+    }
+  }
+
   private isAddressInUseError(error: unknown): error is NodeJS.ErrnoException {
-    return error instanceof Error && 'code' in error && error.code === 'EADDRINUSE'
+    const message = error instanceof Error ? error.message : String(error)
+
+    return (
+      (typeof error === 'object' && error !== null && 'code' in error && error.code === 'EADDRINUSE')
+      || /port \d+ is already in use/i.test(message)
+    )
   }
 }

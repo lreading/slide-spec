@@ -1,3 +1,4 @@
+import { createServer as createNetServer } from 'node:net'
 import { resolve } from 'node:path'
 
 import autoprefixer from 'autoprefixer'
@@ -24,6 +25,7 @@ export class ViteSiteDevServer {
     const workspace = await this.runtimeWorkspace.prepare(paths, { liveContent: true })
 
     try {
+      const resolvedPort = port === 0 ? await this.findFreePort(host) : port
       const server = await this.createViteServer({
         appType: 'spa',
         root: workspace.appRoot,
@@ -42,7 +44,7 @@ export class ViteSiteDevServer {
         },
         server: {
           host,
-          port,
+          port: resolvedPort,
           strictPort: true,
           open: false,
           fs: {
@@ -75,6 +77,27 @@ export class ViteSiteDevServer {
 
     if (!address || typeof address === 'string') {
       throw new Error('Vite dev server did not expose a TCP address.')
+    }
+
+    return address.port
+  }
+
+  private async findFreePort(host: string): Promise<number> {
+    const server = createNetServer()
+
+    await new Promise<void>((resolvePromise, reject) => {
+      server.once('error', reject)
+      server.listen(0, host, () => resolvePromise())
+    })
+
+    const address = server.address()
+
+    await new Promise<void>((resolvePromise) => {
+      server.close(() => resolvePromise())
+    })
+
+    if (!address || typeof address === 'string') {
+      throw new Error('Unable to resolve a free TCP port.')
     }
 
     return address.port

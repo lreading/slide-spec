@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
 import { EnvLoader } from './EnvLoader'
 import { FileSystemPaths } from '../io/FileSystemPaths'
@@ -33,8 +33,50 @@ class MemoryFileSystem implements FileSystem {
   public async removeDirectory(_path: string): Promise<void> {}
 }
 
+let previousGitHubPat: string | undefined
+let previousGitHubToken: string | undefined
+let previousGhToken: string | undefined
+
+beforeEach(() => {
+  previousGitHubPat = process.env.GITHUB_PAT
+  previousGitHubToken = process.env.GITHUB_TOKEN
+  previousGhToken = process.env.GH_TOKEN
+  delete process.env.GITHUB_PAT
+  delete process.env.GITHUB_TOKEN
+  delete process.env.GH_TOKEN
+})
+
+afterEach(() => {
+  restoreEnvValue('GITHUB_PAT', previousGitHubPat)
+  restoreEnvValue('GITHUB_TOKEN', previousGitHubToken)
+  restoreEnvValue('GH_TOKEN', previousGhToken)
+})
+
+function restoreEnvValue(name: string, value: string | undefined): void {
+  if (value === undefined) {
+    delete process.env[name]
+    return
+  }
+
+  process.env[name] = value
+}
+
 describe('EnvLoader', () => {
-  it('loads the GitHub token from GITHUB_PAT and falls back to GITHUB_TOKEN', async () => {
+  it('loads the GitHub token from environment variables before .env files', async () => {
+    const paths = new FileSystemPaths('/workspace/project')
+
+    process.env.GITHUB_PAT = 'process-token'
+
+    await expect(
+      new EnvLoader(new MemoryFileSystem({
+        '/workspace/project/.env': 'GITHUB_PAT=file-token',
+      })).loadEnvironment(paths),
+    ).resolves.toEqual({
+      githubAccessToken: 'process-token',
+    })
+  })
+
+  it('loads the GitHub token from GITHUB_PAT and falls back to GITHUB_TOKEN or GH_TOKEN', async () => {
     const paths = new FileSystemPaths('/workspace/project')
     const loader = new EnvLoader(new MemoryFileSystem({
       '/workspace/project/.env': 'GITHUB_PAT=test-token',
@@ -50,6 +92,14 @@ describe('EnvLoader', () => {
       })).loadEnvironment(paths),
     ).resolves.toEqual({
       githubAccessToken: 'fallback-token',
+    })
+
+    await expect(
+      new EnvLoader(new MemoryFileSystem({
+        '/workspace/project/.env': 'GH_TOKEN=actions-token',
+      })).loadEnvironment(paths),
+    ).resolves.toEqual({
+      githubAccessToken: 'actions-token',
     })
   })
 

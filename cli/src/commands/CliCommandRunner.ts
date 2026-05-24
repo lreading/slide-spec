@@ -290,6 +290,10 @@ export class CliCommandRunner {
     const toDate = this.readStringOption(parsed.options, 'to-date')
     const summary = this.readStringOption(parsed.options, 'summary')
     const subtitle = this.readStringOption(parsed.options, 'subtitle')
+    const repositoryUrl = this.readStringOption(parsed.options, 'repository-url')
+    const docsUrl = this.readStringOption(parsed.options, 'docs-url')
+    const websiteUrl = this.readStringOption(parsed.options, 'website-url')
+    const githubDataSourceUrl = this.readStringOption(parsed.options, 'github-data-source-url')
     const result = await this.service.initPresentation({
       ...(projectRoot !== undefined ? { projectRoot } : {}),
       presentationId: required['presentation-id'],
@@ -299,6 +303,10 @@ export class CliCommandRunner {
       ...(toDate !== undefined ? { toDate } : {}),
       ...(summary !== undefined ? { summary } : {}),
       ...(force !== undefined ? { force } : {}),
+      ...(repositoryUrl !== undefined ? { repositoryUrl } : {}),
+      ...(docsUrl !== undefined ? { docsUrl } : {}),
+      ...(websiteUrl !== undefined ? { websiteUrl } : {}),
+      ...(githubDataSourceUrl !== undefined ? { githubDataSourceUrl } : {}),
     })
     this.info(`Initialized ${result.presentationId}`)
   }
@@ -559,7 +567,7 @@ export class CliCommandRunner {
           'Options:',
           '  [project-root]          Optional. Positional presentation project root',
           '  --project-root <path>   Optional. Named presentation project root',
-          '  --presentation-id <id>        Required. Unique presentation id used for content/presentations/<id>/',
+          '  --presentation-id <id>        Required. Unique path-safe presentation id used for content/presentations/<id>/',
           '  --title <title>               Required. Presentation title shown in listings and the app',
           '  --subtitle <subtitle>         Optional. Secondary label shown in listings and slide chrome',
           '  --from-date <date>            Required. Period start date in YYYY-MM-DD format',
@@ -584,7 +592,7 @@ export class CliCommandRunner {
           'Pull GitHub-derived metrics and write generated data for an existing presentation.',
           'Use this after init, once the presentation scaffold exists.',
           'If generated.yaml already exists, the command exits with an error. Use --force to overwrite.',
-          'If no PAT is available, the CLI will continue best-effort and may be rate-limited.',
+          'If no GitHub token is available, the CLI will continue best-effort and may be rate-limited.',
           'Large repositories can take up to about two minutes before the CLI falls back on unavailable snapshot metadata.',
           '',
           globalOptions,

@@ -4,12 +4,16 @@ const secretPatterns: Array<{ pattern: RegExp; replacement: string }> = [
     replacement: 'Authorization: Bearer [REDACTED]',
   },
   {
-    pattern: /GITHUB_PAT=[^\r\n]*/gi,
+    pattern: /GITHUB_PAT=[^\s"']+/gi,
     replacement: 'GITHUB_PAT=[REDACTED]',
   },
   {
-    pattern: /GITHUB_TOKEN=[^\r\n]*/gi,
+    pattern: /GITHUB_TOKEN=[^\s"']+/gi,
     replacement: 'GITHUB_TOKEN=[REDACTED]',
+  },
+  {
+    pattern: /GH_TOKEN=[^\s"']+/gi,
+    replacement: 'GH_TOKEN=[REDACTED]',
   },
 ]
 

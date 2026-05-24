@@ -113,6 +113,14 @@ describe('CliCommandRunner', () => {
       '2026-03-31',
       '--summary',
       'Summary',
+      '--repository-url',
+      'https://github.com/lreading/slide-spec',
+      '--docs-url',
+      'https://www.slide-spec.dev/',
+      '--website-url',
+      'https://example.com',
+      '--github-data-source-url',
+      'https://github.com/lreading/slide-spec',
       '--force',
     ])).resolves.toBe(0)
 
@@ -123,6 +131,10 @@ describe('CliCommandRunner', () => {
       fromDate: '2026-01-01',
       toDate: '2026-03-31',
       summary: 'Summary',
+      repositoryUrl: 'https://github.com/lreading/slide-spec',
+      docsUrl: 'https://www.slide-spec.dev/',
+      websiteUrl: 'https://example.com',
+      githubDataSourceUrl: 'https://github.com/lreading/slide-spec',
       force: true,
     })
     expect(output.info).toHaveBeenCalledWith('Initialized 2026-q1')
