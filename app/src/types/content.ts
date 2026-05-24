@@ -86,6 +86,8 @@ export interface PresentationToolbarContent {
   navigation_label?: string
   previous_slide_label?: string
   next_slide_label?: string
+  viewport_mode_label?: string
+  fullscreen_mode_label?: string
   presentation_mode_label?: string
   shortcut_help_title?: string
   shortcut_help_body?: string

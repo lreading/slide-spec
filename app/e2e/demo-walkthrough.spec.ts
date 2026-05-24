@@ -17,11 +17,11 @@ test('readme demo walkthrough (records video when using playwright.demo.config)'
   await expect(page.getByText('Keyboard shortcuts')).toBeVisible()
   await page.getByRole('button', { name: 'Do not show again' }).click()
 
-  await page.getByRole('button', { name: 'Presentation mode' }).click()
+  await page.getByRole('button', { name: 'Viewport mode' }).click()
 
   await page.keyboard.press('ArrowRight')
   await expect(page.getByRole('heading', { name: /Thanks/ })).toBeVisible()
 
   await page.keyboard.press('Escape')
-  await expect(page.getByRole('button', { name: 'Presentation mode' })).toBeVisible()
+  await expect(page.getByRole('button', { name: 'Viewport mode' })).toBeVisible()
 })

@@ -28,6 +28,11 @@ export const documentationSections: DocumentationSection[] = [
         title: 'Concepts',
         description: 'Core mental model for content structure, template-driven slides, generated data, and validation.',
       },
+      {
+        path: '/presentation-mode',
+        title: 'Presentation mode guide',
+        description: 'How slide navigation, viewport mode, fullscreen mode, keyboard controls, and callout persistence work.',
+      },
     ],
   },
   {

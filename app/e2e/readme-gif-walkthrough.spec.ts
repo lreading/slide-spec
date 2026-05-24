@@ -1,7 +1,7 @@
 import { test } from '@playwright/test'
 
 test('readme video walkthrough (docs reference project)', async ({ page }) => {
-  await page.goto('/presentations/2026-spring-briefing?slide=1&mode=presentation')
+  await page.goto('/presentations/2026-spring-briefing?slide=1&mode=viewport')
 
   const dismissBtn = page.getByRole('button', { name: 'Do not show again' })
   if (await dismissBtn.isVisible({ timeout: 2000 }).catch(() => false)) {

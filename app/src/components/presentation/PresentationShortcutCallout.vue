@@ -3,10 +3,12 @@ defineProps<{
   title: string
   body: string
   dismissLabel: string
+  closeLabel?: string
 }>()
 
 defineEmits<{
   dismiss: []
+  dismissForever: []
 }>()
 </script>
 
@@ -16,9 +18,14 @@ defineEmits<{
       <p class="shortcut-callout__title">{{ title }}</p>
       <p class="shortcut-callout__body">{{ body }}</p>
     </div>
-    <button type="button" class="shortcut-callout__dismiss" @click="$emit('dismiss')">
-      {{ dismissLabel }}
-    </button>
+    <div class="shortcut-callout__actions">
+      <button type="button" class="shortcut-callout__close" @click="$emit('dismiss')">
+        {{ closeLabel ?? 'Dismiss' }}
+      </button>
+      <button type="button" class="shortcut-callout__dismiss" @click="$emit('dismissForever')">
+        {{ dismissLabel }}
+      </button>
+    </div>
   </aside>
 </template>
 
@@ -63,5 +70,23 @@ defineEmits<{
 
 .shortcut-callout__dismiss:hover {
   color: #ff6a50;
+}
+
+.shortcut-callout__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+.shortcut-callout__close {
+  border: 0;
+  background: transparent;
+  color: #c3c8d7;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.shortcut-callout__close:hover {
+  color: #ffffff;
 }
 </style>

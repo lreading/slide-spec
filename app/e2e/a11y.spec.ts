@@ -21,9 +21,9 @@ test('has no automated accessibility violations on the presentation page', async
   await expectNoAccessibilityViolations('/presentations/2026-q1?slide=1', page)
 })
 
-test('has no automated accessibility violations in presentation mode', async ({ page }) => {
+test('has no automated accessibility violations in viewport mode', async ({ page }) => {
   await page.goto('/presentations/2026-q1?slide=1')
-  await page.getByRole('button', { name: 'Presentation mode' }).click()
+  await page.getByRole('button', { name: 'Viewport mode' }).click()
 
   const results = await new AxeBuilder({ page }).analyze()
 

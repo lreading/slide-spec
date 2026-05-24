@@ -56,6 +56,7 @@ Slide Spec supports connectors that populate `generated.yaml` with live data. Se
 ## Next steps
 
 - [Concepts](/concepts) - understand how Slide Spec projects work
+- [Presenting](/presenting) - navigation, viewport/fullscreen behavior, and shortcuts
 - [Schema reference](/schema/) - every YAML file and field
 - [Templates](/templates/) - the available slide layouts
 - [Examples](/examples/) - real-world project walkthroughs

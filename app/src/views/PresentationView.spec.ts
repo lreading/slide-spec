@@ -35,6 +35,8 @@ describe('PresentationView', () => {
 
   beforeEach(() => {
     setViewportWidth(1024)
+    window.localStorage.removeItem('slide-spec.shortcut-help.dismissed')
+    window.localStorage.removeItem('slide-spec.viewport-escape-hint.dismissed')
     Object.defineProperty(document, 'fullscreenEnabled', {
       configurable: true,
       value: false,
@@ -119,7 +121,7 @@ describe('PresentationView', () => {
   it('normalizes invalid slide queries and exits presentation mode on escape', async () => {
     const router = createAppRouter(true)
 
-    await router.push('/presentations/2026-q1?slide=999&mode=presentation')
+    await router.push('/presentations/2026-q1?slide=999&mode=viewport')
     await router.isReady()
 
     const wrapper = mount(PresentationView, {
@@ -159,7 +161,7 @@ describe('PresentationView', () => {
 
     const router = createAppRouter(true)
 
-    await router.push('/presentations/2026-q1?slide=2&mode=presentation')
+    await router.push('/presentations/2026-q1?slide=2&mode=viewport')
     await router.isReady()
 
     const wrapper = mount(PresentationView, {
@@ -175,7 +177,8 @@ describe('PresentationView', () => {
     expect(router.currentRoute.value.query.mode).toBeUndefined()
     expect(wrapper.findComponent({ name: 'PresentationToolbar' }).exists()).toBe(true)
     expect(wrapper.find('[aria-label="Previous slide"]').exists()).toBe(true)
-    expect(wrapper.text()).not.toContain('Presentation mode')
+    expect(wrapper.text()).not.toContain('Viewport mode')
+    expect(wrapper.text()).not.toContain('Fullscreen mode')
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
@@ -227,7 +230,7 @@ describe('PresentationView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
     expect(requestFullscreen).toHaveBeenCalledTimes(1)
-    expect(router.currentRoute.value.query.mode).toBe('presentation')
+    expect(router.currentRoute.value.query.mode).toBe('fullscreen')
 
     Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
@@ -249,21 +252,21 @@ describe('PresentationView', () => {
     wrapper.unmount()
   })
 
-  it('ignores modified shortcuts and toggles presentation mode with p', async () => {
-    const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
+  it('ignores modified shortcuts and toggles viewport mode with p', async () => {
+    const exitFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
 
-    Object.defineProperty(document, 'fullscreenEnabled', {
+    Object.defineProperty(document, 'fullscreenElement', {
       configurable: true,
-      value: true,
+      value: document.documentElement,
     })
-    Object.defineProperty(document.documentElement, 'requestFullscreen', {
+    Object.defineProperty(document, 'exitFullscreen', {
       configurable: true,
-      value: requestFullscreen,
+      value: exitFullscreen,
     })
 
     const router = createAppRouter(true)
 
-    await router.push('/presentations/2026-q1?slide=2')
+    await router.push('/presentations/2026-q1?slide=2&mode=fullscreen')
     await router.isReady()
 
     const wrapper = mount(PresentationView, {
@@ -281,13 +284,13 @@ describe('PresentationView', () => {
 
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'p' }))
     await flushPromises()
-    expect(requestFullscreen).toHaveBeenCalledTimes(1)
-    expect(router.currentRoute.value.query.mode).toBe('presentation')
+    expect(exitFullscreen).toHaveBeenCalledTimes(1)
+    expect(router.currentRoute.value.query.mode).toBe('viewport')
 
     wrapper.unmount()
   })
 
-  it('falls back to route-only presentation mode when fullscreen is unavailable', async () => {
+  it('falls back to route-only fullscreen mode when fullscreen is unavailable', async () => {
     const requestFullscreen = vi.fn<() => Promise<void>>().mockResolvedValue(undefined)
 
     Object.defineProperty(document, 'fullscreenEnabled', {
@@ -316,7 +319,7 @@ describe('PresentationView', () => {
     window.dispatchEvent(new KeyboardEvent('keydown', { key: 'f' }))
     await flushPromises()
     expect(requestFullscreen).not.toHaveBeenCalled()
-    expect(router.currentRoute.value.query.mode).toBe('presentation')
+    expect(router.currentRoute.value.query.mode).toBe('fullscreen')
     wrapper.unmount()
   })
 
@@ -340,9 +343,29 @@ describe('PresentationView', () => {
     wrapper.unmount()
   })
 
-  it('shows and dismisses the shortcut callout using localStorage', async () => {
-    window.localStorage.removeItem('slide-spec.shortcut-help.dismissed')
+  it('temporarily dismisses the shortcut callout without localStorage', async () => {
+    const router = createAppRouter(true)
+    await router.push('/presentations/2026-q1?slide=1')
+    await router.isReady()
 
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('Keyboard shortcuts')
+    await wrapper.get('.shortcut-callout__close').trigger('click')
+
+    expect(window.localStorage.getItem('slide-spec.shortcut-help.dismissed')).toBeNull()
+    expect(wrapper.text()).not.toContain('Keyboard shortcuts')
+    wrapper.unmount()
+  })
+
+  it('persists shortcut callout dismissal with explicit opt-in', async () => {
     const router = createAppRouter(true)
     await router.push('/presentations/2026-q1?slide=1')
     await router.isReady()
@@ -361,6 +384,50 @@ describe('PresentationView', () => {
 
     expect(window.localStorage.getItem('slide-spec.shortcut-help.dismissed')).toBe('true')
     expect(wrapper.text()).not.toContain('Keyboard shortcuts')
+    wrapper.unmount()
+  })
+
+  it('temporarily dismisses the viewport escape hint without localStorage', async () => {
+    const router = createAppRouter(true)
+    await router.push('/presentations/2026-q1?slide=1&mode=viewport')
+    await router.isReady()
+
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('Press Escape to exit viewport mode.')
+    await wrapper.get('.viewport-escape-hint .shortcut-callout__close').trigger('click')
+
+    expect(window.localStorage.getItem('slide-spec.viewport-escape-hint.dismissed')).toBeNull()
+    expect(wrapper.text()).not.toContain('Press Escape to exit viewport mode.')
+    wrapper.unmount()
+  })
+
+  it('persists viewport escape hint dismissal with explicit opt-in', async () => {
+    const router = createAppRouter(true)
+    await router.push('/presentations/2026-q1?slide=1&mode=viewport')
+    await router.isReady()
+
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('Press Escape to exit viewport mode.')
+    await wrapper.get('.viewport-escape-hint .shortcut-callout__dismiss').trigger('click')
+
+    expect(window.localStorage.getItem('slide-spec.viewport-escape-hint.dismissed')).toBe('true')
+    expect(wrapper.text()).not.toContain('Press Escape to exit viewport mode.')
     wrapper.unmount()
   })
 })

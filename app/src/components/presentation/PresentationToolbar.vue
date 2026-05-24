@@ -7,13 +7,15 @@ defineProps<{
   navigationLabel?: string
   previousSlideLabel?: string
   nextSlideLabel?: string
-  presentationModeLabel?: string
+  viewportModeLabel?: string
+  fullscreenModeLabel?: string
 }>()
 
 defineEmits<{
   previous: []
   next: []
-  toggleMode: []
+  toggleViewportMode: []
+  toggleFullscreenMode: []
 }>()
 </script>
 
@@ -47,12 +49,20 @@ defineEmits<{
 
     <div class="toolbar-group toolbar-group--meta">
       <ActionButton
-        v-if="presentationModeLabel"
+        v-if="viewportModeLabel"
         type="button"
         class="toolbar-mode-button"
-        @click="$emit('toggleMode')"
+        @click="$emit('toggleViewportMode')"
       >
-        {{ presentationModeLabel }}
+        {{ viewportModeLabel }}
+      </ActionButton>
+      <ActionButton
+        v-if="fullscreenModeLabel"
+        type="button"
+        class="toolbar-mode-button"
+        @click="$emit('toggleFullscreenMode')"
+      >
+        {{ fullscreenModeLabel }}
       </ActionButton>
     </div>
   </div>

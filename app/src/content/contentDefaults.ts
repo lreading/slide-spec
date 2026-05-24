@@ -58,9 +58,11 @@ const DEFAULT_PRESENTATION_TOOLBAR_CONTENT: Required<PresentationToolbarContent>
   navigation_label: 'Slide navigation',
   previous_slide_label: 'Previous slide',
   next_slide_label: 'Next slide',
-  presentation_mode_label: 'Presentation mode',
+  viewport_mode_label: 'Viewport mode',
+  fullscreen_mode_label: 'Fullscreen mode',
+  presentation_mode_label: 'Viewport mode',
   shortcut_help_title: 'Keyboard shortcuts',
-  shortcut_help_body: 'Use Left and Right, swipe left or right, Space or Enter for next, and Escape to exit presentation mode.',
+  shortcut_help_body: 'Use Left and Right, swipe left or right, Space or Enter for next, P for viewport mode, F for fullscreen mode, and Escape to exit viewport or fullscreen mode.',
   shortcut_help_dismiss_label: 'Do not show again',
 }
 const DEFAULT_PRESENTATIONS_PAGE_CONTENT: Required<PresentationsPageContent> = {
@@ -106,8 +108,13 @@ export const resolvePresentationToolbarContent = (
     ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.previous_slide_label,
   next_slide_label: trimOrUndefined(site.presentation_toolbar?.next_slide_label)
     ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.next_slide_label,
+  viewport_mode_label: trimOrUndefined(site.presentation_toolbar?.viewport_mode_label)
+    ?? trimOrUndefined(site.presentation_toolbar?.presentation_mode_label)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.viewport_mode_label,
+  fullscreen_mode_label: trimOrUndefined(site.presentation_toolbar?.fullscreen_mode_label)
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.fullscreen_mode_label,
   presentation_mode_label: trimOrUndefined(site.presentation_toolbar?.presentation_mode_label)
-    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.presentation_mode_label,
+    ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.viewport_mode_label,
   shortcut_help_title: trimOrUndefined(site.presentation_toolbar?.shortcut_help_title)
     ?? DEFAULT_PRESENTATION_TOOLBAR_CONTENT.shortcut_help_title,
   shortcut_help_body: trimOrUndefined(site.presentation_toolbar?.shortcut_help_body)

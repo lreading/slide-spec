@@ -161,6 +161,8 @@ function assertPresentationToolbarContent(value: unknown, path: string): void {
       'navigation_label',
       'previous_slide_label',
       'next_slide_label',
+      'viewport_mode_label',
+      'fullscreen_mode_label',
       'presentation_mode_label',
       'shortcut_help_title',
       'shortcut_help_body',
@@ -171,6 +173,8 @@ function assertPresentationToolbarContent(value: unknown, path: string): void {
   assertOptionalString(value.navigation_label, `${path}.navigation_label`)
   assertOptionalString(value.previous_slide_label, `${path}.previous_slide_label`)
   assertOptionalString(value.next_slide_label, `${path}.next_slide_label`)
+  assertOptionalString(value.viewport_mode_label, `${path}.viewport_mode_label`)
+  assertOptionalString(value.fullscreen_mode_label, `${path}.fullscreen_mode_label`)
   assertOptionalString(value.presentation_mode_label, `${path}.presentation_mode_label`)
   assertOptionalString(value.shortcut_help_title, `${path}.shortcut_help_title`)
   assertOptionalString(value.shortcut_help_body, `${path}.shortcut_help_body`)

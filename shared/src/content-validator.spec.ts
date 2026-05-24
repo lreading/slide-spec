@@ -33,6 +33,8 @@ const validSiteDocument = {
       navigation_label: 'Slides',
       previous_slide_label: 'Previous',
       next_slide_label: 'Next',
+      viewport_mode_label: 'Viewport',
+      fullscreen_mode_label: 'Fullscreen',
       presentation_mode_label: 'Present',
       shortcut_help_title: 'Shortcuts',
       shortcut_help_body: 'Use arrow keys.',
