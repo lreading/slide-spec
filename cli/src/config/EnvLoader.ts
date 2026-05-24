@@ -10,6 +10,14 @@ export class EnvLoader {
   public constructor(private readonly fileSystem: FileSystem = new NodeFileSystem()) {}
 
   public async loadEnvironment(paths: FileSystemPaths): Promise<CliEnvironment> {
+    const processToken = this.readGitHubToken(process.env)
+
+    if (processToken) {
+      return {
+        githubAccessToken: processToken,
+      }
+    }
+
     const envPath = await this.findEnvPath(paths)
 
     if (!envPath) {
@@ -18,7 +26,7 @@ export class EnvLoader {
 
     const envSource = await this.fileSystem.readTextFile(envPath)
     const parsed = parse(envSource)
-    const githubAccessToken = parsed.GITHUB_PAT?.trim() || parsed.GITHUB_TOKEN?.trim()
+    const githubAccessToken = this.readGitHubToken(parsed)
 
     if (!githubAccessToken) {
       return {}
@@ -39,5 +47,9 @@ export class EnvLoader {
     }
 
     return undefined
+  }
+
+  private readGitHubToken(source: Record<string, string | undefined>): string | undefined {
+    return source.GITHUB_PAT?.trim() || source.GITHUB_TOKEN?.trim() || source.GH_TOKEN?.trim() || undefined
   }
 }

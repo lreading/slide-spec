@@ -548,6 +548,23 @@ describe('TdCliApplicationService', () => {
     expect(presentationIndexStore.writes).toHaveLength(0)
   })
 
+  it('rejects presentation ids that cannot be used as safe scaffold path segments', async () => {
+    const service = new TdCliApplicationService({
+      projectRoot: '/repo',
+      presentationIndexStore: new StubPresentationIndexStore([]) as never,
+      reportingPeriodResolver: new StubReportingPeriodResolver() as never,
+      fileSystem: new MemoryFileSystem(),
+    })
+
+    await expect(service.initPresentation({
+      presentationId: '../escape',
+      title: 'Escape',
+      fromDate: '2026-01-01',
+    })).rejects.toThrow(
+      'presentationId must be path-safe and contain only letters, numbers, dots, underscores, and hyphens.',
+    )
+  })
+
   it('initFromExample copies the example content to the target project root', async () => {
     const fileSystem = new TrackingFileSystem()
     const exampleRegistry = new StubExampleRegistry()
@@ -671,6 +688,36 @@ describe('TdCliApplicationService', () => {
     })
 
     expect(contentValidator.validates).toEqual(['/repo'])
+    expect(devSiteServer.starts).toEqual([
+      {
+        root: '/repo',
+        host: '127.0.0.1',
+        port: 5173,
+      },
+      {
+        root: '/repo',
+        host: '127.0.0.1',
+        port: 0,
+      },
+    ])
+  })
+
+  it('falls back when Vite reports the default serve port is busy without an error code', async () => {
+    const contentValidator = new StubContentValidator()
+    const devSiteServer = new StubViteSiteDevServer({
+      startErrors: [new Error('Port 5173 is already in use')],
+      startResults: [58124],
+    })
+    const service = new TdCliApplicationService({
+      projectRoot: '/repo',
+      devSiteServer: devSiteServer as never,
+      contentValidator: contentValidator as never,
+    })
+
+    await expect(service.serveSite({})).resolves.toEqual({
+      url: 'http://127.0.0.1:58124/',
+    })
+
     expect(devSiteServer.starts).toEqual([
       {
         root: '/repo',

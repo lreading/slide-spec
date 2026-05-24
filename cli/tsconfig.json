@@ -13,6 +13,13 @@
     "skipLibCheck": true,
     "types": ["node", "vitest/globals"]
   },
-  "include": ["src/**/*.ts", "../shared/src/**/*.ts"],
+  "include": [
+    "src/**/*.ts",
+    "e2e/**/*.ts",
+    "vitest.config.ts",
+    "vitest.e2e.config.ts",
+    "vitest.connectors-e2e.config.ts",
+    "../shared/src/**/*.ts"
+  ],
   "exclude": ["dist", "coverage", "../shared/src/**/*.spec.ts"]
 }

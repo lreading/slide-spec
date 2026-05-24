@@ -34,7 +34,7 @@ From there, edit your content, validate it, fetch generated GitHub-backed conten
 
 ```sh
 npx @slide-spec/cli validate
-# Requires GITHUB_PAT in your environment or in a .env file at the project root
+# Requires GITHUB_PAT, GITHUB_TOKEN, or GH_TOKEN in your environment or in a .env file at the project root
 npx @slide-spec/cli fetch
 npx @slide-spec/cli build
 ```
@@ -94,7 +94,7 @@ slide-spec <command> --help
 
 `fetch` can enrich generated content with GitHub data.
 
-To enable authenticated GitHub-backed fetches, copy `.env.example` to `.env` in your project root and set:
+To enable authenticated GitHub-backed fetches, set a token in your shell environment or copy `.env.example` to `.env` in your project root and set:
 
 ```env
 GITHUB_PAT=your_token_here
@@ -103,6 +103,7 @@ GITHUB_PAT=your_token_here
 Notes:
 
 - A token is optional
+- `GITHUB_PAT`, `GITHUB_TOKEN`, and `GH_TOKEN` are supported; shell environment values take precedence over `.env`
 - `fetch` supports best-effort mode without a token
 - `init` can write a masked `GITHUB_PAT` entry into `.env` during setup
 - `fetch` also supports date ranges

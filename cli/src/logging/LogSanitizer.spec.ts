@@ -7,7 +7,7 @@ describe('LogSanitizer', () => {
     const sanitizer = new LogSanitizer()
 
     expect(
-      sanitizer.sanitize('Authorization: Bearer secret-token\nGITHUB_PAT=another-token\nGITHUB_TOKEN=fallback'),
-    ).toBe('Authorization: Bearer [REDACTED]\nGITHUB_PAT=[REDACTED]\nGITHUB_TOKEN=[REDACTED]')
+      sanitizer.sanitize('Authorization: Bearer secret-token\nGITHUB_PAT=another-token\nGITHUB_TOKEN=fallback\nGH_TOKEN=actions'),
+    ).toBe('Authorization: Bearer [REDACTED]\nGITHUB_PAT=[REDACTED]\nGITHUB_TOKEN=[REDACTED]\nGH_TOKEN=[REDACTED]')
   })
 })

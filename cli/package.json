@@ -39,14 +39,16 @@
     "cli": "node --import tsx src/index.ts",
     "build": "node --import tsx scripts/sync-runtime-template.ts --out runtime-template && node --import tsx scripts/sync-examples.ts --out examples-synced && node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && esbuild src/index.ts --bundle --platform=node --format=esm --target=es2022 --packages=external --outfile=dist/index.js && node --import tsx scripts/sync-runtime-template.ts --out dist/runtime-template && node --import tsx scripts/sync-examples.ts --out dist/examples",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
-    "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" vitest.config.ts eslint.config.mjs",
+    "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" \"e2e/**/*.ts\" vitest.config.ts vitest.e2e.config.ts vitest.connectors-e2e.config.ts eslint.config.mjs",
+    "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" \"e2e/**/*.ts\" vitest.config.ts vitest.e2e.config.ts vitest.connectors-e2e.config.ts eslint.config.mjs",
     "semgrep": "node --import tsx scripts/run-semgrep.ts",
     "spellcheck": "pnpm exec cspell lint --no-progress \"../README.md\" \"../CONTRIBUTING.md\" \"../docs/**/*.md\" --gitignore --config ../.cspell.json",
     "test": "vitest run",
+    "e2e": "pnpm run build && vitest run --config vitest.e2e.config.ts",
+    "e2e:connectors": "pnpm run build && vitest run --config vitest.connectors-e2e.config.ts",
     "coverage": "vitest run --coverage --coverage.thresholds.perFile=true --coverage.thresholds.statements=80 --coverage.thresholds.branches=80 --coverage.thresholds.functions=80 --coverage.thresholds.lines=80",
-    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run build && pnpm run spellcheck",
-    "verify:ci": "pnpm run lint && pnpm run typecheck && pnpm run build"
+    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run e2e && pnpm run spellcheck",
+    "verify:ci": "pnpm run lint && pnpm run typecheck && pnpm run e2e"
   },
   "dependencies": {
     "@fontsource/poppins": "catalog:",

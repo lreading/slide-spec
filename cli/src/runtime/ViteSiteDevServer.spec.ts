@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { ViteSiteDevServer } from './ViteSiteDevServer'
 
 import type { AddressInfo } from 'node:net'
-import type { ViteDevServer } from 'vite'
+import type { InlineConfig, ViteDevServer } from 'vite'
 
 class StubPackagePaths {
   public getPackageRoot(): string {
@@ -80,6 +80,32 @@ describe('ViteSiteDevServer', () => {
       }),
     }))
     expect(runtimeWorkspace.cleanup).not.toHaveBeenCalled()
+  })
+
+  it('resolves port 0 to an explicit free port before starting Vite', async () => {
+    const createServer = vi.fn(async (config: InlineConfig) => createViteServerDouble({
+      address: {
+        address: '127.0.0.1',
+        family: 'IPv4',
+        port: Number(config.server?.port),
+      },
+    }))
+    const server = new ViteSiteDevServer(
+      new StubPackagePaths() as never,
+      new StubRuntimeWorkspace() as never,
+      createServer,
+    )
+
+    await expect(server.start({
+      getProjectRoot: () => '/project',
+    } as never, '127.0.0.1', 0)).resolves.toBeGreaterThan(0)
+
+    expect(createServer).toHaveBeenCalledWith(expect.objectContaining({
+      server: expect.objectContaining({
+        port: expect.any(Number),
+      }),
+    }))
+    expect(createServer.mock.calls[0]?.[0].server?.port).not.toBe(0)
   })
 
   it('closes the Vite server and cleans up the workspace when listen fails', async () => {

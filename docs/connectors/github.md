@@ -25,9 +25,9 @@ Then run [`fetch`](/cli/fetch) to populate `generated.yaml`.
 
 ## Authentication
 
-A GitHub personal access token (PAT) is strongly recommended. Without one, requests hit public rate limits and return less data.
+A GitHub token is strongly recommended. Without one, requests hit public rate limits and return less data.
 
-Set `GITHUB_PAT` in the `.env` file at the project root you are fetching from. The interactive `init` flow can write that file for you if you enter a token during setup.
+Set `GITHUB_PAT`, `GITHUB_TOKEN`, or `GH_TOKEN` in your shell environment or in the `.env` file at the project root you are fetching from. Shell environment values take precedence over `.env` values. The interactive `init` flow can write `GITHUB_PAT` to `.env` for you if you enter a token during setup.
 
 Example:
 
