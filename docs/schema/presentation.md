@@ -92,6 +92,15 @@ Slide-level `title` is not required.
 | `title` | yes | |
 | `content` | | Omit entirely or pass `{}`. Row text comes from other slides |
 
+### section-title
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `content.title` | yes | |
+| `content.subtitle` | | |
+| `content.image_url` | | |
+| `content.image_alt` | | Requires `content.image_url` |
+
 ### section-list-grid
 
 | Field | Required |

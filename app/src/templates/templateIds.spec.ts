@@ -6,6 +6,7 @@ describe('templateIds', () => {
   it('defines the supported template allow-list', () => {
     expect(slideTemplateIds).toEqual([
       'hero',
+      'section-title',
       'agenda',
       'section-list-grid',
       'timeline',
@@ -20,6 +21,7 @@ describe('templateIds', () => {
 
   it('checks whether a value is a supported template id', () => {
     expect(isSlideTemplateId('hero')).toBe(true)
+    expect(isSlideTemplateId('section-title')).toBe(true)
     expect(isSlideTemplateId('unknown-template')).toBe(false)
   })
 })

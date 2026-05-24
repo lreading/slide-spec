@@ -17,6 +17,7 @@ describe('SlideRenderer', () => {
       'Agenda',
       'What Happened Since Last Update',
       'Releases',
+      'Roadmap Themes',
       'Roadmap: Completed',
       'Roadmap: In Progress',
       'Roadmap: Planned',

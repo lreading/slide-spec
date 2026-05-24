@@ -59,6 +59,7 @@ export default defineConfig({
           items: [
             { text: 'Overview', link: '/templates/' },
             { text: 'Hero', link: '/templates/hero' },
+            { text: 'Section Title', link: '/templates/section-title' },
             { text: 'Agenda', link: '/templates/agenda' },
             { text: 'Section List Grid', link: '/templates/section-list-grid' },
             { text: 'Timeline', link: '/templates/timeline' },

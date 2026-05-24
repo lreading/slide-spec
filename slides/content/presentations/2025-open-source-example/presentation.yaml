@@ -48,6 +48,13 @@ presentation:
         featured_release_ids:
           - v3-2-0
           - v3-1-0
+    - template: section-title
+      enabled: true
+      content:
+        title: Delivery Highlights
+        subtitle: The themes that shaped Q1
+        image_url: content/assets/slide-spec-logo.svg
+        image_alt: Vortex CLI mark
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Completed"

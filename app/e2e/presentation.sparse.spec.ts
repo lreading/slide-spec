@@ -24,6 +24,11 @@ async function assertSparseSlide(page: Page, slideNumber: number): Promise<void>
       await expect(page.getByText('Minimal Updates')).toBeVisible()
       await expect(page.getByText('How to Contribute')).toBeVisible()
       break
+    case 'section-title':
+      await expect(page.getByRole('heading', { name: 'Minimal Updates' })).toBeVisible()
+      await expect(page.locator('.section-title__subtitle')).toHaveCount(0)
+      await expect(page.locator('.section-title__image')).toHaveCount(0)
+      break
     case 'section-list-grid':
       await expect(page.getByRole('heading', { name: 'Minimal Updates' })).toBeVisible()
       await expect(page.locator('.feature-card')).toHaveCount(0)

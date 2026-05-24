@@ -21,6 +21,7 @@
           "items": {
             "oneOf": [
               { "$ref": "#/$defs/heroSlide" },
+              { "$ref": "#/$defs/sectionTitleSlide" },
               { "$ref": "#/$defs/agendaSlide" },
               { "$ref": "#/$defs/sectionListGridSlide" },
               { "$ref": "#/$defs/timelineSlide" },
@@ -45,6 +46,7 @@
         "template": {
           "enum": [
             "hero",
+            "section-title",
             "agenda",
             "section-list-grid",
             "timeline",
@@ -99,6 +101,32 @@
             "content": {
               "type": "object",
               "additionalProperties": false
+            }
+          }
+        }
+      ]
+    },
+    "sectionTitleSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "content"],
+          "properties": {
+            "template": { "const": "section-title" },
+            "content": {
+              "type": "object",
+              "required": ["title"],
+              "additionalProperties": false,
+              "dependentRequired": {
+                "image_alt": ["image_url"]
+              },
+              "properties": {
+                "title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "subtitle": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "image_url": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "image_alt": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+              }
             }
           }
         }

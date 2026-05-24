@@ -6,6 +6,14 @@ describe('template validation', () => {
   it('accepts every supported template shape', () => {
     const validSlides = {
       hero: { content: { title_primary: 'Slide', title_accent: 'Spec' } },
+      'section-title': {
+        content: {
+          title: 'Platform Security',
+          subtitle: 'Compliance and governance update',
+          image_url: 'content/assets/security-shield.svg',
+          image_alt: 'Shield icon',
+        },
+      },
       agenda: { title: 'Agenda', content: {} },
       'section-list-grid': { title: 'Sections', content: { sections: [{ title: 'One', bullets: ['A'] }] } },
       timeline: {
@@ -84,8 +92,17 @@ describe('template validation', () => {
 
   it('rejects invalid template content', () => {
     expect(() =>
+      validateTemplateSlide('section-title', { content: { subtitle: 'Only subtitle' } }, 'slides[0]'),
+    ).toThrow('slides[0].content.title must be a string.')
+    expect(() =>
+      validateTemplateSlide('section-title', { content: { title: 'Title', image_alt: 'Only alt' } }, 'slides[0]'),
+    ).toThrow('slides[0].content.image_alt requires slides[0].content.image_url.')
+    expect(() =>
       validateTemplateSlide('hero', { content: { subtitle_prefix: 'Only subtitle' } }, 'slides[0]'),
     ).toThrow('slides[0].content must include title_primary or title_accent.')
+    expect(() =>
+      validateTemplateSlide('section-title', { content: { title: 'Title', subtitle: 'Support' } }, 'slides[0]'),
+    ).not.toThrow()
     expect(() =>
       validateTemplateSlide('progress-timeline', { title: 'Progress', content: { stage: 'blocked' } }, 'slides[1]'),
     ).toThrow('slides[1].content.stage must be one of completed, in-progress, planned, or future.')
