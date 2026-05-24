@@ -116,9 +116,30 @@ test('dismisses the shortcut help callout for the current browser origin', async
   await page.goto('/presentations/2026-q1?slide=1')
 
   await expect(page.getByText('Keyboard shortcuts')).toBeVisible()
+  await page.getByRole('button', { name: 'Dismiss' }).click()
+  await expect(page.getByText('Keyboard shortcuts')).toBeHidden()
+
+  await page.reload()
+  await expect(page.getByText('Keyboard shortcuts')).toBeVisible()
   await page.getByRole('button', { name: 'Do not show again' }).click()
   await expect(page.getByText('Keyboard shortcuts')).toBeHidden()
 
   await page.reload()
   await expect(page.getByText('Keyboard shortcuts')).toBeHidden()
+})
+
+test('dismisses the viewport escape hint for the current browser origin', async ({ page }) => {
+  await page.goto('/presentations/2026-q1?slide=1&mode=viewport')
+
+  await expect(page.getByText('Press Escape to exit viewport mode.')).toBeVisible()
+  await page.locator('.viewport-escape-hint').getByRole('button', { name: 'Dismiss' }).click()
+  await expect(page.getByText('Press Escape to exit viewport mode.')).toBeHidden()
+
+  await page.reload()
+  await expect(page.getByText('Press Escape to exit viewport mode.')).toBeVisible()
+  await page.locator('.viewport-escape-hint').getByRole('button', { name: 'Do not show again' }).click()
+  await expect(page.getByText('Press Escape to exit viewport mode.')).toBeHidden()
+
+  await page.reload()
+  await expect(page.getByText('Press Escape to exit viewport mode.')).toBeHidden()
 })

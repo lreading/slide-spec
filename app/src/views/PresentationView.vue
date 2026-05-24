@@ -14,12 +14,18 @@ const route = useRoute()
 const router = useRouter()
 const fullscreenActive = ref(false)
 const shortcutHelpDismissed = ref(false)
+const shortcutHelpHidden = ref(false)
+const viewportEscapeHintDismissed = ref(false)
+const viewportEscapeHintHidden = ref(false)
 const swipeStart = ref<{ pointerId: number, x: number, y: number }>()
 const { isCompactViewport } = useCompactViewport()
 
 const site = contentRepository.getSiteContent()
 const toolbarContent = resolvePresentationToolbarContent(site)
 const shortcutStorageKey = 'slide-spec.shortcut-help.dismissed'
+const viewportEscapeHintStorageKey = 'slide-spec.viewport-escape-hint.dismissed'
+const viewportEscapeHintTitle = 'Tip'
+const viewportEscapeHintBody = 'Press Escape to exit viewport mode.'
 const useUrlOnlyPresentation = import.meta.env.VITE_PRESENTATION_URL_MODE === 'true'
 const presentationId = computed(() => String(route.params.presentationId))
 const record = computed(() => contentRepository.getPresentation(presentationId.value))
@@ -56,9 +62,17 @@ const fullscreenModeLabel = computed(() =>
 const showShortcutHelp = computed(
   () =>
     !isPresentationActive.value
+    && !shortcutHelpHidden.value
     && !shortcutHelpDismissed.value
     && Boolean(toolbarContent.shortcut_help_title)
     && Boolean(toolbarContent.shortcut_help_body)
+    && Boolean(toolbarContent.shortcut_help_dismiss_label),
+)
+const showViewportEscapeHint = computed(
+  () =>
+    routeMode.value === 'viewport'
+    && !viewportEscapeHintHidden.value
+    && !viewportEscapeHintDismissed.value
     && Boolean(toolbarContent.shortcut_help_dismiss_label),
 )
 const onKeydown = (event: KeyboardEvent): void => {
@@ -79,11 +93,27 @@ const syncFullscreenState = (): void => {
 
 const syncShortcutPreference = (): void => {
   shortcutHelpDismissed.value = window.localStorage.getItem(shortcutStorageKey) === 'true'
+  viewportEscapeHintDismissed.value = window.localStorage.getItem(viewportEscapeHintStorageKey) === 'true'
 }
 
 const dismissShortcutHelp = (): void => {
+  shortcutHelpHidden.value = true
+}
+
+const dismissShortcutHelpForever = (): void => {
   window.localStorage.setItem(shortcutStorageKey, 'true')
   shortcutHelpDismissed.value = true
+  shortcutHelpHidden.value = true
+}
+
+const dismissViewportEscapeHint = (): void => {
+  viewportEscapeHintHidden.value = true
+}
+
+const dismissViewportEscapeHintForever = (): void => {
+  window.localStorage.setItem(viewportEscapeHintStorageKey, 'true')
+  viewportEscapeHintDismissed.value = true
+  viewportEscapeHintHidden.value = true
 }
 
 const updateRoute = async (
@@ -296,7 +326,9 @@ onUnmounted(() => {
       :title="toolbarContent.shortcut_help_title!"
       :body="toolbarContent.shortcut_help_body!"
       :dismiss-label="toolbarContent.shortcut_help_dismiss_label!"
+      close-label="Dismiss"
       @dismiss="dismissShortcutHelp"
+      @dismiss-forever="dismissShortcutHelpForever"
     />
 
     <PresentationToolbar
@@ -313,6 +345,17 @@ onUnmounted(() => {
       @toggle-viewport-mode="toggleViewportMode"
       @toggle-fullscreen-mode="toggleFullscreenMode"
     />
+
+    <div v-if="showViewportEscapeHint" class="viewport-escape-hint">
+      <PresentationShortcutCallout
+        :title="viewportEscapeHintTitle"
+        :body="viewportEscapeHintBody"
+        :dismiss-label="toolbarContent.shortcut_help_dismiss_label!"
+        close-label="Dismiss"
+        @dismiss="dismissViewportEscapeHint"
+        @dismiss-forever="dismissViewportEscapeHintForever"
+      />
+    </div>
 
     <div
       class="slide-stage"
@@ -364,6 +407,42 @@ onUnmounted(() => {
   overflow: hidden;
 }
 
+.viewport-escape-hint {
+  position: fixed;
+  top: 0.85rem;
+  left: 50%;
+  z-index: 40;
+  width: min(calc(100% - 1.5rem), 56rem);
+  transform: translateX(-50%);
+}
+
+.viewport-escape-hint :deep(.shortcut-callout) {
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.75rem;
+  border: 2px solid rgba(255, 255, 255, 0.45);
+  background: rgba(7, 10, 24, 0.97);
+  box-shadow:
+    0 14px 36px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(2px);
+}
+
+.viewport-escape-hint :deep(.shortcut-callout__title) {
+  color: #ffffff;
+}
+
+.viewport-escape-hint :deep(.shortcut-callout__body) {
+  color: #f3f6ff;
+}
+
+.viewport-escape-hint :deep(.shortcut-callout__dismiss) {
+  color: #ff7f6d;
+}
+
+.viewport-escape-hint :deep(.shortcut-callout__dismiss:hover) {
+  color: #ffae9f;
+}
+
 .slide-stage--presentation :deep(.slide-container) {
   width: 100%;
   height: calc(100dvh - 0.7rem);
@@ -374,6 +453,11 @@ onUnmounted(() => {
 @media (max-width: 767px) {
   .presentation-page--presentation {
     padding: 0.25rem;
+  }
+
+  .viewport-escape-hint {
+    top: 0.5rem;
+    width: calc(100% - 1rem);
   }
 
   .slide-stage--presentation :deep(.slide-container) {

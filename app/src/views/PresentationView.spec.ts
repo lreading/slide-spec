@@ -35,6 +35,8 @@ describe('PresentationView', () => {
 
   beforeEach(() => {
     setViewportWidth(1024)
+    window.localStorage.removeItem('slide-spec.shortcut-help.dismissed')
+    window.localStorage.removeItem('slide-spec.viewport-escape-hint.dismissed')
     Object.defineProperty(document, 'fullscreenEnabled', {
       configurable: true,
       value: false,
@@ -341,9 +343,29 @@ describe('PresentationView', () => {
     wrapper.unmount()
   })
 
-  it('shows and dismisses the shortcut callout using localStorage', async () => {
-    window.localStorage.removeItem('slide-spec.shortcut-help.dismissed')
+  it('temporarily dismisses the shortcut callout without localStorage', async () => {
+    const router = createAppRouter(true)
+    await router.push('/presentations/2026-q1?slide=1')
+    await router.isReady()
 
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('Keyboard shortcuts')
+    await wrapper.get('.shortcut-callout__close').trigger('click')
+
+    expect(window.localStorage.getItem('slide-spec.shortcut-help.dismissed')).toBeNull()
+    expect(wrapper.text()).not.toContain('Keyboard shortcuts')
+    wrapper.unmount()
+  })
+
+  it('persists shortcut callout dismissal with explicit opt-in', async () => {
     const router = createAppRouter(true)
     await router.push('/presentations/2026-q1?slide=1')
     await router.isReady()
@@ -362,6 +384,50 @@ describe('PresentationView', () => {
 
     expect(window.localStorage.getItem('slide-spec.shortcut-help.dismissed')).toBe('true')
     expect(wrapper.text()).not.toContain('Keyboard shortcuts')
+    wrapper.unmount()
+  })
+
+  it('temporarily dismisses the viewport escape hint without localStorage', async () => {
+    const router = createAppRouter(true)
+    await router.push('/presentations/2026-q1?slide=1&mode=viewport')
+    await router.isReady()
+
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('Press Escape to exit viewport mode.')
+    await wrapper.get('.viewport-escape-hint .shortcut-callout__close').trigger('click')
+
+    expect(window.localStorage.getItem('slide-spec.viewport-escape-hint.dismissed')).toBeNull()
+    expect(wrapper.text()).not.toContain('Press Escape to exit viewport mode.')
+    wrapper.unmount()
+  })
+
+  it('persists viewport escape hint dismissal with explicit opt-in', async () => {
+    const router = createAppRouter(true)
+    await router.push('/presentations/2026-q1?slide=1&mode=viewport')
+    await router.isReady()
+
+    const wrapper = mount(PresentationView, {
+      global: {
+        plugins: [router],
+        stubs: {
+          RouterLink: RouterLinkStub,
+        },
+      },
+    })
+
+    expect(wrapper.text()).toContain('Press Escape to exit viewport mode.')
+    await wrapper.get('.viewport-escape-hint .shortcut-callout__dismiss').trigger('click')
+
+    expect(window.localStorage.getItem('slide-spec.viewport-escape-hint.dismissed')).toBe('true')
+    expect(wrapper.text()).not.toContain('Press Escape to exit viewport mode.')
     wrapper.unmount()
   })
 })

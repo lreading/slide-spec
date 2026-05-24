@@ -31,6 +31,7 @@ export default defineConfig({
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Quickstart', link: '/quickstart' },
+      { text: 'Presenting', link: '/presenting' },
       { text: 'Concepts', link: '/concepts' },
       { text: 'Schema', link: '/schema/', activeMatch: '^/schema' },
       { text: 'Templates', link: '/templates/', activeMatch: '^/templates' },
