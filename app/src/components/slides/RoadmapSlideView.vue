@@ -12,7 +12,6 @@ import { resolveRoadmapLabels } from '../../content/contentDefaults'
 import type {
   PresentationContent,
   RoadmapSlide,
-  RoadmapStageStatus,
   SiteContent,
 } from '../../types/content'
 
@@ -24,11 +23,11 @@ const props = defineProps<{
   slideTotal: number
 }>()
 
-const stageOrder: RoadmapStageStatus[] = ['completed', 'in-progress', 'planned', 'future']
 const stages = computed(() => props.slide.content.stages)
-const activeStageIndex = computed(() => stageOrder.indexOf(props.slide.content.stage))
+const stageOrder = computed(() => Object.keys(stages.value))
+const activeStageIndex = computed(() => stageOrder.value.indexOf(props.slide.content.stage))
 const timelineStages = computed(() =>
-  stageOrder.map((status, index) => {
+  stageOrder.value.map((status, index) => {
     let progressState: 'viewed' | 'current' | 'upcoming' = 'upcoming'
 
     if (index < activeStageIndex.value) {

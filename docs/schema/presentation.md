@@ -138,7 +138,7 @@ Each `sections[]` entry may also set `fa_icon` to override its badge icon.
 | Field | Required | Notes |
 | --- | --- | --- |
 | `title` | yes | |
-| `content.stage` | yes | `completed`, `in-progress`, `planned`, or `future` |
+| `content.stage` | yes | Must match one key in `content.stages` |
 | `content.deliverables_heading` | | |
 | `content.focus_areas_heading` | | |
 | `content.footer_link_label` | | |
@@ -146,7 +146,7 @@ Each `sections[]` entry may also set `fa_icon` to override its badge icon.
 | `content.focus_areas_fa_icon` | | Defaults to `fa-bullseye` |
 | `content.theme_fa_icon` | | Defaults to `fa-chevron-right` |
 | `content.footer_link_fa_icon` | | Defaults to `fa-github` |
-| `content.stages` | yes | Four stage strip entries |
+| `content.stages` | yes | 2 to 6 stage strip entries, rendered in authored order |
 | `content.items` | yes | Active stage items |
 | `content.themes` | yes | Active stage themes |
 

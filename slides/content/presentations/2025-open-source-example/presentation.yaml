@@ -83,9 +83,6 @@ presentation:
           planned:
             label: Planned
             summary: Scoped for Q2 2025.
-          future:
-            label: Future
-            summary: Under discussion.
         items:
           - Plugin system with local and registry-based resolution
           - Structured error messages with fix suggestions

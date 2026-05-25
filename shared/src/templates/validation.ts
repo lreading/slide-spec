@@ -10,13 +10,39 @@ import {
 } from '../validation/assertions'
 import type { SlideTemplateId } from './templateIds'
 
-const roadmapStageStatuses = new Set(['completed', 'in-progress', 'planned', 'future'])
-const roadmapStageKeys = ['completed', 'in-progress', 'planned', 'future'] as const
+const minimumRoadmapStageCount = 2
+const maximumRoadmapStageCount = 6
 
 function assertRoadmapStageContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNonBlankString(value.label, `${path}.label`)
   assertNonBlankString(value.summary, `${path}.summary`)
+}
+
+function assertRoadmapStages(value: unknown, activeStage: unknown, path: string): void {
+  assert(isRecord(value), `${path}.stages must be an object.`)
+  assertNonBlankString(activeStage, `${path}.stage`)
+  const activeStageKey = activeStage as string
+
+  const stageEntries = Object.entries(value)
+  assert(
+    stageEntries.length >= minimumRoadmapStageCount,
+    `${path}.stages must include at least ${String(minimumRoadmapStageCount)} stages.`,
+  )
+  assert(
+    stageEntries.length <= maximumRoadmapStageCount,
+    `${path}.stages must include no more than ${String(maximumRoadmapStageCount)} stages.`,
+  )
+
+  stageEntries.forEach(([key, stage]) => {
+    assert(key.trim().length > 0, `${path}.stages keys must not be blank.`)
+    assertRoadmapStageContent(stage, `${path}.stages.${key}`)
+  })
+
+  assert(
+    Object.prototype.hasOwnProperty.call(value, activeStageKey),
+    `${path}.stage must match one of the keys in ${path}.stages.`,
+  )
 }
 
 function assertRoadmapTheme(value: unknown, path: string): void {
@@ -170,11 +196,6 @@ const progressTimelineValidator: SlideTemplateValidator = (slide, path) => {
     ],
     `${path}.content`,
   )
-  assertNonBlankString(content.stage, `${path}.content.stage`)
-  assert(
-    roadmapStageStatuses.has(content.stage),
-    `${path}.content.stage must be one of completed, in-progress, planned, or future.`,
-  )
   assertOptionalString(content.deliverables_heading, `${path}.content.deliverables_heading`)
   assertOptionalString(content.focus_areas_heading, `${path}.content.focus_areas_heading`)
   assertOptionalString(content.footer_link_label, `${path}.content.footer_link_label`)
@@ -182,13 +203,7 @@ const progressTimelineValidator: SlideTemplateValidator = (slide, path) => {
   assertOptionalFontAwesomeIcon(content.focus_areas_fa_icon, `${path}.content.focus_areas_fa_icon`)
   assertOptionalFontAwesomeIcon(content.theme_fa_icon, `${path}.content.theme_fa_icon`)
   assertOptionalFontAwesomeIcon(content.footer_link_fa_icon, `${path}.content.footer_link_fa_icon`)
-  assert(isRecord(content.stages), `${path}.content.stages must be an object.`)
-  for (const key of roadmapStageKeys) {
-    assertRoadmapStageContent(
-      (content.stages as Record<string, unknown>)[key],
-      `${path}.content.stages.${key}`,
-    )
-  }
+  assertRoadmapStages(content.stages, content.stage, `${path}.content`)
   assertStringArray(content.items, `${path}.content.items`)
   assertRoadmapThemes(content.themes, `${path}.content.themes`)
 }
