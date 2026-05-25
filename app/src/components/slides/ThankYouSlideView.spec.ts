@@ -73,4 +73,27 @@ describe('ThankYouSlideView', () => {
 
     expect(wrapper.find('.presentation-mark').exists()).toBe(false)
   })
+
+  it('falls back to default resource icons when no icon overrides are authored', () => {
+    const wrapper = mount(ThankYouSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: record.generated,
+        site,
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            repository_fa_icon: undefined,
+            docs_fa_icon: undefined,
+            community_fa_icon: undefined,
+          },
+        },
+      },
+    })
+
+    expect(wrapper.find('.fa-github').exists()).toBe(true)
+    expect(wrapper.find('.fa-book').exists()).toBe(true)
+    expect(wrapper.find('.fa-shield-alt').exists()).toBe(true)
+  })
 })

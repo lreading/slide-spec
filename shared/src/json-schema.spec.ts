@@ -7,6 +7,7 @@ import { parse } from 'yaml'
 import { describe, expect, it } from 'vitest'
 
 import { ContentValidator } from './content-validator'
+import { acceptedFontAwesomeIcons } from './fontawesome'
 import { slideSpecSchemaUrls } from './json-schema-urls'
 
 const repoRoot = resolve(fileURLToPath(new URL('.', import.meta.url)), '..', '..')
@@ -222,5 +223,12 @@ describe('public JSON Schemas', () => {
       true,
       true,
     ])
+  })
+
+  it('keeps the public Font Awesome icon schema aligned with runtime validation', async () => {
+    const definitions = JSON.parse(await readFile(resolve(publicSchemaRoot, 'schema/defs.schema.json'), 'utf8'))
+    const fontAwesomeIconEnum = definitions.$defs.fontAwesomeIcon.enum
+
+    expect(fontAwesomeIconEnum).toEqual(acceptedFontAwesomeIcons)
   })
 })

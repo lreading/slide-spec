@@ -14,8 +14,11 @@ describe('template validation', () => {
           image_alt: 'Shield icon',
         },
       },
-      agenda: { title: 'Agenda', content: {} },
-      'section-list-grid': { title: 'Sections', content: { sections: [{ title: 'One', bullets: ['A'] }] } },
+      agenda: { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-chevron-right' } },
+      'section-list-grid': {
+        title: 'Sections',
+        content: { sections: [{ title: 'One', bullets: ['A'], fa_icon: 'fa-star' }] },
+      },
       timeline: {
         title: 'Timeline',
         content: {
@@ -23,6 +26,9 @@ describe('template validation', () => {
           footer_link_label: 'All releases',
           empty_state_title: 'No releases',
           empty_state_message: 'Nothing yet',
+          latest_release_fa_icon: 'fa-tag',
+          release_fa_icon: 'fa-code-branch',
+          footer_link_fa_icon: 'fa-brands fa-github',
           featured_release_ids: ['v1'],
         },
       },
@@ -33,6 +39,10 @@ describe('template validation', () => {
           deliverables_heading: 'Deliverables',
           focus_areas_heading: 'Focus',
           footer_link_label: 'Roadmap',
+          item_fa_icon: 'fa-chevron-right',
+          focus_areas_fa_icon: 'fa-bullseye',
+          theme_fa_icon: 'fa-check',
+          footer_link_fa_icon: 'fa-github',
           stages: {
             completed: { label: 'Done', summary: 'Completed work' },
             'in-progress': { label: 'Now', summary: 'Current work' },
@@ -49,7 +59,10 @@ describe('template validation', () => {
           banner_prefix: 'Thanks',
           contributors_link_label: 'Contributors',
           banner_suffix: 'team',
-          spotlight: [{ login: 'octocat', summary: 'Shipped a fix' }],
+          github_fa_icon: 'fa-github',
+          quote_fa_icon: 'fa-quote-left',
+          banner_fa_icon: 'fa-heart',
+          spotlight: [{ login: 'octocat', summary: 'Shipped a fix', fa_icon: 'fa-user-astronaut' }],
         },
       },
       'metrics-and-links': {
@@ -59,8 +72,20 @@ describe('template validation', () => {
           stats_heading: 'Stats',
           show_deltas: true,
           trend_suffix: 'from last period',
+          section_heading_fa_icon: 'fa-bullhorn',
+          stats_heading_fa_icon: 'fa-chart-line',
+          stat_fa_icons: ['fa-star'],
+          trend_up_fa_icon: 'fa-arrow-up',
+          trend_down_fa_icon: 'fa-arrow-down',
           stat_keys: ['stars'],
-          mentions: [{ type: 'release', title: 'v1', url_label: 'Read', url: 'https://example.test' }],
+          mentions: [{
+            type: 'release',
+            title: 'v1',
+            url_label: 'Read',
+            url: 'https://example.test',
+            fa_icon: 'fa-rss',
+            link_fa_icon: 'fa-external-link-alt',
+          }],
         },
       },
       'image-and-bullets': {
@@ -79,10 +104,28 @@ describe('template validation', () => {
         title: 'Actions',
         content: {
           footer_text: 'Get involved',
-          cards: [{ title: 'Try it', description: 'Run the CLI', url_label: 'Docs', url: 'https://example.test' }],
+          footer_fa_icon: 'fa-github',
+          footer_link_fa_icon: 'fa-code',
+          cards: [{
+            title: 'Try it',
+            description: 'Run the CLI',
+            url_label: 'Docs',
+            url: 'https://example.test',
+            fa_icon: 'fa-bug',
+            link_fa_icon: 'fa-arrow-right',
+          }],
         },
       },
-      closing: { content: { heading: 'Thanks', message: 'Questions?', quote: 'Ship clear slides.' } },
+      closing: {
+        content: {
+          heading: 'Thanks',
+          message: 'Questions?',
+          quote: 'Ship clear slides.',
+          repository_fa_icon: 'fa-github',
+          docs_fa_icon: 'fa-book',
+          community_fa_icon: 'fa-shield-alt',
+        },
+      },
     } as const
 
     for (const [templateId, slide] of Object.entries(validSlides)) {
@@ -121,5 +164,8 @@ describe('template validation', () => {
     expect(() =>
       validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { bullets: [] } }, 'slides[6]'),
     ).toThrow('slides[6].content.bullets must include at least one item.')
+    expect(() =>
+      validateTemplateSlide('agenda', { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-nope' } }, 'slides[7]'),
+    ).toThrow('slides[7].content.card_arrow_fa_icon must be a supported Font Awesome icon.')
   })
 })

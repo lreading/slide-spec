@@ -42,4 +42,29 @@ describe('RecentUpdatesSlideView', () => {
 
     expect(wrapper.find('.page-title').exists()).toBe(false)
   })
+
+  it('uses configured, ordered default, and overflow fallback icons', () => {
+    const wrapper = mount(RecentUpdatesSlideView, {
+      props: {
+        presentation: record.presentation,
+        slide: {
+          ...slide,
+          content: {
+            sections: [
+              { title: 'Custom', fa_icon: 'fa-code', bullets: ['Custom icon'] },
+              { title: 'Default', bullets: ['Ordered default icon'] },
+              { title: 'Third', bullets: ['Third ordered default'] },
+              { title: 'Overflow', bullets: ['Overflow fallback icon'] },
+            ],
+          },
+        },
+        slideNumber: 3,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.fa-code').exists()).toBe(true)
+    expect(wrapper.find('.fa-users').exists()).toBe(true)
+    expect(wrapper.findAll('.fa-star')).toHaveLength(2)
+  })
 })

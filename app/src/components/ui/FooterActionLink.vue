@@ -1,8 +1,10 @@
 <script setup lang="ts">
+import FaIcon from './FaIcon.vue'
+
 const props = withDefaults(
   defineProps<{
     href: string
-    icon: string | [string, string]
+    faIcon: string
     label: string
     align?: 'start' | 'end' | 'center'
   }>(),
@@ -20,7 +22,7 @@ const props = withDefaults(
     target="_blank"
     rel="noreferrer"
   >
-    <FontAwesomeIcon :icon="icon" />
+    <FaIcon :fa-icon="faIcon" />
     <span>{{ label }}</span>
   </a>
 </template>

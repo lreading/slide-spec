@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import FaIcon from './FaIcon.vue'
+
 export interface KeyValueRow {
   key: string
   value: string
@@ -7,10 +9,10 @@ export interface KeyValueRow {
 withDefaults(
   defineProps<{
     rows: KeyValueRow[]
-    valueIcon?: string | [string, string]
+    valueFaIcon?: string
   }>(),
   {
-    valueIcon: 'chevron-right',
+    valueFaIcon: 'fa-chevron-right',
   },
 )
 </script>
@@ -20,7 +22,7 @@ withDefaults(
     <div v-for="row in rows" :key="row.key" class="key-value-rows__row">
       <div class="key-value-rows__key">{{ row.key }}</div>
       <div class="key-value-rows__value">
-        <FontAwesomeIcon :icon="valueIcon" class="key-value-rows__icon" />
+        <FaIcon :fa-icon="valueFaIcon" class="key-value-rows__icon" />
         <p>{{ row.value }}</p>
       </div>
     </div>

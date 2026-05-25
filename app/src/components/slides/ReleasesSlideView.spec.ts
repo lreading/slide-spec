@@ -97,8 +97,8 @@ describe('ReleasesSlideView', () => {
     expect(releaseCards[1]?.attributes('href')).toBe(
       'https://github.com/example-org/aurora-notes/releases/tag/v9.8.0',
     )
-    expect(releaseComponents[0]?.props('labelIcon')).toBe('tag')
-    expect(releaseComponents[1]?.props('labelIcon')).toBe('code-branch')
+    expect(releaseComponents[0]?.props('labelFaIcon')).toBe('fa-tag')
+    expect(releaseComponents[1]?.props('labelFaIcon')).toBe('fa-code-branch')
     expect(releaseComponents[0]?.props('badgeLabel')).toBe(slide.content.latest_badge_label)
     expect(releaseComponents[1]?.props('badgeLabel')).toBeUndefined()
     expect(wrapper.text()).toContain('First bullet')

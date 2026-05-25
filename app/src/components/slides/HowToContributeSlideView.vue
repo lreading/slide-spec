@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
 import CalloutBanner from '../ui/CalloutBanner.vue'
+import FaIcon from '../ui/FaIcon.vue'
 import FooterActionLink from '../ui/FooterActionLink.vue'
 import IconBadge from '../ui/IconBadge.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
@@ -17,10 +18,12 @@ const props = defineProps<{
   slideTotal: number
 }>()
 
-const icons = ['bug', 'code-branch', 'book', 'bullhorn']
-const trailingIcons = ['arrow-right', 'arrow-right', 'arrow-right', 'star']
+const defaultCardFaIcons = ['fa-bug', 'fa-code-branch', 'fa-book', 'fa-bullhorn']
+const defaultLinkFaIcons = ['fa-arrow-right', 'fa-arrow-right', 'fa-arrow-right', 'fa-star']
 const repositoryLink = computed(() => props.site.links.repository)
 const showFooterCta = computed(() => Boolean(props.slide.content.footer_text?.trim()) || Boolean(repositoryLink.value))
+const footerFaIcon = computed(() => props.slide.content.footer_fa_icon ?? 'fa-github')
+const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon ?? 'fa-code')
 </script>
 
 <template>
@@ -48,12 +51,17 @@ const showFooterCta = computed(() => Boolean(props.slide.content.footer_text?.tr
         min-height="184px"
         max-height="220px"
       >
-        <IconBadge :icon="icons[index]" shape="rounded" class="icon-wrapper" icon-size="28px" />
+        <IconBadge
+          :fa-icon="card.fa_icon ?? defaultCardFaIcons[index] ?? 'fa-star'"
+          shape="rounded"
+          class="icon-wrapper"
+          icon-size="28px"
+        />
         <div class="card-content">
           <h2 class="card-title">{{ card.title }}</h2>
           <p class="card-text">{{ card.description }}</p>
           <a class="card-link" :href="card.url" target="_blank" rel="noreferrer">
-            {{ card.url_label }} <FontAwesomeIcon :icon="trailingIcons[index]" />
+            {{ card.url_label }} <FaIcon :fa-icon="card.link_fa_icon ?? defaultLinkFaIcons[index] ?? 'fa-arrow-right'" />
           </a>
         </div>
       </SurfaceCard>
@@ -61,11 +69,11 @@ const showFooterCta = computed(() => Boolean(props.slide.content.footer_text?.tr
 
     <CalloutBanner v-if="showFooterCta" class="footer-cta">
       <div class="repo-info">
-        <FontAwesomeIcon :icon="['fab', 'github']" class="text-xl mr-3" />
+        <FaIcon :fa-icon="footerFaIcon" class="text-xl mr-3" />
         <p v-if="slide.content.footer_text">{{ slide.content.footer_text }}</p>
       </div>
       <template v-if="repositoryLink" #action>
-        <FooterActionLink :href="repositoryLink.url" icon="code" :label="repositoryLink.label" />
+        <FooterActionLink :href="repositoryLink.url" :fa-icon="footerLinkFaIcon" :label="repositoryLink.label" />
       </template>
     </CalloutBanner>
   </StandardSlideLayout>

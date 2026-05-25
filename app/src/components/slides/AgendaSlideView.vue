@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import FaIcon from '../ui/FaIcon.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import { getSlideLabel } from '../../content/slideLabels'
@@ -20,6 +21,7 @@ const agendaItems = computed(() =>
     .map((entry) => getSlideLabel(entry))
     .filter(Boolean) as string[],
 )
+const cardArrowFaIcon = computed(() => props.slide.content?.card_arrow_fa_icon ?? 'fa-chevron-right')
 </script>
 
 <template>
@@ -46,7 +48,7 @@ const agendaItems = computed(() =>
       >
         <div class="number-badge">{{ String(index + 1).padStart(2, '0') }}</div>
         <p class="card-text">{{ item }}</p>
-        <FontAwesomeIcon icon="chevron-right" class="card-arrow" />
+        <FaIcon :fa-icon="cardArrowFaIcon" class="card-arrow" />
       </SurfaceCard>
     </div>
   </StandardSlideLayout>

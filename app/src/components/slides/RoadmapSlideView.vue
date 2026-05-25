@@ -46,6 +46,10 @@ const timelineStages = computed(() =>
 )
 const activeStage = computed(() => stages.value?.[props.slide.content.stage])
 const roadmapLabels = computed(() => resolveRoadmapLabels(props.slide.content))
+const itemFaIcon = computed(() => props.slide.content.item_fa_icon ?? 'fa-chevron-right')
+const focusAreasFaIcon = computed(() => props.slide.content.focus_areas_fa_icon ?? 'fa-bullseye')
+const themeFaIcon = computed(() => props.slide.content.theme_fa_icon ?? 'fa-chevron-right')
+const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon ?? 'fa-github')
 </script>
 
 <template>
@@ -71,13 +75,14 @@ const roadmapLabels = computed(() => resolveRoadmapLabels(props.slide.content))
         <section class="detail-card detail-card--primary">
           <p v-if="activeStage?.label" class="card-eyebrow">{{ activeStage.label }}</p>
           <h2 v-if="roadmapLabels.deliverables" class="card-title">{{ roadmapLabels.deliverables }}</h2>
-          <ContentList :items="slide.content.items" marker="icon" icon="chevron-right" class="detail-list" />
+          <ContentList :items="slide.content.items" marker="icon" :fa-icon="itemFaIcon" class="detail-list" />
         </section>
 
         <section class="detail-card detail-card--secondary">
-          <SectionHeading v-if="roadmapLabels.focusAreas" icon="bullseye" :title="roadmapLabels.focusAreas" />
+          <SectionHeading v-if="roadmapLabels.focusAreas" :fa-icon="focusAreasFaIcon" :title="roadmapLabels.focusAreas" />
           <KeyValueRows
             :rows="slide.content.themes.map((theme) => ({ key: theme.category, value: theme.target }))"
+            :value-fa-icon="themeFaIcon"
             class="themes-grid"
           />
         </section>
@@ -87,7 +92,7 @@ const roadmapLabels = computed(() => resolveRoadmapLabels(props.slide.content))
         v-if="roadmapLabels.footerLink"
         class="footer-link"
         :href="site.links.repository.url"
-        :icon="['fab', 'github']"
+        :fa-icon="footerLinkFaIcon"
         :label="roadmapLabels.footerLink"
       />
     </div>

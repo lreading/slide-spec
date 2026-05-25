@@ -1,4 +1,5 @@
 import { SLIDE_SPEC_SCHEMA_VERSION } from '../schema-version'
+import { isFontAwesomeIcon } from '../fontawesome'
 
 export function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
@@ -22,6 +23,17 @@ export function assertNonBlankString(value: unknown, path: string): asserts valu
 export function assertOptionalString(value: unknown, path: string): void {
   if (value !== undefined) {
     assertNonBlankString(value, path)
+  }
+}
+
+export function assertFontAwesomeIcon(value: unknown, path: string): asserts value is string {
+  assertNonBlankString(value, path)
+  assert(isFontAwesomeIcon(value), `${path} must be a supported Font Awesome icon.`)
+}
+
+export function assertOptionalFontAwesomeIcon(value: unknown, path: string): void {
+  if (value !== undefined) {
+    assertFontAwesomeIcon(value, path)
   }
 }
 

@@ -29,7 +29,7 @@ export const documentationSections: DocumentationSection[] = [
         description: 'Core mental model for content structure, template-driven slides, generated data, and validation.',
       },
       {
-        path: '/presentation-mode',
+        path: '/presenting',
         title: 'Presentation mode guide',
         description: 'How slide navigation, viewport mode, fullscreen mode, keyboard controls, and callout persistence work.',
       },
@@ -62,6 +62,16 @@ export const documentationSections: DocumentationSection[] = [
         path: '/schema/generated',
         title: 'generated.yaml schema',
         description: 'Generated or manually authored metrics, releases, contributors, and other computed content.',
+      },
+    ],
+  },
+  {
+    title: 'Field Reference',
+    resources: [
+      {
+        path: '/reference/fontawesome',
+        title: 'Font Awesome icon reference',
+        description: 'Supported fa_icon values, accepted aliases, and workspace Font Awesome package versions.',
       },
     ],
   },

@@ -17,6 +17,8 @@ presentation:
       enabled: true
       title: Agenda
       subtitle: What this briefing covers
+      content:
+        card_arrow_fa_icon: fa-arrow-right
     - template: section-list-grid
       enabled: true
       title: What shipped
@@ -24,16 +26,19 @@ presentation:
       content:
         sections:
           - title: Launch workflow
+            fa_icon: fa-check-circle
             bullets:
               - Starter checklists now include task ownership and sign-off states.
               - PDF exports now preserve section grouping for external reviews.
               - Deployment notes are easier to scan on large screens.
           - title: Documentation
+            fa_icon: fa-book
             bullets:
               - New rollout docs cover shared templates and review-mode exports.
               - Migration notes now map old checklist fields to the new schema.
               - Internal examples now match the live generated data model.
           - title: Quality
+            fa_icon: fa-wrench
             bullets:
               - Shared rendering components now have broader test coverage.
               - Example data fixtures were refreshed to match the current schema.
@@ -45,6 +50,7 @@ presentation:
       content:
         latest_badge_label: Latest
         footer_link_label: Browse the release archive
+        footer_link_fa_icon: fa-github
         featured_release_ids:
           - starter-kit-v2
           - export-layout-v1
@@ -64,6 +70,8 @@ presentation:
         deliverables_heading: Key deliverables
         focus_areas_heading: Focus areas
         footer_link_label: View roadmap on GitHub
+        item_fa_icon: fa-check
+        focus_areas_fa_icon: fa-bullseye
         stages:
           completed:
             label: Completed
@@ -94,8 +102,10 @@ presentation:
         banner_prefix: Thanks to
         contributors_link_label: contributors
         banner_suffix: who handled product delivery, export polish, and rollout docs this season.
+        banner_fa_icon: fa-heart
         spotlight:
           - login: ava-product
+            fa_icon: fa-user-astronaut
             summary: Defined the starter-kit structure and coordinated the rollout checklist overhaul.
           - login: mo-rendering
             summary: Improved export polish, spacing, and rendering behavior for PDF output.
@@ -110,6 +120,11 @@ presentation:
         stats_heading: This period
         trend_suffix: vs previous period
         show_deltas: true
+        stat_fa_icons:
+          - fa-star
+          - fa-check-circle
+          - fa-code-branch
+          - fa-user-plus
         stat_keys:
           - stars
           - issues_closed
@@ -117,6 +132,7 @@ presentation:
           - new_contributors
         mentions:
           - type: Case study
+            fa_icon: fa-rss
             title: The customer rollout playbook now includes the new checklist workflow and export review cadence.
             url_label: Read the guide
             url: https://example.com/docs/rollout-playbook
@@ -146,14 +162,17 @@ presentation:
         footer_text: Contribution options stay lightweight on purpose.
         cards:
           - title: Review docs
+            fa_icon: fa-book
             description: Tighten rollout notes, migration steps, and operator checklists before the next update ships.
             url_label: Open docs backlog
             url: https://example.com/docs/backlog
           - title: Test templates
+            fa_icon: fa-check
             description: Run a real project through the starter kit and record anything that feels unclear or repetitive.
             url_label: Report template feedback
             url: https://example.com/feedback/templates
           - title: Improve exports
+            fa_icon: fa-wrench
             description: Review generated PDFs and suggest improvements to spacing, hierarchy, and readability.
             url_label: Share export feedback
             url: https://example.com/feedback/exports
@@ -163,3 +182,6 @@ presentation:
         heading: Thank you
         message: Keep the schema honest, keep the examples real, and the slides stay easy to trust.
         quote: YAML in, static site out.
+        repository_fa_icon: fa-github
+        docs_fa_icon: fa-book
+        community_fa_icon: fa-globe

@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import FaIcon from '../ui/FaIcon.vue'
 import MetricStatCard from '../ui/MetricStatCard.vue'
 import SectionHeading from '../ui/SectionHeading.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
@@ -20,8 +21,8 @@ const props = defineProps<{
   slideTotal: number
 }>()
 
-const mentionIcons = ['microphone-alt', 'rss', 'podcast']
-const statIcons = ['star', 'check-circle', 'code-branch', 'user-plus']
+const mentionFaIcons = ['fa-microphone-alt', 'fa-rss', 'fa-podcast']
+const statFaIcons = ['fa-star', 'fa-check-circle', 'fa-code-branch', 'fa-user-plus']
 
 function formatTrendLabel(
   previous: number,
@@ -51,7 +52,7 @@ function getTrendDirection(delta: number): 'up' | 'down' {
 const stats = computed(() =>
   props.slide.content.stat_keys.map((key, index) => ({
     ...props.generated.stats[key],
-    icon: statIcons[index],
+    faIcon: props.slide.content.stat_fa_icons?.[index] ?? statFaIcons[index] ?? 'fa-star',
     trendDirection: getTrendDirection(props.generated.stats[key].delta),
     trend: props.slide.content.show_deltas === false
       ? undefined
@@ -66,10 +67,15 @@ const stats = computed(() =>
 const mentionCards = computed(() =>
   props.slide.content.mentions.map((mention, index) => ({
     ...mention,
-    icon: mentionIcons[index] ?? 'rss',
+    faIcon: mention.fa_icon ?? mentionFaIcons[index] ?? 'fa-rss',
+    linkFaIcon: mention.link_fa_icon ?? 'fa-external-link-alt',
     isLinked: Boolean(mention.url),
   })),
 )
+const sectionHeadingFaIcon = computed(() => props.slide.content.section_heading_fa_icon ?? 'fa-bullhorn')
+const statsHeadingFaIcon = computed(() => props.slide.content.stats_heading_fa_icon ?? 'fa-chart-line')
+const trendUpFaIcon = computed(() => props.slide.content.trend_up_fa_icon ?? 'fa-arrow-up')
+const trendDownFaIcon = computed(() => props.slide.content.trend_down_fa_icon ?? 'fa-arrow-down')
 </script>
 
 <template>
@@ -84,7 +90,7 @@ const mentionCards = computed(() =>
       <div class="left-column">
         <SectionHeading
           v-if="slide.content.section_heading"
-          :icon="'bullhorn'"
+          :fa-icon="sectionHeadingFaIcon"
           :title="slide.content.section_heading"
         />
         <div class="mentions-list">
@@ -100,10 +106,10 @@ const mentionCards = computed(() =>
             radius="md"
             padding="20px"
           >
-            <div class="mention-type"><FontAwesomeIcon :icon="mention.icon" /> {{ mention.type }}</div>
+            <div class="mention-type"><FaIcon :fa-icon="mention.faIcon" /> {{ mention.type }}</div>
             <h3 class="mention-title">{{ mention.title }}</h3>
             <div v-if="mention.url && mention.url_label" class="mention-link">
-              <FontAwesomeIcon icon="external-link-alt" /> {{ mention.url_label }}
+              <FaIcon :fa-icon="mention.linkFaIcon" /> {{ mention.url_label }}
             </div>
           </SurfaceCard>
         </div>
@@ -112,7 +118,7 @@ const mentionCards = computed(() =>
       <div class="right-column">
         <SectionHeading
           v-if="slide.content.stats_heading"
-          :icon="'chart-line'"
+          :fa-icon="statsHeadingFaIcon"
           :title="slide.content.stats_heading"
         />
         <div class="stats-grid">
@@ -120,11 +126,13 @@ const mentionCards = computed(() =>
             v-for="stat in stats"
             :key="stat.label"
             class="stat-card"
-            :icon="stat.icon"
+            :fa-icon="stat.faIcon"
             :value="stat.current.toLocaleString()"
             :label="stat.label"
             :trend="stat.trend"
             :trend-direction="stat.trendDirection"
+            :trend-up-fa-icon="trendUpFaIcon"
+            :trend-down-fa-icon="trendDownFaIcon"
           />
         </div>
       </div>

@@ -7,7 +7,7 @@ describe('IconBadge', () => {
   it('renders a circular icon badge with defaults', () => {
     const wrapper = mount(IconBadge, {
       props: {
-        icon: 'star',
+        faIcon: 'fa-star',
       },
     })
 
@@ -18,7 +18,7 @@ describe('IconBadge', () => {
   it('supports rounded badges and custom visual values', () => {
     const wrapper = mount(IconBadge, {
       props: {
-        icon: ['fab', 'github'],
+        faIcon: 'fa-github',
         shape: 'rounded',
         size: '100px',
         iconSize: '40px',

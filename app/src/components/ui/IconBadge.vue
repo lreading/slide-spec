@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 
+import FaIcon from './FaIcon.vue'
+
 defineOptions({
   inheritAttrs: false,
 })
 
 const props = withDefaults(
   defineProps<{
-    icon: string | [string, string]
+    faIcon: string
     shape?: 'circle' | 'rounded'
     size?: string
     iconSize?: string
@@ -36,7 +38,7 @@ const styleVars = computed(() => ({
 
 <template>
   <div class="icon-badge" :class="`icon-badge--${shape}`" :style="styleVars" v-bind="$attrs">
-    <FontAwesomeIcon :icon="icon" class="icon-badge__icon" />
+    <FaIcon :fa-icon="faIcon" class="icon-badge__icon" />
   </div>
 </template>
 

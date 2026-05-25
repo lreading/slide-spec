@@ -4,6 +4,7 @@ import { validateTemplateSlide } from './templates/validation'
 import {
   assert,
   assertBoolean,
+  assertOptionalFontAwesomeIcon,
   assertNoUnexpectedKeys,
   assertNonBlankString,
   assertNumber,
@@ -46,7 +47,7 @@ function assertProjectBadge(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNoUnexpectedKeys(value, ['label', 'fa_icon', 'icon_position'], path)
   assertOptionalString(value.label, `${path}.label`)
-  assertOptionalString(value.fa_icon, `${path}.fa_icon`)
+  assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
   assertOptionalString(value.icon_position, `${path}.icon_position`)
   assert(value.label !== undefined || value.fa_icon !== undefined, `${path} must include label or fa_icon.`)
   if (value.icon_position !== undefined) {
@@ -304,10 +305,6 @@ function validateSlide(value: unknown, path: string): void {
   if (value.template === 'agenda') {
     if (value.content !== undefined) {
       assert(isRecord(value.content), `${path}.content must be an object.`)
-      assert(
-        Object.keys(value.content).length === 0,
-        `${path}.content must be omitted or an empty object for agenda slides.`,
-      )
     }
   } else {
     assert(isRecord(value.content), `${path}.content must be an object.`)

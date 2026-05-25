@@ -1,4 +1,5 @@
 import type { SiteContent } from '../types/content'
+import { normalizeFontAwesomeIcon } from '../../../shared/src/fontawesome'
 
 export interface ProjectBadgeDisplay {
   label?: string
@@ -11,13 +12,7 @@ const normalizeIconClass = (faIcon?: string): string | undefined => {
     return undefined
   }
 
-  const trimmed = faIcon.trim()
-
-  if (trimmed.includes(' ')) {
-    return trimmed
-  }
-
-  return `fas ${trimmed}`
+  return normalizeFontAwesomeIcon(faIcon)
 }
 
 export const getProjectBadgeDisplay = (site: SiteContent): ProjectBadgeDisplay | null => {

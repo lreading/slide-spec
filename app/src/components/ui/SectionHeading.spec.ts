@@ -8,7 +8,7 @@ describe('SectionHeading', () => {
     const wrapper = mount(SectionHeading, {
       props: {
         title: 'Community Activity',
-        icon: 'bullhorn',
+        faIcon: 'fa-bullhorn',
       },
     })
 

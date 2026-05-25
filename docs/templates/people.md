@@ -19,8 +19,12 @@ Contributor spotlight cards. Each `spotlight` entry is resolved against `generat
     banner_prefix: Thanks to
     contributors_link_label: contributors
     banner_suffix: who drove this release forward.
+    github_fa_icon: fa-github
+    quote_fa_icon: fa-quote-left
+    banner_fa_icon: fa-heart
     spotlight:
       - login: ava-product
+        fa_icon: fa-user-astronaut
         summary: Defined the starter-kit structure and led the checklist overhaul.
       - login: mo-rendering
         summary: Improved export polish and PDF spacing.
@@ -67,6 +71,9 @@ generated:
 | `content.banner_prefix` | | string |
 | `content.contributors_link_label` | | string |
 | `content.banner_suffix` | | string |
+| `content.github_fa_icon` | | string |
+| `content.quote_fa_icon` | | string |
+| `content.banner_fa_icon` | | string |
 | `content.spotlight` | yes | array |
 
 ### `content.spotlight[]`
@@ -75,5 +82,8 @@ generated:
 | --- | --- | --- |
 | `login` | yes | string |
 | `summary` | yes | string |
+| `fa_icon` | | string |
 
 If a `login` has no match in `generated.contributors.authors[]`, the card renders using the login as the display name.
+
+Icon defaults are `fa-user-astronaut`, `fa-user-ninja`, and `fa-user-secret` for profile cards, `fa-github` for handles, `fa-quote-left` for quote decoration, and `fa-heart` for the banner. Additional profile cards default to `fa-user-secret`. Icon fields use supported values from the [Font Awesome icon reference](/reference/fontawesome).

@@ -94,7 +94,7 @@
       ],
       "properties": {
         "label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
-        "fa_icon": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+        "fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
         "icon_position": { "enum": ["before", "after"] }
       }
     },

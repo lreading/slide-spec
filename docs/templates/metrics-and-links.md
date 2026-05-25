@@ -20,6 +20,13 @@ Two-column layout: authored mention cards on the left, metric tiles on the right
     stats_heading: This period
     trend_suffix: vs previous period
     show_deltas: true
+    section_heading_fa_icon: fa-bullhorn
+    stats_heading_fa_icon: fa-chart-line
+    stat_fa_icons:
+      - fa-star
+      - fa-check-circle
+      - fa-code-branch
+      - fa-user-plus
     stat_keys:
       - stars
       - issues_closed
@@ -27,6 +34,8 @@ Two-column layout: authored mention cards on the left, metric tiles on the right
       - new_contributors
     mentions:
       - type: Case study
+        fa_icon: fa-rss
+        link_fa_icon: fa-external-link-alt
         title: The rollout playbook now includes the new checklist workflow.
         url_label: Read the guide
         url: https://example.com/docs/rollout-playbook
@@ -81,6 +90,11 @@ generated:
 | `content.stats_heading` | | string |
 | `content.show_deltas` | | boolean |
 | `content.trend_suffix` | | string |
+| `content.section_heading_fa_icon` | | string |
+| `content.stats_heading_fa_icon` | | string |
+| `content.stat_fa_icons` | | string[] |
+| `content.trend_up_fa_icon` | | string |
+| `content.trend_down_fa_icon` | | string |
 
 ### `content.mentions[]`
 
@@ -90,5 +104,9 @@ generated:
 | `title` | yes | string |
 | `url_label` | | string |
 | `url` | | string |
+| `fa_icon` | | string |
+| `link_fa_icon` | | string |
 
 `url` and `url_label` are paired: set both or omit both. Mentions without links render as plain text cards.
+
+Icon defaults are `fa-bullhorn` for the mentions heading, `fa-chart-line` for the stats heading, `fa-microphone-alt`, `fa-rss`, and `fa-podcast` for mention cards, `fa-external-link-alt` for mention links, `fa-star`, `fa-check-circle`, `fa-code-branch`, and `fa-user-plus` for stat cards, and `fa-arrow-up` / `fa-arrow-down` for trends. Additional mentions default to `fa-rss`; additional stats default to `fa-star`. Icon fields use supported values from the [Font Awesome icon reference](/reference/fontawesome).

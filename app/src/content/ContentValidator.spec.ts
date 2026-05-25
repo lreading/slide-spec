@@ -483,7 +483,21 @@ describe('ContentValidator', () => {
     expect(() => validator.validatePresentationDocument(document)).not.toThrow()
   })
 
-  it('rejects agenda slides with non-empty content', () => {
+  it('accepts agenda slides with supported icon content', () => {
+    const document = createValidPresentationDocument()
+    document.presentation.slides = [
+      {
+        template: 'agenda',
+        enabled: true,
+        title: 'Agenda',
+        content: { card_arrow_fa_icon: 'fa-arrow-right' },
+      } as never,
+    ]
+
+    expect(() => validator.validatePresentationDocument(document)).not.toThrow()
+  })
+
+  it('rejects agenda slides with unsupported content', () => {
     const document = createValidPresentationDocument()
     document.presentation.slides = [
       {
@@ -495,7 +509,7 @@ describe('ContentValidator', () => {
     ]
 
     expect(() => validator.validatePresentationDocument(document)).toThrow(
-      'presentation document.presentation.slides[0].content must be omitted or an empty object for agenda slides.',
+      'presentation document.presentation.slides[0].content.unused is not allowed.',
     )
   })
 

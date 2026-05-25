@@ -90,13 +90,9 @@ describe('ContributorSpotlightSlideView', () => {
     const names = wrapper.findAll('.contributor-name').map((node) => node.text())
     const handles = wrapper.findAll('.github-handle').map((node) => node.text())
     const links = wrapper.findAll('.github-handle').map((node) => node.attributes('href'))
-    const icons = wrapper
-      .findAllComponents({ name: 'FontAwesomeIcon' })
-      .map((node) => String(node.props('icon')))
-
     expect(names).toContain('mystery_contributor')
     expect(handles).toContain('@mystery_contributor')
     expect(links).toContain('https://github.com/mystery_contributor')
-    expect(icons).toContain('fa-user-secret')
+    expect(wrapper.find('.fa-user-secret').exists()).toBe(true)
   })
 })

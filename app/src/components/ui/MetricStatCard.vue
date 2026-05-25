@@ -1,13 +1,16 @@
 <script setup lang="ts">
+import FaIcon from './FaIcon.vue'
 import IconBadge from './IconBadge.vue'
 import SurfaceCard from './SurfaceCard.vue'
 
 defineProps<{
-  icon: string | [string, string]
+  faIcon: string
   value: string
   label: string
   trend?: string
   trendDirection?: 'up' | 'down'
+  trendUpFaIcon?: string
+  trendDownFaIcon?: string
 }>()
 </script>
 
@@ -19,17 +22,17 @@ defineProps<{
     radius="md"
     padding="25px 20px"
   >
-    <IconBadge :icon="icon" class="metric-stat-card__icon" size="48px" icon-size="20px" />
+    <IconBadge :fa-icon="faIcon" class="metric-stat-card__icon" size="48px" icon-size="20px" />
     <p class="metric-stat-card__value">{{ value }}</p>
     <p class="metric-stat-card__label">{{ label }}</p>
     <div
       v-if="trend"
       class="metric-stat-card__trend"
       :class="{
-        'metric-stat-card__trend--down': trendDirection === 'down',
+      'metric-stat-card__trend--down': trendDirection === 'down',
       }"
     >
-      <FontAwesomeIcon :icon="trendDirection === 'down' ? 'arrow-down' : 'arrow-up'" />
+      <FaIcon :fa-icon="trendDirection === 'down' ? trendDownFaIcon ?? 'fa-arrow-down' : trendUpFaIcon ?? 'fa-arrow-up'" />
       <span>{{ trend }}</span>
     </div>
   </SurfaceCard>

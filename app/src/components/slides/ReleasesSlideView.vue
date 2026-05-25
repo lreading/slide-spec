@@ -32,6 +32,9 @@ const releases = computed(() =>
 )
 const releasesUrl = computed(() => `${props.site.links.repository.url}/releases`)
 const hasReleases = computed(() => releases.value.length > 0)
+const latestReleaseFaIcon = computed(() => props.slide.content.latest_release_fa_icon ?? 'fa-tag')
+const releaseFaIcon = computed(() => props.slide.content.release_fa_icon ?? 'fa-code-branch')
+const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon ?? 'fa-github')
 </script>
 
 <template>
@@ -51,7 +54,7 @@ const hasReleases = computed(() => releases.value.length > 0)
           class="release-card"
           :href="release.githubUrl"
           :label="release.version"
-          :label-icon="index === 0 ? 'tag' : 'code-branch'"
+          :label-fa-icon="index === 0 ? latestReleaseFaIcon : releaseFaIcon"
           :date="formatter.format(new Date(release.published_at))"
           :items="release.summary_bullets"
           :highlighted="index === 0"
@@ -74,7 +77,7 @@ const hasReleases = computed(() => releases.value.length > 0)
         <FooterActionLink
           class="github-link"
           :href="releasesUrl"
-          :icon="['fab', 'github']"
+          :fa-icon="footerLinkFaIcon"
           :label="slide.content.footer_link_label"
         />
       </div>
