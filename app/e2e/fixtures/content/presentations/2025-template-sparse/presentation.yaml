@@ -27,6 +27,14 @@ presentation:
       title: Releases
       content:
         featured_release_ids: []
+    - template: timeline
+      enabled: true
+      title: Sparse Releases
+      content:
+        featured_release_ids:
+          - v1.2.0
+          - v1.1.0
+          - v1.0.0
     - template: progress-timeline
       enabled: true
       title: Roadmap

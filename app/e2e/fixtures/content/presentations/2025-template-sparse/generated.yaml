@@ -6,7 +6,28 @@ generated:
     start: 2025-07-01
     end: 2025-09-30
   stats: {}
-  releases: []
+  releases:
+    - id: v1.2.0
+      version: v1.2.0
+      published_at: 2025-09-15T10:00:00Z
+      url: https://github.com/example-org/aurora-notes/releases/tag/v1.2.0
+      summary_bullets:
+        - Fixed export defaults.
+        - Updated docs.
+    - id: v1.1.0
+      version: v1.1.0
+      published_at: 2025-08-20T10:00:00Z
+      url: https://github.com/example-org/aurora-notes/releases/tag/v1.1.0
+      summary_bullets:
+        - Added timeline examples.
+        - Improved validation.
+    - id: v1.0.0
+      version: v1.0.0
+      published_at: 2025-07-10T10:00:00Z
+      url: https://github.com/example-org/aurora-notes/releases/tag/v1.0.0
+      summary_bullets:
+        - Published the first template set.
+        - Added starter content.
   contributors:
     total: 0
     authors: []
