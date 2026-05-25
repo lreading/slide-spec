@@ -1,6 +1,6 @@
 # Progress Timeline
 
-Focuses a single stage. Each slide carries its own stage headings and four stage strip entries in `content`. The progress strip shows all four stages; the detail columns use the slide's own `items` and `themes` for the active stage only.
+Focuses a single stage. Each slide carries its own stage headings and stage strip entries in `content`. The progress strip shows the authored stages in order; the detail columns use the slide's own `items` and `themes` for the active stage only.
 
 <figure class="template-doc-shot">
   <img src="/screenshots/template-progress-timeline-reference.png" alt="Progress timeline slide showing roadmap stages with the active stage expanded" />
@@ -13,10 +13,10 @@ Focuses a single stage. Each slide carries its own stage headings and four stage
 ```yaml
 - template: progress-timeline
   enabled: true
-  title: "Roadmap: Completed"
-  subtitle: Delivered work
+  title: "Roadmap: 6 Months"
+  subtitle: Current roadmap focus
   content:
-    stage: completed
+    stage: 6-months
     deliverables_heading: Key deliverables
     focus_areas_heading: Focus areas
     footer_link_label: View roadmap on GitHub
@@ -25,18 +25,15 @@ Focuses a single stage. Each slide carries its own stage headings and four stage
     theme_fa_icon: fa-chevron-right
     footer_link_fa_icon: fa-github
     stages:
-      completed:
-        label: Completed
-        summary: Work that shipped during this period.
-      in-progress:
-        label: In Progress
-        summary: Active work continuing into the next cycle.
-      planned:
-        label: Planned
-        summary: Scoped for the next cycle.
-      future:
-        label: Future
-        summary: Depends on the current architecture pass.
+      3-months:
+        label: 3 Months
+        summary: Stabilize adoption.
+      6-months:
+        label: 6 Months
+        summary: Expand core workflows.
+      12-months:
+        label: 12 Months
+        summary: Scale the operating model.
     items:
       - Published a new starter kit for launch checklists.
       - Added exportable PDF summaries.
@@ -65,7 +62,7 @@ If `subtitle` is omitted, the active stage's `summary` is used instead.
 | --- | --- | --- | --- |
 | `title` | yes | string | |
 | `subtitle` | | string | |
-| `content.stage` | yes | string | `completed`, `in-progress`, `planned`, `future` |
+| `content.stage` | yes | string | Must match one key in `content.stages` |
 | `content.deliverables_heading` | | string | |
 | `content.focus_areas_heading` | | string | |
 | `content.footer_link_label` | | string | |
@@ -73,10 +70,10 @@ If `subtitle` is omitted, the active stage's `summary` is used instead.
 | `content.focus_areas_fa_icon` | | string | Defaults to `fa-bullseye` |
 | `content.theme_fa_icon` | | string | Defaults to `fa-chevron-right` |
 | `content.footer_link_fa_icon` | | string | Defaults to `fa-github` |
-| `content.stages` | yes | object | Four stage strip entries |
+| `content.stages` | yes | object | 2 to 6 stage strip entries, rendered in authored order |
 | `content.items` | yes | string[] | Active stage items |
 | `content.themes` | yes | array | Active stage themes |
 
-The progress timeline schema is documented in [presentation.yaml](/schema/presentation#progress-timeline).
+Stage keys may use the existing `completed`, `in-progress`, `planned`, and `future` shape, or custom labels such as `3-months`, `6-months`, and `12-months`. The progress timeline schema is documented in [presentation.yaml](/schema/presentation#progress-timeline).
 
 Icon fields use supported values from the [Font Awesome icon reference](/reference/fontawesome).

@@ -2,6 +2,30 @@ import { describe, expect, it } from 'vitest'
 
 import { validateTemplateSlide } from './validation'
 
+const validRoadmapStages = {
+  completed: { label: 'Done', summary: 'Completed work' },
+  'in-progress': { label: 'Now', summary: 'Current work' },
+  planned: { label: 'Next', summary: 'Planned work' },
+  future: { label: 'Later', summary: 'Future work' },
+} as const
+
+const validProgressTimelineSlide = {
+  title: 'Progress',
+  content: {
+    stage: 'planned',
+    deliverables_heading: 'Deliverables',
+    focus_areas_heading: 'Focus',
+    footer_link_label: 'Roadmap',
+    item_fa_icon: 'fa-chevron-right',
+    focus_areas_fa_icon: 'fa-bullseye',
+    theme_fa_icon: 'fa-check',
+    footer_link_fa_icon: 'fa-github',
+    stages: validRoadmapStages,
+    items: ['Ship it'],
+    themes: [{ category: 'Quality', target: 'Keep gates green' }],
+  },
+} as const
+
 describe('template validation', () => {
   it('accepts every supported template shape', () => {
     const validSlides = {
@@ -32,27 +56,7 @@ describe('template validation', () => {
           featured_release_ids: ['v1'],
         },
       },
-      'progress-timeline': {
-        title: 'Progress',
-        content: {
-          stage: 'planned',
-          deliverables_heading: 'Deliverables',
-          focus_areas_heading: 'Focus',
-          footer_link_label: 'Roadmap',
-          item_fa_icon: 'fa-chevron-right',
-          focus_areas_fa_icon: 'fa-bullseye',
-          theme_fa_icon: 'fa-check',
-          footer_link_fa_icon: 'fa-github',
-          stages: {
-            completed: { label: 'Done', summary: 'Completed work' },
-            'in-progress': { label: 'Now', summary: 'Current work' },
-            planned: { label: 'Next', summary: 'Planned work' },
-            future: { label: 'Later', summary: 'Future work' },
-          },
-          items: ['Ship it'],
-          themes: [{ category: 'Quality', target: 'Keep gates green' }],
-        },
-      },
+      'progress-timeline': validProgressTimelineSlide,
       people: {
         title: 'People',
         content: {
@@ -147,8 +151,18 @@ describe('template validation', () => {
       validateTemplateSlide('section-title', { content: { title: 'Title', subtitle: 'Support' } }, 'slides[0]'),
     ).not.toThrow()
     expect(() =>
-      validateTemplateSlide('progress-timeline', { title: 'Progress', content: { stage: 'blocked' } }, 'slides[1]'),
-    ).toThrow('slides[1].content.stage must be one of completed, in-progress, planned, or future.')
+      validateTemplateSlide(
+        'progress-timeline',
+        {
+          ...validProgressTimelineSlide,
+          content: {
+            ...validProgressTimelineSlide.content,
+            stage: 'blocked',
+          },
+        },
+        'slides[1]',
+      ),
+    ).toThrow('slides[1].content.stage must match one of the keys in slides[1].content.stages.')
     expect(() =>
       validateTemplateSlide('metrics-and-links', { title: 'Metrics', content: { stat_keys: [], mentions: [{ type: 'post', title: 'Post', url: 'https://example.test' }] } }, 'slides[2]'),
     ).toThrow('slides[2].content.mentions[0] must provide url and url_label together.')

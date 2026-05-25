@@ -294,7 +294,7 @@ export interface ContentSection {
   fa_icon?: string
 }
 
-export type RoadmapStageStatus = 'completed' | 'in-progress' | 'planned' | 'future'
+export type RoadmapStageStatus = string
 
 export interface RoadmapTheme {
   category: string

@@ -319,6 +319,9 @@ describe('template validation', () => {
       title: 'Roadmap',
       content: {
         stage: 'active',
+        stages: validRoadmapStages,
+        items: [],
+        themes: [],
       },
     },
     people: {
@@ -387,7 +390,7 @@ describe('template validation', () => {
       'section-list-grid': 'slides[section-list-grid].content.sections must be an array.',
       timeline: 'slides[timeline].content.featured_release_ids must be an array.',
       'progress-timeline':
-        'slides[progress-timeline].content.stage must be one of completed, in-progress, planned, or future.',
+        'slides[progress-timeline].content.stage must match one of the keys in slides[progress-timeline].content.stages.',
       people: 'slides[people].content.spotlight[0].summary must be a string.',
       'metrics-and-links':
         'slides[metrics-and-links].content.mentions[0] must provide url and url_label together.',
@@ -426,5 +429,30 @@ describe('template validation', () => {
         'slides[metrics-and-links]',
       ),
     ).toThrow('slides[metrics-and-links].content.show_deltas must be a boolean.')
+  })
+
+  it('accepts progress-timeline slides with three authored stages', () => {
+    const definition = getSlideTemplateDefinition('progress-timeline')
+
+    expect(() =>
+      definition.validate(
+        {
+          template: 'progress-timeline',
+          enabled: true,
+          title: 'Roadmap',
+          content: {
+            stage: '6-months',
+            stages: {
+              '3-months': { label: '3 Months', summary: 'Stabilize adoption.' },
+              '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
+              '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
+            },
+            items: ['Measure adoption'],
+            themes: [{ category: 'Adoption', target: 'Make progress explicit' }],
+          },
+        },
+        'slides[progress-timeline]',
+      ),
+    ).not.toThrow()
   })
 })
