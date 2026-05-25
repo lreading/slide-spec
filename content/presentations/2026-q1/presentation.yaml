@@ -88,9 +88,6 @@ presentation:
             label: Planned
             summary: The published roadmap shifts next-step planning toward enterprise readiness, better UX, and automation-friendly
               workflows.
-          future:
-            label: Future
-            summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
         items:
           - Reusable briefing templates landed for roadmap, release, and community updates.
           - Aurora Notes' content manifest gained clearer publication metadata.

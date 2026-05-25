@@ -63,6 +63,43 @@ describe('RoadmapSlideView', () => {
     expect(wrapper.find('.footer-link').exists()).toBe(false)
   })
 
+  it('renders timeline stages from authored stage keys', () => {
+    const slide = roadmapSlides[0]
+
+    if (!slide || slide.template !== 'progress-timeline') {
+      throw new Error('Expected roadmap slide in fixture data')
+    }
+
+    const wrapper = mount(RoadmapSlideView, {
+      props: {
+        presentation: record.presentation,
+        site: contentRepository.getSiteContent(),
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            stage: '6-months',
+            stages: {
+              '3-months': { label: '3 Months', summary: 'Stabilize adoption.' },
+              '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
+              '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
+            },
+          },
+        },
+        slideNumber: 4,
+        slideTotal: 12,
+      },
+    })
+
+    const timelineItems = wrapper.findAll('.progress-timeline__item')
+
+    expect(timelineItems).toHaveLength(3)
+    expect(timelineItems[0]?.classes()).toContain('progress-timeline__item--viewed')
+    expect(timelineItems[1]?.classes()).toContain('progress-timeline__item--current')
+    expect(timelineItems[2]?.classes()).toContain('progress-timeline__item--upcoming')
+    expect(wrapper.text()).toContain('6 Months')
+  })
+
   it('omits optional roadmap headings and stage eyebrow when slide-local labels are blank', () => {
     const slide = roadmapSlides[2]
 

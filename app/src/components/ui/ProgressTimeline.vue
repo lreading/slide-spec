@@ -16,7 +16,10 @@ defineProps<{
 <template>
   <div class="progress-timeline">
     <div class="progress-timeline__line"></div>
-    <div class="progress-timeline__items">
+    <div
+      class="progress-timeline__items"
+      :style="{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }"
+    >
       <div
         v-for="item in items"
         :key="item.key"
@@ -49,7 +52,6 @@ defineProps<{
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
 

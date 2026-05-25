@@ -225,6 +225,62 @@ describe('public JSON Schemas', () => {
     ])
   })
 
+  it('accepts progress-timeline slides with three authored stages', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'progress-timeline',
+          enabled: true,
+          title: 'Roadmap',
+          content: {
+            stage: '6-months',
+            stages: {
+              '3-months': { label: '3 Months', summary: 'Stabilize adoption.' },
+              '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
+              '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
+            },
+            items: ['Measure adoption'],
+            themes: [{ category: 'Adoption', target: 'Make progress explicit' }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('rejects progress-timeline schemas with too few stage entries', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'progress-timeline',
+          enabled: true,
+          title: 'Roadmap',
+          content: {
+            stage: 'completed',
+            stages: {
+              completed: { label: 'Completed', summary: 'Delivered work.' },
+            },
+            items: ['Measure adoption'],
+            themes: [{ category: 'Adoption', target: 'Make progress explicit' }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document).length).toBeGreaterThan(0)
+  })
+
   it('keeps the public Font Awesome icon schema aligned with runtime validation', async () => {
     const definitions = JSON.parse(await readFile(resolve(publicSchemaRoot, 'schema/defs.schema.json'), 'utf8'))
     const fontAwesomeIconEnum = definitions.$defs.fontAwesomeIcon.enum

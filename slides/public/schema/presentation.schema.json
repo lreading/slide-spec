@@ -198,7 +198,7 @@
               "required": ["stage", "stages", "items", "themes"],
               "additionalProperties": false,
               "properties": {
-                "stage": { "enum": ["completed", "in-progress", "planned", "future"] },
+                "stage": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "deliverables_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "focus_areas_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "footer_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
@@ -208,14 +208,10 @@
                 "footer_link_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "stages": {
                   "type": "object",
-                  "required": ["completed", "in-progress", "planned", "future"],
-                  "additionalProperties": false,
-                  "properties": {
-                    "completed": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
-                    "in-progress": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
-                    "planned": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
-                    "future": { "$ref": "defs.schema.json#/$defs/roadmapStage" }
-                  }
+                  "minProperties": 2,
+                  "maxProperties": 6,
+                  "propertyNames": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                  "additionalProperties": { "$ref": "defs.schema.json#/$defs/roadmapStage" }
                 },
                 "items": { "$ref": "defs.schema.json#/$defs/stringArray" },
                 "themes": {
