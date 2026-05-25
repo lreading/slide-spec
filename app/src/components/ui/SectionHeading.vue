@@ -1,14 +1,16 @@
 <script setup lang="ts">
+import FaIcon from './FaIcon.vue'
+
 defineProps<{
   title: string
-  icon: string | [string, string]
+  faIcon: string
 }>()
 </script>
 
 <template>
   <div class="section-heading">
     <h2 class="section-heading__title">
-      <FontAwesomeIcon :icon="icon" class="section-heading__icon" />
+      <FaIcon :fa-icon="faIcon" class="section-heading__icon" />
       <span>{{ title }}</span>
     </h2>
   </div>

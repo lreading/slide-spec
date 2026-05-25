@@ -106,7 +106,7 @@ Each link object:
 | Field | Required | Type | Notes |
 | --- | --- | --- | --- |
 | `label` | | string | Badge text |
-| `fa_icon` | | string | Font Awesome class (e.g. `fa-code`) |
+| `fa_icon` | | string | Supported Font Awesome icon from the [icon reference](/reference/fontawesome), e.g. `fa-code` |
 | `icon_position` | | string | `before` or `after` |
 
 At least one of `label` or `fa_icon` must be present.

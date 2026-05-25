@@ -158,7 +158,9 @@ export interface SectionTitleSlideContent {
   image_alt?: string
 }
 
-export type AgendaSlideContent = Record<string, never>
+export interface AgendaSlideContent {
+  card_arrow_fa_icon?: string
+}
 
 export interface SectionListGridSlideContent {
   sections: ContentSection[]
@@ -169,6 +171,9 @@ export interface TimelineSlideContent {
   footer_link_label?: string
   empty_state_title?: string
   empty_state_message?: string
+  latest_release_fa_icon?: string
+  release_fa_icon?: string
+  footer_link_fa_icon?: string
   featured_release_ids: string[]
 }
 
@@ -177,6 +182,10 @@ export interface ProgressTimelineSlideContent {
   deliverables_heading?: string
   focus_areas_heading?: string
   footer_link_label?: string
+  item_fa_icon?: string
+  focus_areas_fa_icon?: string
+  theme_fa_icon?: string
+  footer_link_fa_icon?: string
   stages: Record<RoadmapStageStatus, RoadmapStageSummary>
   items: string[]
   themes: RoadmapTheme[]
@@ -186,6 +195,9 @@ export interface PeopleSlideContent {
   banner_prefix?: string
   contributors_link_label?: string
   banner_suffix?: string
+  github_fa_icon?: string
+  quote_fa_icon?: string
+  banner_fa_icon?: string
   spotlight: SpotlightEntry[]
 }
 
@@ -194,12 +206,19 @@ export interface MetricsAndLinksSlideContent {
   stats_heading?: string
   show_deltas?: boolean
   trend_suffix?: string
+  section_heading_fa_icon?: string
+  stats_heading_fa_icon?: string
+  stat_fa_icons?: string[]
+  trend_up_fa_icon?: string
+  trend_down_fa_icon?: string
   stat_keys: string[]
   mentions: CommunityMention[]
 }
 
 export interface ActionCardsSlideContent {
   footer_text?: string
+  footer_fa_icon?: string
+  footer_link_fa_icon?: string
   cards: ContributionCard[]
 }
 
@@ -219,6 +238,9 @@ export interface ClosingSlideContent {
   heading: string
   message: string
   quote?: string
+  repository_fa_icon?: string
+  docs_fa_icon?: string
+  community_fa_icon?: string
 }
 
 export type TitleSlide = SlideBase<'hero', HeroSlideContent>
@@ -269,6 +291,7 @@ export interface PresentationContent {
 export interface ContentSection {
   title: string
   bullets: string[]
+  fa_icon?: string
 }
 
 export type RoadmapStageStatus = 'completed' | 'in-progress' | 'planned' | 'future'
@@ -286,6 +309,7 @@ export interface RoadmapStageSummary {
 export interface SpotlightEntry {
   login: string
   summary: string
+  fa_icon?: string
 }
 
 export interface CommunityMention {
@@ -293,6 +317,8 @@ export interface CommunityMention {
   title: string
   url_label?: string
   url?: string
+  fa_icon?: string
+  link_fa_icon?: string
 }
 
 export interface ContributionCard {
@@ -300,6 +326,8 @@ export interface ContributionCard {
   description: string
   url_label: string
   url: string
+  fa_icon?: string
+  link_fa_icon?: string
 }
 
 export interface PresentationRecord {

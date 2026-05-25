@@ -25,6 +25,9 @@ const props = defineProps<{
 const markLabel = computed(() => resolvePresentationChromeLabel(props.site))
 const mascotUrl = computed(() => assetResolver.resolve(props.site.mascot?.url))
 const mascotAlt = computed(() => props.site.mascot?.alt?.trim() || undefined)
+const repositoryFaIcon = computed(() => props.slide.content.repository_fa_icon ?? 'fa-github')
+const docsFaIcon = computed(() => props.slide.content.docs_fa_icon ?? 'fa-book')
+const communityFaIcon = computed(() => props.slide.content.community_fa_icon ?? 'fa-shield-alt')
 </script>
 
 <template>
@@ -55,19 +58,19 @@ const mascotAlt = computed(() => props.site.mascot?.alt?.trim() || undefined)
       <div class="actions">
         <ResourcePillLink
           :href="site.links.repository.url"
-          :icon="['fab', 'github']"
+          :fa-icon="repositoryFaIcon"
           :eyebrow="site.links.repository.eyebrow"
           :title="site.links.repository.label"
         />
         <ResourcePillLink
           :href="site.links.docs.url"
-          icon="book"
+          :fa-icon="docsFaIcon"
           :eyebrow="site.links.docs.eyebrow"
           :title="site.links.docs.label"
         />
         <ResourcePillLink
           :href="site.links.community.url"
-          icon="shield-alt"
+          :fa-icon="communityFaIcon"
           :eyebrow="site.links.community.eyebrow"
           :title="site.links.community.label"
         />

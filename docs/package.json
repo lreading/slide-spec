@@ -14,6 +14,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "catalog:",
+    "@fortawesome/fontawesome-free": "catalog:",
     "@playwright/test": "catalog:",
     "playwright": "catalog:",
     "tsx": "catalog:",

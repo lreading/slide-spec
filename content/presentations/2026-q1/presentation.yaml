@@ -15,6 +15,8 @@ presentation:
     - template: agenda
       enabled: true
       title: Agenda
+      content:
+        card_arrow_fa_icon: fa-arrow-right
     - template: section-list-grid
       enabled: true
       title: What Happened Since Last Update
@@ -22,6 +24,7 @@ presentation:
       content:
         sections:
           - title: Authoring, templates, and publishing
+            fa_icon: fa-code-branch
             bullets:
               - Reusable briefing templates landed for roadmap, release, and community updates.
               - The content manifest gained clearer metadata for publication windows and owners.
@@ -29,6 +32,7 @@ presentation:
               - Preview routing was tightened for nested presentation paths.
               - The presentation picker now handles larger local archives with predictable ordering.
           - title: Quality, docs, and delivery
+            fa_icon: fa-check-circle
             bullets:
               - Template documentation examples were refreshed to match current rendering behavior.
               - Content validation messages now point authors to the field that needs attention.
@@ -36,6 +40,7 @@ presentation:
               - CI workflow actions were updated to current versions.
               - Contribution guidance now asks for local preview notes before submission.
           - title: Community and usability
+            fa_icon: fa-users
             bullets:
               - Keyboard shortcuts were clarified in the presenter help panel.
               - Empty-state copy was improved for first-run local content.
@@ -49,6 +54,7 @@ presentation:
       content:
         latest_badge_label: Latest
         footer_link_label: View release history on GitHub
+        footer_link_fa_icon: fa-github
         empty_state_title: No tagged releases in this period
         empty_state_message: Q1 work focused on reusable templates, authoring quality, documentation, and release engineering
           improvements rather than a packaged release.
@@ -68,6 +74,8 @@ presentation:
         deliverables_heading: Key deliverables
         focus_areas_heading: Focus areas
         footer_link_label: View full roadmap & milestones on GitHub
+        item_fa_icon: fa-check
+        focus_areas_fa_icon: fa-bullseye
         stages:
           completed:
             label: Completed
@@ -208,8 +216,10 @@ presentation:
         banner_prefix: Special thanks to all
         contributors_link_label: contributors
         banner_suffix: who shipped code, docs, tests, translations, and roadmap work during Q1 2026.
+        banner_fa_icon: fa-heart
         spotlight:
           - login: river-park
+            fa_icon: fa-user-astronaut
             summary: Delivered reusable briefing templates for roadmap and release updates, then followed through with preview
               routing and documentation fixes.
           - login: mint-owl
@@ -224,6 +234,13 @@ presentation:
         section_heading: Community Activity
         stats_heading: Stats This Quarter
         trend_suffix: vs previous period
+        section_heading_fa_icon: fa-bullhorn
+        stats_heading_fa_icon: fa-chart-line
+        stat_fa_icons:
+          - fa-star
+          - fa-check-circle
+          - fa-code-branch
+          - fa-user-plus
         stat_keys:
           - stars
           - issues_closed
@@ -231,6 +248,7 @@ presentation:
           - new_contributors
         mentions:
           - type: Public roadmap
+            fa_icon: fa-rss
             title: Aurora Notes' public planning board opened in March 2026 with themes for maintainability, team readiness,
               UX/accessibility, publishing workflows, and community confidence.
             url_label: Join the GitHub discussion
@@ -265,23 +283,28 @@ presentation:
       subtitle: Practical ways to contribute code, docs, testing, and feedback
       content:
         footer_text: Open Source and Community Driven
+        footer_fa_icon: fa-github
         cards:
           - title: Report Bugs
+            fa_icon: fa-bug
             description: File a reproducible issue with environment details, screenshots, and any project or stack context that helps
               maintainers confirm the problem.
             url_label: Submit an issue
             url: https://github.com/example-org/aurora-notes/issues
           - title: Submit Code
+            fa_icon: fa-code-branch
             description: Pick up a tracked issue, fork the repository, and submit a pull request that includes the manual testing
               now required in the contribution guide.
             url_label: Read CONTRIBUTING.md
             url: https://github.com/example-org/aurora-notes/blob/main/CONTRIBUTING.md
           - title: Improve Docs
+            fa_icon: fa-book
             description: Improve installation docs, schema guidance, deployment notes, or contributor documentation so users can
               adopt Aurora Notes more easily.
             url_label: Edit docs on GitHub
             url: https://github.com/example-org/aurora-notes
           - title: Spread the Word
+            fa_icon: fa-bullhorn
             description: Join the roadmap discussion, share your usage patterns, star the repository, or help connect Aurora Notes
               to adjacent open-source workflows.
             url_label: Share & Star
@@ -292,3 +315,6 @@ presentation:
         heading: Thank you
         message: See you in the next update.
         quote: making project updates easier to share
+        repository_fa_icon: fa-github
+        docs_fa_icon: fa-book
+        community_fa_icon: fa-globe

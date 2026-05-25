@@ -7,7 +7,7 @@ describe('MetricStatCard', () => {
   it('renders value, label, and trend', () => {
     const wrapper = mount(MetricStatCard, {
       props: {
-        icon: 'star',
+        faIcon: 'fa-star',
         value: '1,234',
         label: 'GitHub Stars',
         trend: '+12% vs last Q',
@@ -22,7 +22,7 @@ describe('MetricStatCard', () => {
   it('renders a down trend with the down arrow class when requested', () => {
     const wrapper = mount(MetricStatCard, {
       props: {
-        icon: 'star',
+        faIcon: 'fa-star',
         value: '4',
         label: 'New contributors',
         trend: '-20% vs last presentation',
@@ -38,7 +38,7 @@ describe('MetricStatCard', () => {
   it('omits trend when not provided', () => {
     const wrapper = mount(MetricStatCard, {
       props: {
-        icon: 'star',
+        faIcon: 'fa-star',
         value: '7',
         label: 'Open issues',
       },

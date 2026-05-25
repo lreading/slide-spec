@@ -33,6 +33,7 @@ export default defineConfig({
       { text: 'Quickstart', link: '/quickstart' },
       { text: 'Presenting', link: '/presenting' },
       { text: 'Concepts', link: '/concepts' },
+      { text: 'Reference', link: '/reference/fontawesome', activeMatch: '^/reference' },
       { text: 'Schema', link: '/schema/', activeMatch: '^/schema' },
       { text: 'Templates', link: '/templates/', activeMatch: '^/templates' },
       { text: 'CLI', link: '/cli/', activeMatch: '^/cli' },
@@ -50,6 +51,14 @@ export default defineConfig({
             { text: 'presentations/index.yaml', link: '/schema/presentations-index' },
             { text: 'presentation.yaml', link: '/schema/presentation' },
             { text: 'generated.yaml', link: '/schema/generated' },
+          ],
+        },
+      ],
+      '/reference/': [
+        {
+          text: 'Reference',
+          items: [
+            { text: 'Font Awesome Icons', link: '/reference/fontawesome' },
           ],
         },
       ],

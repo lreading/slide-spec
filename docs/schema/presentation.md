@@ -6,6 +6,8 @@ For a complete example, see the [reference presentation.yaml](https://github.com
 
 Each slide owns its own `content` block. If two slides need the same copy or labels, repeat them on those slides rather than relying on shared presentation-level data.
 
+Icon fields named `fa_icon` or ending in `_fa_icon` accept supported Font Awesome values from the [Font Awesome icon reference](/reference/fontawesome). All icon fields are optional and keep their documented defaults when omitted.
+
 ## Top level
 
 ```yaml
@@ -34,6 +36,10 @@ The [progress-timeline](/templates/progress-timeline) template is self-contained
 | `content.deliverables_heading` | | string |
 | `content.focus_areas_heading` | | string |
 | `content.footer_link_label` | | string |
+| `content.item_fa_icon` | | string |
+| `content.focus_areas_fa_icon` | | string |
+| `content.theme_fa_icon` | | string |
+| `content.footer_link_fa_icon` | | string |
 | `content.stages` | yes | object |
 | `content.items` | yes | string[] |
 | `content.themes` | yes | array of `{ category, target }` |
@@ -90,7 +96,8 @@ Slide-level `title` is not required.
 | Field | Required | Notes |
 | --- | --- | --- |
 | `title` | yes | |
-| `content` | | Omit entirely or pass `{}`. Row text comes from other slides |
+| `content` | | Omit entirely or configure `content.card_arrow_fa_icon`. Row text comes from other slides |
+| `content.card_arrow_fa_icon` | | Defaults to `fa-chevron-right` |
 
 ### section-title
 
@@ -110,6 +117,8 @@ Slide-level `title` is not required.
 
 Each `sections[]` entry: `{ title: string, bullets: string[] }`.
 
+Each `sections[]` entry may also set `fa_icon` to override its badge icon.
+
 ### timeline
 
 | Field | Required | Notes |
@@ -120,6 +129,9 @@ Each `sections[]` entry: `{ title: string, bullets: string[] }`.
 | `content.footer_link_label` | | |
 | `content.empty_state_title` | | |
 | `content.empty_state_message` | | |
+| `content.latest_release_fa_icon` | | Defaults to `fa-tag` |
+| `content.release_fa_icon` | | Defaults to `fa-code-branch` |
+| `content.footer_link_fa_icon` | | Defaults to `fa-github` |
 
 ### progress-timeline
 
@@ -130,35 +142,47 @@ Each `sections[]` entry: `{ title: string, bullets: string[] }`.
 | `content.deliverables_heading` | | |
 | `content.focus_areas_heading` | | |
 | `content.footer_link_label` | | |
+| `content.item_fa_icon` | | Defaults to `fa-chevron-right` |
+| `content.focus_areas_fa_icon` | | Defaults to `fa-bullseye` |
+| `content.theme_fa_icon` | | Defaults to `fa-chevron-right` |
+| `content.footer_link_fa_icon` | | Defaults to `fa-github` |
 | `content.stages` | yes | Four stage strip entries |
 | `content.items` | yes | Active stage items |
 | `content.themes` | yes | Active stage themes |
 
 ### people
 
-| Field | Required |
-| --- | --- |
-| `title` | yes |
-| `content.spotlight` | yes |
-| `content.banner_prefix` | |
-| `content.contributors_link_label` | |
-| `content.banner_suffix` | |
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content.spotlight` | yes | |
+| `content.banner_prefix` | | |
+| `content.contributors_link_label` | | |
+| `content.banner_suffix` | | |
+| `content.github_fa_icon` | | Defaults to `fa-github` |
+| `content.quote_fa_icon` | | Defaults to `fa-quote-left` |
+| `content.banner_fa_icon` | | Defaults to `fa-heart` |
 
-Each `spotlight[]` entry: `{ login: string, summary: string }`.
+Each `spotlight[]` entry: `{ login: string, summary: string }` with optional `fa_icon`.
 
 ### metrics-and-links
 
-| Field | Required |
-| --- | --- |
-| `title` | yes |
-| `content.stat_keys` | yes |
-| `content.mentions` | yes |
-| `content.section_heading` | |
-| `content.stats_heading` | |
-| `content.show_deltas` | |
-| `content.trend_suffix` | |
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content.stat_keys` | yes | |
+| `content.mentions` | yes | |
+| `content.section_heading` | | |
+| `content.stats_heading` | | |
+| `content.show_deltas` | | |
+| `content.trend_suffix` | | |
+| `content.section_heading_fa_icon` | | Defaults to `fa-bullhorn` |
+| `content.stats_heading_fa_icon` | | Defaults to `fa-chart-line` |
+| `content.stat_fa_icons` | | Optional string array matched to `stat_keys` order |
+| `content.trend_up_fa_icon` | | Defaults to `fa-arrow-up` |
+| `content.trend_down_fa_icon` | | Defaults to `fa-arrow-down` |
 
-Each `mentions[]` entry: `{ type: string, title: string }` with optional paired `url` + `url_label`.
+Each `mentions[]` entry: `{ type: string, title: string }` with optional paired `url` + `url_label`, optional `fa_icon`, and optional `link_fa_icon`.
 
 ### image-and-bullets
 
@@ -175,13 +199,15 @@ When present, `image` has shape: `{ src: string, alt?: string, description?: str
 
 ### action-cards
 
-| Field | Required |
-| --- | --- |
-| `title` | yes |
-| `content.cards` | yes |
-| `content.footer_text` | |
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content.cards` | yes | |
+| `content.footer_text` | | |
+| `content.footer_fa_icon` | | Defaults to `fa-github` |
+| `content.footer_link_fa_icon` | | Defaults to `fa-code` |
 
-Each `cards[]` entry: `{ title, description, url_label, url }` (all required strings).
+Each `cards[]` entry: `{ title, description, url_label, url }` (all required strings) with optional `fa_icon` and `link_fa_icon`.
 
 ### closing
 
@@ -190,5 +216,8 @@ Each `cards[]` entry: `{ title, description, url_label, url }` (all required str
 | `content.heading` | yes | |
 | `content.message` | yes | |
 | `content.quote` | | |
+| `content.repository_fa_icon` | | Defaults to `fa-github` |
+| `content.docs_fa_icon` | | Defaults to `fa-book` |
+| `content.community_fa_icon` | | Defaults to `fa-shield-alt` |
 
 Slide-level `title` is not required.

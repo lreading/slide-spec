@@ -15,8 +15,12 @@ Grid of CTA cards with an optional footer strip.
   subtitle: Ways to support the next cycle
   content:
     footer_text: Contribution options stay lightweight on purpose.
+    footer_fa_icon: fa-github
+    footer_link_fa_icon: fa-code
     cards:
       - title: Review docs
+        fa_icon: fa-book
+        link_fa_icon: fa-arrow-right
         description: Tighten rollout notes and operator checklists.
         url_label: Open docs backlog
         url: https://example.com/docs/backlog
@@ -46,6 +50,8 @@ Grid of CTA cards with an optional footer strip.
 | `title` | yes | string |
 | `subtitle` | | string |
 | `content.footer_text` | | string |
+| `content.footer_fa_icon` | | string |
+| `content.footer_link_fa_icon` | | string |
 | `content.cards` | yes | array |
 
 ### `content.cards[]`
@@ -56,3 +62,7 @@ Grid of CTA cards with an optional footer strip.
 | `description` | yes | string |
 | `url_label` | yes | string |
 | `url` | yes | string |
+| `fa_icon` | | string |
+| `link_fa_icon` | | string |
+
+Icon defaults are `fa-bug`, `fa-code-branch`, `fa-book`, and `fa-bullhorn` for cards, `fa-arrow-right`, `fa-arrow-right`, `fa-arrow-right`, and `fa-star` for card links, `fa-github` for the footer strip, and `fa-code` for the footer button. Additional cards default to `fa-star`, and additional card links default to `fa-arrow-right`. Icon fields use supported values from the [Font Awesome icon reference](/reference/fontawesome).

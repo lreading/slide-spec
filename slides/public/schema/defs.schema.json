@@ -17,6 +17,120 @@
         "$ref": "#/$defs/nonBlankString"
       }
     },
+    "fontAwesomeIcon": {
+      "type": "string",
+      "description": "Supported Font Awesome icon. See https://docs.slide-spec.dev/reference/fontawesome.",
+      "enum": [
+        "fa-arrow-down",
+        "fa-solid fa-arrow-down",
+        "fas fa-arrow-down",
+        "fa-arrow-left",
+        "fa-solid fa-arrow-left",
+        "fas fa-arrow-left",
+        "fa-arrow-right",
+        "fa-solid fa-arrow-right",
+        "fas fa-arrow-right",
+        "fa-arrow-up",
+        "fa-solid fa-arrow-up",
+        "fas fa-arrow-up",
+        "fa-book",
+        "fa-solid fa-book",
+        "fas fa-book",
+        "fa-bug",
+        "fa-solid fa-bug",
+        "fas fa-bug",
+        "fa-bullhorn",
+        "fa-solid fa-bullhorn",
+        "fas fa-bullhorn",
+        "fa-bullseye",
+        "fa-solid fa-bullseye",
+        "fas fa-bullseye",
+        "fa-chart-line",
+        "fa-solid fa-chart-line",
+        "fas fa-chart-line",
+        "fa-check",
+        "fa-solid fa-check",
+        "fas fa-check",
+        "fa-check-circle",
+        "fa-solid fa-check-circle",
+        "fas fa-check-circle",
+        "fa-chevron-right",
+        "fa-solid fa-chevron-right",
+        "fas fa-chevron-right",
+        "fa-code",
+        "fa-solid fa-code",
+        "fas fa-code",
+        "fa-code-branch",
+        "fa-solid fa-code-branch",
+        "fas fa-code-branch",
+        "fa-external-link-alt",
+        "fa-solid fa-external-link-alt",
+        "fas fa-external-link-alt",
+        "fa-flask",
+        "fa-solid fa-flask",
+        "fas fa-flask",
+        "fa-globe",
+        "fa-solid fa-globe",
+        "fas fa-globe",
+        "fa-heart",
+        "fa-solid fa-heart",
+        "fas fa-heart",
+        "fa-lock",
+        "fa-solid fa-lock",
+        "fas fa-lock",
+        "fa-microphone-alt",
+        "fa-solid fa-microphone-alt",
+        "fas fa-microphone-alt",
+        "fa-podcast",
+        "fa-solid fa-podcast",
+        "fas fa-podcast",
+        "fa-quote-left",
+        "fa-solid fa-quote-left",
+        "fas fa-quote-left",
+        "fa-rss",
+        "fa-solid fa-rss",
+        "fas fa-rss",
+        "fa-shield-alt",
+        "fa-solid fa-shield-alt",
+        "fas fa-shield-alt",
+        "fa-shield-halved",
+        "fa-solid fa-shield-halved",
+        "fas fa-shield-halved",
+        "fa-star",
+        "fa-solid fa-star",
+        "fas fa-star",
+        "fa-tag",
+        "fa-solid fa-tag",
+        "fas fa-tag",
+        "fa-user-astronaut",
+        "fa-solid fa-user-astronaut",
+        "fas fa-user-astronaut",
+        "fa-user-ninja",
+        "fa-solid fa-user-ninja",
+        "fas fa-user-ninja",
+        "fa-user-plus",
+        "fa-solid fa-user-plus",
+        "fas fa-user-plus",
+        "fa-user-secret",
+        "fa-solid fa-user-secret",
+        "fas fa-user-secret",
+        "fa-users",
+        "fa-solid fa-users",
+        "fas fa-users",
+        "fa-wrench",
+        "fa-solid fa-wrench",
+        "fas fa-wrench",
+        "fa-github",
+        "fa-brands fa-github",
+        "fab fa-github"
+      ]
+    },
+    "fontAwesomeIconArray": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/fontAwesomeIcon"
+      }
+    },
     "link": {
       "type": "object",
       "required": ["label", "url"],
@@ -104,7 +218,8 @@
       "additionalProperties": false,
       "properties": {
         "title": { "$ref": "#/$defs/nonBlankString" },
-        "bullets": { "$ref": "#/$defs/stringArray" }
+        "bullets": { "$ref": "#/$defs/stringArray" },
+        "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" }
       }
     },
     "roadmapStage": {
@@ -131,7 +246,8 @@
       "additionalProperties": false,
       "properties": {
         "login": { "$ref": "#/$defs/nonBlankString" },
-        "summary": { "$ref": "#/$defs/nonBlankString" }
+        "summary": { "$ref": "#/$defs/nonBlankString" },
+        "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" }
       }
     },
     "communityMention": {
@@ -146,7 +262,9 @@
         "type": { "$ref": "#/$defs/nonBlankString" },
         "title": { "$ref": "#/$defs/nonBlankString" },
         "url_label": { "$ref": "#/$defs/nonBlankString" },
-        "url": { "$ref": "#/$defs/nonBlankString" }
+        "url": { "$ref": "#/$defs/nonBlankString" },
+        "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" },
+        "link_fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" }
       }
     },
     "contributionCard": {
@@ -157,7 +275,9 @@
         "title": { "$ref": "#/$defs/nonBlankString" },
         "description": { "$ref": "#/$defs/nonBlankString" },
         "url_label": { "$ref": "#/$defs/nonBlankString" },
-        "url": { "$ref": "#/$defs/nonBlankString" }
+        "url": { "$ref": "#/$defs/nonBlankString" },
+        "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" },
+        "link_fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" }
       }
     }
   }

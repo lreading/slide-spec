@@ -9,7 +9,7 @@ describe('ProjectBadgePill', () => {
       props: {
         badge: {
           label: 'OWASP Lab Project',
-          iconClass: 'fas fa-flask',
+          iconClass: 'fa-solid fa-flask',
           iconPosition: 'before',
         },
       },
@@ -24,7 +24,7 @@ describe('ProjectBadgePill', () => {
       props: {
         badge: {
           label: 'Badge Text',
-          iconClass: 'fas fa-star',
+          iconClass: 'fa-solid fa-star',
           iconPosition: 'after',
         },
       },

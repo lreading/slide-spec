@@ -8,7 +8,7 @@ describe('ResourcePillLink', () => {
     const wrapper = mount(ResourcePillLink, {
       props: {
         href: 'https://example.com',
-        icon: ['fab', 'github'],
+        faIcon: 'fa-github',
         eyebrow: 'Source Code',
         title: 'GitHub Repo',
       },
@@ -23,7 +23,7 @@ describe('ResourcePillLink', () => {
     const wrapper = mount(ResourcePillLink, {
       props: {
         href: 'https://example.com',
-        icon: 'book',
+        faIcon: 'fa-book',
         title: 'Read the Docs',
       },
     })

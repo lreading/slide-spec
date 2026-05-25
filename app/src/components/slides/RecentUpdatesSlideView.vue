@@ -12,7 +12,7 @@ defineProps<{
   slideTotal: number
 }>()
 
-const icons = ['wrench', 'star', 'users']
+const defaultSectionFaIcons = ['fa-wrench', 'fa-star', 'fa-users']
 </script>
 
 <template>
@@ -34,7 +34,7 @@ const icons = ['wrench', 'star', 'users']
         radius="md"
         padding="30px"
       >
-        <IconBadge :icon="icons[index]" class="icon-container" />
+        <IconBadge :fa-icon="section.fa_icon ?? defaultSectionFaIcons[index] ?? 'fa-star'" class="icon-container" />
         <h2 class="card-title">{{ section.title }}</h2>
         <ul class="bullet-list">
           <li v-for="bullet in section.bullets" :key="bullet" class="bullet-item">{{ bullet }}</li>

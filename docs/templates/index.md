@@ -31,6 +31,10 @@ site:
 
 The corner mark combines `site.presentation_chrome.mark_label` with `presentation.subtitle` from the deck.
 
+## Template icons
+
+Templates that render Font Awesome icons expose optional `fa_icon` or `*_fa_icon` fields in their YAML content. Omit these fields to keep the template defaults. Set them only when a slide needs more specific iconography. Supported values are listed in the [Font Awesome icon reference](/reference/fontawesome).
+
 ## Slide structure
 
 Every slide shares this envelope in `presentation.yaml`:

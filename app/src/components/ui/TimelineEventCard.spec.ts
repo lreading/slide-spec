@@ -9,7 +9,7 @@ describe('TimelineEventCard', () => {
       props: {
         href: 'https://example.com/release',
         label: 'v1.0.0',
-        labelIcon: 'tag',
+        labelFaIcon: 'fa-tag',
         date: 'January 1, 2026',
         items: ['One', 'Two'],
         highlighted: true,
@@ -29,7 +29,7 @@ describe('TimelineEventCard', () => {
       props: {
         href: 'https://example.com/release',
         label: 'v0.9.0',
-        labelIcon: ['fab', 'github'],
+        labelFaIcon: 'fa-github',
         date: 'December 1, 2025',
         items: ['Only'],
       },

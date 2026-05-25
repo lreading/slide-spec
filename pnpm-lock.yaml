@@ -341,6 +341,9 @@ importers:
       '@axe-core/playwright':
         specifier: 'catalog:'
         version: 4.11.3(playwright-core@1.60.0)
+      '@fortawesome/fontawesome-free':
+        specifier: 'catalog:'
+        version: 7.2.0
       '@playwright/test':
         specifier: 'catalog:'
         version: 1.60.0

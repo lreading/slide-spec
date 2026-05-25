@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import ContentList from './ContentList.vue'
+import FaIcon from './FaIcon.vue'
 import SurfaceCard from './SurfaceCard.vue'
 
 defineProps<{
   href: string
   label: string
-  labelIcon: string | [string, string]
+  labelFaIcon: string
   date: string
   items: string[]
   highlighted?: boolean
@@ -31,7 +32,7 @@ defineProps<{
     <div class="timeline-event-card__header">
       <div class="timeline-event-card__label-group">
         <span class="timeline-event-card__label">
-          <FontAwesomeIcon :icon="labelIcon" />
+          <FaIcon :fa-icon="labelFaIcon" class="timeline-event-card__label-icon" />
           {{ label }}
         </span>
         <span v-if="badgeLabel" class="timeline-event-card__badge">{{ badgeLabel }}</span>
@@ -99,7 +100,7 @@ defineProps<{
   font: 700 18px/1 var(--font-mono);
 }
 
-.timeline-event-card__label :deep(svg) {
+.timeline-event-card__label-icon {
   margin-right: 10px;
   color: #e8341c;
   font-size: 16px;

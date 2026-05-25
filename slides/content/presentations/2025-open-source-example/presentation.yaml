@@ -17,6 +17,8 @@ presentation:
       enabled: true
       title: Agenda
       subtitle: What this update covers
+      content:
+        card_arrow_fa_icon: fa-arrow-right
     - template: section-list-grid
       enabled: true
       title: What shipped
@@ -24,16 +26,19 @@ presentation:
       content:
         sections:
           - title: Plugin system
+            fa_icon: fa-code-branch
             bullets:
               - Local plugins resolve from the project directory
               - Registry plugins install from the public catalog
               - Lifecycle hooks for init, build, and deploy phases
           - title: Error messages
+            fa_icon: fa-bug
             bullets:
               - Structured output with error codes and fix suggestions
               - Links to relevant documentation in every error
               - Machine-readable JSON output for CI pipelines
           - title: Shell completions
+            fa_icon: fa-wrench
             bullets:
               - Auto-generated completions for bash, zsh, and fish
               - Dynamic completions for project-specific commands
@@ -45,6 +50,8 @@ presentation:
       content:
         latest_badge_label: Latest
         footer_link_label: All releases on GitHub
+        latest_release_fa_icon: fa-tag
+        release_fa_icon: fa-code-branch
         featured_release_ids:
           - v3-2-0
           - v3-1-0
@@ -64,6 +71,8 @@ presentation:
         deliverables_heading: Shipped
         focus_areas_heading: Themes
         footer_link_label: View full roadmap
+        item_fa_icon: fa-check
+        focus_areas_fa_icon: fa-bullseye
         stages:
           completed:
             label: Completed
@@ -94,8 +103,10 @@ presentation:
         banner_prefix: Thanks to all
         contributors_link_label: contributors
         banner_suffix: who helped shape this release.
+        quote_fa_icon: fa-quote-left
         spotlight:
           - login: sarah-plugins
+            fa_icon: fa-user-astronaut
             summary: Designed and implemented the plugin resolution system from scratch.
           - login: kai-errors
             summary: Rewrote the error pipeline to include structured codes and fix suggestions.
@@ -110,6 +121,11 @@ presentation:
         stats_heading: This quarter
         trend_suffix: vs last quarter
         show_deltas: true
+        stat_fa_icons:
+          - fa-star
+          - fa-check-circle
+          - fa-code-branch
+          - fa-user-plus
         stat_keys:
           - stars
           - issues_closed
@@ -117,6 +133,7 @@ presentation:
           - new_contributors
         mentions:
           - type: Blog post
+            fa_icon: fa-rss
             title: How we built the Vortex plugin system
             url_label: Read on the blog
             url: https://vortex-cli.example.com/blog/plugin-system
@@ -146,14 +163,17 @@ presentation:
         footer_text: Every contribution matters, no matter the size.
         cards:
           - title: Write a plugin
+            fa_icon: fa-code
             description: Build a plugin and publish it to the registry. The plugin guide has templates to get started.
             url_label: Plugin guide
             url: https://vortex-cli.example.com/docs/plugins
           - title: Improve docs
+            fa_icon: fa-book
             description: Help us write better guides, fix typos, or add examples for common workflows.
             url_label: Docs backlog
             url: https://github.com/example/vortex-cli/issues?q=label%3Adocs
           - title: Report bugs
+            fa_icon: fa-bug
             description: Found something broken? File an issue with reproduction steps and we will prioritize it.
             url_label: Open an issue
             url: https://github.com/example/vortex-cli/issues/new
@@ -163,3 +183,6 @@ presentation:
         heading: Thank you
         message: Vortex CLI is built by its community. Every issue, PR, and plugin makes it better for everyone.
         quote: Ship tools, not tickets.
+        repository_fa_icon: fa-github
+        docs_fa_icon: fa-book
+        community_fa_icon: fa-users

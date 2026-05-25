@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import FaIcon from './FaIcon.vue'
+
 defineProps<{
   href: string
-  icon: string | [string, string]
+  faIcon: string
   title: string
   eyebrow?: string
 }>()
@@ -9,7 +11,7 @@ defineProps<{
 
 <template>
   <a class="resource-pill-link" :href="href" target="_blank" rel="noreferrer">
-    <FontAwesomeIcon :icon="icon" class="resource-pill-link__icon" />
+    <FaIcon :fa-icon="faIcon" class="resource-pill-link__icon" />
     <div class="resource-pill-link__copy">
       <span v-if="eyebrow" class="resource-pill-link__eyebrow">{{ eyebrow }}</span>
       <span class="resource-pill-link__title">{{ title }}</span>

@@ -9,7 +9,7 @@ describe('ContentList', () => {
       props: {
         items: ['First', 'Second'],
         marker: 'icon',
-        icon: 'chevron-right',
+        faIcon: 'fa-chevron-right',
       },
     })
 

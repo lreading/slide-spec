@@ -20,6 +20,10 @@ Focuses a single stage. Each slide carries its own stage headings and four stage
     deliverables_heading: Key deliverables
     focus_areas_heading: Focus areas
     footer_link_label: View roadmap on GitHub
+    item_fa_icon: fa-check
+    focus_areas_fa_icon: fa-bullseye
+    theme_fa_icon: fa-chevron-right
+    footer_link_fa_icon: fa-github
     stages:
       completed:
         label: Completed
@@ -65,8 +69,14 @@ If `subtitle` is omitted, the active stage's `summary` is used instead.
 | `content.deliverables_heading` | | string | |
 | `content.focus_areas_heading` | | string | |
 | `content.footer_link_label` | | string | |
+| `content.item_fa_icon` | | string | Defaults to `fa-chevron-right` |
+| `content.focus_areas_fa_icon` | | string | Defaults to `fa-bullseye` |
+| `content.theme_fa_icon` | | string | Defaults to `fa-chevron-right` |
+| `content.footer_link_fa_icon` | | string | Defaults to `fa-github` |
 | `content.stages` | yes | object | Four stage strip entries |
 | `content.items` | yes | string[] | Active stage items |
 | `content.themes` | yes | array | Active stage themes |
 
 The progress timeline schema is documented in [presentation.yaml](/schema/presentation#progress-timeline).
+
+Icon fields use supported values from the [Font Awesome icon reference](/reference/fontawesome).

@@ -24,6 +24,8 @@ schemaVersion: 1
 
 The public JSON Schemas are maintained to mirror Slide Spec runtime validation and make editors more useful while you author content. Use `slide-spec validate` as the authoritative project validation path before publishing.
 
+Fields named `fa_icon` or ending in `_fa_icon` validate against the supported [Font Awesome icon reference](/reference/fontawesome).
+
 Use the specific schema for each file when you know the document type:
 
 | File | Schema URL |

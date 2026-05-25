@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
 import CalloutBanner from '../ui/CalloutBanner.vue'
+import FaIcon from '../ui/FaIcon.vue'
 import IconBadge from '../ui/IconBadge.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
@@ -22,7 +23,7 @@ const props = defineProps<{
   slideTotal: number
 }>()
 
-const avatarIcons = ['user-astronaut', 'user-ninja', 'user-secret']
+const avatarFaIcons = ['fa-user-astronaut', 'fa-user-ninja', 'fa-user-secret']
 const contributors = computed(() =>
   props.slide.content.spotlight.map((entry, index) => {
     const contributor = props.generated.contributors.authors.find((author) => author.login === entry.login)
@@ -32,7 +33,7 @@ const contributors = computed(() =>
       name: contributor?.name ?? entry.login,
       handle: `@${entry.login}`,
       profileUrl: `https://github.com/${entry.login}`,
-      icon: avatarIcons[index] ?? 'fa-user-secret',
+      faIcon: entry.fa_icon ?? avatarFaIcons[index] ?? 'fa-user-secret',
     }
   }),
 )
@@ -48,6 +49,9 @@ const showBanner = computed(
     || Boolean(bannerContent.value.linkLabel)
     || Boolean(bannerContent.value.suffix),
 )
+const githubFaIcon = computed(() => props.slide.content.github_fa_icon ?? 'fa-github')
+const quoteFaIcon = computed(() => props.slide.content.quote_fa_icon ?? 'fa-quote-left')
+const bannerFaIcon = computed(() => props.slide.content.banner_fa_icon ?? 'fa-heart')
 </script>
 
 <template>
@@ -72,7 +76,7 @@ const showBanner = computed(
         padding="30px 24px"
       >
         <IconBadge
-          :icon="profile.icon"
+          :fa-icon="profile.faIcon"
           class="avatar-container"
           size="100px"
           icon-size="40px"
@@ -87,17 +91,17 @@ const showBanner = computed(
           target="_blank"
           rel="noreferrer"
         >
-          <FontAwesomeIcon :icon="['fab', 'github']" />
+          <FaIcon :fa-icon="githubFaIcon" />
           <span>{{ profile.handle }}</span>
         </a>
-        <FontAwesomeIcon icon="quote-left" class="quote-icon" />
+        <FaIcon :fa-icon="quoteFaIcon" class="quote-icon" />
         <p class="contribution-desc">{{ profile.summary }}</p>
       </SurfaceCard>
     </div>
 
     <CalloutBanner v-if="showBanner" class="thank-you-banner" variant="dashed" align="center">
       <p class="thank-you-text">
-        <FontAwesomeIcon icon="heart" class="thank-you-icon" />
+        <FaIcon :fa-icon="bannerFaIcon" class="thank-you-icon" />
         <template v-if="bannerContent.prefix">{{ bannerContent.prefix }} </template>
         <a
           v-if="bannerContent.linkLabel"

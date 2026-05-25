@@ -8,7 +8,7 @@ describe('FooterActionLink', () => {
     const wrapper = mount(FooterActionLink, {
       props: {
         href: 'https://example.com',
-        icon: ['fab', 'github'],
+        faIcon: 'fa-github',
         label: 'Open on GitHub',
       },
     })
@@ -22,7 +22,7 @@ describe('FooterActionLink', () => {
     const wrapper = mount(FooterActionLink, {
       props: {
         href: 'https://example.com',
-        icon: 'code',
+        faIcon: 'fa-code',
         label: 'Source',
         align: 'start',
       },

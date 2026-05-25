@@ -245,6 +245,12 @@ describe('ContentValidator', () => {
     expect(() =>
       validator.validateSiteDocument({
         schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
+        site: { ...validSiteDocument.site, project_badge: { label: 'Badge', fa_icon: 'fa-nope' } },
+      }),
+    ).toThrow('site.yaml.site.project_badge.fa_icon must be a supported Font Awesome icon.')
+    expect(() =>
+      validator.validateSiteDocument({
+        schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,
         site: { ...validSiteDocument.site, navigation: { docs_enabled: 'true' } },
       }),
     ).toThrow('site.yaml.site.navigation.docs_enabled must be a boolean.')
@@ -365,7 +371,7 @@ describe('ContentValidator', () => {
           slides: [{ template: 'agenda', enabled: true, title: 'Agenda', content: { extra: true } }],
         },
       }),
-    ).toThrow('presentation document.presentation.slides[0].content must be omitted or an empty object for agenda slides.')
+    ).toThrow('presentation document.presentation.slides[0].content.extra is not allowed.')
     expect(() =>
       validator.validateGeneratedDocument({
         schemaVersion: SLIDE_SPEC_SCHEMA_VERSION,

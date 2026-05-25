@@ -19,7 +19,7 @@ describe('getProjectBadgeDisplay', () => {
       }),
     ).toEqual({
       label: 'Demo Lab Project',
-      iconClass: 'fas fa-flask',
+      iconClass: 'fa-solid fa-flask',
       iconPosition: 'before',
     })
   })
@@ -38,7 +38,7 @@ describe('getProjectBadgeDisplay', () => {
       }),
     ).toEqual({
       label: undefined,
-      iconClass: 'fab fa-github',
+      iconClass: 'fa-brands fa-github',
       iconPosition: 'before',
     })
   })
@@ -75,7 +75,7 @@ describe('getProjectBadgeDisplay', () => {
         title: 'Aurora Notes Quarterly Updates',
         project_badge: {
           label: 'Custom Badge',
-          fa_icon: 'fa-flag',
+          fa_icon: 'fa-star',
           icon_position: 'after',
         },
         home_intro: 'Quarterly community updates',
@@ -85,7 +85,7 @@ describe('getProjectBadgeDisplay', () => {
       }),
     ).toEqual({
       label: 'Custom Badge',
-      iconClass: 'fas fa-flag',
+      iconClass: 'fa-solid fa-star',
       iconPosition: 'after',
     })
   })

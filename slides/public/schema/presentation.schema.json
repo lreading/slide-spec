@@ -100,7 +100,10 @@
             "template": { "const": "agenda" },
             "content": {
               "type": "object",
-              "additionalProperties": false
+              "additionalProperties": false,
+              "properties": {
+                "card_arrow_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" }
+              }
             }
           }
         }
@@ -172,6 +175,9 @@
                 "footer_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "empty_state_title": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "empty_state_message": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "latest_release_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "release_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "footer_link_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "featured_release_ids": { "$ref": "defs.schema.json#/$defs/stringArray" }
               }
             }
@@ -196,6 +202,10 @@
                 "deliverables_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "focus_areas_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "footer_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "item_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "focus_areas_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "theme_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "footer_link_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "stages": {
                   "type": "object",
                   "required": ["completed", "in-progress", "planned", "future"],
@@ -234,6 +244,9 @@
                 "banner_prefix": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "contributors_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "banner_suffix": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "github_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "quote_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "banner_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "spotlight": {
                   "type": "array",
                   "items": { "$ref": "defs.schema.json#/$defs/spotlightEntry" }
@@ -261,6 +274,11 @@
                 "stats_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "show_deltas": { "type": "boolean" },
                 "trend_suffix": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "section_heading_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "stats_heading_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "stat_fa_icons": { "$ref": "defs.schema.json#/$defs/fontAwesomeIconArray" },
+                "trend_up_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "trend_down_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "stat_keys": { "$ref": "defs.schema.json#/$defs/stringArray" },
                 "mentions": {
                   "type": "array",
@@ -286,6 +304,8 @@
               "additionalProperties": false,
               "properties": {
                 "footer_text": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "footer_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "footer_link_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "cards": {
                   "type": "array",
                   "items": { "$ref": "defs.schema.json#/$defs/contributionCard" }
@@ -351,7 +371,10 @@
               "properties": {
                 "heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "message": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
-                "quote": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+                "quote": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "repository_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "docs_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "community_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" }
               }
             }
           }

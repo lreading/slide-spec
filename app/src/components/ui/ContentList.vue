@@ -1,16 +1,18 @@
 <script setup lang="ts">
+import FaIcon from './FaIcon.vue'
+
 const props = withDefaults(
   defineProps<{
     items: string[]
     marker?: 'icon' | 'bullet'
-    icon?: string | [string, string]
+    faIcon?: string
     markerColor?: string
     gap?: string
     itemPaddingLeft?: string
   }>(),
   {
     marker: 'bullet',
-    icon: 'chevron-right',
+    faIcon: 'fa-chevron-right',
     markerColor: '#e8341c',
     gap: '0.9rem',
     itemPaddingLeft: '20px',
@@ -28,7 +30,7 @@ const props = withDefaults(
     }"
   >
     <li v-for="item in items" :key="item" class="content-list__item" :class="`content-list__item--${marker}`">
-      <FontAwesomeIcon v-if="marker === 'icon'" :icon="icon" class="content-list__icon" />
+      <FaIcon v-if="marker === 'icon'" :fa-icon="faIcon" class="content-list__icon" />
       <span>{{ item }}</span>
     </li>
   </ul>
