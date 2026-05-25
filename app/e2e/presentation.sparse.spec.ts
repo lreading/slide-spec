@@ -6,6 +6,24 @@ import { FixtureRepository } from './support/FixtureRepository'
 const fixtures = new FixtureRepository()
 const sparseRecord = fixtures.getPresentation('2025-template-sparse')
 
+async function assertReleaseCardGapsRemainCompact(page: Page): Promise<void> {
+  const releaseCards = page.locator('.release-card')
+  const cardGaps: number[] = []
+
+  for (let index = 1; index < 3; index += 1) {
+    const previousBox = await releaseCards.nth(index - 1).boundingBox()
+    const currentBox = await releaseCards.nth(index).boundingBox()
+
+    if (!previousBox || !currentBox) {
+      throw new Error('Release card boxes must be available for spacing checks')
+    }
+
+    cardGaps.push(currentBox.y - (previousBox.y + previousBox.height))
+  }
+
+  expect(cardGaps.every((gap) => gap > 0 && gap <= 40)).toBe(true)
+}
+
 async function assertSparseSlide(page: Page, slideNumber: number): Promise<void> {
   const slide = sparseRecord.presentation.slides[slideNumber - 1]
 
@@ -34,9 +52,17 @@ async function assertSparseSlide(page: Page, slideNumber: number): Promise<void>
       await expect(page.locator('.feature-card')).toHaveCount(0)
       break
     case 'timeline':
-      await expect(page.getByRole('heading', { name: 'Releases' })).toBeVisible()
-      await expect(page.locator('.release-card')).toHaveCount(0)
-      await expect(page.locator('.github-link')).toHaveCount(0)
+      if (slide.content.featured_release_ids.length === 0) {
+        await expect(page.getByRole('heading', { name: 'Releases' })).toBeVisible()
+        await expect(page.locator('.release-card')).toHaveCount(0)
+        await expect(page.locator('.github-link')).toHaveCount(0)
+        break
+      }
+
+      await expect(page.getByRole('heading', { name: 'Sparse Releases' })).toBeVisible()
+      await expect(page.locator('.release-card')).toHaveCount(3)
+      await expect(page.locator('.timeline-container')).toHaveCSS('justify-content', 'flex-start')
+      await assertReleaseCardGapsRemainCompact(page)
       break
     case 'progress-timeline':
       await expect(page.getByRole('heading', { name: 'Roadmap' })).toBeVisible()
