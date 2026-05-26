@@ -108,6 +108,7 @@ describe('template validation', () => {
         title: 'Actions',
         content: {
           footer_text: 'Get involved',
+          footer_link_enabled: false,
           footer_fa_icon: 'fa-github',
           footer_link_fa_icon: 'fa-code',
           cards: [{
@@ -170,16 +171,22 @@ describe('template validation', () => {
       validateTemplateSlide('metrics-and-links', { title: 'Metrics', content: { stat_keys: [], mentions: [{ type: 'post', title: 'Post' }] } }, 'slides[3]'),
     ).not.toThrow()
     expect(() =>
-      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { image_side: 'center', bullets: ['One'] } }, 'slides[4]'),
-    ).toThrow('slides[4].content.image_side must be left or right.')
+      validateTemplateSlide('action-cards', { title: 'Actions', content: { cards: [{ title: 'Plan', description: 'Pick a path', url: 'https://example.test' }] } }, 'slides[4]'),
+    ).toThrow('slides[4].content.cards[0] must provide url and url_label together.')
     expect(() =>
-      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: {} }, 'slides[5]'),
-    ).toThrow('slides[5].content must include image or bullets.')
+      validateTemplateSlide('action-cards', { title: 'Actions', content: { footer_link_enabled: true, cards: [{ title: 'Plan', description: 'Pick a path' }] } }, 'slides[5]'),
+    ).not.toThrow()
     expect(() =>
-      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { bullets: [] } }, 'slides[6]'),
-    ).toThrow('slides[6].content.bullets must include at least one item.')
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { image_side: 'center', bullets: ['One'] } }, 'slides[6]'),
+    ).toThrow('slides[6].content.image_side must be left or right.')
     expect(() =>
-      validateTemplateSlide('agenda', { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-nope' } }, 'slides[7]'),
-    ).toThrow('slides[7].content.card_arrow_fa_icon must be a supported Font Awesome icon.')
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: {} }, 'slides[7]'),
+    ).toThrow('slides[7].content must include image or bullets.')
+    expect(() =>
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { bullets: [] } }, 'slides[8]'),
+    ).toThrow('slides[8].content.bullets must include at least one item.')
+    expect(() =>
+      validateTemplateSlide('agenda', { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-nope' } }, 'slides[9]'),
+    ).toThrow('slides[9].content.card_arrow_fa_icon must be a supported Font Awesome icon.')
   })
 })

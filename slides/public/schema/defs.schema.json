@@ -269,8 +269,12 @@
     },
     "contributionCard": {
       "type": "object",
-      "required": ["title", "description", "url_label", "url"],
+      "required": ["title", "description"],
       "additionalProperties": false,
+      "dependentRequired": {
+        "url": ["url_label"],
+        "url_label": ["url"]
+      },
       "properties": {
         "title": { "$ref": "#/$defs/nonBlankString" },
         "description": { "$ref": "#/$defs/nonBlankString" },

@@ -190,15 +190,19 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       for (const card of contributeSlide.content.cards) {
         await expect(page.getByText(card.title)).toBeVisible()
         await expect(page.getByText(card.description)).toBeVisible()
-        await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
+        if (card.url && card.url_label) {
+          await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
+        }
       }
       await expect(
         page.getByText(contributeSlide.content.footer_text ?? 'Open Source and Community Driven'),
       ).toBeVisible()
-      await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
-        'href',
-        site.links.repository.url,
-      )
+      if (contributeSlide.content.footer_link_enabled !== false) {
+        await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
+          'href',
+          site.links.repository.url,
+        )
+      }
       break
     }
     case 'closing':

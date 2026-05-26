@@ -204,10 +204,13 @@ When present, `image` has shape: `{ src: string, alt?: string, description?: str
 | `title` | yes | |
 | `content.cards` | yes | |
 | `content.footer_text` | | |
+| `content.footer_link_enabled` | | Boolean. Defaults to `true`; set to `false` to hide the repository footer action for this slide |
 | `content.footer_fa_icon` | | Defaults to `fa-github` |
 | `content.footer_link_fa_icon` | | Defaults to `fa-code` |
 
-Each `cards[]` entry: `{ title, description, url_label, url }` (all required strings) with optional `fa_icon` and `link_fa_icon`.
+Each `cards[]` entry requires `title` and `description`, with optional `fa_icon` and `link_fa_icon`.
+
+`url` and `url_label` are paired: set both or omit both. Cards without links render as informational cards without a bottom link.
 
 ### closing
 

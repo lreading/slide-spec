@@ -280,6 +280,7 @@ presentation:
       subtitle: Practical ways to contribute code, docs, testing, and feedback
       content:
         footer_text: Open Source and Community Driven
+        footer_link_enabled: false
         footer_fa_icon: fa-github
         cards:
           - title: Report Bugs
@@ -304,8 +305,6 @@ presentation:
             fa_icon: fa-bullhorn
             description: Join the roadmap discussion, share your usage patterns, star the repository, or help connect Aurora Notes
               to adjacent open-source workflows.
-            url_label: Share & Star
-            url: https://github.com/example-org/aurora-notes
     - template: closing
       enabled: true
       content:

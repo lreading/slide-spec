@@ -100,6 +100,74 @@ describe('HowToContributeSlideView', () => {
     expect(wrapper.text()).not.toContain('Open Source and Community Driven')
   })
 
+  it('omits card links for informational cards without link fields', () => {
+    const site: SiteContent = {
+      title: 'Aurora Notes Updates',
+      home_intro: 'Intro',
+      home_cta_label: 'View latest presentation',
+      presentations_cta_label: 'View all presentations',
+      links: {},
+    }
+
+    const wrapper = mount(HowToContributeSlideView, {
+      props: {
+        presentation,
+        site,
+        slide: {
+          ...slide,
+          content: {
+            cards: [
+              {
+                title: 'Decide Scope',
+                description: 'Review partner boundaries before planning.',
+              },
+            ],
+          },
+        },
+        slideNumber: 11,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.text()).toContain('Decide Scope')
+    expect(wrapper.find('.card-link').exists()).toBe(false)
+  })
+
+  it('omits the repository footer link when disabled for the slide', () => {
+    const site: SiteContent = {
+      title: 'Aurora Notes Updates',
+      home_intro: 'Intro',
+      home_cta_label: 'View latest presentation',
+      presentations_cta_label: 'View all presentations',
+      links: {
+        repository: {
+          label: 'View source on GitHub',
+          url: 'https://github.com/example/project',
+        },
+      },
+    }
+
+    const wrapper = mount(HowToContributeSlideView, {
+      props: {
+        presentation,
+        site,
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            footer_text: 'Local next steps only.',
+            footer_link_enabled: false,
+          },
+        },
+        slideNumber: 11,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.get('.footer-cta').text()).toContain('Local next steps only.')
+    expect(wrapper.find('.footer-action-link').exists()).toBe(false)
+  })
+
   it('omits the footer callout entirely when footer copy and repository link are both missing', () => {
     const site: SiteContent = {
       title: 'Aurora Notes Updates',

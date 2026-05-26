@@ -158,6 +158,7 @@ presentation:
       subtitle: Ways to contribute this quarter
       content:
         footer_text: Every contribution matters, no matter the size.
+        footer_link_enabled: false
         cards:
           - title: Write a plugin
             fa_icon: fa-code
@@ -172,8 +173,6 @@ presentation:
           - title: Report bugs
             fa_icon: fa-bug
             description: Found something broken? File an issue with reproduction steps and we will prioritize it.
-            url_label: Open an issue
-            url: https://github.com/example/vortex-cli/issues/new
     - template: closing
       enabled: true
       content:
