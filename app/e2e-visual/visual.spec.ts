@@ -130,6 +130,23 @@ test.describe('visual regression', () => {
     })
   })
 
+  test('captures rich text lists inside action cards', async ({ page }) => {
+    await page.setViewportSize(DESKTOP_VIEWPORT)
+    await page.addInitScript(() => {
+      window.localStorage.setItem('slide-spec.shortcut-help.dismissed', 'true')
+      window.localStorage.setItem('slide-spec.viewport-escape-hint.dismissed', 'true')
+    })
+    await page.goto('/presentations/2026-q1?slide=12&mode=viewport')
+    await preparePageForCapture(page)
+
+    await expect(page).toHaveScreenshot('presentation-rich-text-action-cards-desktop.png', {
+      animations: 'disabled',
+      caret: 'hide',
+      fullPage: true,
+      maxDiffPixelRatio: 0.01,
+    })
+  })
+
   test('captures the sparse presentation', async ({ page }) => {
     await page.setViewportSize(TABLET_VIEWPORT)
     await page.goto('/presentations/2025-template-sparse?slide=1')
