@@ -21,7 +21,9 @@ const props = defineProps<{
 const defaultCardFaIcons = ['fa-bug', 'fa-code-branch', 'fa-book', 'fa-bullhorn']
 const defaultLinkFaIcons = ['fa-arrow-right', 'fa-arrow-right', 'fa-arrow-right', 'fa-star']
 const repositoryLink = computed(() => props.site.links.repository)
-const showFooterCta = computed(() => Boolean(props.slide.content.footer_text?.trim()) || Boolean(repositoryLink.value))
+const footerLinkEnabled = computed(() => props.slide.content.footer_link_enabled !== false)
+const footerActionLink = computed(() => (footerLinkEnabled.value ? repositoryLink.value : undefined))
+const showFooterCta = computed(() => Boolean(props.slide.content.footer_text?.trim()) || Boolean(footerActionLink.value))
 const footerFaIcon = computed(() => props.slide.content.footer_fa_icon ?? 'fa-github')
 const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon ?? 'fa-code')
 </script>
@@ -60,7 +62,7 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
         <div class="card-content">
           <h2 class="card-title">{{ card.title }}</h2>
           <p class="card-text">{{ card.description }}</p>
-          <a class="card-link" :href="card.url" target="_blank" rel="noreferrer">
+          <a v-if="card.url && card.url_label" class="card-link" :href="card.url" target="_blank" rel="noreferrer">
             {{ card.url_label }} <FaIcon :fa-icon="card.link_fa_icon ?? defaultLinkFaIcons[index] ?? 'fa-arrow-right'" />
           </a>
         </div>
@@ -72,8 +74,8 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
         <FaIcon :fa-icon="footerFaIcon" class="text-xl mr-3" />
         <p v-if="slide.content.footer_text">{{ slide.content.footer_text }}</p>
       </div>
-      <template v-if="repositoryLink" #action>
-        <FooterActionLink :href="repositoryLink.url" :fa-icon="footerLinkFaIcon" :label="repositoryLink.label" />
+      <template v-if="footerActionLink" #action>
+        <FooterActionLink :href="footerActionLink.url" :fa-icon="footerLinkFaIcon" :label="footerActionLink.label" />
       </template>
     </CalloutBanner>
   </StandardSlideLayout>

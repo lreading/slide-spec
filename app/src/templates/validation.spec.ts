@@ -128,6 +128,7 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     title: 'How to contribute',
     content: {
+      footer_link_enabled: false,
       cards: [
         {
           title: 'Report bugs',
@@ -235,12 +236,11 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     title: 'Contribute',
     content: {
+      footer_link_enabled: true,
       cards: [
         {
           title: 'Submit code',
           description: 'Open a PR',
-          url_label: 'Contribute',
-          url: 'https://github.com/example-org/aurora-notes/pulls',
         },
       ],
     },
@@ -395,7 +395,7 @@ describe('template validation', () => {
       'metrics-and-links':
         'slides[metrics-and-links].content.mentions[0] must provide url and url_label together.',
       'image-and-bullets': 'slides[image-and-bullets].content.image_side must be left or right.',
-      'action-cards': 'slides[action-cards].content.cards[0].url must be a string.',
+      'action-cards': 'slides[action-cards].content.cards[0] must provide url and url_label together.',
       closing: 'slides[closing].content.message must be a string.',
     }
 

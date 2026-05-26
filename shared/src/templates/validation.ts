@@ -84,10 +84,15 @@ function assertContributionCard(value: unknown, path: string): void {
   assertNoUnexpectedKeys(value, ['title', 'description', 'url_label', 'url', 'fa_icon', 'link_fa_icon'], path)
   assertNonBlankString(value.title, `${path}.title`)
   assertNonBlankString(value.description, `${path}.description`)
-  assertNonBlankString(value.url_label, `${path}.url_label`)
-  assertNonBlankString(value.url, `${path}.url`)
+  assertOptionalString(value.url_label, `${path}.url_label`)
+  assertOptionalString(value.url, `${path}.url`)
   assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
   assertOptionalFontAwesomeIcon(value.link_fa_icon, `${path}.link_fa_icon`)
+  assert(
+    (value.url === undefined && value.url_label === undefined)
+      || (value.url !== undefined && value.url_label !== undefined),
+    `${path} must provide url and url_label together.`,
+  )
 }
 
 function assertImageAndBulletsImage(value: unknown, path: string): void {
@@ -287,8 +292,13 @@ const metricsAndLinksValidator: SlideTemplateValidator = (slide, path) => {
 const actionCardsValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
-  assertNoUnexpectedKeys(content, ['footer_text', 'cards', 'footer_fa_icon', 'footer_link_fa_icon'], `${path}.content`)
+  assertNoUnexpectedKeys(
+    content,
+    ['footer_text', 'footer_link_enabled', 'cards', 'footer_fa_icon', 'footer_link_fa_icon'],
+    `${path}.content`,
+  )
   assertOptionalString(content.footer_text, `${path}.content.footer_text`)
+  assertOptionalBoolean(content.footer_link_enabled, `${path}.content.footer_link_enabled`)
   assertOptionalFontAwesomeIcon(content.footer_fa_icon, `${path}.content.footer_fa_icon`)
   assertOptionalFontAwesomeIcon(content.footer_link_fa_icon, `${path}.content.footer_link_fa_icon`)
   assert(Array.isArray(content.cards), `${path}.content.cards must be an array.`)

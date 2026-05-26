@@ -300,6 +300,7 @@
               "additionalProperties": false,
               "properties": {
                 "footer_text": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "footer_link_enabled": { "type": "boolean" },
                 "footer_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "footer_link_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "cards": {

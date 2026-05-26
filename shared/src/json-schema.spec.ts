@@ -254,6 +254,52 @@ describe('public JSON Schemas', () => {
     expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
   })
 
+  it('accepts action-cards slides with informational cards and a disabled footer link', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'action-cards',
+          enabled: true,
+          title: 'Decisions',
+          content: {
+            footer_text: 'Review locally.',
+            footer_link_enabled: false,
+            cards: [{ title: 'Partner Scope', description: 'Confirm boundaries before kickoff.' }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('rejects action-cards slides with partial card links', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'action-cards',
+          enabled: true,
+          title: 'Actions',
+          content: {
+            cards: [{ title: 'Report', description: 'Open a ticket.', url: 'https://example.test' }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document).length).toBeGreaterThan(0)
+  })
+
   it('rejects progress-timeline schemas with too few stage entries', async () => {
     const ajv = await loadSchemas()
     const document = {

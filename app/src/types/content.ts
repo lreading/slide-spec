@@ -217,6 +217,7 @@ export interface MetricsAndLinksSlideContent {
 
 export interface ActionCardsSlideContent {
   footer_text?: string
+  footer_link_enabled?: boolean
   footer_fa_icon?: string
   footer_link_fa_icon?: string
   cards: ContributionCard[]
@@ -324,8 +325,8 @@ export interface CommunityMention {
 export interface ContributionCard {
   title: string
   description: string
-  url_label: string
-  url: string
+  url_label?: string
+  url?: string
   fa_icon?: string
   link_fa_icon?: string
 }
