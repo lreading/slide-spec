@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, rm, symlink } from 'node:fs/promises'
+import { mkdir, mkdtemp, rm, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { resolve } from 'node:path'
 
@@ -129,6 +129,59 @@ describe('ViteSiteDevServer', () => {
         },
       }),
     }))
+  })
+
+  it('deduplicates allowed package realpaths and ignores non-package node_modules entries', async () => {
+    const cliRoot = await createRoot('slide-spec-cli-')
+    const realPackageRoot = await createRoot('slide-spec-shared-package-')
+    const realUnscopedPackageRoot = await createRoot('slide-spec-unscoped-package-')
+    const nodeModulesRoot = resolve(cliRoot, 'node_modules')
+    await mkdir(resolve(nodeModulesRoot, '@fontsource'), { recursive: true })
+    await symlink(
+      realPackageRoot,
+      resolve(nodeModulesRoot, '@fontsource', 'poppins'),
+      'junction',
+    )
+    await symlink(
+      realPackageRoot,
+      resolve(nodeModulesRoot, '@fontsource', 'roboto-mono'),
+      'junction',
+    )
+    await symlink(
+      realUnscopedPackageRoot,
+      resolve(nodeModulesRoot, 'vite'),
+      'junction',
+    )
+    await symlink(
+      resolve(cliRoot, 'missing-scope-target'),
+      resolve(nodeModulesRoot, '@missing'),
+      'junction',
+    )
+    await symlink(
+      resolve(cliRoot, 'missing-package-target'),
+      resolve(nodeModulesRoot, 'missing-package'),
+      'junction',
+    )
+    await writeFile(resolve(nodeModulesRoot, '.modules.yaml'), 'ignored: true')
+
+    const viteServer = createViteServerDouble()
+    const createServer = vi.fn(async (_config) => viteServer)
+    const server = new ViteSiteDevServer(
+      new StubPackagePaths(cliRoot) as never,
+      new StubRuntimeWorkspace() as never,
+      createServer,
+    )
+
+    await expect(server.start({
+      getProjectRoot: () => cliRoot,
+    } as never, '127.0.0.1', 4173)).resolves.toBe(4173)
+
+    const allow = (createServer.mock.calls[0]?.[0].server?.fs?.allow ?? []) as string[]
+    expect(allow).toContain(realPackageRoot)
+    expect(allow).toContain(realUnscopedPackageRoot)
+    expect(allow.filter((path) => path === realPackageRoot)).toHaveLength(1)
+    expect(allow).not.toContain(resolve(cliRoot, 'missing-scope-target'))
+    expect(allow).not.toContain(resolve(cliRoot, 'missing-package-target'))
   })
 
   it('resolves port 0 to an explicit free port before starting Vite', async () => {
