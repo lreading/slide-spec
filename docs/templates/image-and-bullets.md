@@ -18,7 +18,11 @@ Balanced slide layout for an image block and a bullet list, with support for ima
     image:
       src: /assets/migration-overview.png
       alt: Diagram of migration architecture
-      description: Migration architecture captured during rollout week.
+      description: |-
+        Migration architecture captured during rollout week.
+
+        - New ingress path
+        - Clearer ownership points
     bullets:
       - New ingress path reduced deployment time by 28%.
       - Authoring defaults now preserve explicit review ownership.
@@ -41,4 +45,6 @@ Balanced slide layout for an image block and a bullet list, with support for ima
 | --- | --- | --- |
 | `src` | yes | string |
 | `alt` | | string |
-| `description` | | string |
+| `description` | | string; supports lightweight rich text |
+
+`description` accepts the lightweight rich text documented in [Concepts](/concepts#lightweight-rich-text).

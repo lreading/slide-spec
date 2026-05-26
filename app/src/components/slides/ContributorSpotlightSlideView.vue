@@ -5,6 +5,7 @@ import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
 import CalloutBanner from '../ui/CalloutBanner.vue'
 import FaIcon from '../ui/FaIcon.vue'
 import IconBadge from '../ui/IconBadge.vue'
+import RichText from '../ui/RichText.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import type {
@@ -95,7 +96,7 @@ const bannerFaIcon = computed(() => props.slide.content.banner_fa_icon ?? 'fa-he
           <span>{{ profile.handle }}</span>
         </a>
         <FaIcon :fa-icon="quoteFaIcon" class="quote-icon" />
-        <p class="contribution-desc">{{ profile.summary }}</p>
+        <RichText :text="profile.summary" class="contribution-desc" />
       </SurfaceCard>
     </div>
 

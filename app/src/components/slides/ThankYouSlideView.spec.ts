@@ -96,4 +96,24 @@ describe('ThankYouSlideView', () => {
     expect(wrapper.find('.fa-book').exists()).toBe(true)
     expect(wrapper.find('.fa-shield-alt').exists()).toBe(true)
   })
+
+  it('renders lightweight rich text in the closing message', () => {
+    const wrapper = mount(ThankYouSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: record.generated,
+        site,
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            message: 'Keep shipping.\n\n1. Validate content\n2. Review slides',
+          },
+        },
+      },
+    })
+
+    expect(wrapper.find('.hero-subtitle .rich-text__paragraph').text()).toBe('Keep shipping.')
+    expect(wrapper.findAll('.hero-subtitle .rich-text__list--ordered .rich-text__item')).toHaveLength(2)
+  })
 })

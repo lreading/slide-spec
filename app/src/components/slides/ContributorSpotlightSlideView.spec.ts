@@ -95,4 +95,31 @@ describe('ContributorSpotlightSlideView', () => {
     expect(links).toContain('https://github.com/mystery_contributor')
     expect(wrapper.find('.fa-user-secret').exists()).toBe(true)
   })
+
+  it('renders lightweight rich text in spotlight summaries', () => {
+    const wrapper = mount(ContributorSpotlightSlideView, {
+      props: {
+        presentation: record.presentation,
+        generated: record.generated,
+        site,
+        slide: {
+          ...slide,
+          content: {
+            ...slide.content,
+            spotlight: [
+              {
+                login: 'mystery_contributor',
+                summary: 'Led release prep.\n\n1. Drafted notes\n2. Verified screenshots',
+              },
+            ],
+          },
+        },
+        slideNumber: 6,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.contribution-desc .rich-text__paragraph').text()).toBe('Led release prep.')
+    expect(wrapper.findAll('.contribution-desc .rich-text__list--ordered .rich-text__item')).toHaveLength(2)
+  })
 })

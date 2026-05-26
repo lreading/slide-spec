@@ -57,4 +57,28 @@ describe('ImageAndBulletsSlideView', () => {
     expect(wrapper.find('.image-panel').exists()).toBe(false)
     expect(wrapper.text()).toContain('Only bullet content')
   })
+
+  it('renders lightweight rich text in image descriptions', () => {
+    const wrapper = mount(ImageAndBulletsSlideView, {
+      props: {
+        presentation: record.presentation,
+        slide: {
+          template: 'image-and-bullets',
+          enabled: true,
+          title: 'Highlights',
+          content: {
+            image: {
+              src: '/assets/demo-logo.svg',
+              description: 'Architecture note.\n\n- First detail\n- Second detail',
+            },
+          },
+        },
+        slideNumber: 1,
+        slideTotal: 1,
+      },
+    })
+
+    expect(wrapper.find('.image-panel__description .rich-text__paragraph').text()).toBe('Architecture note.')
+    expect(wrapper.findAll('.image-panel__description .rich-text__list--unordered .rich-text__item')).toHaveLength(2)
+  })
 })

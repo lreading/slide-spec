@@ -6,6 +6,7 @@ import CalloutBanner from '../ui/CalloutBanner.vue'
 import FaIcon from '../ui/FaIcon.vue'
 import FooterActionLink from '../ui/FooterActionLink.vue'
 import IconBadge from '../ui/IconBadge.vue'
+import RichText from '../ui/RichText.vue'
 import SurfaceCard from '../ui/SurfaceCard.vue'
 
 import type { HowToContributeSlide, PresentationContent, SiteContent } from '../../types/content'
@@ -61,7 +62,7 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
         />
         <div class="card-content">
           <h2 class="card-title">{{ card.title }}</h2>
-          <p class="card-text">{{ card.description }}</p>
+          <RichText :text="card.description" class="card-text" />
           <a v-if="card.url && card.url_label" class="card-link" :href="card.url" target="_blank" rel="noreferrer">
             {{ card.url_label }} <FaIcon :fa-icon="card.link_fa_icon ?? defaultLinkFaIcons[index] ?? 'fa-arrow-right'" />
           </a>
@@ -72,7 +73,7 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
     <CalloutBanner v-if="showFooterCta" class="footer-cta">
       <div class="repo-info">
         <FaIcon :fa-icon="footerFaIcon" class="text-xl mr-3" />
-        <p v-if="slide.content.footer_text">{{ slide.content.footer_text }}</p>
+        <RichText v-if="slide.content.footer_text" :text="slide.content.footer_text" class="footer-text" />
       </div>
       <template v-if="footerActionLink" #action>
         <FooterActionLink :href="footerActionLink.url" :fa-icon="footerLinkFaIcon" :label="footerActionLink.label" />
@@ -165,6 +166,10 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
   align-items: center;
   color: #d0d0e8;
   font-size: 14px;
+}
+
+.footer-text {
+  min-width: 0;
 }
 
 @media (max-width: 959px) {

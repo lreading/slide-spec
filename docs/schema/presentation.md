@@ -8,6 +8,10 @@ Each slide owns its own `content` block. If two slides need the same copy or lab
 
 Icon fields named `fa_icon` or ending in `_fa_icon` accept supported Font Awesome values from the [Font Awesome icon reference](/reference/fontawesome). All icon fields are optional and keep their documented defaults when omitted.
 
+## Lightweight rich text
+
+Body-copy string fields support a small rich-text subset when authored as YAML block scalars. Blank-line-separated text renders as paragraphs, blocks where every line starts with `- ` or `* ` render as unordered lists, and blocks where every line starts with ordered markers such as `1. ` or `1) ` render as ordered lists. This is not full Markdown, and raw HTML is rendered as text.
+
 ## Top level
 
 ```yaml
@@ -43,6 +47,8 @@ The [progress-timeline](/templates/progress-timeline) template is self-contained
 | `content.stages` | yes | object |
 | `content.items` | yes | string[] |
 | `content.themes` | yes | array of `{ category, target }` |
+
+Stage summaries, item text, and theme targets support lightweight rich text.
 
 ### `content.stages`
 
@@ -163,7 +169,7 @@ Each `sections[]` entry may also set `fa_icon` to override its badge icon.
 | `content.quote_fa_icon` | | Defaults to `fa-quote-left` |
 | `content.banner_fa_icon` | | Defaults to `fa-heart` |
 
-Each `spotlight[]` entry: `{ login: string, summary: string }` with optional `fa_icon`.
+Each `spotlight[]` entry: `{ login: string, summary: string }` with optional `fa_icon`. `summary` supports lightweight rich text.
 
 ### metrics-and-links
 
@@ -195,7 +201,7 @@ Each `mentions[]` entry: `{ type: string, title: string }` with optional paired 
 
 `content` must include at least one major block: `image` or `bullets`.
 
-When present, `image` has shape: `{ src: string, alt?: string, description?: string }`.
+When present, `image` has shape: `{ src: string, alt?: string, description?: string }`. `description` supports lightweight rich text.
 
 ### action-cards
 
@@ -208,7 +214,7 @@ When present, `image` has shape: `{ src: string, alt?: string, description?: str
 | `content.footer_fa_icon` | | Defaults to `fa-github` |
 | `content.footer_link_fa_icon` | | Defaults to `fa-code` |
 
-Each `cards[]` entry requires `title` and `description`, with optional `fa_icon` and `link_fa_icon`.
+Each `cards[]` entry requires `title` and `description`, with optional `fa_icon` and `link_fa_icon`. `description` and `content.footer_text` support lightweight rich text.
 
 `url` and `url_label` are paired: set both or omit both. Cards without links render as informational cards without a bottom link.
 
@@ -217,7 +223,7 @@ Each `cards[]` entry requires `title` and `description`, with optional `fa_icon`
 | Field | Required | Notes |
 | --- | --- | --- |
 | `content.heading` | yes | |
-| `content.message` | yes | |
+| `content.message` | yes | Supports lightweight rich text |
 | `content.quote` | | |
 | `content.repository_fa_icon` | | Defaults to `fa-github` |
 | `content.docs_fa_icon` | | Defaults to `fa-book` |
