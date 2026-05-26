@@ -2,6 +2,7 @@ import { expect, test } from '@playwright/test'
 import type { Page } from '@playwright/test'
 
 import { FixtureRepository } from './support/FixtureRepository'
+import { parseRichTextBlocks } from '../../shared/src/rich-text'
 
 import type {
   CommunityHighlightsSlide,
@@ -31,6 +32,19 @@ function formatHeroTitle(primary: string | undefined, accent: string | undefined
 
 function formatContributorsLinkLabel(total: number, label: string): string {
   return `${total} ${label}`
+}
+
+async function assertRichTextContent(page: Page, text: string): Promise<void> {
+  for (const block of parseRichTextBlocks(text)) {
+    if (block.type === 'paragraph') {
+      await expect(page.getByText(block.text)).toBeVisible()
+      continue
+    }
+
+    for (const item of block.items) {
+      await expect(page.getByText(item)).toBeVisible()
+    }
+  }
 }
 
 async function assertSlideContent(page: Page, slide: PresentationSlide): Promise<void> {
@@ -146,7 +160,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
           'href',
           `https://github.com/${spotlight.login}`,
         )
-        await expect(page.getByText(spotlight.summary)).toBeVisible()
+        await assertRichTextContent(page, spotlight.summary)
       }
       const contributorsLinkLabel = contributorSlide.content.contributors_link_label ?? 'contributors'
       await expect(
@@ -189,7 +203,7 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(page.getByText(contributeSlide.subtitle ?? '')).toBeVisible()
       for (const card of contributeSlide.content.cards) {
         await expect(page.getByText(card.title)).toBeVisible()
-        await expect(page.getByText(card.description)).toBeVisible()
+        await assertRichTextContent(page, card.description)
         if (card.url && card.url_label) {
           await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
         }

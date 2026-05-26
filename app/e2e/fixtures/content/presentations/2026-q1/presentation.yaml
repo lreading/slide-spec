@@ -261,13 +261,19 @@ presentation:
         footer_link_enabled: false
         cards:
           - title: Report Bugs
-            description: File a reproducible issue with environment details, screenshots, and any project or stack context that helps
-              maintainers confirm the problem.
+            description: |-
+              File a reproducible issue with enough context for maintainers to confirm the problem.
+
+              - Include environment details and screenshots.
+              - Attach the smallest project or stack context that reproduces it.
             url_label: Submit an issue
             url: https://github.com/example-org/aurora-notes/issues
           - title: Submit Code
-            description: Pick up a tracked issue, fork the repository, and submit a pull request that includes the manual testing
-              now required in the contribution guide.
+            description: |-
+              Pick up a tracked issue, fork the repository, and submit a pull request.
+
+              1. Keep the change focused.
+              2. Include the manual testing now required in the contribution guide.
             url_label: Read CONTRIBUTING.md
             url: https://github.com/example-org/aurora-notes/blob/main/CONTRIBUTING.md
           - title: Improve Docs

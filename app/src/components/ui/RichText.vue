@@ -31,7 +31,11 @@ const blocks = computed(() => parseRichTextBlocks(props.text))
 <style scoped>
 .rich-text {
   display: grid;
-  gap: var(--rich-text-gap, 0.55em);
+  align-content: flex-start;
+  justify-items: stretch;
+  width: 100%;
+  gap: var(--rich-text-gap, 0.45em);
+  text-align: var(--rich-text-align, left);
 }
 
 .rich-text__paragraph,
@@ -41,9 +45,27 @@ const blocks = computed(() => parseRichTextBlocks(props.text))
 
 .rich-text__list {
   padding-left: var(--rich-text-list-padding-left, 1.25em);
+  text-align: left;
+}
+
+.rich-text__list--unordered {
+  list-style-type: disc;
+}
+
+.rich-text__list--ordered {
+  list-style-type: decimal;
+}
+
+.rich-text__item {
+  padding-left: var(--rich-text-marker-gap, 0.2em);
 }
 
 .rich-text__item + .rich-text__item {
   margin-top: var(--rich-text-item-gap, 0.25em);
+}
+
+.rich-text__item::marker {
+  color: var(--rich-text-marker-color, #e8341c);
+  font-weight: 700;
 }
 </style>

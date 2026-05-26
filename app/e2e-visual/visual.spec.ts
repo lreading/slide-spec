@@ -38,6 +38,13 @@ async function preparePageForCapture(page: Parameters<typeof test>[0]['page']): 
   expect(brokenImageSources, `Broken images found: ${brokenImageSources.join(', ')}`).toEqual([])
 }
 
+async function dismissPresentationHints(page: Parameters<typeof test>[0]['page']): Promise<void> {
+  await page.addInitScript(() => {
+    window.localStorage.setItem('slide-spec.shortcut-help.dismissed', 'true')
+    window.localStorage.setItem('slide-spec.viewport-escape-hint.dismissed', 'true')
+  })
+}
+
 test.describe('visual regression', () => {
   test('captures the home page', async ({ page }) => {
     await page.setViewportSize(DESKTOP_VIEWPORT)
@@ -123,6 +130,34 @@ test.describe('visual regression', () => {
     await preparePageForCapture(page)
 
     await expect(page).toHaveScreenshot('presentation-community-metrics-desktop.png', {
+      animations: 'disabled',
+      caret: 'hide',
+      fullPage: true,
+      maxDiffPixelRatio: 0.01,
+    })
+  })
+
+  test('captures rich text lists inside action cards', async ({ page }) => {
+    await page.setViewportSize(DESKTOP_VIEWPORT)
+    await dismissPresentationHints(page)
+    await page.goto('/presentations/2026-q1?slide=12&mode=viewport')
+    await preparePageForCapture(page)
+
+    await expect(page).toHaveScreenshot('presentation-rich-text-action-cards-desktop.png', {
+      animations: 'disabled',
+      caret: 'hide',
+      fullPage: true,
+      maxDiffPixelRatio: 0.01,
+    })
+  })
+
+  test('captures the closing slide', async ({ page }) => {
+    await page.setViewportSize(DESKTOP_VIEWPORT)
+    await dismissPresentationHints(page)
+    await page.goto('/presentations/2026-q1?slide=13&mode=viewport')
+    await preparePageForCapture(page)
+
+    await expect(page).toHaveScreenshot('presentation-closing-desktop.png', {
       animations: 'disabled',
       caret: 'hide',
       fullPage: true,
