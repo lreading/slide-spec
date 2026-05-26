@@ -252,6 +252,22 @@ presentation:
           - Reusable briefing templates now cover roadmap, release, and community updates.
           - Validation and documentation updates reduced day-to-day authoring friction.
           - Preview and archive behavior is more predictable for larger local catalogs.
+    - template: card-grid
+      enabled: true
+      title: Template Focus Areas
+      subtitle: Agenda-style authored rows for concise topic lists
+      content:
+        card_arrow_fa_icon: fa-arrow-right
+        items:
+          - title: Roadmap briefings
+            fa_icon: fa-bullseye
+            url: https://example.org/projects/aurora-notes/roadmap
+          - title: Release reviews
+            marker_text: R
+          - title: Community updates
+            fa_icon: fa-users
+          - title: Decision logs
+            marker_text: D
     - template: action-cards
       enabled: true
       title: How to Contribute

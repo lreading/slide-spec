@@ -7,6 +7,7 @@ Templates are pre-built layouts for slides. Each slide in a presentation require
 | [`hero`](/templates/hero) | Title slide with branding |
 | [`section-title`](/templates/section-title) | Lightweight section divider with optional visual context |
 | [`agenda`](/templates/agenda) | Auto-generated table of contents |
+| [`card-grid`](/templates/card-grid) | Authored agenda-style card rows |
 | [`section-list-grid`](/templates/section-list-grid) | Grid of titled bullet sections |
 | [`timeline`](/templates/timeline) | Release cards from generated data |
 | [`progress-timeline`](/templates/progress-timeline) | Self-contained stage detail |

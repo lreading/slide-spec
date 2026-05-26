@@ -202,6 +202,23 @@ describe('public JSON Schemas', () => {
         },
       },
       {
+        schemaId: schemaIds.presentation,
+        document: {
+          schemaVersion: 1,
+          presentation: {
+            id: 'demo',
+            title: 'Demo',
+            subtitle: 'Example',
+            slides: [{
+              template: 'card-grid',
+              enabled: true,
+              title: 'Topics',
+              content: { items: [{ title: 'One', marker_text: 'A', fa_icon: 'fa-star' }] },
+            }],
+          },
+        },
+      },
+      {
         schemaId: schemaIds.generated,
         document: {
           schemaVersion: 1,
@@ -217,6 +234,7 @@ describe('public JSON Schemas', () => {
     ]
 
     expect(invalidDocuments.map(({ schemaId, document }) => validateDocument(ajv, schemaId, document).length > 0)).toEqual([
+      true,
       true,
       true,
       true,
@@ -272,6 +290,90 @@ describe('public JSON Schemas', () => {
             cards: [{ title: 'Partner Scope', description: 'Confirm boundaries before kickoff.' }],
           },
         }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('accepts card-grid slides with authored rows, markers, icons, and links', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'card-grid',
+          enabled: true,
+          title: 'Initiatives',
+          content: {
+            card_arrow_fa_icon: 'fa-arrow-right',
+            items: [
+              { title: 'Detection / Response', fa_icon: 'fa-shield-halved' },
+              { title: 'Supply Chain', marker_text: 'B' },
+              { title: 'Documentation', url: 'https://example.test/docs' },
+            ],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('rejects card-grid items with both marker text and icon fields', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'card-grid',
+          enabled: true,
+          title: 'Initiatives',
+          content: {
+            items: [{ title: 'Detection / Response', marker_text: 'D', fa_icon: 'fa-shield-halved' }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document).length).toBeGreaterThan(0)
+  })
+
+  it('accepts people slides with authored names, summary-only cards, and action cards without descriptions', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [
+          {
+            template: 'people',
+            enabled: true,
+            title: 'Users',
+            content: {
+              spotlight: [
+                { name: 'Security Operator', summary: 'Runs incident response.' },
+                { summary: 'Owns a summary-only role.' },
+              ],
+            },
+          },
+          {
+            template: 'action-cards',
+            enabled: true,
+            title: 'Actions',
+            content: {
+              cards: [{ title: 'Decide Scope' }],
+            },
+          },
+        ],
       },
     }
 

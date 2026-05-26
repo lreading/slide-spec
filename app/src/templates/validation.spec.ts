@@ -45,6 +45,20 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     title: 'Agenda',
   },
+  'card-grid': {
+    template: 'card-grid',
+    enabled: true,
+    title: 'Initiatives',
+    subtitle: 'Authored agenda-style rows',
+    content: {
+      card_arrow_fa_icon: 'fa-arrow-right',
+      items: [
+        { title: 'Detection / Response', fa_icon: 'fa-shield-halved' },
+        { title: 'Supply Chain', marker_text: 'B' },
+        { title: 'Documentation', url: 'https://example.test/docs' },
+      ],
+    },
+  },
   'section-list-grid': {
     template: 'section-list-grid',
     enabled: true,
@@ -91,6 +105,13 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
         {
           login: 'octocat',
           summary: 'Summary',
+        },
+        {
+          name: 'Release Operator',
+          summary: 'Summary',
+        },
+        {
+          summary: 'Summary-only role',
         },
       ],
     },
@@ -169,6 +190,18 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     title: 'Agenda',
   },
+  'card-grid': {
+    template: 'card-grid',
+    enabled: true,
+    title: 'Topics',
+    content: {
+      items: [
+        {
+          title: 'One',
+        },
+      ],
+    },
+  },
   'section-list-grid': {
     template: 'section-list-grid',
     enabled: true,
@@ -208,7 +241,6 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     content: {
       spotlight: [
         {
-          login: 'octocat',
           summary: 'Summary',
         },
       ],
@@ -240,7 +272,6 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
       cards: [
         {
           title: 'Submit code',
-          description: 'Open a PR',
         },
       ],
     },
@@ -291,13 +322,27 @@ describe('template validation', () => {
         subtitle: 'No title',
       },
     },
-    agenda: {
-      template: 'agenda',
-      enabled: true,
-      title: '  ',
-      content: {},
+  agenda: {
+    template: 'agenda',
+    enabled: true,
+    title: '  ',
+    content: {},
+  },
+  'card-grid': {
+    template: 'card-grid',
+    enabled: true,
+    title: 'Topics',
+    content: {
+      items: [
+        {
+          title: 'One',
+          marker_text: '1',
+          fa_icon: 'fa-star',
+        },
+      ],
     },
-    'section-list-grid': {
+  },
+  'section-list-grid': {
       template: 'section-list-grid',
       enabled: true,
       title: 'Updates',
@@ -387,6 +432,7 @@ describe('template validation', () => {
       hero: 'slides[hero].content must include title_primary or title_accent.',
       'section-title': 'slides[section-title].content.title must be a string.',
       agenda: 'slides[agenda].title must not be blank.',
+      'card-grid': 'slides[card-grid].content.items[0] must not provide marker_text and fa_icon together.',
       'section-list-grid': 'slides[section-list-grid].content.sections must be an array.',
       timeline: 'slides[timeline].content.featured_release_ids must be an array.',
       'progress-timeline':

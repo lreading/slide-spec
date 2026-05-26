@@ -39,6 +39,17 @@ describe('template validation', () => {
         },
       },
       agenda: { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-chevron-right' } },
+      'card-grid': {
+        title: 'Initiatives',
+        content: {
+          card_arrow_fa_icon: 'fa-arrow-right',
+          items: [
+            { title: 'Detection / Response', fa_icon: 'fa-shield-halved' },
+            { title: 'Supply Chain', marker_text: 'B' },
+            { title: 'Documentation', url: 'https://example.test/docs' },
+          ],
+        },
+      },
       'section-list-grid': {
         title: 'Sections',
         content: { sections: [{ title: 'One', bullets: ['A'], fa_icon: 'fa-star' }] },
@@ -66,7 +77,11 @@ describe('template validation', () => {
           github_fa_icon: 'fa-github',
           quote_fa_icon: 'fa-quote-left',
           banner_fa_icon: 'fa-heart',
-          spotlight: [{ login: 'octocat', summary: 'Shipped a fix', fa_icon: 'fa-user-astronaut' }],
+          spotlight: [
+            { login: 'octocat', summary: 'Shipped a fix', fa_icon: 'fa-user-astronaut' },
+            { name: 'Release Operator', summary: 'Kept the launch moving.' },
+            { summary: 'Kept a summary-only operating role visible.' },
+          ],
         },
       },
       'metrics-and-links': {
@@ -188,5 +203,14 @@ describe('template validation', () => {
     expect(() =>
       validateTemplateSlide('agenda', { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-nope' } }, 'slides[9]'),
     ).toThrow('slides[9].content.card_arrow_fa_icon must be a supported Font Awesome icon.')
+    expect(() =>
+      validateTemplateSlide('card-grid', { title: 'Initiatives', content: { items: [{ title: 'One', marker_text: 'A', fa_icon: 'fa-star' }] } }, 'slides[10]'),
+    ).toThrow('slides[10].content.items[0] must not provide marker_text and fa_icon together.')
+    expect(() =>
+      validateTemplateSlide('people', { title: 'People', content: { spotlight: [{ summary: 'Missing label' }] } }, 'slides[11]'),
+    ).not.toThrow()
+    expect(() =>
+      validateTemplateSlide('action-cards', { title: 'Actions', content: { cards: [{ title: 'Plan' }] } }, 'slides[12]'),
+    ).not.toThrow()
   })
 })

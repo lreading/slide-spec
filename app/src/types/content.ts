@@ -162,6 +162,11 @@ export interface AgendaSlideContent {
   card_arrow_fa_icon?: string
 }
 
+export interface CardGridSlideContent {
+  card_arrow_fa_icon?: string
+  items: CardGridItem[]
+}
+
 export interface SectionListGridSlideContent {
   sections: ContentSection[]
 }
@@ -252,6 +257,8 @@ export type AgendaSlide = Omit<SlideBase<'agenda', AgendaSlideContent>, 'content
   content?: AgendaSlideContent
 }
 
+export type CardGridSlide = SlideBase<'card-grid', CardGridSlideContent>
+
 export type RecentUpdatesSlide = SlideBase<'section-list-grid', SectionListGridSlideContent>
 
 export type ReleasesSlide = SlideBase<'timeline', TimelineSlideContent>
@@ -272,6 +279,7 @@ export type PresentationSlide =
   | TitleSlide
   | SectionTitleSlide
   | AgendaSlide
+  | CardGridSlide
   | RecentUpdatesSlide
   | ReleasesSlide
   | RoadmapSlide
@@ -295,6 +303,13 @@ export interface ContentSection {
   fa_icon?: string
 }
 
+export interface CardGridItem {
+  title: string
+  marker_text?: string
+  fa_icon?: string
+  url?: string
+}
+
 export type RoadmapStageStatus = string
 
 export interface RoadmapTheme {
@@ -308,7 +323,8 @@ export interface RoadmapStageSummary {
 }
 
 export interface SpotlightEntry {
-  login: string
+  login?: string
+  name?: string
   summary: string
   fa_icon?: string
 }
@@ -324,7 +340,7 @@ export interface CommunityMention {
 
 export interface ContributionCard {
   title: string
-  description: string
+  description?: string
   url_label?: string
   url?: string
   fa_icon?: string

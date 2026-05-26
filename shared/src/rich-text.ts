@@ -11,9 +11,14 @@ export type RichTextBlock =
     type: 'ordered-list'
     items: string[]
   }
+  | {
+    type: 'spacer'
+    size: number
+  }
 
 const unorderedItemPattern = /^\s*[-*]\s+(.+)$/
 const orderedItemPattern = /^\s*\d+[.)]\s+(.+)$/
+const blockSeparatorPattern = /(\n[ \t]*\n(?:[ \t]*\n)*)/
 
 const toParagraphText = (lines: string[]): string =>
   lines.map((line) => line.trim()).filter(Boolean).join(' ')
@@ -65,9 +70,34 @@ const parseBlock = (block: string): RichTextBlock | undefined => {
   }
 }
 
-export const parseRichTextBlocks = (value: string): RichTextBlock[] =>
-  value
-    .replace(/\r\n?/g, '\n')
-    .split(/\n\s*\n/)
-    .map((block) => parseBlock(block))
-    .filter((block): block is RichTextBlock => block !== undefined)
+const countNewlines = (value: string): number => value.match(/\n/g)?.length ?? 0
+
+export const parseRichTextBlocks = (value: string): RichTextBlock[] => {
+  const blocks: RichTextBlock[] = []
+  let pendingSpacerSize = 0
+
+  for (const part of value.replace(/\r\n?/g, '\n').split(blockSeparatorPattern)) {
+    if (part.trim().length === 0) {
+      pendingSpacerSize += Math.max(0, countNewlines(part) - 2)
+      continue
+    }
+
+    const block = parseBlock(part)
+
+    if (!block) {
+      continue
+    }
+
+    if (blocks.length > 0 && pendingSpacerSize > 0) {
+      blocks.push({
+        type: 'spacer',
+        size: pendingSpacerSize,
+      })
+    }
+
+    blocks.push(block)
+    pendingSpacerSize = 0
+  }
+
+  return blocks
+}

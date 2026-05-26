@@ -154,6 +154,22 @@ presentation:
           - Launch checklist ownership and sign-off states are now explicit.
           - Exported review decks preserve section grouping.
           - Operator documentation now aligns with live templates.
+    - template: card-grid
+      enabled: true
+      title: Launch focus areas
+      subtitle: Authored rows for the next readiness review
+      content:
+        card_arrow_fa_icon: fa-arrow-right
+        items:
+          - title: Checklist ownership
+            fa_icon: fa-check-circle
+            url: https://example.com/docs/checklist-ownership
+          - title: Export review
+            marker_text: E
+          - title: Operator docs
+            fa_icon: fa-book
+          - title: Release sign-off
+            marker_text: S
     - template: action-cards
       enabled: true
       title: How to help

@@ -62,7 +62,7 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
         />
         <div class="card-content">
           <h2 class="card-title">{{ card.title }}</h2>
-          <RichText :text="card.description" class="card-text" />
+          <RichText v-if="card.description" :text="card.description" class="card-text" />
           <a v-if="card.url && card.url_label" class="card-link" :href="card.url" target="_blank" rel="noreferrer">
             {{ card.url_label }} <FaIcon :fa-icon="card.link_fa_icon ?? defaultLinkFaIcons[index] ?? 'fa-arrow-right'" />
           </a>

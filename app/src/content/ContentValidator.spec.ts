@@ -25,6 +25,17 @@ const createValidPresentationDocument = () => ({
         title: 'Agenda',
       },
       {
+        template: 'card-grid',
+        enabled: true,
+        title: 'Initiatives',
+        content: {
+          items: [
+            { title: 'Detection / Response', fa_icon: 'fa-shield-halved' },
+            { title: 'Supply Chain', marker_text: 'B' },
+          ],
+        },
+      },
+      {
         template: 'section-list-grid',
         enabled: true,
         title: 'Updates',

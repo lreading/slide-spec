@@ -19,11 +19,17 @@ const blocks = computed(() => parseRichTextBlocks(props.text))
           {{ item }}
         </li>
       </ul>
-      <ol v-else class="rich-text__list rich-text__list--ordered">
+      <ol v-else-if="block.type === 'ordered-list'" class="rich-text__list rich-text__list--ordered">
         <li v-for="(item, itemIndex) in block.items" :key="`${blockIndex}-${itemIndex}`" class="rich-text__item">
           {{ item }}
         </li>
       </ol>
+      <div
+        v-else
+        class="rich-text__spacer"
+        :style="{ '--rich-text-spacer-lines': String(block.size) }"
+        aria-hidden="true"
+      />
     </template>
   </div>
 </template>
@@ -34,7 +40,7 @@ const blocks = computed(() => parseRichTextBlocks(props.text))
   align-content: flex-start;
   justify-items: stretch;
   width: 100%;
-  gap: var(--rich-text-gap, 0.45em);
+  row-gap: var(--rich-text-block-gap, var(--rich-text-gap, 0.85em));
   text-align: var(--rich-text-align, left);
 }
 
@@ -67,5 +73,9 @@ const blocks = computed(() => parseRichTextBlocks(props.text))
 .rich-text__item::marker {
   color: var(--rich-text-marker-color, #e8341c);
   font-weight: 700;
+}
+
+.rich-text__spacer {
+  height: calc(var(--rich-text-spacer-lines, 1) * var(--rich-text-spacer-line-height, 0.85em));
 }
 </style>

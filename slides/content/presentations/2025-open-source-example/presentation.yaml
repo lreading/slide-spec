@@ -152,6 +152,22 @@ presentation:
           - Plugin system shipped with local and registry-based resolution.
           - Structured error messages now include fix suggestions and docs links.
           - Shell completion support landed for bash, zsh, and fish.
+    - template: card-grid
+      enabled: true
+      title: Maintainer focus areas
+      subtitle: Authored topic cards using the agenda visual style
+      content:
+        card_arrow_fa_icon: fa-arrow-right
+        items:
+          - title: Plugin registry hardening
+            fa_icon: fa-shield-halved
+            url: https://vortex-cli.example.com/roadmap/plugins
+          - title: Error-code taxonomy
+            marker_text: E
+          - title: Shell integration tests
+            fa_icon: fa-check
+          - title: Community plugin docs
+            marker_text: D
     - template: action-cards
       enabled: true
       title: Get involved

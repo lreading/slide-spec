@@ -16,6 +16,29 @@ describe('RichText', () => {
     expect(wrapper.findAll('.rich-text__list--ordered .rich-text__item')).toHaveLength(1)
   })
 
+  it('uses visible block spacing between paragraphs and unordered lists', () => {
+    const wrapper = mount(RichText, {
+      props: {
+        text: 'Intro paragraph.\n\n- First action\n- Second action',
+      },
+    })
+
+    expect(wrapper.find('.rich-text__paragraph + .rich-text__list--unordered').exists()).toBe(true)
+  })
+
+  it('renders extra blank lines as spacer elements between blocks', () => {
+    const wrapper = mount(RichText, {
+      props: {
+        text: 'Intro paragraph.\n\n\n\n- First action\n- Second action',
+      },
+    })
+
+    const spacer = wrapper.find('.rich-text__spacer')
+
+    expect(spacer.exists()).toBe(true)
+    expect(spacer.attributes('style')).toContain('--rich-text-spacer-lines: 2;')
+  })
+
   it('escapes html-like text through Vue interpolation', () => {
     const wrapper = mount(RichText, {
       props: {

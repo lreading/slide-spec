@@ -140,7 +140,7 @@ test.describe('visual regression', () => {
   test('captures rich text lists inside action cards', async ({ page }) => {
     await page.setViewportSize(DESKTOP_VIEWPORT)
     await dismissPresentationHints(page)
-    await page.goto('/presentations/2026-q1?slide=12&mode=viewport')
+    await page.goto('/presentations/2026-q1?slide=13&mode=viewport')
     await preparePageForCapture(page)
 
     await expect(page).toHaveScreenshot('presentation-rich-text-action-cards-desktop.png', {
@@ -154,7 +154,7 @@ test.describe('visual regression', () => {
   test('captures the closing slide', async ({ page }) => {
     await page.setViewportSize(DESKTOP_VIEWPORT)
     await dismissPresentationHints(page)
-    await page.goto('/presentations/2026-q1?slide=13&mode=viewport')
+    await page.goto('/presentations/2026-q1?slide=14&mode=viewport')
     await preparePageForCapture(page)
 
     await expect(page).toHaveScreenshot('presentation-closing-desktop.png', {

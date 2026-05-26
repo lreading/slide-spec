@@ -20,8 +20,9 @@ const screenshotRoutes = [
   { name: 'template-people-reference.png', path: '/presentations/2026-spring-briefing?slide=7' },
   { name: 'template-metrics-and-links-reference.png', path: '/presentations/2026-spring-briefing?slide=8' },
   { name: 'template-image-and-bullets-reference.png', path: '/presentations/2026-spring-briefing?slide=9' },
-  { name: 'template-action-cards-reference.png', path: '/presentations/2026-spring-briefing?slide=10' },
-  { name: 'template-closing-reference.png', path: '/presentations/2026-spring-briefing?slide=11' },
+  { name: 'template-card-grid-reference.png', path: '/presentations/2026-spring-briefing?slide=10' },
+  { name: 'template-action-cards-reference.png', path: '/presentations/2026-spring-briefing?slide=11' },
+  { name: 'template-closing-reference.png', path: '/presentations/2026-spring-briefing?slide=12' },
 ] as const
 
 export class DocsAssetGenerator {

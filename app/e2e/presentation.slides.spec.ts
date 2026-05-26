@@ -5,6 +5,7 @@ import { FixtureRepository } from './support/FixtureRepository'
 import { parseRichTextBlocks } from '../../shared/src/rich-text'
 
 import type {
+  CardGridSlide,
   CommunityHighlightsSlide,
   ContributorSpotlightSlide,
   HowToContributeSlide,
@@ -41,8 +42,10 @@ async function assertRichTextContent(page: Page, text: string): Promise<void> {
       continue
     }
 
-    for (const item of block.items) {
-      await expect(page.getByText(item)).toBeVisible()
+    if (block.type === 'unordered-list' || block.type === 'ordered-list') {
+      for (const item of block.items) {
+        await expect(page.getByText(item)).toBeVisible()
+      }
     }
   }
 }
@@ -73,6 +76,18 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(page.getByText('Roadmap: Future', { exact: true })).toBeVisible()
       await expect(page.getByText('Thank You')).toBeVisible()
       break
+    case 'card-grid': {
+      const cardGridSlide: CardGridSlide = slide
+      await expect(page.getByText(cardGridSlide.title ?? '')).toBeVisible()
+      await expect(page.getByText(cardGridSlide.subtitle ?? '')).toBeVisible()
+      for (const item of cardGridSlide.content.items) {
+        await expect(page.getByText(item.title)).toBeVisible()
+        if (item.url) {
+          await expect(page.locator(`a[href="${item.url}"]`).filter({ hasText: item.title })).toBeVisible()
+        }
+      }
+      break
+    }
     case 'section-list-grid': {
       const recentSlide: RecentUpdatesSlide = slide
       await expect(page.getByText(recentSlide.title ?? '')).toBeVisible()
@@ -153,13 +168,16 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         const contributor = record.generated.contributors.authors.find(
           (entry) => entry.login === spotlight.login,
         )
+        const displayName = spotlight.name ?? contributor?.name ?? spotlight.login ?? ''
         await expect(
-          page.getByRole('heading', { name: contributor?.name ?? spotlight.login }),
+          page.getByRole('heading', { name: displayName }),
         ).toBeVisible()
-        await expect(page.getByRole('link', { name: `@${spotlight.login}` })).toHaveAttribute(
-          'href',
-          `https://github.com/${spotlight.login}`,
-        )
+        if (spotlight.login) {
+          await expect(page.getByRole('link', { name: `@${spotlight.login}` })).toHaveAttribute(
+            'href',
+            `https://github.com/${spotlight.login}`,
+          )
+        }
         await assertRichTextContent(page, spotlight.summary)
       }
       const contributorsLinkLabel = contributorSlide.content.contributors_link_label ?? 'contributors'
@@ -203,7 +221,9 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(page.getByText(contributeSlide.subtitle ?? '')).toBeVisible()
       for (const card of contributeSlide.content.cards) {
         await expect(page.getByText(card.title)).toBeVisible()
-        await assertRichTextContent(page, card.description)
+        if (card.description) {
+          await assertRichTextContent(page, card.description)
+        }
         if (card.url && card.url_label) {
           await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
         }

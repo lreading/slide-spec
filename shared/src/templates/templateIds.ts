@@ -2,6 +2,7 @@ export const slideTemplateIds = [
   'hero',
   'section-title',
   'agenda',
+  'card-grid',
   'section-list-grid',
   'timeline',
   'progress-timeline',

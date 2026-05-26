@@ -105,6 +105,16 @@ Slide-level `title` is not required.
 | `content` | | Omit entirely or configure `content.card_arrow_fa_icon`. Row text comes from other slides |
 | `content.card_arrow_fa_icon` | | Defaults to `fa-chevron-right` |
 
+### card-grid
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content.items` | yes | Authored rows rendered in order |
+| `content.card_arrow_fa_icon` | | Optional arrow icon rendered at the end of each card |
+
+Each `items[]` entry requires `title`, with optional `marker_text`, `fa_icon`, and `url`. Set either `marker_text` or `fa_icon`, not both. If both are omitted, the card uses its 1-based row number. Cards with `url` render as full-card links.
+
 ### section-title
 
 | Field | Required | Notes |
@@ -169,7 +179,7 @@ Each `sections[]` entry may also set `fa_icon` to override its badge icon.
 | `content.quote_fa_icon` | | Defaults to `fa-quote-left` |
 | `content.banner_fa_icon` | | Defaults to `fa-heart` |
 
-Each `spotlight[]` entry: `{ login: string, summary: string }` with optional `fa_icon`. `summary` supports lightweight rich text.
+Each `spotlight[]` entry requires `summary`, with optional `login`, `name`, and `fa_icon`. Entries with `login` render a GitHub handle link. Entries with only `name` render without a handle. Entries with neither `login` nor `name` render summary-only cards. `summary` supports lightweight rich text.
 
 ### metrics-and-links
 
@@ -214,7 +224,7 @@ When present, `image` has shape: `{ src: string, alt?: string, description?: str
 | `content.footer_fa_icon` | | Defaults to `fa-github` |
 | `content.footer_link_fa_icon` | | Defaults to `fa-code` |
 
-Each `cards[]` entry requires `title` and `description`, with optional `fa_icon` and `link_fa_icon`. `description` and `content.footer_text` support lightweight rich text.
+Each `cards[]` entry requires `title`, with optional `description`, `fa_icon`, and `link_fa_icon`. `description` and `content.footer_text` support lightweight rich text.
 
 `url` and `url_label` are paired: set both or omit both. Cards without links render as informational cards without a bottom link.
 
