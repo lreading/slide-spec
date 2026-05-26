@@ -1,3 +1,4 @@
+import { opendir, realpath } from 'node:fs/promises'
 import { createServer as createNetServer } from 'node:net'
 import { resolve } from 'node:path'
 
@@ -7,7 +8,7 @@ import vue from '@vitejs/plugin-vue'
 import { createServer as viteCreateServer } from 'vite'
 
 import { CliPackagePaths } from './CliPackagePaths'
-import { RuntimeWorkspace } from './RuntimeWorkspace'
+import { RuntimeWorkspace, type PreparedRuntimeWorkspace } from './RuntimeWorkspace'
 
 import type { FileSystemPaths } from '../io/FileSystemPaths'
 import type { ViteDevServer, InlineConfig } from 'vite'
@@ -26,6 +27,7 @@ export class ViteSiteDevServer {
 
     try {
       const resolvedPort = port === 0 ? await this.findFreePort(host) : port
+      const filesystemAllow = await this.resolveFilesystemAllow(workspace, paths)
       const server = await this.createViteServer({
         appType: 'spa',
         root: workspace.appRoot,
@@ -48,12 +50,7 @@ export class ViteSiteDevServer {
           strictPort: true,
           open: false,
           fs: {
-            allow: [
-              workspace.root,
-              paths.getProjectRoot(),
-              this.packagePaths.getPackageRoot(),
-              this.packagePaths.getNodeModulesRoot(),
-            ],
+            allow: filesystemAllow,
           },
         },
       })
@@ -80,6 +77,72 @@ export class ViteSiteDevServer {
     }
 
     return address.port
+  }
+
+  private async resolveFilesystemAllow(workspace: PreparedRuntimeWorkspace, paths: FileSystemPaths): Promise<string[]> {
+    return [
+      workspace.root,
+      paths.getProjectRoot(),
+      this.packagePaths.getPackageRoot(),
+      this.packagePaths.getNodeModulesRoot(),
+      ...await this.resolveNodeModuleRealpaths(),
+    ].filter((path, index, allPaths) => allPaths.indexOf(path) === index)
+  }
+
+  private async resolveNodeModuleRealpaths(): Promise<string[]> {
+    const nodeModulesRoot = this.packagePaths.getNodeModulesRoot()
+    const packageRoots: string[] = []
+
+    try {
+      for await (const entry of await opendir(nodeModulesRoot)) {
+        if (!entry.isDirectory() && !entry.isSymbolicLink()) {
+          continue
+        }
+
+        if (entry.name.startsWith('@')) {
+          packageRoots.push(...await this.resolveScopedPackageRealpaths(resolve(nodeModulesRoot, entry.name)))
+          continue
+        }
+
+        const realPackageRoot = await this.resolveRealpath(resolve(nodeModulesRoot, entry.name))
+        if (realPackageRoot) {
+          packageRoots.push(realPackageRoot)
+        }
+      }
+    } catch {
+      return []
+    }
+
+    return packageRoots
+  }
+
+  private async resolveScopedPackageRealpaths(scopeRoot: string): Promise<string[]> {
+    const packageRoots: string[] = []
+
+    try {
+      for await (const entry of await opendir(scopeRoot)) {
+        if (!entry.isDirectory() && !entry.isSymbolicLink()) {
+          continue
+        }
+
+        const realPackageRoot = await this.resolveRealpath(resolve(scopeRoot, entry.name))
+        if (realPackageRoot) {
+          packageRoots.push(realPackageRoot)
+        }
+      }
+    } catch {
+      return []
+    }
+
+    return packageRoots
+  }
+
+  private async resolveRealpath(path: string): Promise<string | undefined> {
+    try {
+      return await realpath(path)
+    } catch {
+      return undefined
+    }
   }
 
   private async findFreePort(host: string): Promise<number> {
