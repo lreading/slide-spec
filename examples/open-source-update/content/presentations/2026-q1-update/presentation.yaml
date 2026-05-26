@@ -63,11 +63,7 @@ presentation:
       subtitle: What we shipped
       content:
         stage: completed
-        deliverables_heading: Shipped
-        focus_areas_heading: Themes
         footer_link_label: View full roadmap
-        item_fa_icon: fa-check
-        focus_areas_fa_icon: fa-bullseye
         stages:
           completed:
             label: Completed
@@ -81,15 +77,23 @@ presentation:
           future:
             label: Future
             summary: Under discussion.
-        items:
-          - Plugin system with local and registry-based resolution
-          - Structured error messages with fix suggestions
-          - Shell completion for bash, zsh, and fish
-        themes:
-          - category: Extensibility
-            target: Let users add functionality without forking.
-          - category: Developer Experience
-            target: Reduce time-to-fix for common errors.
+        sections:
+          - title: Shipped
+            fa_icon: fa-check
+            type: richtext
+            body: |-
+              - Plugin system with local and registry-based resolution
+              - Structured error messages with fix suggestions
+              - Shell completion for bash, zsh, and fish
+          - title: Themes
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Extensibility
+                value: Let users add functionality without forking.
+              - key: Developer Experience
+                value: Reduce time-to-fix for common errors.
     - template: people
       enabled: true
       title: Contributor spotlight

@@ -2,13 +2,11 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
-import ContentList from '../ui/ContentList.vue'
+import FaIcon from '../ui/FaIcon.vue'
 import FooterActionLink from '../ui/FooterActionLink.vue'
 import KeyValueRows from '../ui/KeyValueRows.vue'
 import ProgressTimeline from '../ui/ProgressTimeline.vue'
-import SectionHeading from '../ui/SectionHeading.vue'
-import { resolveRoadmapLabels } from '../../content/contentDefaults'
-
+import RichText from '../ui/RichText.vue'
 import type {
   PresentationContent,
   RoadmapSlide,
@@ -44,11 +42,11 @@ const timelineStages = computed(() =>
   }),
 )
 const activeStage = computed(() => stages.value?.[props.slide.content.stage])
-const roadmapLabels = computed(() => resolveRoadmapLabels(props.slide.content))
-const itemFaIcon = computed(() => props.slide.content.item_fa_icon ?? 'fa-chevron-right')
-const focusAreasFaIcon = computed(() => props.slide.content.focus_areas_fa_icon ?? 'fa-bullseye')
-const themeFaIcon = computed(() => props.slide.content.theme_fa_icon ?? 'fa-chevron-right')
 const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon ?? 'fa-github')
+const footerLinkLabel = computed(() => {
+  const label = props.slide.content.footer_link_label?.trim()
+  return label && label.length > 0 ? label : undefined
+})
 </script>
 
 <template>
@@ -70,29 +68,32 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
         }))"
       />
 
-      <div class="details-grid">
-        <section class="detail-card detail-card--primary">
-          <p v-if="activeStage?.label" class="card-eyebrow">{{ activeStage.label }}</p>
-          <h2 v-if="roadmapLabels.deliverables" class="card-title">{{ roadmapLabels.deliverables }}</h2>
-          <ContentList :items="slide.content.items" marker="icon" :fa-icon="itemFaIcon" class="detail-list" />
-        </section>
-
-        <section class="detail-card detail-card--secondary">
-          <SectionHeading v-if="roadmapLabels.focusAreas" :fa-icon="focusAreasFaIcon" :title="roadmapLabels.focusAreas" />
+      <div class="details-grid" :style="{ '--progress-detail-columns': String(slide.content.sections.length) }">
+        <section
+          v-for="(section, index) in slide.content.sections"
+          class="detail-card"
+          :key="`${section.type}-${section.title ?? index}`"
+        >
+          <h2 v-if="section.title" class="card-title">
+            <FaIcon v-if="section.fa_icon" :fa-icon="section.fa_icon" class="card-title__icon" />
+            <span>{{ section.title }}</span>
+          </h2>
+          <RichText v-if="section.type === 'richtext'" :text="section.body" class="detail-rich-text" />
           <KeyValueRows
-            :rows="slide.content.themes.map((theme) => ({ key: theme.category, value: theme.target }))"
-            :value-fa-icon="themeFaIcon"
+            v-else
+            :rows="section.body"
+            :value-fa-icon="section.separator_fa_icon ?? 'fa-chevron-right'"
             class="themes-grid"
           />
         </section>
       </div>
 
       <FooterActionLink
-        v-if="roadmapLabels.footerLink"
+        v-if="footerLinkLabel"
         class="footer-link"
         :href="site.links.repository.url"
         :fa-icon="footerLinkFaIcon"
-        :label="roadmapLabels.footerLink"
+        :label="footerLinkLabel"
       />
     </div>
   </StandardSlideLayout>
@@ -105,60 +106,50 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
   flex-direction: column;
   gap: 2rem;
 }
-
 .details-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+  grid-template-columns: repeat(var(--progress-detail-columns), minmax(0, 1fr));
   gap: 1.5rem;
   flex: 1;
 }
-
 .detail-card {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  align-content: flex-start;
   min-height: 0;
+  padding: 1.5rem 1.75rem;
   border-radius: 12px;
+  border: 1px solid #333344;
   background-color: #252535;
 }
-
-.detail-card--primary {
-  padding: 1.75rem 1.75rem 1.5rem;
-  border-left: 4px solid #e8341c;
-}
-
-.detail-card--secondary {
-  padding: 1.5rem 1.75rem;
-  border: 1px solid #333344;
-}
-
-.card-eyebrow {
-  margin: 0 0 0.65rem;
-  color: #e8341c;
-  font: 600 0.82rem/1.2 var(--font-mono);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 .card-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
   margin: 0 0 1.25rem;
+  padding-bottom: 0.7rem;
+  border-bottom: 1px solid #333344;
   color: #ffffff;
-  font-size: 1.6rem;
+  font-size: 1.25rem;
   font-weight: 600;
 }
-
+.card-title__icon {
+  color: #e8341c;
+  flex-shrink: 0;
+}
+.detail-rich-text {
+  color: #d0d0e8;
+  line-height: 1.5;
+}
 @media (max-width: 1199px) {
   .details-grid {
     grid-template-columns: 1fr;
   }
 }
-
 @media (max-width: 767px) {
   .content-wrapper {
     gap: 1.5rem;
   }
-
-  .detail-card--primary,
-  .detail-card--secondary {
+  .detail-card {
     padding: 1.25rem;
   }
 }

@@ -12,8 +12,20 @@ const validProgressTimelineSlide = {
       planned: { label: 'Next', summary: 'Planned work' },
       future: { label: 'Later', summary: 'Future work' },
     },
-    items: ['Ship it'],
-    themes: [{ category: 'Quality', target: 'Keep gates green' }],
+    sections: [
+      {
+        title: 'What changed',
+        fa_icon: 'fa-check',
+        type: 'richtext',
+        body: 'Ship it',
+      },
+      {
+        title: 'Signals',
+        type: 'keyvalue',
+        separator_fa_icon: 'fa-arrow-right',
+        body: [{ key: 'Quality', value: 'Keep gates green' }],
+      },
+    ],
   },
 } as const
 
@@ -100,5 +112,64 @@ describe('progress-timeline validation', () => {
         'slides[progress]',
       ),
     ).toThrow('slides[progress].content.stages must include no more than 6 stages.')
+  })
+
+  it('rejects more than three declarative sections', () => {
+    expect(() =>
+      validateTemplateSlide(
+        'progress-timeline',
+        {
+          ...validProgressTimelineSlide,
+          content: {
+            ...validProgressTimelineSlide.content,
+            sections: [
+              { type: 'richtext', body: 'One' },
+              { type: 'richtext', body: 'Two' },
+              { type: 'richtext', body: 'Three' },
+              { type: 'richtext', body: 'Four' },
+            ],
+          },
+        },
+        'slides[progress]',
+      ),
+    ).toThrow('slides[progress].content.sections must include no more than 3 sections.')
+  })
+
+  it('rejects separator icons for richtext sections', () => {
+    expect(() =>
+      validateTemplateSlide(
+        'progress-timeline',
+        {
+          ...validProgressTimelineSlide,
+          content: {
+            ...validProgressTimelineSlide.content,
+            sections: [
+              {
+                type: 'richtext',
+                separator_fa_icon: 'fa-arrow-right',
+                body: 'Text',
+              },
+            ],
+          },
+        },
+        'slides[progress]',
+      ),
+    ).toThrow('slides[progress].content.sections[0].separator_fa_icon is only allowed when slides[progress].content.sections[0].type is "keyvalue".')
+  })
+
+  it('rejects unsupported detail fields', () => {
+    expect(() =>
+      validateTemplateSlide(
+        'progress-timeline',
+        {
+          ...validProgressTimelineSlide,
+          content: {
+            ...validProgressTimelineSlide.content,
+            detail_columns: ['Fixed detail'],
+          },
+        },
+        'slides[progress]',
+      ),
+    ).toThrow('slides[progress].content.detail_columns is not allowed.')
   })
 })

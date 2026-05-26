@@ -32,34 +32,29 @@ presentation:
 
 ## Progress timeline slide content
 
-The [progress-timeline](/templates/progress-timeline) template is self-contained. The slide owns its stage strip, active-stage detail, and footer labels.
+The [progress-timeline](/templates/progress-timeline) template is self-contained. The slide owns its stage strip, active-stage detail sections, and footer labels.
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `content.stage` | yes | string |
-| `content.deliverables_heading` | | string |
-| `content.focus_areas_heading` | | string |
 | `content.footer_link_label` | | string |
-| `content.item_fa_icon` | | string |
-| `content.focus_areas_fa_icon` | | string |
-| `content.theme_fa_icon` | | string |
 | `content.footer_link_fa_icon` | | string |
 | `content.stages` | yes | object |
-| `content.items` | yes | string[] |
-| `content.themes` | yes | array of `{ category, target }` |
+| `content.sections` | yes | array of section objects |
 
-Stage summaries, item text, and theme targets support lightweight rich text.
+Stage summaries, rich-text section bodies, and key/value row values support lightweight rich text.
 
 ### `content.stages`
 
-Must contain exactly four keys:
+Must contain 2 to 6 entries. Stage keys are author-defined labels, such as:
 
-| Key | Required |
-| --- | --- |
-| `completed` | yes |
-| `in-progress` | yes |
-| `planned` | yes |
-| `future` | yes |
+| Example key |
+| --- |
+| `completed` |
+| `in-progress` |
+| `planned` |
+| `future` |
+| `6-months` |
 
 Each stage strip entry:
 
@@ -68,7 +63,17 @@ Each stage strip entry:
 | `label` | yes | string |
 | `summary` | yes | string |
 
-The active stage's `items` and `themes` live on the slide itself. Each `themes[]` entry has `category` (string, required) and `target` (string, required).
+### `content.sections`
+
+Must contain at least one and no more than three entries. Each section:
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `title` | | string |
+| `fa_icon` | | string |
+| `type` | yes | `richtext` or `keyvalue` |
+| `body` | yes | string for `richtext`; array of `{ key, value }` for `keyvalue` |
+| `separator_fa_icon` | | string; only valid for `keyvalue` sections |
 
 ## Slides
 
@@ -155,16 +160,10 @@ Each `sections[]` entry may also set `fa_icon` to override its badge icon.
 | --- | --- | --- |
 | `title` | yes | |
 | `content.stage` | yes | Must match one key in `content.stages` |
-| `content.deliverables_heading` | | |
-| `content.focus_areas_heading` | | |
 | `content.footer_link_label` | | |
-| `content.item_fa_icon` | | Defaults to `fa-chevron-right` |
-| `content.focus_areas_fa_icon` | | Defaults to `fa-bullseye` |
-| `content.theme_fa_icon` | | Defaults to `fa-chevron-right` |
 | `content.footer_link_fa_icon` | | Defaults to `fa-github` |
 | `content.stages` | yes | 2 to 6 stage strip entries, rendered in authored order |
-| `content.items` | yes | Active stage items |
-| `content.themes` | yes | Active stage themes |
+| `content.sections` | yes | 1 to 3 active-stage sections |
 
 ### people
 

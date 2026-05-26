@@ -64,8 +64,6 @@ const createValidPresentationDocument = () => ({
         title: 'Roadmap',
         content: {
           stage: 'completed',
-          deliverables_heading: 'Key deliverables',
-          focus_areas_heading: 'Focus areas',
           footer_link_label: 'View full roadmap & milestones on GitHub',
           stages: {
             completed: {
@@ -85,8 +83,18 @@ const createValidPresentationDocument = () => ({
               summary: 'Later',
             },
           },
-          items: ['One'],
-          themes: [{ category: 'Theme', target: 'Target' }],
+          sections: [
+            {
+              title: 'Key deliverables',
+              type: 'richtext',
+              body: 'One',
+            },
+            {
+              title: 'Focus areas',
+              type: 'keyvalue',
+              body: [{ key: 'Theme', value: 'Target' }],
+            },
+          ],
         },
       },
       {

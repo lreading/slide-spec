@@ -58,7 +58,7 @@ description: |-
 
 This is intentionally not full Markdown. Inline formatting, links, headings, tables, and raw HTML are treated as plain text. The renderer uses normal Vue text interpolation, so HTML-like input is escaped instead of injected into the page.
 
-Use lightweight rich text for body-copy fields such as action-card descriptions and footer text, people spotlight summaries, progress-timeline stage summaries and theme targets, shared list items, key-value row values, image descriptions, and closing messages. One-line strings continue to render as normal body copy.
+Use lightweight rich text for body-copy fields such as action-card descriptions and footer text, people spotlight summaries, progress-timeline stage summaries and section bodies, shared list items, key-value row values, image descriptions, and closing messages. One-line strings continue to render as normal body copy.
 
 ## Connectors
 

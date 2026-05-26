@@ -57,8 +57,6 @@ presentation:
       subtitle: Q1 security initiatives
       content:
         stage: completed
-        deliverables_heading: Completed initiatives
-        focus_areas_heading: Focus areas
         footer_link_label: View security roadmap
         stages:
           completed:
@@ -73,15 +71,23 @@ presentation:
           future:
             label: Future
             summary: Under evaluation.
-        items:
-          - Migrated all services to automated dependency scanning
-          - Completed annual penetration test with zero critical findings
-          - Rolled out hardware security keys for all engineering staff
-        themes:
-          - category: Supply Chain
-            target: Eliminate unscanned dependencies from production.
-          - category: Authentication
-            target: Phishing-resistant credentials for all engineers.
+        sections:
+          - title: Completed initiatives
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: |-
+              - Migrated all services to automated dependency scanning
+              - Completed annual penetration test with zero critical findings
+              - Rolled out hardware security keys for all engineering staff
+          - title: Focus areas
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Supply Chain
+                value: Eliminate unscanned dependencies from production.
+              - key: Authentication
+                value: Phishing-resistant credentials for all engineers.
     - template: people
       enabled: true
       title: Security team

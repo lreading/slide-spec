@@ -42,8 +42,11 @@ presentation:
           future:
             label: Future
             summary: Default roadmap fixture content.
-        items: []
-        themes: []
+        sections:
+          - title: Current focus
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: Default roadmap fixture content.
     - template: people
       enabled: true
       title: Contributors

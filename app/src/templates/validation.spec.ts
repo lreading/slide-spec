@@ -88,12 +88,23 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     title: 'Roadmap',
     content: {
       stage: 'completed',
-      deliverables_heading: 'Key deliverables',
-      focus_areas_heading: 'Focus areas',
       footer_link_label: 'View roadmap',
       stages: validRoadmapStages,
-      items: ['One'],
-      themes: [{ category: 'Theme', target: 'Target' }],
+      sections: [
+        {
+          title: 'Key deliverables',
+          fa_icon: 'fa-check',
+          type: 'richtext',
+          body: 'One',
+        },
+        {
+          title: 'Focus areas',
+          fa_icon: 'fa-bullseye',
+          type: 'keyvalue',
+          separator_fa_icon: 'fa-chevron-right',
+          body: [{ key: 'Theme', value: 'Target' }],
+        },
+      ],
     },
   },
   people: {
@@ -230,8 +241,12 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     content: {
       stage: 'completed',
       stages: validRoadmapStages,
-      items: [],
-      themes: [],
+      sections: [
+        {
+          type: 'richtext',
+          body: 'One',
+        },
+      ],
     },
   },
   people: {
@@ -365,8 +380,12 @@ describe('template validation', () => {
       content: {
         stage: 'active',
         stages: validRoadmapStages,
-        items: [],
-        themes: [],
+        sections: [
+          {
+            type: 'richtext',
+            body: 'One',
+          },
+        ],
       },
     },
     people: {
@@ -493,8 +512,16 @@ describe('template validation', () => {
               '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
               '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
             },
-            items: ['Measure adoption'],
-            themes: [{ category: 'Adoption', target: 'Make progress explicit' }],
+            sections: [
+              {
+                type: 'richtext',
+                body: 'Measure adoption',
+              },
+              {
+                type: 'keyvalue',
+                body: [{ key: 'Adoption', value: 'Make progress explicit' }],
+              },
+            ],
           },
         },
         'slides[progress-timeline]',

@@ -62,8 +62,6 @@ presentation:
       title: Roadmap
       content:
         stage: completed
-        deliverables_heading: Key deliverables
-        focus_areas_heading: Focus areas
         footer_link_label: View roadmap
         stages:
           completed:
@@ -78,11 +76,15 @@ presentation:
           future:
             label: Future
             summary: Later
-        items:
-          - One
-        themes:
-          - category: Theme
-            target: Target
+        sections:
+          - title: Key deliverables
+            type: richtext
+            body: One
+          - title: Focus areas
+            type: keyvalue
+            body:
+              - key: Theme
+                value: Target
 `)
   await writeFile(resolve(root, 'content', 'presentations', 'demo', 'generated.yaml'), `
 schemaVersion: 1

@@ -245,14 +245,44 @@
         "summary": { "$ref": "#/$defs/nonBlankString" }
       }
     },
-    "roadmapTheme": {
+    "progressTimelineKeyValueRow": {
       "type": "object",
-      "required": ["category", "target"],
+      "required": ["key", "value"],
       "additionalProperties": false,
       "properties": {
-        "category": { "$ref": "#/$defs/nonBlankString" },
-        "target": { "$ref": "#/$defs/nonBlankString" }
+        "key": { "$ref": "#/$defs/nonBlankString" },
+        "value": { "$ref": "#/$defs/nonBlankString" }
       }
+    },
+    "progressTimelineSection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["type", "body"],
+          "additionalProperties": false,
+          "properties": {
+            "title": { "$ref": "#/$defs/nonBlankString" },
+            "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" },
+            "type": { "const": "richtext" },
+            "body": { "$ref": "#/$defs/nonBlankString" }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["type", "body"],
+          "additionalProperties": false,
+          "properties": {
+            "title": { "$ref": "#/$defs/nonBlankString" },
+            "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" },
+            "type": { "const": "keyvalue" },
+            "separator_fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" },
+            "body": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/progressTimelineKeyValueRow" }
+            }
+          }
+        }
+      ]
     },
     "spotlightEntry": {
       "type": "object",

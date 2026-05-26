@@ -140,18 +140,20 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       const roadmapSlide: RoadmapSlide = slide
       const stage = roadmapSlide.content.stages[roadmapSlide.content.stage]
       await expect(page.getByText(`Roadmap: ${stage?.label}`)).toBeVisible()
-      await expect(page.getByText(roadmapSlide.content.deliverables_heading ?? 'Key deliverables')).toBeVisible()
-      await expect(page.getByText(roadmapSlide.content.focus_areas_heading ?? 'Focus areas')).toBeVisible()
       for (const timelineStage of Object.values(roadmapSlide.content.stages)) {
         await expect(page.getByText(timelineStage.label, { exact: true }).first()).toBeVisible()
       }
       await expect(page.getByText(stage?.summary ?? '', { exact: true }).first()).toBeVisible()
-      for (const item of roadmapSlide.content.items) {
-        await expect(page.getByText(item)).toBeVisible()
-      }
-      for (const theme of roadmapSlide.content.themes) {
-        await expect(page.getByText(theme.category, { exact: true }).first()).toBeVisible()
-        await expect(page.getByText(theme.target)).toBeVisible()
+      for (const section of roadmapSlide.content.sections) {
+        if (section.title) {
+          await expect(page.getByText(section.title, { exact: true }).first()).toBeVisible()
+        }
+        if (section.type === 'keyvalue') {
+          for (const row of section.body) {
+            await expect(page.getByText(row.key, { exact: true }).first()).toBeVisible()
+            await expect(page.getByText(row.value)).toBeVisible()
+          }
+        }
       }
       if (roadmapSlide.content.footer_link_label) {
         await expect(page.getByRole('link', { name: roadmapSlide.content.footer_link_label })).toHaveAttribute(

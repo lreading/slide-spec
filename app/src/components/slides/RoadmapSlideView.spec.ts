@@ -58,9 +58,53 @@ describe('RoadmapSlideView', () => {
     })
 
     expect(wrapper.text()).toContain('Roadmap: Completed')
-    expect(wrapper.find('.card-eyebrow').exists()).toBe(true)
     expect(wrapper.find('.card-title').exists()).toBe(true)
     expect(wrapper.find('.footer-link').exists()).toBe(false)
+  })
+
+  it('renders declarative progress timeline sections', () => {
+    const slide = roadmapSlides[0]
+
+    if (!slide || slide.template !== 'progress-timeline') {
+      throw new Error('Expected roadmap slide in fixture data')
+    }
+
+    const wrapper = mount(RoadmapSlideView, {
+      props: {
+        presentation: record.presentation,
+        site: contentRepository.getSiteContent(),
+        slide: {
+          ...slide,
+          content: {
+            stage: slide.content.stage,
+            stages: slide.content.stages,
+            footer_link_label: slide.content.footer_link_label,
+            sections: [
+              {
+                title: 'What happened',
+                fa_icon: 'fa-check',
+                type: 'richtext',
+                body: 'First paragraph.\n\n- Detail one\n- Detail two',
+              },
+              {
+                title: 'Signals',
+                fa_icon: 'fa-bullseye',
+                type: 'keyvalue',
+                separator_fa_icon: 'fa-arrow-right',
+                body: [{ key: 'Quality', value: 'Keep gates green' }],
+              },
+            ],
+          },
+        },
+        slideNumber: 4,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.findAll('.detail-card')).toHaveLength(2)
+    expect(wrapper.find('.detail-rich-text .rich-text__paragraph').text()).toBe('First paragraph.')
+    expect(wrapper.findAll('.detail-rich-text .rich-text__item')).toHaveLength(2)
+    expect(wrapper.find('.key-value-rows__key').text()).toBe('Quality')
   })
 
   it('renders timeline stages from authored stage keys', () => {
@@ -100,7 +144,7 @@ describe('RoadmapSlideView', () => {
     expect(wrapper.text()).toContain('6 Months')
   })
 
-  it('omits optional roadmap headings and stage eyebrow when slide-local labels are blank', () => {
+  it('omits optional section headings and stage label when slide-local labels are blank', () => {
     const slide = roadmapSlides[2]
 
     if (!slide || slide.template !== 'progress-timeline') {
@@ -117,9 +161,13 @@ describe('RoadmapSlideView', () => {
           subtitle: undefined,
           content: {
             ...slide.content,
-            deliverables_heading: undefined,
-            focus_areas_heading: undefined,
             footer_link_label: undefined,
+            sections: [
+              {
+                type: 'richtext',
+                body: 'Unlabeled detail',
+              },
+            ],
             stages: {
               ...slide.content.stages,
               planned: {
@@ -137,7 +185,6 @@ describe('RoadmapSlideView', () => {
 
     expect(wrapper.find('.card-eyebrow').exists()).toBe(false)
     expect(wrapper.find('.card-title').exists()).toBe(false)
-    expect(wrapper.find('.section-heading').exists()).toBe(false)
     expect(wrapper.find('.footer-link').exists()).toBe(false)
     expect(wrapper.find('.standard-slide-layout__subtitle').exists()).toBe(false)
 
