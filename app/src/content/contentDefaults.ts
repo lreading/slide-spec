@@ -4,7 +4,6 @@ import type {
   HomeHeroContent,
   HomeLogoLinkContent,
   NavigationContent,
-  ProgressTimelineSlideContent,
   PresentationToolbarContent,
   PresentationsPageContent,
   SiteContent,
@@ -15,12 +14,6 @@ export interface TitleSlideResolvedContent {
   titlePrimary?: string
   titleAccent?: string
   subtitlePrefix?: string
-}
-
-export interface RoadmapResolvedLabels {
-  deliverables?: string
-  focusAreas?: string
-  footerLink?: string
 }
 
 export interface ResolvedAttributionContent {
@@ -177,12 +170,4 @@ export const resolveTitleSlideContent = (
   titlePrimary: trimOrUndefined(slide.content.title_primary),
   titleAccent: trimOrUndefined(slide.content.title_accent),
   subtitlePrefix: trimOrUndefined(slide.content.subtitle_prefix),
-})
-
-export const resolveRoadmapLabels = (
-  content: ProgressTimelineSlideContent,
-): RoadmapResolvedLabels => ({
-  deliverables: trimOrUndefined(content.deliverables_heading),
-  focusAreas: trimOrUndefined(content.focus_areas_heading),
-  footerLink: trimOrUndefined(content.footer_link_label),
 })

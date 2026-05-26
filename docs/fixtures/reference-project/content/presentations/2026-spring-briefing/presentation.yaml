@@ -67,11 +67,7 @@ presentation:
       subtitle: Delivered work
       content:
         stage: completed
-        deliverables_heading: Key deliverables
-        focus_areas_heading: Focus areas
         footer_link_label: View roadmap on GitHub
-        item_fa_icon: fa-check
-        focus_areas_fa_icon: fa-bullseye
         stages:
           completed:
             label: Completed
@@ -85,15 +81,23 @@ presentation:
           future:
             label: Future
             summary: Longer-term work that depends on the current architecture pass.
-        items:
-          - Published a new starter kit for customer launch checklists.
-          - Added exportable PDF summaries for customer-facing review decks.
-          - Reworked the deployment checklist UI for operators.
-        themes:
-          - category: Operator UX
-            target: Make release review and launch readiness easier to audit.
-          - category: Exportability
-            target: Support polished handoff artifacts without manual cleanup.
+        sections:
+          - title: Key deliverables
+            fa_icon: fa-check
+            type: richtext
+            body: |-
+              - Published a new starter kit for customer launch checklists.
+              - Added exportable PDF summaries for customer-facing review decks.
+              - Reworked the deployment checklist UI for operators.
+          - title: Focus areas
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Operator UX
+                value: Make release review and launch readiness easier to audit.
+              - key: Exportability
+                value: Support polished handoff artifacts without manual cleanup.
     - template: people
       enabled: true
       title: Contributor spotlight

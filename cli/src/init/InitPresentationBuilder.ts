@@ -189,8 +189,14 @@ export class InitPresentationBuilder {
                   summary: 'Longer-horizon work under consideration.',
                 },
               },
-              items: [],
-              themes: [],
+              sections: [
+                {
+                  title: 'Current focus',
+                  fa_icon: 'fa-chevron-right',
+                  type: 'richtext',
+                  body: 'Replace with progress details for the active stage.',
+                },
+              ],
             },
           },
           {

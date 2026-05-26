@@ -184,16 +184,32 @@ export interface TimelineSlideContent {
 
 export interface ProgressTimelineSlideContent {
   stage: RoadmapStageStatus
-  deliverables_heading?: string
-  focus_areas_heading?: string
   footer_link_label?: string
-  item_fa_icon?: string
-  focus_areas_fa_icon?: string
-  theme_fa_icon?: string
   footer_link_fa_icon?: string
   stages: Record<RoadmapStageStatus, RoadmapStageSummary>
-  items: string[]
-  themes: RoadmapTheme[]
+  sections: ProgressTimelineSection[]
+}
+
+export interface ProgressTimelineRichTextSection {
+  title?: string
+  fa_icon?: string
+  type: 'richtext'
+  body: string
+}
+
+export interface ProgressTimelineKeyValueSection {
+  title?: string
+  fa_icon?: string
+  type: 'keyvalue'
+  separator_fa_icon?: string
+  body: ProgressTimelineKeyValueRow[]
+}
+
+export type ProgressTimelineSection = ProgressTimelineRichTextSection | ProgressTimelineKeyValueSection
+
+export interface ProgressTimelineKeyValueRow {
+  key: string
+  value: string
 }
 
 export interface PeopleSlideContent {
@@ -311,11 +327,6 @@ export interface CardGridItem {
 }
 
 export type RoadmapStageStatus = string
-
-export interface RoadmapTheme {
-  category: string
-  target: string
-}
 
 export interface RoadmapStageSummary {
   label: string

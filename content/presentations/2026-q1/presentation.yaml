@@ -71,11 +71,7 @@ presentation:
       title: "Roadmap: Completed"
       content:
         stage: completed
-        deliverables_heading: Key deliverables
-        focus_areas_heading: Focus areas
         footer_link_label: View full roadmap & milestones on GitHub
-        item_fa_icon: fa-check
-        focus_areas_fa_icon: fa-bullseye
         stages:
           completed:
             label: Completed
@@ -88,25 +84,31 @@ presentation:
             label: Planned
             summary: The published roadmap shifts next-step planning toward enterprise readiness, better UX, and automation-friendly
               workflows.
-        items:
-          - Reusable briefing templates landed for roadmap, release, and community updates.
-          - Aurora Notes' content manifest gained clearer publication metadata.
-          - Starter examples now cover weekly notes, planning reviews, and decision logs.
-          - Preview and archive fixes landed for nested routes, ordering, and template visibility.
-        themes:
-          - category: Team Readiness
-            target: Templates and preview fixes continue to make Aurora Notes easier for teams to adopt.
-          - category: Publishing Flow
-            target: Archive ordering and nested routes improved compatibility with static hosting workflows.
-          - category: Authoring Quality
-            target: Validation and empty-state updates reduced friction in day-to-day editing.
+        sections:
+          - title: Key deliverables
+            fa_icon: fa-check
+            type: richtext
+            body: |-
+              - Reusable briefing templates landed for roadmap, release, and community updates.
+              - Aurora Notes' content manifest gained clearer publication metadata.
+              - Starter examples now cover weekly notes, planning reviews, and decision logs.
+              - Preview and archive fixes landed for nested routes, ordering, and template visibility.
+          - title: Focus areas
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Team Readiness
+                value: Templates and preview fixes continue to make Aurora Notes easier for teams to adopt.
+              - key: Publishing Flow
+                value: Archive ordering and nested routes improved compatibility with static hosting workflows.
+              - key: Authoring Quality
+                value: Validation and empty-state updates reduced friction in day-to-day editing.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: In Progress"
       content:
         stage: in-progress
-        deliverables_heading: Key deliverables
-        focus_areas_heading: Focus areas
         footer_link_label: View full roadmap & milestones on GitHub
         stages:
           completed:
@@ -123,25 +125,35 @@ presentation:
           future:
             label: Future
             summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
-        items:
-          - Presentation search coverage and keyboard navigation coverage both landed in March.
-          - Documentation cleanup continued with dependency updates, template example fixes, and contributor guidance changes.
-          - Workflow and dependency maintenance continued across CI actions and build assets.
-          - The public planning board opened on March 8 to align future work under shared themes.
-        themes:
-          - category: Maintainability
-            target: Testing coverage, dependency hygiene, and build cleanup remain active themes.
-          - category: Community Confidence
-            target: Contributor guidance and documentation are being tightened as the project grows.
-          - category: Release Notes
-            target: Release-readiness work continued even without a tagged GitHub release in the window.
+        sections:
+          - title: Key deliverables
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: >-
+              - Presentation search coverage and keyboard navigation coverage both landed in March.
+
+              - Documentation cleanup continued with dependency updates, template example fixes, and contributor
+              guidance changes.
+
+              - Workflow and dependency maintenance continued across CI actions and build assets.
+
+              - The public planning board opened on March 8 to align future work under shared themes.
+          - title: Focus areas
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Maintainability
+                value: Testing coverage, dependency hygiene, and build cleanup remain active themes.
+              - key: Community Confidence
+                value: Contributor guidance and documentation are being tightened as the project grows.
+              - key: Release Notes
+                value: Release-readiness work continued even without a tagged GitHub release in the window.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Planned"
       content:
         stage: planned
-        deliverables_heading: Key deliverables
-        focus_areas_heading: Focus areas
         footer_link_label: View full roadmap & milestones on GitHub
         stages:
           completed:
@@ -158,25 +170,31 @@ presentation:
           future:
             label: Future
             summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
-        items:
-          - Workspace presets, review checklists, and project templates remain part of the team-readiness backlog.
-          - Content catalogs, authoring guides, and CLI preview polish are called out as future deliverables.
-          - UX work includes search ergonomics, WCAG accessibility baselines, and a UI style guide.
-          - Export options, preview hooks, and publishing workflows are listed under automation.
-        themes:
-          - category: Team Readiness
-            target: Support team adoption without abandoning Git-based workflows.
-          - category: UX & Accessibility
-            target: Improve approachability, consistency, and accessibility across the product.
-          - category: Automation & Integration
-            target: Make Aurora Notes easier to connect to publishing workflows and tooling.
+        sections:
+          - title: Key deliverables
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: |-
+              - Workspace presets, review checklists, and project templates remain part of the team-readiness backlog.
+              - Content catalogs, authoring guides, and CLI preview polish are called out as future deliverables.
+              - UX work includes search ergonomics, WCAG accessibility baselines, and a UI style guide.
+              - Export options, preview hooks, and publishing workflows are listed under automation.
+          - title: Focus areas
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Team Readiness
+                value: Support team adoption without abandoning Git-based workflows.
+              - key: UX & Accessibility
+                value: Improve approachability, consistency, and accessibility across the product.
+              - key: Automation & Integration
+                value: Make Aurora Notes easier to connect to publishing workflows and tooling.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: Future"
       content:
         stage: future
-        deliverables_heading: Key deliverables
-        focus_areas_heading: Focus areas
         footer_link_label: View full roadmap & milestones on GitHub
         stages:
           completed:
@@ -193,18 +211,26 @@ presentation:
           future:
             label: Future
             summary: Version 3.x remains centered on a more interoperable file format and long-horizon project maturity goals.
-        items:
-          - Version 3.x is expected to move toward reusable content packages instead of one-off decks.
-          - Portable metadata is the likely direction for the future project manifest.
-          - The project page explicitly calls out integrations with adjacent publishing tools.
-          - The long-horizon roadmap also aims for a stable template marketplace.
-        themes:
-          - category: Portable Metadata
-            target: Center authored updates around reusable project data and interchange.
-          - category: Publishing Ecosystem
-            target: Reduce friction between Aurora Notes and other open-source publishing tools.
-          - category: Project Maturity
-            target: Continue the path from Demo Lab toward stable-template maturity.
+        sections:
+          - title: Key deliverables
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: |-
+              - Version 3.x is expected to move toward reusable content packages instead of one-off decks.
+              - Portable metadata is the likely direction for the future project manifest.
+              - The project page explicitly calls out integrations with adjacent publishing tools.
+              - The long-horizon roadmap also aims for a stable template marketplace.
+          - title: Focus areas
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Portable Metadata
+                value: Center authored updates around reusable project data and interchange.
+              - key: Publishing Ecosystem
+                value: Reduce friction between Aurora Notes and other open-source publishing tools.
+              - key: Project Maturity
+                value: Continue the path from Demo Lab toward stable-template maturity.
     - template: people
       enabled: true
       title: Contributor Spotlight
@@ -256,8 +282,8 @@ presentation:
             url_label: View the project page
             url: https://example.org/projects/aurora-notes/
           - type: Documentation
-            title: The version 2 documentation continues to cover configuration, templates, testing, and content metadata for current
-              users and contributors.
+            title: The version 2 documentation continues to cover configuration, templates, testing, and content metadata for
+              current users and contributors.
             url_label: Browse the docs
             url: https://docs.example.org/aurora-notes
     - template: image-and-bullets
@@ -301,8 +327,8 @@ presentation:
         cards:
           - title: Report Bugs
             fa_icon: fa-bug
-            description: File a reproducible issue with environment details, screenshots, and any project or stack context that helps
-              maintainers confirm the problem.
+            description: File a reproducible issue with environment details, screenshots, and any project or stack context that
+              helps maintainers confirm the problem.
             url_label: Submit an issue
             url: https://github.com/example-org/aurora-notes/issues
           - title: Submit Code

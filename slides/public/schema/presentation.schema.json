@@ -221,16 +221,17 @@
             "template": { "const": "progress-timeline" },
             "content": {
               "type": "object",
-              "required": ["stage", "stages", "items", "themes"],
+              "required": ["stage", "stages", "sections"],
               "additionalProperties": false,
               "properties": {
                 "stage": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
-                "deliverables_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
-                "focus_areas_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "sections": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 3,
+                  "items": { "$ref": "defs.schema.json#/$defs/progressTimelineSection" }
+                },
                 "footer_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
-                "item_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
-                "focus_areas_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
-                "theme_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "footer_link_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "stages": {
                   "type": "object",
@@ -238,11 +239,6 @@
                   "maxProperties": 6,
                   "propertyNames": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                   "additionalProperties": { "$ref": "defs.schema.json#/$defs/roadmapStage" }
-                },
-                "items": { "$ref": "defs.schema.json#/$defs/stringArray" },
-                "themes": {
-                  "type": "array",
-                  "items": { "$ref": "defs.schema.json#/$defs/roadmapTheme" }
                 }
               }
             }

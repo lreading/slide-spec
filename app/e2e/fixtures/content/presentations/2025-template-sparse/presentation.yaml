@@ -53,11 +53,13 @@ presentation:
           future:
             label: Future
             summary: Later
-        items:
-          - One
-        themes:
-          - category: Theme
-            target: Target
+        sections:
+          - type: richtext
+            body: One
+          - type: keyvalue
+            body:
+              - key: Theme
+                value: Target
     - template: people
       enabled: true
       title: Contributors

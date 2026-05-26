@@ -45,17 +45,42 @@ function assertRoadmapStages(value: unknown, activeStage: unknown, path: string)
   )
 }
 
-function assertRoadmapTheme(value: unknown, path: string): void {
+function assertProgressTimelineKeyValueRow(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
-  assertNonBlankString(value.category, `${path}.category`)
-  assertNonBlankString(value.target, `${path}.target`)
+  assertNoUnexpectedKeys(value, ['key', 'value'], path)
+  assertNonBlankString(value.key, `${path}.key`)
+  assertNonBlankString(value.value, `${path}.value`)
 }
 
-function assertRoadmapThemes(value: unknown, path: string): void {
+function assertProgressTimelineSection(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['title', 'fa_icon', 'type', 'separator_fa_icon', 'body'], path)
+  assertOptionalString(value.title, `${path}.title`)
+  assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
+
+  if (value.type === 'richtext') {
+    assertNonBlankString(value.body, `${path}.body`)
+    assert(
+      value.separator_fa_icon === undefined,
+      `${path}.separator_fa_icon is only allowed when ${path}.type is "keyvalue".`,
+    )
+    return
+  }
+
+  assert(value.type === 'keyvalue', `${path}.type must be "richtext" or "keyvalue".`)
+  assertOptionalFontAwesomeIcon(value.separator_fa_icon, `${path}.separator_fa_icon`)
+  assert(Array.isArray(value.body), `${path}.body must be an array.`)
+  ;(value.body as unknown[]).forEach((row, index) => {
+    assertProgressTimelineKeyValueRow(row, `${path}.body[${index}]`)
+  })
+}
+
+function assertProgressTimelineSections(value: unknown, path: string): void {
   assert(Array.isArray(value), `${path} must be an array.`)
-  ;(value as unknown[]).forEach((theme, index) => {
-    assert(isRecord(theme), `${path}[${index}] must be an object.`)
-    assertRoadmapTheme(theme, `${path}[${index}]`)
+  assert(value.length >= 1, `${path} must include at least 1 section.`)
+  assert(value.length <= 3, `${path} must include no more than 3 sections.`)
+  value.forEach((section, index) => {
+    assertProgressTimelineSection(section, `${path}[${index}]`)
   })
 }
 
@@ -212,29 +237,17 @@ const progressTimelineValidator: SlideTemplateValidator = (slide, path) => {
     content,
     [
       'stage',
-      'deliverables_heading',
-      'focus_areas_heading',
+      'sections',
       'footer_link_label',
       'stages',
-      'items',
-      'themes',
-      'item_fa_icon',
-      'focus_areas_fa_icon',
-      'theme_fa_icon',
       'footer_link_fa_icon',
     ],
     `${path}.content`,
   )
-  assertOptionalString(content.deliverables_heading, `${path}.content.deliverables_heading`)
-  assertOptionalString(content.focus_areas_heading, `${path}.content.focus_areas_heading`)
   assertOptionalString(content.footer_link_label, `${path}.content.footer_link_label`)
-  assertOptionalFontAwesomeIcon(content.item_fa_icon, `${path}.content.item_fa_icon`)
-  assertOptionalFontAwesomeIcon(content.focus_areas_fa_icon, `${path}.content.focus_areas_fa_icon`)
-  assertOptionalFontAwesomeIcon(content.theme_fa_icon, `${path}.content.theme_fa_icon`)
   assertOptionalFontAwesomeIcon(content.footer_link_fa_icon, `${path}.content.footer_link_fa_icon`)
   assertRoadmapStages(content.stages, content.stage, `${path}.content`)
-  assertStringArray(content.items, `${path}.content.items`)
-  assertRoadmapThemes(content.themes, `${path}.content.themes`)
+  assertProgressTimelineSections(content.sections, `${path}.content.sections`)
 }
 
 const peopleValidator: SlideTemplateValidator = (slide, path) => {

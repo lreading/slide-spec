@@ -13,16 +13,24 @@ const validProgressTimelineSlide = {
   title: 'Progress',
   content: {
     stage: 'planned',
-    deliverables_heading: 'Deliverables',
-    focus_areas_heading: 'Focus',
     footer_link_label: 'Roadmap',
-    item_fa_icon: 'fa-chevron-right',
-    focus_areas_fa_icon: 'fa-bullseye',
-    theme_fa_icon: 'fa-check',
     footer_link_fa_icon: 'fa-github',
     stages: validRoadmapStages,
-    items: ['Ship it'],
-    themes: [{ category: 'Quality', target: 'Keep gates green' }],
+    sections: [
+      {
+        title: 'Details',
+        fa_icon: 'fa-chevron-right',
+        type: 'richtext',
+        body: 'Ship it',
+      },
+      {
+        title: 'Signals',
+        fa_icon: 'fa-bullseye',
+        type: 'keyvalue',
+        separator_fa_icon: 'fa-check',
+        body: [{ key: 'Quality', value: 'Keep gates green' }],
+      },
+    ],
   },
 } as const
 

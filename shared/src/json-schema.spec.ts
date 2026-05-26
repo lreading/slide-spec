@@ -262,14 +262,59 @@ describe('public JSON Schemas', () => {
               '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
               '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
             },
-            items: ['Measure adoption'],
-            themes: [{ category: 'Adoption', target: 'Make progress explicit' }],
+            sections: [
+              {
+                title: 'What happened',
+                fa_icon: 'fa-check',
+                type: 'richtext',
+                body: 'Measure adoption',
+              },
+              {
+                title: 'Signals',
+                fa_icon: 'fa-bullseye',
+                type: 'keyvalue',
+                separator_fa_icon: 'fa-arrow-right',
+                body: [{ key: 'Adoption', value: 'Make progress explicit' }],
+              },
+            ],
           },
         }],
       },
     }
 
     expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('rejects progress-timeline rich text sections with separator icons', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'progress-timeline',
+          enabled: true,
+          title: 'Roadmap',
+          content: {
+            stage: '6-months',
+            stages: {
+              '3-months': { label: '3 Months', summary: 'Stabilize adoption.' },
+              '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
+              '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
+            },
+            sections: [{
+              type: 'richtext',
+              separator_fa_icon: 'fa-arrow-right',
+              body: 'Measure adoption',
+            }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document).length).toBeGreaterThan(0)
   })
 
   it('accepts action-cards slides with informational cards and a disabled footer link', async () => {
@@ -419,8 +464,10 @@ describe('public JSON Schemas', () => {
             stages: {
               completed: { label: 'Completed', summary: 'Delivered work.' },
             },
-            items: ['Measure adoption'],
-            themes: [{ category: 'Adoption', target: 'Make progress explicit' }],
+            sections: [{
+              type: 'richtext',
+              body: 'Measure adoption',
+            }],
           },
         }],
       },
