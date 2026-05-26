@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 
 import StandardSlideLayout from '../presentation/StandardSlideLayout.vue'
+import RichText from '../ui/RichText.vue'
 
 import { assetResolver } from '../../content/AssetResolver'
 import type { ImageAndBulletsSlide, PresentationContent } from '../../types/content'
@@ -46,7 +47,9 @@ const showSplitLayout = computed(() => hasImage.value && hasBullets.value)
     >
       <figure v-if="hasImage" class="image-panel">
         <img :src="imageUrl" :alt="imageAlt" class="image-panel__image" />
-        <figcaption v-if="imageDescription" class="image-panel__description">{{ imageDescription }}</figcaption>
+        <figcaption v-if="imageDescription" class="image-panel__description">
+          <RichText :text="imageDescription" />
+        </figcaption>
       </figure>
 
       <ul v-if="hasBullets" class="bullet-list">

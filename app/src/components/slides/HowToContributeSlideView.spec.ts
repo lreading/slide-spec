@@ -133,6 +133,39 @@ describe('HowToContributeSlideView', () => {
     expect(wrapper.find('.card-link').exists()).toBe(false)
   })
 
+  it('renders lightweight rich text in card descriptions', () => {
+    const site: SiteContent = {
+      title: 'Aurora Notes Updates',
+      home_intro: 'Intro',
+      home_cta_label: 'View latest presentation',
+      presentations_cta_label: 'View all presentations',
+      links: {},
+    }
+
+    const wrapper = mount(HowToContributeSlideView, {
+      props: {
+        presentation,
+        site,
+        slide: {
+          ...slide,
+          content: {
+            cards: [
+              {
+                title: 'Decide Scope',
+                description: 'Review partner boundaries.\n\n- Confirm owners\n- Capture risks',
+              },
+            ],
+          },
+        },
+        slideNumber: 11,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.find('.card-text .rich-text__paragraph').text()).toBe('Review partner boundaries.')
+    expect(wrapper.findAll('.card-text .rich-text__list--unordered .rich-text__item')).toHaveLength(2)
+  })
+
   it('omits the repository footer link when disabled for the slide', () => {
     const site: SiteContent = {
       title: 'Aurora Notes Updates',

@@ -41,6 +41,25 @@ Every slide uses a template that determines its layout. Templates range from sim
 
 Slides are entries in the `presentation.slides` array. Each slide has a `template`, an `enabled` flag, an optional `title` and `subtitle`, and a `content` block whose shape depends on the template. Disabled slides are skipped during rendering but preserved in the YAML for future use.
 
+## Lightweight rich text
+
+Long-form string fields can use YAML block scalars for simple paragraph and list structure without adding duplicate fields. Blank-line-separated text renders as separate paragraphs. A block where every line starts with `- ` or `* ` renders as an unordered list. A block where every line starts with ordered markers such as `1. ` or `1) ` renders as an ordered list.
+
+```yaml
+description: |-
+  First paragraph.
+
+  - First unordered item
+  - Second unordered item
+
+  1. First ordered item
+  2. Second ordered item
+```
+
+This is intentionally not full Markdown. Inline formatting, links, headings, tables, and raw HTML are treated as plain text. The renderer uses normal Vue text interpolation, so HTML-like input is escaped instead of injected into the page.
+
+Use lightweight rich text for body-copy fields such as action-card descriptions and footer text, people spotlight summaries, progress-timeline stage summaries and theme targets, shared list items, key-value row values, image descriptions, and closing messages. One-line strings continue to render as normal body copy.
+
 ## Connectors
 
 Connectors are data sources that populate `generated.yaml` automatically. Configure a connector in `site.yaml` and use the `fetch` command to pull live data. If your data comes from a source without a built-in connector, you can always write `generated.yaml` by hand. See [connectors](/connectors/) for available options.

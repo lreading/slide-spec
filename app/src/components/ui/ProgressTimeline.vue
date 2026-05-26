@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import RichText from './RichText.vue'
+
 export type ProgressTimelineState = 'viewed' | 'current' | 'upcoming'
 
 export interface ProgressTimelineItem {
@@ -28,7 +30,7 @@ defineProps<{
       >
         <div class="progress-timeline__node"></div>
         <h3 class="progress-timeline__title">{{ item.title }}</h3>
-        <p class="progress-timeline__summary">{{ item.summary }}</p>
+        <RichText :text="item.summary" class="progress-timeline__summary" />
       </div>
     </div>
   </div>

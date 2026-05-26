@@ -18,4 +18,20 @@ describe('KeyValueRows', () => {
     expect(wrapper.text()).toContain('Category')
     expect(wrapper.text()).toContain('More')
   })
+
+  it('renders lightweight rich text values', () => {
+    const wrapper = mount(KeyValueRows, {
+      props: {
+        rows: [
+          {
+            key: 'Category',
+            value: 'First paragraph.\n\n1. First step\n2. Second step',
+          },
+        ],
+      },
+    })
+
+    expect(wrapper.find('.rich-text__paragraph').text()).toBe('First paragraph.')
+    expect(wrapper.findAll('.rich-text__list--ordered .rich-text__item')).toHaveLength(2)
+  })
 })

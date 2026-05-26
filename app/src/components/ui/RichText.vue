@@ -1,0 +1,49 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+
+import { parseRichTextBlocks } from '../../../../shared/src/rich-text'
+
+const props = defineProps<{
+  text: string
+}>()
+
+const blocks = computed(() => parseRichTextBlocks(props.text))
+</script>
+
+<template>
+  <div class="rich-text">
+    <template v-for="(block, blockIndex) in blocks" :key="`${block.type}-${blockIndex}`">
+      <p v-if="block.type === 'paragraph'" class="rich-text__paragraph">{{ block.text }}</p>
+      <ul v-else-if="block.type === 'unordered-list'" class="rich-text__list rich-text__list--unordered">
+        <li v-for="(item, itemIndex) in block.items" :key="`${blockIndex}-${itemIndex}`" class="rich-text__item">
+          {{ item }}
+        </li>
+      </ul>
+      <ol v-else class="rich-text__list rich-text__list--ordered">
+        <li v-for="(item, itemIndex) in block.items" :key="`${blockIndex}-${itemIndex}`" class="rich-text__item">
+          {{ item }}
+        </li>
+      </ol>
+    </template>
+  </div>
+</template>
+
+<style scoped>
+.rich-text {
+  display: grid;
+  gap: var(--rich-text-gap, 0.55em);
+}
+
+.rich-text__paragraph,
+.rich-text__list {
+  margin: 0;
+}
+
+.rich-text__list {
+  padding-left: var(--rich-text-list-padding-left, 1.25em);
+}
+
+.rich-text__item + .rich-text__item {
+  margin-top: var(--rich-text-item-gap, 0.25em);
+}
+</style>

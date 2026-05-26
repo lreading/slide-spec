@@ -30,7 +30,11 @@ Focuses a single stage. Each slide carries its own stage headings and stage stri
         summary: Stabilize adoption.
       6-months:
         label: 6 Months
-        summary: Expand core workflows.
+        summary: |-
+          Expand core workflows.
+
+          1. Improve authoring
+          2. Tighten previews
       12-months:
         label: 12 Months
         summary: Scale the operating model.
@@ -39,7 +43,11 @@ Focuses a single stage. Each slide carries its own stage headings and stage stri
       - Added exportable PDF summaries.
     themes:
       - category: Operator UX
-        target: Make release review easier to audit.
+        target: |-
+          Make release review easier to audit.
+
+          - Preserve decisions
+          - Surface follow-ups
       - category: Exportability
         target: Support polished handoff artifacts.
 ```
@@ -48,10 +56,10 @@ Focuses a single stage. Each slide carries its own stage headings and stage stri
 
 | Region | Source |
 | --- | --- |
-| Progress strip | All stages from `content.stages` |
+| Progress strip | All stages from `content.stages`; stage summaries support lightweight rich text |
 | Active stage highlight | Matches `content.stage` |
 | Deliverables column | `content.deliverables_heading` + `content.items` |
-| Focus areas column | `content.focus_areas_heading` + `content.themes` |
+| Focus areas column | `content.focus_areas_heading` + `content.themes`; theme targets support lightweight rich text |
 | Footer link | `content.footer_link_label` with href `site.links.repository.url` |
 
 If `subtitle` is omitted, the active stage's `summary` is used instead.
@@ -71,9 +79,9 @@ If `subtitle` is omitted, the active stage's `summary` is used instead.
 | `content.theme_fa_icon` | | string | Defaults to `fa-chevron-right` |
 | `content.footer_link_fa_icon` | | string | Defaults to `fa-github` |
 | `content.stages` | yes | object | 2 to 6 stage strip entries, rendered in authored order |
-| `content.items` | yes | string[] | Active stage items |
-| `content.themes` | yes | array | Active stage themes |
+| `content.items` | yes | string[] | Active stage items; item text supports lightweight rich text |
+| `content.themes` | yes | array | Active stage themes; `target` supports lightweight rich text |
 
-Stage keys may use the existing `completed`, `in-progress`, `planned`, and `future` shape, or custom labels such as `3-months`, `6-months`, and `12-months`. The progress timeline schema is documented in [presentation.yaml](/schema/presentation#progress-timeline).
+Stage keys may use the existing `completed`, `in-progress`, `planned`, and `future` shape, or custom labels such as `3-months`, `6-months`, and `12-months`. Stage summaries, deliverable items, and theme targets accept the lightweight rich text documented in [Concepts](/concepts#lightweight-rich-text). The progress timeline schema is documented in [presentation.yaml](/schema/presentation#progress-timeline).
 
 Icon fields use supported values from the [Font Awesome icon reference](/reference/fontawesome).
