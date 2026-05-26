@@ -138,6 +138,8 @@ const communityFaIcon = computed(() => props.slide.content.community_fa_icon ?? 
 }
 
 .hero-subtitle {
+  --rich-text-align: center;
+
   margin: 0;
   font-size: 1.875rem;
   line-height: 2.25rem;
