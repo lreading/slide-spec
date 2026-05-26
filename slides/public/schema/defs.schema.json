@@ -222,6 +222,20 @@
         "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" }
       }
     },
+    "cardGridItem": {
+      "type": "object",
+      "required": ["title"],
+      "additionalProperties": false,
+      "not": {
+        "required": ["marker_text", "fa_icon"]
+      },
+      "properties": {
+        "title": { "$ref": "#/$defs/nonBlankString" },
+        "marker_text": { "$ref": "#/$defs/nonBlankString" },
+        "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" },
+        "url": { "$ref": "#/$defs/nonBlankString" }
+      }
+    },
     "roadmapStage": {
       "type": "object",
       "required": ["label", "summary"],
@@ -242,10 +256,11 @@
     },
     "spotlightEntry": {
       "type": "object",
-      "required": ["login", "summary"],
+      "required": ["summary"],
       "additionalProperties": false,
       "properties": {
         "login": { "$ref": "#/$defs/nonBlankString" },
+        "name": { "$ref": "#/$defs/nonBlankString" },
         "summary": { "$ref": "#/$defs/nonBlankString" },
         "fa_icon": { "$ref": "#/$defs/fontAwesomeIcon" }
       }
@@ -269,7 +284,7 @@
     },
     "contributionCard": {
       "type": "object",
-      "required": ["title", "description"],
+      "required": ["title"],
       "additionalProperties": false,
       "dependentRequired": {
         "url": ["url_label"],

@@ -71,10 +71,24 @@ function assertContentSection(value: unknown, path: string): void {
   assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
 }
 
+function assertCardGridItem(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['title', 'marker_text', 'fa_icon', 'url'], path)
+  assertNonBlankString(value.title, `${path}.title`)
+  assertOptionalString(value.marker_text, `${path}.marker_text`)
+  assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
+  assertOptionalString(value.url, `${path}.url`)
+  assert(
+    value.marker_text === undefined || value.fa_icon === undefined,
+    `${path} must not provide marker_text and fa_icon together.`,
+  )
+}
+
 function assertSpotlightEntry(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
-  assertNoUnexpectedKeys(value, ['login', 'summary', 'fa_icon'], path)
-  assertNonBlankString(value.login, `${path}.login`)
+  assertNoUnexpectedKeys(value, ['login', 'name', 'summary', 'fa_icon'], path)
+  assertOptionalString(value.login, `${path}.login`)
+  assertOptionalString(value.name, `${path}.name`)
   assertNonBlankString(value.summary, `${path}.summary`)
   assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
 }
@@ -83,7 +97,7 @@ function assertContributionCard(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNoUnexpectedKeys(value, ['title', 'description', 'url_label', 'url', 'fa_icon', 'link_fa_icon'], path)
   assertNonBlankString(value.title, `${path}.title`)
-  assertNonBlankString(value.description, `${path}.description`)
+  assertOptionalString(value.description, `${path}.description`)
   assertOptionalString(value.url_label, `${path}.url_label`)
   assertOptionalString(value.url, `${path}.url`)
   assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
@@ -143,6 +157,16 @@ const agendaValidator: SlideTemplateValidator = (slide, path) => {
     assertNoUnexpectedKeys(content, ['card_arrow_fa_icon'], `${path}.content`)
     assertOptionalFontAwesomeIcon(content.card_arrow_fa_icon, `${path}.content.card_arrow_fa_icon`)
   }
+}
+
+const cardGridValidator: SlideTemplateValidator = (slide, path) => {
+  assertNonBlankString(slide.title, `${path}.title`)
+  const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(content, ['card_arrow_fa_icon', 'items'], `${path}.content`)
+  assertOptionalFontAwesomeIcon(content.card_arrow_fa_icon, `${path}.content.card_arrow_fa_icon`)
+  assert(Array.isArray(content.items), `${path}.content.items must be an array.`)
+  ;(content.items as unknown[]).forEach((item, index) =>
+    assertCardGridItem(item, `${path}.content.items[${index}]`))
 }
 
 const sectionListGridValidator: SlideTemplateValidator = (slide, path) => {
@@ -347,6 +371,7 @@ export const slideTemplateValidators: Record<SlideTemplateId, SlideTemplateValid
   hero: heroValidator,
   'section-title': sectionTitleValidator,
   agenda: agendaValidator,
+  'card-grid': cardGridValidator,
   'section-list-grid': sectionListGridValidator,
   timeline: timelineValidator,
   'progress-timeline': progressTimelineValidator,

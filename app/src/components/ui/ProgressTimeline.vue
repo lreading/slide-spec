@@ -142,6 +142,8 @@ defineProps<{
   color: #8888aa;
   font-size: 0.82rem;
   line-height: 1.45;
+  text-align: center;
+  justify-items: center;
 }
 
 @media (max-width: 1199px) {

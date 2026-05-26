@@ -133,6 +133,38 @@ describe('HowToContributeSlideView', () => {
     expect(wrapper.find('.card-link').exists()).toBe(false)
   })
 
+  it('renders cards without descriptions', () => {
+    const site: SiteContent = {
+      title: 'Aurora Notes Updates',
+      home_intro: 'Intro',
+      home_cta_label: 'View latest presentation',
+      presentations_cta_label: 'View all presentations',
+      links: {},
+    }
+
+    const wrapper = mount(HowToContributeSlideView, {
+      props: {
+        presentation,
+        site,
+        slide: {
+          ...slide,
+          content: {
+            cards: [
+              {
+                title: 'Decide Scope',
+              },
+            ],
+          },
+        },
+        slideNumber: 11,
+        slideTotal: 12,
+      },
+    })
+
+    expect(wrapper.text()).toContain('Decide Scope')
+    expect(wrapper.find('.card-text').exists()).toBe(false)
+  })
+
   it('renders lightweight rich text in card descriptions', () => {
     const site: SiteContent = {
       title: 'Aurora Notes Updates',

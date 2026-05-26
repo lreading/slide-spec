@@ -43,6 +43,36 @@ describe('parseRichTextBlocks', () => {
     ])
   })
 
+  it('splits paragraph text from a following unordered list across blank lines', () => {
+    expect(parseRichTextBlocks('Intro paragraph.\n\n- First action\n- Second action')).toEqual([
+      {
+        type: 'paragraph',
+        text: 'Intro paragraph.',
+      },
+      {
+        type: 'unordered-list',
+        items: ['First action', 'Second action'],
+      },
+    ])
+  })
+
+  it('preserves extra blank lines between parsed blocks as spacer tokens', () => {
+    expect(parseRichTextBlocks('Intro paragraph.\n\n\n\n\n- First action\n- Second action')).toEqual([
+      {
+        type: 'paragraph',
+        text: 'Intro paragraph.',
+      },
+      {
+        type: 'spacer',
+        size: 3,
+      },
+      {
+        type: 'unordered-list',
+        items: ['First action', 'Second action'],
+      },
+    ])
+  })
+
   it('parses ordered list blocks that use period or parenthesis markers', () => {
     expect(parseRichTextBlocks('1. First item\n2) Second item')).toEqual([
       {

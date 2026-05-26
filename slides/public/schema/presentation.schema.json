@@ -23,6 +23,7 @@
               { "$ref": "#/$defs/heroSlide" },
               { "$ref": "#/$defs/sectionTitleSlide" },
               { "$ref": "#/$defs/agendaSlide" },
+              { "$ref": "#/$defs/cardGridSlide" },
               { "$ref": "#/$defs/sectionListGridSlide" },
               { "$ref": "#/$defs/timelineSlide" },
               { "$ref": "#/$defs/progressTimelineSlide" },
@@ -48,6 +49,7 @@
             "hero",
             "section-title",
             "agenda",
+            "card-grid",
             "section-list-grid",
             "timeline",
             "progress-timeline",
@@ -129,6 +131,30 @@
                 "subtitle": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "image_url": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
                 "image_alt": { "$ref": "defs.schema.json#/$defs/nonBlankString" }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cardGridSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "card-grid" },
+            "content": {
+              "type": "object",
+              "required": ["items"],
+              "additionalProperties": false,
+              "properties": {
+                "card_arrow_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "items": {
+                  "type": "array",
+                  "items": { "$ref": "defs.schema.json#/$defs/cardGridItem" }
+                }
               }
             }
           }

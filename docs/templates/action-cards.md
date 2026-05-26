@@ -35,6 +35,7 @@ Grid of linked or informational cards with an optional footer strip.
         url: https://example.com/feedback/templates
       - title: Improve exports
         description: Review PDFs and suggest spacing or readability improvements.
+      - title: Confirm scope
 ```
 
 ## Data sources
@@ -63,12 +64,12 @@ Grid of linked or informational cards with an optional footer strip.
 | Field | Required | Type |
 | --- | --- | --- |
 | `title` | yes | string |
-| `description` | yes | string; supports lightweight rich text |
+| `description` | | string; supports lightweight rich text |
 | `url_label` | conditional | string |
 | `url` | conditional | string |
 | `fa_icon` | | string |
 | `link_fa_icon` | | string |
 
-`url` and `url_label` are paired: set both or omit both. Cards without links render without the bottom link. `description` and `content.footer_text` accept the lightweight rich text documented in [Concepts](/concepts#lightweight-rich-text). `content.footer_link_enabled` defaults to `true`; set it to `false` to hide the repository footer button on a slide.
+`url` and `url_label` are paired: set both or omit both. Cards without links render without the bottom link. Cards without `description` render as compact title-only cards. `description` and `content.footer_text` accept the lightweight rich text documented in [Concepts](/concepts#lightweight-rich-text). `content.footer_link_enabled` defaults to `true`; set it to `false` to hide the repository footer button on a slide.
 
 Icon defaults are `fa-bug`, `fa-code-branch`, `fa-book`, and `fa-bullhorn` for cards, `fa-arrow-right`, `fa-arrow-right`, `fa-arrow-right`, and `fa-star` for card links, `fa-github` for the footer strip, and `fa-code` for the footer button. Additional cards default to `fa-star`, and additional card links default to `fa-arrow-right`. Icon fields use supported values from the [Font Awesome icon reference](/reference/fontawesome).

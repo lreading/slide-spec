@@ -27,14 +27,17 @@ const props = defineProps<{
 const avatarFaIcons = ['fa-user-astronaut', 'fa-user-ninja', 'fa-user-secret']
 const contributors = computed(() =>
   props.slide.content.spotlight.map((entry, index) => {
-    const contributor = props.generated.contributors.authors.find((author) => author.login === entry.login)
+    const contributor = entry.login
+      ? props.generated.contributors.authors.find((author) => author.login === entry.login)
+      : undefined
 
     return {
       ...entry,
-      name: contributor?.name ?? entry.login,
-      handle: `@${entry.login}`,
-      profileUrl: `https://github.com/${entry.login}`,
+      name: entry.name ?? contributor?.name ?? entry.login,
+      handle: entry.login ? `@${entry.login}` : undefined,
+      profileUrl: entry.login ? `https://github.com/${entry.login}` : undefined,
       faIcon: entry.fa_icon ?? avatarFaIcons[index] ?? 'fa-user-secret',
+      key: entry.login ?? entry.name ?? `${index}-${entry.summary}`,
     }
   }),
 )
@@ -66,7 +69,7 @@ const bannerFaIcon = computed(() => props.slide.content.banner_fa_icon ?? 'fa-he
     <div class="profiles-grid">
       <SurfaceCard
         v-for="profile in contributors"
-        :key="profile.login"
+        :key="profile.key"
         class="profile-card"
         :interactive="true"
         hover-shift="y"
@@ -85,8 +88,9 @@ const bannerFaIcon = computed(() => props.slide.content.banner_fa_icon ?? 'fa-he
           border-color="#333344"
           icon-color="#555577"
         />
-        <h2 class="contributor-name">{{ profile.name }}</h2>
+        <h2 v-if="profile.name" class="contributor-name">{{ profile.name }}</h2>
         <a
+          v-if="profile.handle && profile.profileUrl"
           class="github-handle"
           :href="profile.profileUrl"
           target="_blank"

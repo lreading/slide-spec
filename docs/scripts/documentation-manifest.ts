@@ -99,6 +99,11 @@ export const documentationSections: DocumentationSection[] = [
         description: 'Auto-generated table of contents slide driven by the presentation structure.',
       },
       {
+        path: '/templates/card-grid',
+        title: 'Card grid template',
+        description: 'Authored agenda-style cards for topic lists, initiative maps, and linked rows.',
+      },
+      {
         path: '/templates/section-list-grid',
         title: 'Section list grid template',
         description: 'Grid layout for grouped lists, themes, or workstream summaries.',
