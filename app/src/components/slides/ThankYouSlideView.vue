@@ -4,6 +4,7 @@ import { computed } from 'vue'
 import AccentDivider from '../ui/AccentDivider.vue'
 import FloatingMascot from '../ui/FloatingMascot.vue'
 import HeroDecor from '../ui/HeroDecor.vue'
+import RichText from '../ui/RichText.vue'
 import ResourcePillLink from '../ui/ResourcePillLink.vue'
 import { assetResolver } from '../../content/AssetResolver'
 import { resolvePresentationChromeLabel } from '../../content/contentDefaults'
@@ -52,7 +53,7 @@ const communityFaIcon = computed(() => props.slide.content.community_fa_icon ?? 
       <div class="text-block">
         <h1 class="hero-title">{{ slide.content.heading }}<span class="accent-text">!</span></h1>
         <AccentDivider width="4rem" :opacity="0.8" padding="0.5rem 0" />
-        <h2 class="hero-subtitle">{{ slide.content.message }}</h2>
+        <RichText :text="slide.content.message" class="hero-subtitle" role="heading" aria-level="2" />
       </div>
 
       <div class="actions">
@@ -137,6 +138,8 @@ const communityFaIcon = computed(() => props.slide.content.community_fa_icon ?? 
 }
 
 .hero-subtitle {
+  --rich-text-align: center;
+
   margin: 0;
   font-size: 1.875rem;
   line-height: 2.25rem;

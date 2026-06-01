@@ -45,6 +45,20 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     title: 'Agenda',
   },
+  'card-grid': {
+    template: 'card-grid',
+    enabled: true,
+    title: 'Initiatives',
+    subtitle: 'Authored agenda-style rows',
+    content: {
+      card_arrow_fa_icon: 'fa-arrow-right',
+      items: [
+        { title: 'Detection / Response', fa_icon: 'fa-shield-halved' },
+        { title: 'Supply Chain', marker_text: 'B' },
+        { title: 'Documentation', url: 'https://example.test/docs' },
+      ],
+    },
+  },
   'section-list-grid': {
     template: 'section-list-grid',
     enabled: true,
@@ -74,12 +88,23 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     title: 'Roadmap',
     content: {
       stage: 'completed',
-      deliverables_heading: 'Key deliverables',
-      focus_areas_heading: 'Focus areas',
       footer_link_label: 'View roadmap',
       stages: validRoadmapStages,
-      items: ['One'],
-      themes: [{ category: 'Theme', target: 'Target' }],
+      sections: [
+        {
+          title: 'Key deliverables',
+          fa_icon: 'fa-check',
+          type: 'richtext',
+          body: 'One',
+        },
+        {
+          title: 'Focus areas',
+          fa_icon: 'fa-bullseye',
+          type: 'keyvalue',
+          separator_fa_icon: 'fa-chevron-right',
+          body: [{ key: 'Theme', value: 'Target' }],
+        },
+      ],
     },
   },
   people: {
@@ -91,6 +116,13 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
         {
           login: 'octocat',
           summary: 'Summary',
+        },
+        {
+          name: 'Release Operator',
+          summary: 'Summary',
+        },
+        {
+          summary: 'Summary-only role',
         },
       ],
     },
@@ -128,6 +160,7 @@ const validSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     title: 'How to contribute',
     content: {
+      footer_link_enabled: false,
       cards: [
         {
           title: 'Report bugs',
@@ -168,6 +201,18 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     title: 'Agenda',
   },
+  'card-grid': {
+    template: 'card-grid',
+    enabled: true,
+    title: 'Topics',
+    content: {
+      items: [
+        {
+          title: 'One',
+        },
+      ],
+    },
+  },
   'section-list-grid': {
     template: 'section-list-grid',
     enabled: true,
@@ -196,8 +241,12 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     content: {
       stage: 'completed',
       stages: validRoadmapStages,
-      items: [],
-      themes: [],
+      sections: [
+        {
+          type: 'richtext',
+          body: 'One',
+        },
+      ],
     },
   },
   people: {
@@ -207,7 +256,6 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     content: {
       spotlight: [
         {
-          login: 'octocat',
           summary: 'Summary',
         },
       ],
@@ -235,12 +283,10 @@ const sparseSlides: Record<SlideTemplateId, Record<string, unknown>> = {
     enabled: true,
     title: 'Contribute',
     content: {
+      footer_link_enabled: true,
       cards: [
         {
           title: 'Submit code',
-          description: 'Open a PR',
-          url_label: 'Contribute',
-          url: 'https://github.com/example-org/aurora-notes/pulls',
         },
       ],
     },
@@ -291,13 +337,27 @@ describe('template validation', () => {
         subtitle: 'No title',
       },
     },
-    agenda: {
-      template: 'agenda',
-      enabled: true,
-      title: '  ',
-      content: {},
+  agenda: {
+    template: 'agenda',
+    enabled: true,
+    title: '  ',
+    content: {},
+  },
+  'card-grid': {
+    template: 'card-grid',
+    enabled: true,
+    title: 'Topics',
+    content: {
+      items: [
+        {
+          title: 'One',
+          marker_text: '1',
+          fa_icon: 'fa-star',
+        },
+      ],
     },
-    'section-list-grid': {
+  },
+  'section-list-grid': {
       template: 'section-list-grid',
       enabled: true,
       title: 'Updates',
@@ -319,6 +379,13 @@ describe('template validation', () => {
       title: 'Roadmap',
       content: {
         stage: 'active',
+        stages: validRoadmapStages,
+        sections: [
+          {
+            type: 'richtext',
+            body: 'One',
+          },
+        ],
       },
     },
     people: {
@@ -384,15 +451,16 @@ describe('template validation', () => {
       hero: 'slides[hero].content must include title_primary or title_accent.',
       'section-title': 'slides[section-title].content.title must be a string.',
       agenda: 'slides[agenda].title must not be blank.',
+      'card-grid': 'slides[card-grid].content.items[0] must not provide marker_text and fa_icon together.',
       'section-list-grid': 'slides[section-list-grid].content.sections must be an array.',
       timeline: 'slides[timeline].content.featured_release_ids must be an array.',
       'progress-timeline':
-        'slides[progress-timeline].content.stage must be one of completed, in-progress, planned, or future.',
+        'slides[progress-timeline].content.stage must match one of the keys in slides[progress-timeline].content.stages.',
       people: 'slides[people].content.spotlight[0].summary must be a string.',
       'metrics-and-links':
         'slides[metrics-and-links].content.mentions[0] must provide url and url_label together.',
       'image-and-bullets': 'slides[image-and-bullets].content.image_side must be left or right.',
-      'action-cards': 'slides[action-cards].content.cards[0].url must be a string.',
+      'action-cards': 'slides[action-cards].content.cards[0] must provide url and url_label together.',
       closing: 'slides[closing].content.message must be a string.',
     }
 
@@ -426,5 +494,38 @@ describe('template validation', () => {
         'slides[metrics-and-links]',
       ),
     ).toThrow('slides[metrics-and-links].content.show_deltas must be a boolean.')
+  })
+
+  it('accepts progress-timeline slides with three authored stages', () => {
+    const definition = getSlideTemplateDefinition('progress-timeline')
+
+    expect(() =>
+      definition.validate(
+        {
+          template: 'progress-timeline',
+          enabled: true,
+          title: 'Roadmap',
+          content: {
+            stage: '6-months',
+            stages: {
+              '3-months': { label: '3 Months', summary: 'Stabilize adoption.' },
+              '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
+              '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
+            },
+            sections: [
+              {
+                type: 'richtext',
+                body: 'Measure adoption',
+              },
+              {
+                type: 'keyvalue',
+                body: [{ key: 'Adoption', value: 'Make progress explicit' }],
+              },
+            ],
+          },
+        },
+        'slides[progress-timeline]',
+      ),
+    ).not.toThrow()
   })
 })

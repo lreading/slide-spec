@@ -67,11 +67,7 @@ presentation:
       subtitle: Delivered work
       content:
         stage: completed
-        deliverables_heading: Key deliverables
-        focus_areas_heading: Focus areas
         footer_link_label: View roadmap on GitHub
-        item_fa_icon: fa-check
-        focus_areas_fa_icon: fa-bullseye
         stages:
           completed:
             label: Completed
@@ -85,15 +81,23 @@ presentation:
           future:
             label: Future
             summary: Longer-term work that depends on the current architecture pass.
-        items:
-          - Published a new starter kit for customer launch checklists.
-          - Added exportable PDF summaries for customer-facing review decks.
-          - Reworked the deployment checklist UI for operators.
-        themes:
-          - category: Operator UX
-            target: Make release review and launch readiness easier to audit.
-          - category: Exportability
-            target: Support polished handoff artifacts without manual cleanup.
+        sections:
+          - title: Key deliverables
+            fa_icon: fa-check
+            type: richtext
+            body: |-
+              - Published a new starter kit for customer launch checklists.
+              - Added exportable PDF summaries for customer-facing review decks.
+              - Reworked the deployment checklist UI for operators.
+          - title: Focus areas
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Operator UX
+                value: Make release review and launch readiness easier to audit.
+              - key: Exportability
+                value: Support polished handoff artifacts without manual cleanup.
     - template: people
       enabled: true
       title: Contributor spotlight
@@ -154,6 +158,22 @@ presentation:
           - Launch checklist ownership and sign-off states are now explicit.
           - Exported review decks preserve section grouping.
           - Operator documentation now aligns with live templates.
+    - template: card-grid
+      enabled: true
+      title: Launch focus areas
+      subtitle: Authored rows for the next readiness review
+      content:
+        card_arrow_fa_icon: fa-arrow-right
+        items:
+          - title: Checklist ownership
+            fa_icon: fa-check-circle
+            url: https://example.com/docs/checklist-ownership
+          - title: Export review
+            marker_text: E
+          - title: Operator docs
+            fa_icon: fa-book
+          - title: Release sign-off
+            marker_text: S
     - template: action-cards
       enabled: true
       title: How to help

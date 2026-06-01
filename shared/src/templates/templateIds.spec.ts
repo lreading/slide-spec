@@ -7,6 +7,7 @@ describe('slide template ids', () => {
     expect(slideTemplateIds).toContain('hero')
     expect(isSlideTemplateId('hero')).toBe(true)
     expect(isSlideTemplateId('section-title')).toBe(true)
+    expect(isSlideTemplateId('card-grid')).toBe(true)
     expect(isSlideTemplateId('unknown')).toBe(false)
   })
 })

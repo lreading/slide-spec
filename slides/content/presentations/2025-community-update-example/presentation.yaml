@@ -55,8 +55,6 @@ presentation:
       subtitle: Community initiatives delivered
       content:
         stage: completed
-        deliverables_heading: Delivered
-        focus_areas_heading: Themes
         footer_link_label: View community roadmap
         stages:
           completed:
@@ -71,15 +69,23 @@ presentation:
           future:
             label: Future
             summary: Exploring for later in the year.
-        items:
-          - Launched 3 new learning paths on the developer portal
-          - Spoke at 4 conferences across 3 countries
-          - Shipped the community SDK with 15 code samples
-        themes:
-          - category: Education
-            target: Lower the barrier to entry for new developers.
-          - category: Reach
-            target: Grow awareness in new geographic markets.
+        sections:
+          - title: Delivered
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: |-
+              - Launched 3 new learning paths on the developer portal
+              - Spoke at 4 conferences across 3 countries
+              - Shipped the community SDK with 15 code samples
+          - title: Themes
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Education
+                value: Lower the barrier to entry for new developers.
+              - key: Reach
+                value: Grow awareness in new geographic markets.
     - template: people
       enabled: true
       title: Community champions

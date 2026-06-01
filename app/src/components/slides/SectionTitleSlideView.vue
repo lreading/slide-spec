@@ -44,6 +44,7 @@ const imageAlt = computed(() => props.slide.content.image_alt?.trim() || '')
   flex: 1;
   flex-direction: column;
   justify-content: center;
+  align-items: flex-start;
   gap: 1.25rem;
 }
 
@@ -63,12 +64,13 @@ const imageAlt = computed(() => props.slide.content.image_alt?.trim() || '')
 }
 
 .section-title__subtitle {
-  margin: 0;
+  margin: 0 0 0 0.6rem;
   max-width: 54ch;
   color: #b6b7cf;
   font-size: clamp(1rem, 1.6vw, 1.25rem);
   line-height: 1.45;
   font-style: italic;
+  text-align: left;
 }
 
 @media (max-width: 767px) {

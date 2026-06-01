@@ -202,6 +202,23 @@ describe('public JSON Schemas', () => {
         },
       },
       {
+        schemaId: schemaIds.presentation,
+        document: {
+          schemaVersion: 1,
+          presentation: {
+            id: 'demo',
+            title: 'Demo',
+            subtitle: 'Example',
+            slides: [{
+              template: 'card-grid',
+              enabled: true,
+              title: 'Topics',
+              content: { items: [{ title: 'One', marker_text: 'A', fa_icon: 'fa-star' }] },
+            }],
+          },
+        },
+      },
+      {
         schemaId: schemaIds.generated,
         document: {
           schemaVersion: 1,
@@ -222,7 +239,241 @@ describe('public JSON Schemas', () => {
       true,
       true,
       true,
+      true,
     ])
+  })
+
+  it('accepts progress-timeline slides with three authored stages', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'progress-timeline',
+          enabled: true,
+          title: 'Roadmap',
+          content: {
+            stage: '6-months',
+            stages: {
+              '3-months': { label: '3 Months', summary: 'Stabilize adoption.' },
+              '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
+              '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
+            },
+            sections: [
+              {
+                title: 'What happened',
+                fa_icon: 'fa-check',
+                type: 'richtext',
+                body: 'Measure adoption',
+              },
+              {
+                title: 'Signals',
+                fa_icon: 'fa-bullseye',
+                type: 'keyvalue',
+                separator_fa_icon: 'fa-arrow-right',
+                body: [{ key: 'Adoption', value: 'Make progress explicit' }],
+              },
+            ],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('rejects progress-timeline rich text sections with separator icons', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'progress-timeline',
+          enabled: true,
+          title: 'Roadmap',
+          content: {
+            stage: '6-months',
+            stages: {
+              '3-months': { label: '3 Months', summary: 'Stabilize adoption.' },
+              '6-months': { label: '6 Months', summary: 'Expand core workflows.' },
+              '12-months': { label: '12 Months', summary: 'Scale the operating model.' },
+            },
+            sections: [{
+              type: 'richtext',
+              separator_fa_icon: 'fa-arrow-right',
+              body: 'Measure adoption',
+            }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document).length).toBeGreaterThan(0)
+  })
+
+  it('accepts action-cards slides with informational cards and a disabled footer link', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'action-cards',
+          enabled: true,
+          title: 'Decisions',
+          content: {
+            footer_text: 'Review locally.',
+            footer_link_enabled: false,
+            cards: [{ title: 'Partner Scope', description: 'Confirm boundaries before kickoff.' }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('accepts card-grid slides with authored rows, markers, icons, and links', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'card-grid',
+          enabled: true,
+          title: 'Initiatives',
+          content: {
+            card_arrow_fa_icon: 'fa-arrow-right',
+            items: [
+              { title: 'Detection / Response', fa_icon: 'fa-shield-halved' },
+              { title: 'Supply Chain', marker_text: 'B' },
+              { title: 'Documentation', url: 'https://example.test/docs' },
+            ],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('rejects card-grid items with both marker text and icon fields', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'card-grid',
+          enabled: true,
+          title: 'Initiatives',
+          content: {
+            items: [{ title: 'Detection / Response', marker_text: 'D', fa_icon: 'fa-shield-halved' }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document).length).toBeGreaterThan(0)
+  })
+
+  it('accepts people slides with authored names, summary-only cards, and action cards without descriptions', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [
+          {
+            template: 'people',
+            enabled: true,
+            title: 'Users',
+            content: {
+              spotlight: [
+                { name: 'Security Operator', summary: 'Runs incident response.' },
+                { summary: 'Owns a summary-only role.' },
+              ],
+            },
+          },
+          {
+            template: 'action-cards',
+            enabled: true,
+            title: 'Actions',
+            content: {
+              cards: [{ title: 'Decide Scope' }],
+            },
+          },
+        ],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document)).toEqual([])
+  })
+
+  it('rejects action-cards slides with partial card links', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'action-cards',
+          enabled: true,
+          title: 'Actions',
+          content: {
+            cards: [{ title: 'Report', description: 'Open a ticket.', url: 'https://example.test' }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document).length).toBeGreaterThan(0)
+  })
+
+  it('rejects progress-timeline schemas with too few stage entries', async () => {
+    const ajv = await loadSchemas()
+    const document = {
+      schemaVersion: 1,
+      presentation: {
+        id: 'demo',
+        title: 'Demo',
+        subtitle: 'Example',
+        slides: [{
+          template: 'progress-timeline',
+          enabled: true,
+          title: 'Roadmap',
+          content: {
+            stage: 'completed',
+            stages: {
+              completed: { label: 'Completed', summary: 'Delivered work.' },
+            },
+            sections: [{
+              type: 'richtext',
+              body: 'Measure adoption',
+            }],
+          },
+        }],
+      },
+    }
+
+    expect(validateDocument(ajv, schemaIds.presentation, document).length).toBeGreaterThan(0)
   })
 
   it('keeps the public Font Awesome icon schema aligned with runtime validation', async () => {

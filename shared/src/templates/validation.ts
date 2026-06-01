@@ -10,8 +10,8 @@ import {
 } from '../validation/assertions'
 import type { SlideTemplateId } from './templateIds'
 
-const roadmapStageStatuses = new Set(['completed', 'in-progress', 'planned', 'future'])
-const roadmapStageKeys = ['completed', 'in-progress', 'planned', 'future'] as const
+const minimumRoadmapStageCount = 2
+const maximumRoadmapStageCount = 6
 
 function assertRoadmapStageContent(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
@@ -19,17 +19,68 @@ function assertRoadmapStageContent(value: unknown, path: string): void {
   assertNonBlankString(value.summary, `${path}.summary`)
 }
 
-function assertRoadmapTheme(value: unknown, path: string): void {
-  assert(isRecord(value), `${path} must be an object.`)
-  assertNonBlankString(value.category, `${path}.category`)
-  assertNonBlankString(value.target, `${path}.target`)
+function assertRoadmapStages(value: unknown, activeStage: unknown, path: string): void {
+  assert(isRecord(value), `${path}.stages must be an object.`)
+  assertNonBlankString(activeStage, `${path}.stage`)
+  const activeStageKey = activeStage as string
+
+  const stageEntries = Object.entries(value)
+  assert(
+    stageEntries.length >= minimumRoadmapStageCount,
+    `${path}.stages must include at least ${String(minimumRoadmapStageCount)} stages.`,
+  )
+  assert(
+    stageEntries.length <= maximumRoadmapStageCount,
+    `${path}.stages must include no more than ${String(maximumRoadmapStageCount)} stages.`,
+  )
+
+  stageEntries.forEach(([key, stage]) => {
+    assert(key.trim().length > 0, `${path}.stages keys must not be blank.`)
+    assertRoadmapStageContent(stage, `${path}.stages.${key}`)
+  })
+
+  assert(
+    Object.prototype.hasOwnProperty.call(value, activeStageKey),
+    `${path}.stage must match one of the keys in ${path}.stages.`,
+  )
 }
 
-function assertRoadmapThemes(value: unknown, path: string): void {
+function assertProgressTimelineKeyValueRow(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['key', 'value'], path)
+  assertNonBlankString(value.key, `${path}.key`)
+  assertNonBlankString(value.value, `${path}.value`)
+}
+
+function assertProgressTimelineSection(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['title', 'fa_icon', 'type', 'separator_fa_icon', 'body'], path)
+  assertOptionalString(value.title, `${path}.title`)
+  assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
+
+  if (value.type === 'richtext') {
+    assertNonBlankString(value.body, `${path}.body`)
+    assert(
+      value.separator_fa_icon === undefined,
+      `${path}.separator_fa_icon is only allowed when ${path}.type is "keyvalue".`,
+    )
+    return
+  }
+
+  assert(value.type === 'keyvalue', `${path}.type must be "richtext" or "keyvalue".`)
+  assertOptionalFontAwesomeIcon(value.separator_fa_icon, `${path}.separator_fa_icon`)
+  assert(Array.isArray(value.body), `${path}.body must be an array.`)
+  ;(value.body as unknown[]).forEach((row, index) => {
+    assertProgressTimelineKeyValueRow(row, `${path}.body[${index}]`)
+  })
+}
+
+function assertProgressTimelineSections(value: unknown, path: string): void {
   assert(Array.isArray(value), `${path} must be an array.`)
-  ;(value as unknown[]).forEach((theme, index) => {
-    assert(isRecord(theme), `${path}[${index}] must be an object.`)
-    assertRoadmapTheme(theme, `${path}[${index}]`)
+  assert(value.length >= 1, `${path} must include at least 1 section.`)
+  assert(value.length <= 3, `${path} must include no more than 3 sections.`)
+  value.forEach((section, index) => {
+    assertProgressTimelineSection(section, `${path}[${index}]`)
   })
 }
 
@@ -45,10 +96,24 @@ function assertContentSection(value: unknown, path: string): void {
   assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
 }
 
+function assertCardGridItem(value: unknown, path: string): void {
+  assert(isRecord(value), `${path} must be an object.`)
+  assertNoUnexpectedKeys(value, ['title', 'marker_text', 'fa_icon', 'url'], path)
+  assertNonBlankString(value.title, `${path}.title`)
+  assertOptionalString(value.marker_text, `${path}.marker_text`)
+  assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
+  assertOptionalString(value.url, `${path}.url`)
+  assert(
+    value.marker_text === undefined || value.fa_icon === undefined,
+    `${path} must not provide marker_text and fa_icon together.`,
+  )
+}
+
 function assertSpotlightEntry(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
-  assertNoUnexpectedKeys(value, ['login', 'summary', 'fa_icon'], path)
-  assertNonBlankString(value.login, `${path}.login`)
+  assertNoUnexpectedKeys(value, ['login', 'name', 'summary', 'fa_icon'], path)
+  assertOptionalString(value.login, `${path}.login`)
+  assertOptionalString(value.name, `${path}.name`)
   assertNonBlankString(value.summary, `${path}.summary`)
   assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
 }
@@ -57,11 +122,16 @@ function assertContributionCard(value: unknown, path: string): void {
   assert(isRecord(value), `${path} must be an object.`)
   assertNoUnexpectedKeys(value, ['title', 'description', 'url_label', 'url', 'fa_icon', 'link_fa_icon'], path)
   assertNonBlankString(value.title, `${path}.title`)
-  assertNonBlankString(value.description, `${path}.description`)
-  assertNonBlankString(value.url_label, `${path}.url_label`)
-  assertNonBlankString(value.url, `${path}.url`)
+  assertOptionalString(value.description, `${path}.description`)
+  assertOptionalString(value.url_label, `${path}.url_label`)
+  assertOptionalString(value.url, `${path}.url`)
   assertOptionalFontAwesomeIcon(value.fa_icon, `${path}.fa_icon`)
   assertOptionalFontAwesomeIcon(value.link_fa_icon, `${path}.link_fa_icon`)
+  assert(
+    (value.url === undefined && value.url_label === undefined)
+      || (value.url !== undefined && value.url_label !== undefined),
+    `${path} must provide url and url_label together.`,
+  )
 }
 
 function assertImageAndBulletsImage(value: unknown, path: string): void {
@@ -114,6 +184,16 @@ const agendaValidator: SlideTemplateValidator = (slide, path) => {
   }
 }
 
+const cardGridValidator: SlideTemplateValidator = (slide, path) => {
+  assertNonBlankString(slide.title, `${path}.title`)
+  const content = slide.content as Record<string, unknown>
+  assertNoUnexpectedKeys(content, ['card_arrow_fa_icon', 'items'], `${path}.content`)
+  assertOptionalFontAwesomeIcon(content.card_arrow_fa_icon, `${path}.content.card_arrow_fa_icon`)
+  assert(Array.isArray(content.items), `${path}.content.items must be an array.`)
+  ;(content.items as unknown[]).forEach((item, index) =>
+    assertCardGridItem(item, `${path}.content.items[${index}]`))
+}
+
 const sectionListGridValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
@@ -157,40 +237,17 @@ const progressTimelineValidator: SlideTemplateValidator = (slide, path) => {
     content,
     [
       'stage',
-      'deliverables_heading',
-      'focus_areas_heading',
+      'sections',
       'footer_link_label',
       'stages',
-      'items',
-      'themes',
-      'item_fa_icon',
-      'focus_areas_fa_icon',
-      'theme_fa_icon',
       'footer_link_fa_icon',
     ],
     `${path}.content`,
   )
-  assertNonBlankString(content.stage, `${path}.content.stage`)
-  assert(
-    roadmapStageStatuses.has(content.stage),
-    `${path}.content.stage must be one of completed, in-progress, planned, or future.`,
-  )
-  assertOptionalString(content.deliverables_heading, `${path}.content.deliverables_heading`)
-  assertOptionalString(content.focus_areas_heading, `${path}.content.focus_areas_heading`)
   assertOptionalString(content.footer_link_label, `${path}.content.footer_link_label`)
-  assertOptionalFontAwesomeIcon(content.item_fa_icon, `${path}.content.item_fa_icon`)
-  assertOptionalFontAwesomeIcon(content.focus_areas_fa_icon, `${path}.content.focus_areas_fa_icon`)
-  assertOptionalFontAwesomeIcon(content.theme_fa_icon, `${path}.content.theme_fa_icon`)
   assertOptionalFontAwesomeIcon(content.footer_link_fa_icon, `${path}.content.footer_link_fa_icon`)
-  assert(isRecord(content.stages), `${path}.content.stages must be an object.`)
-  for (const key of roadmapStageKeys) {
-    assertRoadmapStageContent(
-      (content.stages as Record<string, unknown>)[key],
-      `${path}.content.stages.${key}`,
-    )
-  }
-  assertStringArray(content.items, `${path}.content.items`)
-  assertRoadmapThemes(content.themes, `${path}.content.themes`)
+  assertRoadmapStages(content.stages, content.stage, `${path}.content`)
+  assertProgressTimelineSections(content.sections, `${path}.content.sections`)
 }
 
 const peopleValidator: SlideTemplateValidator = (slide, path) => {
@@ -272,8 +329,13 @@ const metricsAndLinksValidator: SlideTemplateValidator = (slide, path) => {
 const actionCardsValidator: SlideTemplateValidator = (slide, path) => {
   assertNonBlankString(slide.title, `${path}.title`)
   const content = slide.content as Record<string, unknown>
-  assertNoUnexpectedKeys(content, ['footer_text', 'cards', 'footer_fa_icon', 'footer_link_fa_icon'], `${path}.content`)
+  assertNoUnexpectedKeys(
+    content,
+    ['footer_text', 'footer_link_enabled', 'cards', 'footer_fa_icon', 'footer_link_fa_icon'],
+    `${path}.content`,
+  )
   assertOptionalString(content.footer_text, `${path}.content.footer_text`)
+  assertOptionalBoolean(content.footer_link_enabled, `${path}.content.footer_link_enabled`)
   assertOptionalFontAwesomeIcon(content.footer_fa_icon, `${path}.content.footer_fa_icon`)
   assertOptionalFontAwesomeIcon(content.footer_link_fa_icon, `${path}.content.footer_link_fa_icon`)
   assert(Array.isArray(content.cards), `${path}.content.cards must be an array.`)
@@ -322,6 +384,7 @@ export const slideTemplateValidators: Record<SlideTemplateId, SlideTemplateValid
   hero: heroValidator,
   'section-title': sectionTitleValidator,
   agenda: agendaValidator,
+  'card-grid': cardGridValidator,
   'section-list-grid': sectionListGridValidator,
   timeline: timelineValidator,
   'progress-timeline': progressTimelineValidator,

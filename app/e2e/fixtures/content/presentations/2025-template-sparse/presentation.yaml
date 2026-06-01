@@ -27,6 +27,14 @@ presentation:
       title: Releases
       content:
         featured_release_ids: []
+    - template: timeline
+      enabled: true
+      title: Sparse Releases
+      content:
+        featured_release_ids:
+          - v1.2.0
+          - v1.1.0
+          - v1.0.0
     - template: progress-timeline
       enabled: true
       title: Roadmap
@@ -45,11 +53,13 @@ presentation:
           future:
             label: Future
             summary: Later
-        items:
-          - One
-        themes:
-          - category: Theme
-            target: Target
+        sections:
+          - type: richtext
+            body: One
+          - type: keyvalue
+            body:
+              - key: Theme
+                value: Target
     - template: people
       enabled: true
       title: Contributors

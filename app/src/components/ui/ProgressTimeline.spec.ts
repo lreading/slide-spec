@@ -20,4 +20,22 @@ describe('ProgressTimeline', () => {
     expect(wrapper.text()).toContain('Completed')
     expect(wrapper.text()).toContain('Later')
   })
+
+  it('renders lightweight rich text summaries', () => {
+    const wrapper = mount(ProgressTimeline, {
+      props: {
+        items: [
+          {
+            key: '1',
+            title: 'Current',
+            summary: 'Active now.\n\n- One focus\n- Second focus',
+            state: 'current',
+          },
+        ],
+      },
+    })
+
+    expect(wrapper.find('.progress-timeline__summary .rich-text__paragraph').text()).toBe('Active now.')
+    expect(wrapper.findAll('.progress-timeline__summary .rich-text__list--unordered .rich-text__item')).toHaveLength(2)
+  })
 })

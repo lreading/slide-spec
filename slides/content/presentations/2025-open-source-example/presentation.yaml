@@ -68,11 +68,7 @@ presentation:
       subtitle: What we shipped
       content:
         stage: completed
-        deliverables_heading: Shipped
-        focus_areas_heading: Themes
         footer_link_label: View full roadmap
-        item_fa_icon: fa-check
-        focus_areas_fa_icon: fa-bullseye
         stages:
           completed:
             label: Completed
@@ -83,18 +79,23 @@ presentation:
           planned:
             label: Planned
             summary: Scoped for Q2 2025.
-          future:
-            label: Future
-            summary: Under discussion.
-        items:
-          - Plugin system with local and registry-based resolution
-          - Structured error messages with fix suggestions
-          - Shell completion for bash, zsh, and fish
-        themes:
-          - category: Extensibility
-            target: Let users add functionality without forking.
-          - category: Developer Experience
-            target: Reduce time-to-fix for common errors.
+        sections:
+          - title: Shipped
+            fa_icon: fa-check
+            type: richtext
+            body: |-
+              - Plugin system with local and registry-based resolution
+              - Structured error messages with fix suggestions
+              - Shell completion for bash, zsh, and fish
+          - title: Themes
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Extensibility
+                value: Let users add functionality without forking.
+              - key: Developer Experience
+                value: Reduce time-to-fix for common errors.
     - template: people
       enabled: true
       title: Contributor spotlight
@@ -155,12 +156,29 @@ presentation:
           - Plugin system shipped with local and registry-based resolution.
           - Structured error messages now include fix suggestions and docs links.
           - Shell completion support landed for bash, zsh, and fish.
+    - template: card-grid
+      enabled: true
+      title: Maintainer focus areas
+      subtitle: Authored topic cards using the agenda visual style
+      content:
+        card_arrow_fa_icon: fa-arrow-right
+        items:
+          - title: Plugin registry hardening
+            fa_icon: fa-shield-halved
+            url: https://vortex-cli.example.com/roadmap/plugins
+          - title: Error-code taxonomy
+            marker_text: E
+          - title: Shell integration tests
+            fa_icon: fa-check
+          - title: Community plugin docs
+            marker_text: D
     - template: action-cards
       enabled: true
       title: Get involved
       subtitle: Ways to contribute this quarter
       content:
         footer_text: Every contribution matters, no matter the size.
+        footer_link_enabled: false
         cards:
           - title: Write a plugin
             fa_icon: fa-code
@@ -175,8 +193,6 @@ presentation:
           - title: Report bugs
             fa_icon: fa-bug
             description: Found something broken? File an issue with reproduction steps and we will prioritize it.
-            url_label: Open an issue
-            url: https://github.com/example/vortex-cli/issues/new
     - template: closing
       enabled: true
       content:

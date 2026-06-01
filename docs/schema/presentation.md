@@ -8,6 +8,10 @@ Each slide owns its own `content` block. If two slides need the same copy or lab
 
 Icon fields named `fa_icon` or ending in `_fa_icon` accept supported Font Awesome values from the [Font Awesome icon reference](/reference/fontawesome). All icon fields are optional and keep their documented defaults when omitted.
 
+## Lightweight rich text
+
+Body-copy string fields support a small rich-text subset when authored as YAML block scalars. Blank-line-separated text renders as paragraphs, blocks where every line starts with `- ` or `* ` render as unordered lists, and blocks where every line starts with ordered markers such as `1. ` or `1) ` render as ordered lists. This is not full Markdown, and raw HTML is rendered as text.
+
 ## Top level
 
 ```yaml
@@ -28,32 +32,29 @@ presentation:
 
 ## Progress timeline slide content
 
-The [progress-timeline](/templates/progress-timeline) template is self-contained. The slide owns its stage strip, active-stage detail, and footer labels.
+The [progress-timeline](/templates/progress-timeline) template is self-contained. The slide owns its stage strip, active-stage detail sections, and footer labels.
 
 | Field | Required | Type |
 | --- | --- | --- |
 | `content.stage` | yes | string |
-| `content.deliverables_heading` | | string |
-| `content.focus_areas_heading` | | string |
 | `content.footer_link_label` | | string |
-| `content.item_fa_icon` | | string |
-| `content.focus_areas_fa_icon` | | string |
-| `content.theme_fa_icon` | | string |
 | `content.footer_link_fa_icon` | | string |
 | `content.stages` | yes | object |
-| `content.items` | yes | string[] |
-| `content.themes` | yes | array of `{ category, target }` |
+| `content.sections` | yes | array of section objects |
+
+Stage summaries, rich-text section bodies, and key/value row values support lightweight rich text.
 
 ### `content.stages`
 
-Must contain exactly four keys:
+Must contain 2 to 6 entries. Stage keys are author-defined labels, such as:
 
-| Key | Required |
-| --- | --- |
-| `completed` | yes |
-| `in-progress` | yes |
-| `planned` | yes |
-| `future` | yes |
+| Example key |
+| --- |
+| `completed` |
+| `in-progress` |
+| `planned` |
+| `future` |
+| `6-months` |
 
 Each stage strip entry:
 
@@ -62,7 +63,17 @@ Each stage strip entry:
 | `label` | yes | string |
 | `summary` | yes | string |
 
-The active stage's `items` and `themes` live on the slide itself. Each `themes[]` entry has `category` (string, required) and `target` (string, required).
+### `content.sections`
+
+Must contain at least one and no more than three entries. Each section:
+
+| Field | Required | Type |
+| --- | --- | --- |
+| `title` | | string |
+| `fa_icon` | | string |
+| `type` | yes | `richtext` or `keyvalue` |
+| `body` | yes | string for `richtext`; array of `{ key, value }` for `keyvalue` |
+| `separator_fa_icon` | | string; only valid for `keyvalue` sections |
 
 ## Slides
 
@@ -98,6 +109,16 @@ Slide-level `title` is not required.
 | `title` | yes | |
 | `content` | | Omit entirely or configure `content.card_arrow_fa_icon`. Row text comes from other slides |
 | `content.card_arrow_fa_icon` | | Defaults to `fa-chevron-right` |
+
+### card-grid
+
+| Field | Required | Notes |
+| --- | --- | --- |
+| `title` | yes | |
+| `content.items` | yes | Authored rows rendered in order |
+| `content.card_arrow_fa_icon` | | Optional arrow icon rendered at the end of each card |
+
+Each `items[]` entry requires `title`, with optional `marker_text`, `fa_icon`, and `url`. Set either `marker_text` or `fa_icon`, not both. If both are omitted, the card uses its 1-based row number. Cards with `url` render as full-card links.
 
 ### section-title
 
@@ -138,17 +159,11 @@ Each `sections[]` entry may also set `fa_icon` to override its badge icon.
 | Field | Required | Notes |
 | --- | --- | --- |
 | `title` | yes | |
-| `content.stage` | yes | `completed`, `in-progress`, `planned`, or `future` |
-| `content.deliverables_heading` | | |
-| `content.focus_areas_heading` | | |
+| `content.stage` | yes | Must match one key in `content.stages` |
 | `content.footer_link_label` | | |
-| `content.item_fa_icon` | | Defaults to `fa-chevron-right` |
-| `content.focus_areas_fa_icon` | | Defaults to `fa-bullseye` |
-| `content.theme_fa_icon` | | Defaults to `fa-chevron-right` |
 | `content.footer_link_fa_icon` | | Defaults to `fa-github` |
-| `content.stages` | yes | Four stage strip entries |
-| `content.items` | yes | Active stage items |
-| `content.themes` | yes | Active stage themes |
+| `content.stages` | yes | 2 to 6 stage strip entries, rendered in authored order |
+| `content.sections` | yes | 1 to 3 active-stage sections |
 
 ### people
 
@@ -163,7 +178,7 @@ Each `sections[]` entry may also set `fa_icon` to override its badge icon.
 | `content.quote_fa_icon` | | Defaults to `fa-quote-left` |
 | `content.banner_fa_icon` | | Defaults to `fa-heart` |
 
-Each `spotlight[]` entry: `{ login: string, summary: string }` with optional `fa_icon`.
+Each `spotlight[]` entry requires `summary`, with optional `login`, `name`, and `fa_icon`. Entries with `login` render a GitHub handle link. Entries with only `name` render without a handle. Entries with neither `login` nor `name` render summary-only cards. `summary` supports lightweight rich text.
 
 ### metrics-and-links
 
@@ -195,7 +210,7 @@ Each `mentions[]` entry: `{ type: string, title: string }` with optional paired 
 
 `content` must include at least one major block: `image` or `bullets`.
 
-When present, `image` has shape: `{ src: string, alt?: string, description?: string }`.
+When present, `image` has shape: `{ src: string, alt?: string, description?: string }`. `description` supports lightweight rich text.
 
 ### action-cards
 
@@ -204,17 +219,20 @@ When present, `image` has shape: `{ src: string, alt?: string, description?: str
 | `title` | yes | |
 | `content.cards` | yes | |
 | `content.footer_text` | | |
+| `content.footer_link_enabled` | | Boolean. Defaults to `true`; set to `false` to hide the repository footer action for this slide |
 | `content.footer_fa_icon` | | Defaults to `fa-github` |
 | `content.footer_link_fa_icon` | | Defaults to `fa-code` |
 
-Each `cards[]` entry: `{ title, description, url_label, url }` (all required strings) with optional `fa_icon` and `link_fa_icon`.
+Each `cards[]` entry requires `title`, with optional `description`, `fa_icon`, and `link_fa_icon`. `description` and `content.footer_text` support lightweight rich text.
+
+`url` and `url_label` are paired: set both or omit both. Cards without links render as informational cards without a bottom link.
 
 ### closing
 
 | Field | Required | Notes |
 | --- | --- | --- |
 | `content.heading` | yes | |
-| `content.message` | yes | |
+| `content.message` | yes | Supports lightweight rich text |
 | `content.quote` | | |
 | `content.repository_fa_icon` | | Defaults to `fa-github` |
 | `content.docs_fa_icon` | | Defaults to `fa-book` |

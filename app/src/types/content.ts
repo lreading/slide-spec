@@ -162,6 +162,11 @@ export interface AgendaSlideContent {
   card_arrow_fa_icon?: string
 }
 
+export interface CardGridSlideContent {
+  card_arrow_fa_icon?: string
+  items: CardGridItem[]
+}
+
 export interface SectionListGridSlideContent {
   sections: ContentSection[]
 }
@@ -179,16 +184,32 @@ export interface TimelineSlideContent {
 
 export interface ProgressTimelineSlideContent {
   stage: RoadmapStageStatus
-  deliverables_heading?: string
-  focus_areas_heading?: string
   footer_link_label?: string
-  item_fa_icon?: string
-  focus_areas_fa_icon?: string
-  theme_fa_icon?: string
   footer_link_fa_icon?: string
   stages: Record<RoadmapStageStatus, RoadmapStageSummary>
-  items: string[]
-  themes: RoadmapTheme[]
+  sections: ProgressTimelineSection[]
+}
+
+export interface ProgressTimelineRichTextSection {
+  title?: string
+  fa_icon?: string
+  type: 'richtext'
+  body: string
+}
+
+export interface ProgressTimelineKeyValueSection {
+  title?: string
+  fa_icon?: string
+  type: 'keyvalue'
+  separator_fa_icon?: string
+  body: ProgressTimelineKeyValueRow[]
+}
+
+export type ProgressTimelineSection = ProgressTimelineRichTextSection | ProgressTimelineKeyValueSection
+
+export interface ProgressTimelineKeyValueRow {
+  key: string
+  value: string
 }
 
 export interface PeopleSlideContent {
@@ -217,6 +238,7 @@ export interface MetricsAndLinksSlideContent {
 
 export interface ActionCardsSlideContent {
   footer_text?: string
+  footer_link_enabled?: boolean
   footer_fa_icon?: string
   footer_link_fa_icon?: string
   cards: ContributionCard[]
@@ -251,6 +273,8 @@ export type AgendaSlide = Omit<SlideBase<'agenda', AgendaSlideContent>, 'content
   content?: AgendaSlideContent
 }
 
+export type CardGridSlide = SlideBase<'card-grid', CardGridSlideContent>
+
 export type RecentUpdatesSlide = SlideBase<'section-list-grid', SectionListGridSlideContent>
 
 export type ReleasesSlide = SlideBase<'timeline', TimelineSlideContent>
@@ -271,6 +295,7 @@ export type PresentationSlide =
   | TitleSlide
   | SectionTitleSlide
   | AgendaSlide
+  | CardGridSlide
   | RecentUpdatesSlide
   | ReleasesSlide
   | RoadmapSlide
@@ -294,12 +319,14 @@ export interface ContentSection {
   fa_icon?: string
 }
 
-export type RoadmapStageStatus = 'completed' | 'in-progress' | 'planned' | 'future'
-
-export interface RoadmapTheme {
-  category: string
-  target: string
+export interface CardGridItem {
+  title: string
+  marker_text?: string
+  fa_icon?: string
+  url?: string
 }
+
+export type RoadmapStageStatus = string
 
 export interface RoadmapStageSummary {
   label: string
@@ -307,7 +334,8 @@ export interface RoadmapStageSummary {
 }
 
 export interface SpotlightEntry {
-  login: string
+  login?: string
+  name?: string
   summary: string
   fa_icon?: string
 }
@@ -323,9 +351,9 @@ export interface CommunityMention {
 
 export interface ContributionCard {
   title: string
-  description: string
-  url_label: string
-  url: string
+  description?: string
+  url_label?: string
+  url?: string
   fa_icon?: string
   link_fa_icon?: string
 }

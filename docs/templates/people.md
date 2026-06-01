@@ -25,11 +25,18 @@ Contributor spotlight cards. Each `spotlight` entry is resolved against `generat
     spotlight:
       - login: ava-product
         fa_icon: fa-user-astronaut
-        summary: Defined the starter-kit structure and led the checklist overhaul.
+        summary: |-
+          Defined the starter-kit structure and led the checklist overhaul.
+
+          - Unblocked first-run setup
+          - Simplified release review
       - login: mo-rendering
         summary: Improved export polish and PDF spacing.
       - login: ren-docs
         summary: Reworked migration notes for faster team adoption.
+      - name: Launch Coordinator
+        summary: Kept the readiness review moving across product, docs, and support.
+      - summary: Coordinated the launch checklist without needing a public handle.
 ```
 
 ### Matching data (in `generated.yaml`)
@@ -55,10 +62,10 @@ generated:
 
 | Region | Source |
 | --- | --- |
-| Cards | One per `spotlight[]`. Name from matching `authors[].name` (falls back to `login`) |
-| Avatar | `authors[].avatar_url` |
-| Summary | `spotlight[].summary` |
-| GitHub link | `https://github.com/{login}` |
+| Cards | One per `spotlight[]`. Name from `spotlight[].name`, matching `authors[].name`, or `login` when present |
+| Avatar | Icon badge from `spotlight[].fa_icon` or the default icon sequence |
+| Summary | `spotlight[].summary`, with lightweight rich text support |
+| GitHub link | `https://github.com/{login}`, only when `login` is present |
 | Banner | `banner_prefix` + linked `{total} {contributors_link_label}` + `banner_suffix` |
 | Banner link | `site.links.repository.url/graphs/contributors` |
 
@@ -80,10 +87,11 @@ generated:
 
 | Field | Required | Type |
 | --- | --- | --- |
-| `login` | yes | string |
-| `summary` | yes | string |
+| `login` | | string |
+| `name` | | string |
+| `summary` | yes | string; supports lightweight rich text |
 | `fa_icon` | | string |
 
-If a `login` has no match in `generated.contributors.authors[]`, the card renders using the login as the display name.
+If a `login` has no match in `generated.contributors.authors[]`, the card renders using the login as the display name. If only `name` is set, the card does not render a GitHub handle link. If both `login` and `name` are omitted, the card renders as a summary-only card. `summary` accepts the lightweight rich text documented in [Concepts](/concepts#lightweight-rich-text).
 
 Icon defaults are `fa-user-astronaut`, `fa-user-ninja`, and `fa-user-secret` for profile cards, `fa-github` for handles, `fa-quote-left` for quote decoration, and `fa-heart` for the banner. Additional profile cards default to `fa-user-secret`. Icon fields use supported values from the [Font Awesome icon reference](/reference/fontawesome).

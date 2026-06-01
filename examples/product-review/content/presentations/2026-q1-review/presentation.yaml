@@ -58,8 +58,6 @@ presentation:
       subtitle: Q1 deliverables
       content:
         stage: completed
-        deliverables_heading: Delivered
-        focus_areas_heading: Strategic themes
         footer_link_label: View full roadmap
         stages:
           completed:
@@ -74,15 +72,23 @@ presentation:
           future:
             label: Future
             summary: Under exploration.
-        items:
-          - Workspace redesign with customizable layouts
-          - API v3 with breaking change migration tool
-          - Self-serve onboarding flow for teams under 50
-        themes:
-          - category: User Experience
-            target: Reduce time-to-value for new workspace setups.
-          - category: Platform
-            target: Modernize the API for partner integrations.
+        sections:
+          - title: Delivered
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: |-
+              - Workspace redesign with customizable layouts
+              - API v3 with breaking change migration tool
+              - Self-serve onboarding flow for teams under 50
+          - title: Strategic themes
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: User Experience
+                value: Reduce time-to-value for new workspace setups.
+              - key: Platform
+                value: Modernize the API for partner integrations.
     - template: people
       enabled: true
       title: Team spotlight

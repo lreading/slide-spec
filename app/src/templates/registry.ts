@@ -1,6 +1,7 @@
 import type { Component } from 'vue'
 
 import AgendaSlideView from '../components/slides/AgendaSlideView.vue'
+import CardGridSlideView from '../components/slides/CardGridSlideView.vue'
 import CommunityHighlightsSlideView from '../components/slides/CommunityHighlightsSlideView.vue'
 import ContributorSpotlightSlideView from '../components/slides/ContributorSpotlightSlideView.vue'
 import HowToContributeSlideView from '../components/slides/HowToContributeSlideView.vue'
@@ -63,6 +64,13 @@ const slideTemplateRegistry: Record<SlideTemplateId, SlideTemplateDefinition> = 
     label: 'Agenda',
     component: AgendaSlideView,
     validate: slideTemplateValidators.agenda,
+    createProps: createSharedSlideProps,
+  },
+  'card-grid': {
+    id: 'card-grid',
+    label: 'Card Grid',
+    component: CardGridSlideView,
+    validate: slideTemplateValidators['card-grid'],
     createProps: createSharedSlideProps,
   },
   'section-list-grid': {

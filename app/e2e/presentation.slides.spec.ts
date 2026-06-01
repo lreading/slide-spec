@@ -2,8 +2,10 @@ import { expect, test } from '@playwright/test'
 import type { Page } from '@playwright/test'
 
 import { FixtureRepository } from './support/FixtureRepository'
+import { parseRichTextBlocks } from '../../shared/src/rich-text'
 
 import type {
+  CardGridSlide,
   CommunityHighlightsSlide,
   ContributorSpotlightSlide,
   HowToContributeSlide,
@@ -33,6 +35,21 @@ function formatContributorsLinkLabel(total: number, label: string): string {
   return `${total} ${label}`
 }
 
+async function assertRichTextContent(page: Page, text: string): Promise<void> {
+  for (const block of parseRichTextBlocks(text)) {
+    if (block.type === 'paragraph') {
+      await expect(page.getByText(block.text)).toBeVisible()
+      continue
+    }
+
+    if (block.type === 'unordered-list' || block.type === 'ordered-list') {
+      for (const item of block.items) {
+        await expect(page.getByText(item)).toBeVisible()
+      }
+    }
+  }
+}
+
 async function assertSlideContent(page: Page, slide: PresentationSlide): Promise<void> {
   switch (slide.template) {
     case 'hero':
@@ -59,6 +76,18 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(page.getByText('Roadmap: Future', { exact: true })).toBeVisible()
       await expect(page.getByText('Thank You')).toBeVisible()
       break
+    case 'card-grid': {
+      const cardGridSlide: CardGridSlide = slide
+      await expect(page.getByText(cardGridSlide.title ?? '')).toBeVisible()
+      await expect(page.getByText(cardGridSlide.subtitle ?? '')).toBeVisible()
+      for (const item of cardGridSlide.content.items) {
+        await expect(page.getByText(item.title)).toBeVisible()
+        if (item.url) {
+          await expect(page.locator(`a[href="${item.url}"]`).filter({ hasText: item.title })).toBeVisible()
+        }
+      }
+      break
+    }
     case 'section-list-grid': {
       const recentSlide: RecentUpdatesSlide = slide
       await expect(page.getByText(recentSlide.title ?? '')).toBeVisible()
@@ -111,18 +140,20 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       const roadmapSlide: RoadmapSlide = slide
       const stage = roadmapSlide.content.stages[roadmapSlide.content.stage]
       await expect(page.getByText(`Roadmap: ${stage?.label}`)).toBeVisible()
-      await expect(page.getByText(roadmapSlide.content.deliverables_heading ?? 'Key deliverables')).toBeVisible()
-      await expect(page.getByText(roadmapSlide.content.focus_areas_heading ?? 'Focus areas')).toBeVisible()
       for (const timelineStage of Object.values(roadmapSlide.content.stages)) {
         await expect(page.getByText(timelineStage.label, { exact: true }).first()).toBeVisible()
       }
       await expect(page.getByText(stage?.summary ?? '', { exact: true }).first()).toBeVisible()
-      for (const item of roadmapSlide.content.items) {
-        await expect(page.getByText(item)).toBeVisible()
-      }
-      for (const theme of roadmapSlide.content.themes) {
-        await expect(page.getByText(theme.category, { exact: true }).first()).toBeVisible()
-        await expect(page.getByText(theme.target)).toBeVisible()
+      for (const section of roadmapSlide.content.sections) {
+        if (section.title) {
+          await expect(page.getByText(section.title, { exact: true }).first()).toBeVisible()
+        }
+        if (section.type === 'keyvalue') {
+          for (const row of section.body) {
+            await expect(page.getByText(row.key, { exact: true }).first()).toBeVisible()
+            await expect(page.getByText(row.value)).toBeVisible()
+          }
+        }
       }
       if (roadmapSlide.content.footer_link_label) {
         await expect(page.getByRole('link', { name: roadmapSlide.content.footer_link_label })).toHaveAttribute(
@@ -139,14 +170,17 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
         const contributor = record.generated.contributors.authors.find(
           (entry) => entry.login === spotlight.login,
         )
+        const displayName = spotlight.name ?? contributor?.name ?? spotlight.login ?? ''
         await expect(
-          page.getByRole('heading', { name: contributor?.name ?? spotlight.login }),
+          page.getByRole('heading', { name: displayName }),
         ).toBeVisible()
-        await expect(page.getByRole('link', { name: `@${spotlight.login}` })).toHaveAttribute(
-          'href',
-          `https://github.com/${spotlight.login}`,
-        )
-        await expect(page.getByText(spotlight.summary)).toBeVisible()
+        if (spotlight.login) {
+          await expect(page.getByRole('link', { name: `@${spotlight.login}` })).toHaveAttribute(
+            'href',
+            `https://github.com/${spotlight.login}`,
+          )
+        }
+        await assertRichTextContent(page, spotlight.summary)
       }
       const contributorsLinkLabel = contributorSlide.content.contributors_link_label ?? 'contributors'
       await expect(
@@ -189,16 +223,22 @@ async function assertSlideContent(page: Page, slide: PresentationSlide): Promise
       await expect(page.getByText(contributeSlide.subtitle ?? '')).toBeVisible()
       for (const card of contributeSlide.content.cards) {
         await expect(page.getByText(card.title)).toBeVisible()
-        await expect(page.getByText(card.description)).toBeVisible()
-        await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
+        if (card.description) {
+          await assertRichTextContent(page, card.description)
+        }
+        if (card.url && card.url_label) {
+          await expect(page.getByRole('link', { name: card.url_label })).toHaveAttribute('href', card.url)
+        }
       }
       await expect(
         page.getByText(contributeSlide.content.footer_text ?? 'Open Source and Community Driven'),
       ).toBeVisible()
-      await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
-        'href',
-        site.links.repository.url,
-      )
+      if (contributeSlide.content.footer_link_enabled !== false) {
+        await expect(page.getByRole('link', { name: site.links.repository.label })).toHaveAttribute(
+          'href',
+          site.links.repository.url,
+        )
+      }
       break
     }
     case 'closing':

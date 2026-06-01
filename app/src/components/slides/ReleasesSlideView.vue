@@ -92,7 +92,8 @@ const footerLinkFaIcon = computed(() => props.slide.content.footer_link_fa_icon 
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 1rem;
+  justify-content: flex-start;
 }
 
 .timeline-line {

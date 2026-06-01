@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FaIcon from './FaIcon.vue'
+import RichText from './RichText.vue'
 
 export interface KeyValueRow {
   key: string
@@ -23,7 +24,7 @@ withDefaults(
       <div class="key-value-rows__key">{{ row.key }}</div>
       <div class="key-value-rows__value">
         <FaIcon :fa-icon="valueFaIcon" class="key-value-rows__icon" />
-        <p>{{ row.value }}</p>
+        <RichText :text="row.value" class="key-value-rows__text" />
       </div>
     </div>
   </div>
@@ -61,8 +62,8 @@ withDefaults(
   flex-shrink: 0;
 }
 
-.key-value-rows__value p {
-  margin: 0;
+.key-value-rows__text {
+  min-width: 0;
 }
 
 .key-value-rows__row:last-child .key-value-rows__key,

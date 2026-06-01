@@ -2,6 +2,38 @@ import { describe, expect, it } from 'vitest'
 
 import { validateTemplateSlide } from './validation'
 
+const validRoadmapStages = {
+  completed: { label: 'Done', summary: 'Completed work' },
+  'in-progress': { label: 'Now', summary: 'Current work' },
+  planned: { label: 'Next', summary: 'Planned work' },
+  future: { label: 'Later', summary: 'Future work' },
+} as const
+
+const validProgressTimelineSlide = {
+  title: 'Progress',
+  content: {
+    stage: 'planned',
+    footer_link_label: 'Roadmap',
+    footer_link_fa_icon: 'fa-github',
+    stages: validRoadmapStages,
+    sections: [
+      {
+        title: 'Details',
+        fa_icon: 'fa-chevron-right',
+        type: 'richtext',
+        body: 'Ship it',
+      },
+      {
+        title: 'Signals',
+        fa_icon: 'fa-bullseye',
+        type: 'keyvalue',
+        separator_fa_icon: 'fa-check',
+        body: [{ key: 'Quality', value: 'Keep gates green' }],
+      },
+    ],
+  },
+} as const
+
 describe('template validation', () => {
   it('accepts every supported template shape', () => {
     const validSlides = {
@@ -15,6 +47,17 @@ describe('template validation', () => {
         },
       },
       agenda: { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-chevron-right' } },
+      'card-grid': {
+        title: 'Initiatives',
+        content: {
+          card_arrow_fa_icon: 'fa-arrow-right',
+          items: [
+            { title: 'Detection / Response', fa_icon: 'fa-shield-halved' },
+            { title: 'Supply Chain', marker_text: 'B' },
+            { title: 'Documentation', url: 'https://example.test/docs' },
+          ],
+        },
+      },
       'section-list-grid': {
         title: 'Sections',
         content: { sections: [{ title: 'One', bullets: ['A'], fa_icon: 'fa-star' }] },
@@ -32,27 +75,7 @@ describe('template validation', () => {
           featured_release_ids: ['v1'],
         },
       },
-      'progress-timeline': {
-        title: 'Progress',
-        content: {
-          stage: 'planned',
-          deliverables_heading: 'Deliverables',
-          focus_areas_heading: 'Focus',
-          footer_link_label: 'Roadmap',
-          item_fa_icon: 'fa-chevron-right',
-          focus_areas_fa_icon: 'fa-bullseye',
-          theme_fa_icon: 'fa-check',
-          footer_link_fa_icon: 'fa-github',
-          stages: {
-            completed: { label: 'Done', summary: 'Completed work' },
-            'in-progress': { label: 'Now', summary: 'Current work' },
-            planned: { label: 'Next', summary: 'Planned work' },
-            future: { label: 'Later', summary: 'Future work' },
-          },
-          items: ['Ship it'],
-          themes: [{ category: 'Quality', target: 'Keep gates green' }],
-        },
-      },
+      'progress-timeline': validProgressTimelineSlide,
       people: {
         title: 'People',
         content: {
@@ -62,7 +85,11 @@ describe('template validation', () => {
           github_fa_icon: 'fa-github',
           quote_fa_icon: 'fa-quote-left',
           banner_fa_icon: 'fa-heart',
-          spotlight: [{ login: 'octocat', summary: 'Shipped a fix', fa_icon: 'fa-user-astronaut' }],
+          spotlight: [
+            { login: 'octocat', summary: 'Shipped a fix', fa_icon: 'fa-user-astronaut' },
+            { name: 'Release Operator', summary: 'Kept the launch moving.' },
+            { summary: 'Kept a summary-only operating role visible.' },
+          ],
         },
       },
       'metrics-and-links': {
@@ -104,6 +131,7 @@ describe('template validation', () => {
         title: 'Actions',
         content: {
           footer_text: 'Get involved',
+          footer_link_enabled: false,
           footer_fa_icon: 'fa-github',
           footer_link_fa_icon: 'fa-code',
           cards: [{
@@ -147,8 +175,18 @@ describe('template validation', () => {
       validateTemplateSlide('section-title', { content: { title: 'Title', subtitle: 'Support' } }, 'slides[0]'),
     ).not.toThrow()
     expect(() =>
-      validateTemplateSlide('progress-timeline', { title: 'Progress', content: { stage: 'blocked' } }, 'slides[1]'),
-    ).toThrow('slides[1].content.stage must be one of completed, in-progress, planned, or future.')
+      validateTemplateSlide(
+        'progress-timeline',
+        {
+          ...validProgressTimelineSlide,
+          content: {
+            ...validProgressTimelineSlide.content,
+            stage: 'blocked',
+          },
+        },
+        'slides[1]',
+      ),
+    ).toThrow('slides[1].content.stage must match one of the keys in slides[1].content.stages.')
     expect(() =>
       validateTemplateSlide('metrics-and-links', { title: 'Metrics', content: { stat_keys: [], mentions: [{ type: 'post', title: 'Post', url: 'https://example.test' }] } }, 'slides[2]'),
     ).toThrow('slides[2].content.mentions[0] must provide url and url_label together.')
@@ -156,16 +194,31 @@ describe('template validation', () => {
       validateTemplateSlide('metrics-and-links', { title: 'Metrics', content: { stat_keys: [], mentions: [{ type: 'post', title: 'Post' }] } }, 'slides[3]'),
     ).not.toThrow()
     expect(() =>
-      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { image_side: 'center', bullets: ['One'] } }, 'slides[4]'),
-    ).toThrow('slides[4].content.image_side must be left or right.')
+      validateTemplateSlide('action-cards', { title: 'Actions', content: { cards: [{ title: 'Plan', description: 'Pick a path', url: 'https://example.test' }] } }, 'slides[4]'),
+    ).toThrow('slides[4].content.cards[0] must provide url and url_label together.')
     expect(() =>
-      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: {} }, 'slides[5]'),
-    ).toThrow('slides[5].content must include image or bullets.')
+      validateTemplateSlide('action-cards', { title: 'Actions', content: { footer_link_enabled: true, cards: [{ title: 'Plan', description: 'Pick a path' }] } }, 'slides[5]'),
+    ).not.toThrow()
     expect(() =>
-      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { bullets: [] } }, 'slides[6]'),
-    ).toThrow('slides[6].content.bullets must include at least one item.')
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { image_side: 'center', bullets: ['One'] } }, 'slides[6]'),
+    ).toThrow('slides[6].content.image_side must be left or right.')
     expect(() =>
-      validateTemplateSlide('agenda', { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-nope' } }, 'slides[7]'),
-    ).toThrow('slides[7].content.card_arrow_fa_icon must be a supported Font Awesome icon.')
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: {} }, 'slides[7]'),
+    ).toThrow('slides[7].content must include image or bullets.')
+    expect(() =>
+      validateTemplateSlide('image-and-bullets', { title: 'Highlights', content: { bullets: [] } }, 'slides[8]'),
+    ).toThrow('slides[8].content.bullets must include at least one item.')
+    expect(() =>
+      validateTemplateSlide('agenda', { title: 'Agenda', content: { card_arrow_fa_icon: 'fa-nope' } }, 'slides[9]'),
+    ).toThrow('slides[9].content.card_arrow_fa_icon must be a supported Font Awesome icon.')
+    expect(() =>
+      validateTemplateSlide('card-grid', { title: 'Initiatives', content: { items: [{ title: 'One', marker_text: 'A', fa_icon: 'fa-star' }] } }, 'slides[10]'),
+    ).toThrow('slides[10].content.items[0] must not provide marker_text and fa_icon together.')
+    expect(() =>
+      validateTemplateSlide('people', { title: 'People', content: { spotlight: [{ summary: 'Missing label' }] } }, 'slides[11]'),
+    ).not.toThrow()
+    expect(() =>
+      validateTemplateSlide('action-cards', { title: 'Actions', content: { cards: [{ title: 'Plan' }] } }, 'slides[12]'),
+    ).not.toThrow()
   })
 })

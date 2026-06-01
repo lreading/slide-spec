@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import RichText from './RichText.vue'
+
 export type ProgressTimelineState = 'viewed' | 'current' | 'upcoming'
 
 export interface ProgressTimelineItem {
@@ -16,7 +18,10 @@ defineProps<{
 <template>
   <div class="progress-timeline">
     <div class="progress-timeline__line"></div>
-    <div class="progress-timeline__items">
+    <div
+      class="progress-timeline__items"
+      :style="{ gridTemplateColumns: `repeat(${items.length}, minmax(0, 1fr))` }"
+    >
       <div
         v-for="item in items"
         :key="item.key"
@@ -25,7 +30,7 @@ defineProps<{
       >
         <div class="progress-timeline__node"></div>
         <h3 class="progress-timeline__title">{{ item.title }}</h3>
-        <p class="progress-timeline__summary">{{ item.summary }}</p>
+        <RichText :text="item.summary" class="progress-timeline__summary" />
       </div>
     </div>
   </div>
@@ -49,7 +54,6 @@ defineProps<{
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1rem;
 }
 
@@ -138,6 +142,8 @@ defineProps<{
   color: #8888aa;
   font-size: 0.82rem;
   line-height: 1.45;
+  text-align: center;
+  justify-items: center;
 }
 
 @media (max-width: 1199px) {

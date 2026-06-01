@@ -10,7 +10,6 @@ import {
   resolvePresentationChromeLabel,
   resolvePresentationsPageContent,
   resolvePresentationToolbarContent,
-  resolveRoadmapLabels,
   resolveTitleSlideContent,
 } from './contentDefaults'
 
@@ -18,14 +17,9 @@ describe('contentDefaults', () => {
   const site = contentRepository.getSiteContent()
   const record = contentRepository.getPresentation('2026-q1')
   const titleSlide = record.presentation.slides.find((slide) => slide.template === 'hero')
-  const roadmapSlide = record.presentation.slides.find((slide) => slide.template === 'progress-timeline')
 
   if (!titleSlide || titleSlide.template !== 'hero') {
     throw new Error('Expected title slide in fixture data')
-  }
-
-  if (!roadmapSlide || roadmapSlide.template !== 'progress-timeline') {
-    throw new Error('Expected roadmap slide in fixture data')
   }
 
   it('normalizes configured site content', () => {
@@ -208,20 +202,15 @@ describe('contentDefaults', () => {
     })
   })
 
-  it('normalizes authored slide and roadmap labels', () => {
+  it('normalizes authored title slide labels', () => {
     expect(resolveTitleSlideContent(titleSlide)).toEqual({
       titlePrimary: 'Aurora',
       titleAccent: 'Notes',
       subtitlePrefix: 'Community Update',
     })
-    expect(resolveRoadmapLabels(roadmapSlide.content)).toEqual({
-      deliverables: 'Key deliverables',
-      focusAreas: 'Focus areas',
-      footerLink: 'View full roadmap & milestones on GitHub',
-    })
   })
 
-  it('returns undefined for blank title-slide and roadmap labels', () => {
+  it('returns undefined for blank title-slide labels', () => {
     expect(
       resolveTitleSlideContent({
         ...titleSlide,
@@ -236,19 +225,6 @@ describe('contentDefaults', () => {
       titlePrimary: undefined,
       titleAccent: undefined,
       subtitlePrefix: undefined,
-    })
-
-    expect(
-      resolveRoadmapLabels({
-        ...roadmapSlide.content,
-        deliverables_heading: '   ',
-        focus_areas_heading: '   ',
-        footer_link_label: '   ',
-      }),
-    ).toEqual({
-      deliverables: undefined,
-      focusAreas: undefined,
-      footerLink: undefined,
     })
   })
 })

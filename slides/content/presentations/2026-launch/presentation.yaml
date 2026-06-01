@@ -60,8 +60,6 @@ presentation:
       subtitle: Everything delivered in the launch sprint
       content:
         stage: completed
-        deliverables_heading: Delivered
-        focus_areas_heading: Themes
         footer_link_label: View full roadmap
         stages:
           completed:
@@ -76,27 +74,33 @@ presentation:
           future:
             label: Future
             summary: Longer-horizon ideas being explored.
-        items:
-          - Full built-in template set (hero through closing, including image-and-bullets)
-          - CLI with init, validate, fetch, build, serve
-          - Vue 3 app renderer with Vite
-          - Unit, E2E, a11y, and visual regression tests
-          - CI/CD with Semgrep, Trivy, and Gitleaks scanning
-          - OpenSSF Best Practices badge achieved
-          - VitePress documentation site
-        themes:
-          - category: Functionality
-            target: All table-stakes features for a usable v0.
-          - category: Quality
-            target: Ship with meaningful test coverage from day one.
+        sections:
+          - title: Delivered
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: |-
+              - Full built-in template set (hero through closing, including image-and-bullets)
+              - CLI with init, validate, fetch, build, serve
+              - Vue 3 app renderer with Vite
+              - Unit, E2E, a11y, and visual regression tests
+              - CI/CD with Semgrep, Trivy, and Gitleaks scanning
+              - OpenSSF Best Practices badge achieved
+              - VitePress documentation site
+          - title: Themes
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Functionality
+                value: All table-stakes features for a usable v0.
+              - key: Quality
+                value: Ship with meaningful test coverage from day one.
     - template: progress-timeline
       enabled: true
       title: "Roadmap: In Progress"
       subtitle: Active work right now
       content:
         stage: in-progress
-        deliverables_heading: In Progress
-        focus_areas_heading: Themes
         footer_link_label: View full roadmap
         stages:
           completed:
@@ -111,16 +115,24 @@ presentation:
           future:
             label: Future
             summary: Longer-horizon ideas being explored.
-        items:
-          - First stable release (v1.0.0)
-          - slide-spec.dev homepage (this site)
-          - docs.slide-spec.dev documentation site
-          - Usability & user acceptance testing
-        themes:
-          - category: Stability
-            target: Remove alpha-stage rough edges before the first real users.
-          - category: Visibility
-            target: Give the project a home on the web.
+        sections:
+          - title: In Progress
+            fa_icon: fa-chevron-right
+            type: richtext
+            body: |-
+              - First stable release (v1.0.0)
+              - slide-spec.dev homepage (this site)
+              - docs.slide-spec.dev documentation site
+              - Usability & user acceptance testing
+          - title: Themes
+            fa_icon: fa-bullseye
+            type: keyvalue
+            separator_fa_icon: fa-chevron-right
+            body:
+              - key: Stability
+                value: Remove alpha-stage rough edges before the first real users.
+              - key: Visibility
+                value: Give the project a home on the web.
     - template: metrics-and-links
       enabled: true
       title: Project health

@@ -70,6 +70,7 @@ export default defineConfig({
             { text: 'Hero', link: '/templates/hero' },
             { text: 'Section Title', link: '/templates/section-title' },
             { text: 'Agenda', link: '/templates/agenda' },
+            { text: 'Card Grid', link: '/templates/card-grid' },
             { text: 'Section List Grid', link: '/templates/section-list-grid' },
             { text: 'Timeline', link: '/templates/timeline' },
             { text: 'Progress Timeline', link: '/templates/progress-timeline' },

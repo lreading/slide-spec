@@ -25,6 +25,7 @@ describe('SlideRenderer', () => {
       'Contributor Spotlight',
       'Community Highlights',
       'Image and Bullets',
+      'Template Focus Areas',
       'How to Contribute',
       'Thank you',
     ]

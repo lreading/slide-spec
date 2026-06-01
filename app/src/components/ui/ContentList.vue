@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import FaIcon from './FaIcon.vue'
+import RichText from './RichText.vue'
 
 const props = withDefaults(
   defineProps<{
@@ -31,7 +32,7 @@ const props = withDefaults(
   >
     <li v-for="item in items" :key="item" class="content-list__item" :class="`content-list__item--${marker}`">
       <FaIcon v-if="marker === 'icon'" :fa-icon="faIcon" class="content-list__icon" />
-      <span>{{ item }}</span>
+      <RichText :text="item" class="content-list__text" />
     </li>
   </ul>
 </template>
@@ -60,6 +61,10 @@ const props = withDefaults(
   margin-top: 0.28rem;
   color: var(--content-list-marker-color);
   flex-shrink: 0;
+}
+
+.content-list__text {
+  min-width: 0;
 }
 
 .content-list__item--bullet {

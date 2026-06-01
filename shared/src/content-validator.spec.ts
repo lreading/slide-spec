@@ -95,6 +95,17 @@ const validPresentationDocument = {
         title: 'Agenda',
         content: {},
       },
+      {
+        template: 'card-grid',
+        enabled: true,
+        title: 'Initiatives',
+        content: {
+          items: [
+            { title: 'Detection / Response', fa_icon: 'fa-shield-halved' },
+            { title: 'Supply Chain', marker_text: 'B' },
+          ],
+        },
+      },
     ],
   },
 }

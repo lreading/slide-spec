@@ -23,6 +23,7 @@
               { "$ref": "#/$defs/heroSlide" },
               { "$ref": "#/$defs/sectionTitleSlide" },
               { "$ref": "#/$defs/agendaSlide" },
+              { "$ref": "#/$defs/cardGridSlide" },
               { "$ref": "#/$defs/sectionListGridSlide" },
               { "$ref": "#/$defs/timelineSlide" },
               { "$ref": "#/$defs/progressTimelineSlide" },
@@ -48,6 +49,7 @@
             "hero",
             "section-title",
             "agenda",
+            "card-grid",
             "section-list-grid",
             "timeline",
             "progress-timeline",
@@ -135,6 +137,30 @@
         }
       ]
     },
+    "cardGridSlide": {
+      "allOf": [
+        { "$ref": "#/$defs/slideBase" },
+        {
+          "type": "object",
+          "required": ["template", "enabled", "title", "content"],
+          "properties": {
+            "template": { "const": "card-grid" },
+            "content": {
+              "type": "object",
+              "required": ["items"],
+              "additionalProperties": false,
+              "properties": {
+                "card_arrow_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
+                "items": {
+                  "type": "array",
+                  "items": { "$ref": "defs.schema.json#/$defs/cardGridItem" }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "sectionListGridSlide": {
       "allOf": [
         { "$ref": "#/$defs/slideBase" },
@@ -195,32 +221,24 @@
             "template": { "const": "progress-timeline" },
             "content": {
               "type": "object",
-              "required": ["stage", "stages", "items", "themes"],
+              "required": ["stage", "stages", "sections"],
               "additionalProperties": false,
               "properties": {
-                "stage": { "enum": ["completed", "in-progress", "planned", "future"] },
-                "deliverables_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
-                "focus_areas_heading": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "stage": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "sections": {
+                  "type": "array",
+                  "minItems": 1,
+                  "maxItems": 3,
+                  "items": { "$ref": "defs.schema.json#/$defs/progressTimelineSection" }
+                },
                 "footer_link_label": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
-                "item_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
-                "focus_areas_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
-                "theme_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "footer_link_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "stages": {
                   "type": "object",
-                  "required": ["completed", "in-progress", "planned", "future"],
-                  "additionalProperties": false,
-                  "properties": {
-                    "completed": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
-                    "in-progress": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
-                    "planned": { "$ref": "defs.schema.json#/$defs/roadmapStage" },
-                    "future": { "$ref": "defs.schema.json#/$defs/roadmapStage" }
-                  }
-                },
-                "items": { "$ref": "defs.schema.json#/$defs/stringArray" },
-                "themes": {
-                  "type": "array",
-                  "items": { "$ref": "defs.schema.json#/$defs/roadmapTheme" }
+                  "minProperties": 2,
+                  "maxProperties": 6,
+                  "propertyNames": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                  "additionalProperties": { "$ref": "defs.schema.json#/$defs/roadmapStage" }
                 }
               }
             }
@@ -304,6 +322,7 @@
               "additionalProperties": false,
               "properties": {
                 "footer_text": { "$ref": "defs.schema.json#/$defs/nonBlankString" },
+                "footer_link_enabled": { "type": "boolean" },
                 "footer_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "footer_link_fa_icon": { "$ref": "defs.schema.json#/$defs/fontAwesomeIcon" },
                 "cards": {
