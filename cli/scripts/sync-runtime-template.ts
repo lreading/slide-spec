@@ -54,8 +54,12 @@ class RuntimeTemplateSync {
   }
 
   private async copyShared(outputRoot: string): Promise<void> {
-    await cp(this.sharedRoot, resolve(outputRoot, 'shared'), {
+    const sharedOutputRoot = resolve(outputRoot, 'shared')
+
+    await mkdir(sharedOutputRoot, { recursive: true })
+    await cp(resolve(this.sharedRoot, 'src'), resolve(sharedOutputRoot, 'src'), {
       recursive: true,
+      filter: (sourcePath) => !sourcePath.replaceAll('\\', '/').endsWith('.spec.ts'),
     })
   }
 }

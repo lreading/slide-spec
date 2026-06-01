@@ -50,6 +50,8 @@ jobs:
             command: pnpm --filter @slide-spec/cli typecheck
           - name: CLI Build
             command: pnpm --filter @slide-spec/cli build
+          - name: CLI Package
+            command: pnpm --filter @slide-spec/cli package:verify
           - name: CLI Unit Tests
             command: pnpm --filter @slide-spec/cli coverage
           - name: CLI E2E

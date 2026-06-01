@@ -15,6 +15,7 @@ It currently:
 
 - runs the shared quality workflow before publishing
 - derives the npm version from the pushed tag
+- verifies the packed CLI package contains the built entrypoint, runtime template, and bundled examples before publishing
 - publishes `@slide-spec/cli` to npm with provenance enabled
 - maps prereleases to explicit npm dist-tags
 - creates a GitHub Release with generated release notes plus a release metadata preface
