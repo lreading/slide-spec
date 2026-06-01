@@ -21,6 +21,7 @@ describe('CliPackagePaths', () => {
     const paths = new CliPackagePaths(root)
     expect(paths.getPackageRoot()).toBe(root)
     expect(paths.getNodeModulesRoot()).toBe(resolve(root, 'node_modules'))
+    expect(paths.getNodeModulesRoots()).toEqual([resolve(root, 'node_modules')])
     expect(paths.getWorkspaceBaseRoot()).toBe(resolve(root, '.runtime-workspaces'))
     expect(paths.getRuntimeTemplateRoot()).toBe(resolve(root, 'dist', 'runtime-template'))
 
@@ -36,6 +37,16 @@ describe('CliPackagePaths', () => {
     expect(() => paths.getRuntimeTemplateRoot()).toThrow(
       'Missing embedded runtime template. Rebuild the CLI package before using build or serve.',
     )
+  })
+
+  it('includes the package-manager node_modules root for scoped npx installs', () => {
+    const root = resolve(tmpdir(), 'slide-spec-npx', 'node_modules', '@slide-spec', 'cli')
+    const paths = new CliPackagePaths(root)
+
+    expect(paths.getNodeModulesRoots()).toEqual([
+      resolve(root, 'node_modules'),
+      resolve(tmpdir(), 'slide-spec-npx', 'node_modules'),
+    ])
   })
 
   it('prefers the built examples and falls back to the synced examples', async () => {

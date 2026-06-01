@@ -84,13 +84,20 @@ export class ViteSiteDevServer {
       workspace.root,
       paths.getProjectRoot(),
       this.packagePaths.getPackageRoot(),
-      this.packagePaths.getNodeModulesRoot(),
+      ...this.packagePaths.getNodeModulesRoots(),
       ...await this.resolveNodeModuleRealpaths(),
     ].filter((path, index, allPaths) => allPaths.indexOf(path) === index)
   }
 
   private async resolveNodeModuleRealpaths(): Promise<string[]> {
-    const nodeModulesRoot = this.packagePaths.getNodeModulesRoot()
+    const packageRoots = await Promise.all(
+      this.packagePaths.getNodeModulesRoots().map((nodeModulesRoot) => this.resolveNodeModuleRootRealpaths(nodeModulesRoot)),
+    )
+
+    return packageRoots.flat().filter((path, index, allPaths) => allPaths.indexOf(path) === index)
+  }
+
+  private async resolveNodeModuleRootRealpaths(nodeModulesRoot: string): Promise<string[]> {
     const packageRoots: string[] = []
 
     try {
