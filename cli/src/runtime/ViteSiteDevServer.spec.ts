@@ -19,6 +19,10 @@ class StubPackagePaths {
   public getNodeModulesRoot(): string {
     return resolve(this.packageRoot, 'node_modules')
   }
+
+  public getNodeModulesRoots(): string[] {
+    return [this.getNodeModulesRoot()]
+  }
 }
 
 class StubRuntimeWorkspace {
@@ -129,6 +133,40 @@ describe('ViteSiteDevServer', () => {
         },
       }),
     }))
+  })
+
+  it('allows hoisted npx dependency package paths from the package manager node_modules root', async () => {
+    const installRoot = await createRoot('slide-spec-npx-install-')
+    const packageRoot = resolve(installRoot, 'node_modules', '@slide-spec', 'cli')
+    const nodeModulesRoot = resolve(installRoot, 'node_modules')
+    const fontPackageRoot = resolve(nodeModulesRoot, '@fontsource', 'poppins')
+    await mkdir(fontPackageRoot, { recursive: true })
+    await mkdir(packageRoot, { recursive: true })
+
+    class NpxPackagePaths extends StubPackagePaths {
+      public override getNodeModulesRoots(): string[] {
+        return [
+          resolve(packageRoot, 'node_modules'),
+          nodeModulesRoot,
+        ]
+      }
+    }
+
+    const viteServer = createViteServerDouble()
+    const createServer = vi.fn(async (_config) => viteServer)
+    const server = new ViteSiteDevServer(
+      new NpxPackagePaths(packageRoot) as never,
+      new StubRuntimeWorkspace() as never,
+      createServer,
+    )
+
+    await expect(server.start({
+      getProjectRoot: () => '/project',
+    } as never, '127.0.0.1', 4173)).resolves.toBe(4173)
+
+    const allow = (createServer.mock.calls[0]?.[0].server?.fs?.allow ?? []) as string[]
+    expect(allow).toContain(nodeModulesRoot)
+    expect(allow).toContain(fontPackageRoot)
   })
 
   it('deduplicates allowed package realpaths and ignores non-package node_modules entries', async () => {

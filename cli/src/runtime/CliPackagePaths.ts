@@ -1,6 +1,6 @@
 import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { dirname, resolve } from 'node:path'
+import { basename, dirname, resolve } from 'node:path'
 
 export class CliPackagePaths {
   private readonly packageRoot: string
@@ -15,6 +15,13 @@ export class CliPackagePaths {
 
   public getNodeModulesRoot(): string {
     return resolve(this.packageRoot, 'node_modules')
+  }
+
+  public getNodeModulesRoots(): string[] {
+    return [
+      this.getNodeModulesRoot(),
+      this.findPackageManagerNodeModulesRoot(),
+    ].filter((path, index, paths): path is string => Boolean(path) && paths.indexOf(path) === index)
   }
 
   public getWorkspaceBaseRoot(): string {
@@ -64,5 +71,19 @@ export class CliPackagePaths {
     }
 
     return packageRoot
+  }
+
+  private findPackageManagerNodeModulesRoot(): string | undefined {
+    let current = this.packageRoot
+
+    while (current !== dirname(current)) {
+      if (basename(current) === 'node_modules') {
+        return current
+      }
+
+      current = dirname(current)
+    }
+
+    return undefined
   }
 }
