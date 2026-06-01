@@ -77,7 +77,7 @@ jobs:
       - run: pnpm --filter @slide-spec/cli exec npm version "${RELEASE_VERSION}" --allow-same-version --no-git-tag-version
         env:
           RELEASE_VERSION: ${{ needs.prepare-release.outputs.version }}
-      - run: pnpm --filter @slide-spec/cli pack --dry-run
+      - run: pnpm --filter @slide-spec/cli package:verify
       - run: pnpm --filter @slide-spec/cli publish --provenance --access public --tag "${NPM_DIST_TAG}" --no-git-checks
         env:
           NPM_DIST_TAG: ${{ needs.prepare-release.outputs.dist-tag }}

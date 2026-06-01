@@ -38,6 +38,8 @@
   "scripts": {
     "cli": "node --import tsx src/index.ts",
     "build": "node --import tsx scripts/sync-runtime-template.ts --out runtime-template && node --import tsx scripts/sync-examples.ts --out examples-synced && node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\" && esbuild src/index.ts --bundle --platform=node --format=esm --target=es2022 --packages=external --outfile=dist/index.js && node --import tsx scripts/sync-runtime-template.ts --out dist/runtime-template && node --import tsx scripts/sync-examples.ts --out dist/examples",
+    "prepack": "pnpm run build",
+    "package:verify": "pnpm run build && node --import tsx scripts/verify-package.ts",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint --cache --cache-location .eslintcache --max-warnings=0 \"src/**/*.ts\" \"e2e/**/*.ts\" vitest.config.ts vitest.e2e.config.ts vitest.connectors-e2e.config.ts eslint.config.mjs",
     "lint:fix": "eslint --cache --cache-location .eslintcache --fix \"src/**/*.ts\" \"e2e/**/*.ts\" vitest.config.ts vitest.e2e.config.ts vitest.connectors-e2e.config.ts eslint.config.mjs",

@@ -7,6 +7,7 @@ interface Step {
 
 const steps: readonly Step[] = [
   { name: 'root verify', command: ['pnpm', 'run', 'verify'] },
+  { name: 'cli package', command: ['pnpm', '--filter', '@slide-spec/cli', 'package:verify'] },
   { name: 'docs a11y', command: ['pnpm', '--filter', '@slide-spec/docs', 'a11y'] },
   { name: 'markdownlint', command: ['pnpm', 'run', 'lint:markdown'] },
   { name: 'root spellcheck', command: ['pnpm', 'run', 'spellcheck'] },
