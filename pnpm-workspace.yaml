@@ -53,14 +53,14 @@ catalog:
   tailwindcss: ^3.4.19
   tsx: ^4.22.3
   typescript: ~6.0.3
-  typescript-eslint: ^8.59.4
+  typescript-eslint: ^8.60.0
   vite: ^8.0.11
   vitepress: ^1.6.4
   vitest: ^4.1.7
-  vue: ^3.5.34
+  vue: ^3.5.35
   vue-eslint-parser: ^10.4.0
   vue-router: ^5.0.6
-  vue-tsc: ^3.3.1
+  vue-tsc: ^3.3.2
   yaml: ^2.8.4
   yaml-language-server: ^1.23.0
 
