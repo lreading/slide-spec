@@ -5,6 +5,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { useCompactViewport } from './useCompactViewport'
 
 describe('useCompactViewport', () => {
+  // eslint-disable-next-line @typescript-eslint/unbound-method
   const originalMatchMedia = window.matchMedia
   const originalInnerWidth = window.innerWidth
 
