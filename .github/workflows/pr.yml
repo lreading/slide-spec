@@ -12,7 +12,6 @@ jobs:
     uses: ./.github/workflows/reusable-quality.yml
     with:
       run-dependency-review: true
-    secrets: inherit
 
   required-quality:
     name: Quality

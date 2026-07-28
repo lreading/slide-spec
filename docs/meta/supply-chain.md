@@ -37,6 +37,8 @@ pnpm -r update <package> --latest
 
 `pnpm-workspace.yaml` sets `minimumReleaseAge: 7200`, so installs reject package versions published less than 5 days ago. Dependabot also waits 5 days before opening dependency update PRs.
 
+The local Semgrep policy in `.semgrep.yml` enforces the same 5-day minimum for both settings.
+
 For an urgent security update before that wait, add an exact, reviewed `minimumReleaseAgeExclude` entry for that package version, then run the normal add/update command and `pnpm verify`.
 
 Latest release assets:

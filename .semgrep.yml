@@ -1,0 +1,76 @@
+rules:
+  - id: slide-spec.dependabot-minimum-cooldown
+    message: >-
+      Each Dependabot package ecosystem must set cooldown.default-days to at
+      least 5.
+    severity: ERROR
+    languages:
+      - yaml
+    paths:
+      include:
+        - "**/.github/dependabot.yml"
+        - "**/.github/dependabot.yaml"
+    pattern-either:
+      - patterns:
+          - pattern-inside: |
+              updates:
+                ...
+          - pattern: |
+              - package-ecosystem: $ECOSYSTEM
+                ...
+          - pattern-not: |
+              - package-ecosystem: $ECOSYSTEM
+                ...
+                cooldown:
+                  ...
+                ...
+      - patterns:
+          - pattern-inside: |
+              updates:
+                ...
+          - pattern-regex: 'default-days\s*:\s*(?P<DAYS>\d+)'
+          - metavariable-comparison:
+              metavariable: $DAYS
+              comparison: int($DAYS) < 5
+          - focus-metavariable: $DAYS
+      - patterns:
+          - pattern-inside: |
+              updates:
+                ...
+          - pattern: |
+              cooldown:
+                default-days: $DAYS
+          - metavariable-regex:
+              metavariable: $DAYS
+              regex: ^\D
+          - focus-metavariable: $DAYS
+
+  - id: slide-spec.pnpm-minimum-release-age
+    message: >-
+      pnpm-workspace.yaml must set minimumReleaseAge to at least 7200 minutes
+      (5 days).
+    severity: ERROR
+    languages:
+      - yaml
+    paths:
+      include:
+        - "**/pnpm-workspace.yaml"
+    pattern-either:
+      - patterns:
+          - pattern-regex: >-
+              (?ms)(?:\A|^---$\n)(?:(?!^minimumReleaseAge\s*:)(?!^---$)[\s\S])*?(?P<TARGET>^(?:packages|catalog)\s*:)(?:(?!^minimumReleaseAge\s*:)(?!^---$)[\s\S])*?(?=^---$|\z)
+          - focus-metavariable: $TARGET
+      - patterns:
+          - pattern-regex: '^\s*minimumReleaseAge\s*:\s*(?P<AGE>\d+)'
+          - metavariable-comparison:
+              metavariable: $AGE
+              comparison: int($AGE) < 7200
+          - focus-metavariable: $AGE
+      - patterns:
+          - pattern: |
+              minimumReleaseAge: $AGE
+          - metavariable-regex:
+              metavariable: $AGE
+              regex: ^\D
+          - focus-metavariable: $AGE
+      - pattern-regex: '(?m)^\s*minimumReleaseAge\s*:\s*$'
