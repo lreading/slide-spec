@@ -55,7 +55,6 @@ jobs:
     uses: ./.github/workflows/reusable-quality.yml
     with:
       run-dependency-review: false
-    secrets: inherit
 
   publish-cli:
     runs-on: ubuntu-latest
