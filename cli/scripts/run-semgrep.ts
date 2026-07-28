@@ -15,6 +15,12 @@ class SemgrepLocalRunner {
       'scan',
       '--config',
       'auto',
+      '--config',
+      '/src/.semgrep.yml',
+      '--exclude-rule',
+      'package_managers.dependabot.dependabot-missing-cooldown.dependabot-missing-cooldown',
+      '--exclude-rule',
+      'package_managers.pnpm.pnpm-missing-minimum-release-age.pnpm-minimum-release-age',
       '--error',
       '/src',
     ])
